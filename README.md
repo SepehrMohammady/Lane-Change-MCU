@@ -1,9 +1,14 @@
-# DIMIR × µNAS — Lane-Change Intention Prediction under MCU Budgets
+# LC-Intention-NAS — Lane-Change Intention Prediction under MCU Budgets
 
 PhD research project (ELIOS Lab, University of Genoa, SYNERGIES project).
-Constrained neural architecture search on the DIMIR driving time-series
-dataset; goal: beat the published LC-Intention baseline on all three tasks
-with models small enough for STM32 deployment, and publish in a Q1 venue.
+Constrained neural architecture search on the Lane Change Intention
+Recognition driving time-series dataset (internal codename DIMIR); goal: beat
+the published LC-Intention baseline with models small enough for deployment
+on the **STM32H7B3I-DK**, and publish in a Q1 venue.
+
+📚 Farsi course website (A-to-Z of this project): enable GitHub Pages
+(Settings → Pages → main branch, root) and it serves from
+[`course/`](course/) — or open `course/index.html` locally.
 
 ## Tasks and targets
 
@@ -27,8 +32,8 @@ scripts/check_pipeline.py        3-task smoke test on real data; run after every
 logs/experiments.jsonl           one JSON line per run (feeds the paper's tables)
 docs/DATA.md                     dataset facts, quirks, open questions
 docs/research/                   literature and toolchain notes
-paper/                           LaTeX draft (IEEE journal format) + notes + style guard
-course/                          Farsi step-by-step course following the project
+paper/                           LaTeX draft + main.pdf (rebuilt via scripts/build_paper.ps1) + style guard
+course/                          Farsi course website (HTML, diagrams, quizzes)
 LOGBOOK.md                       dated journal of decisions and results
 ```
 
