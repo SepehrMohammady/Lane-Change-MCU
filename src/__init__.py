@@ -1,4 +1,4 @@
-"""DIMIR µNAS project — source package.
+"""DMIR µNAS project — source package.
 
 Modules:
     config      -- single experiment configuration dataclass (user-facing)

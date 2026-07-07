@@ -1,4 +1,4 @@
-"""Data loading and sanitation for the prepared DIMIR splits.
+"""Data loading and sanitation for the prepared DMIR splits.
 
 The dataset arrives as pickled numpy arrays, already windowed and
 normalised by the data provider: windows of 50 timesteps x 31 features.

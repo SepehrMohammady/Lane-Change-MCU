@@ -2,7 +2,7 @@
 
 PhD research project (ELIOS Lab, University of Genoa, SYNERGIES project).
 Constrained neural architecture search on the Lane Change Intention
-Recognition driving time-series dataset (internal codename DIMIR); goal: beat
+Recognition driving time-series dataset (codename DMIR); goal: beat
 the published LC-Intention baseline with models small enough for deployment
 on the **STM32H7B3I-DK**, and publish in a Q1 venue.
 
@@ -26,7 +26,7 @@ data provider). Published baseline to beat
 ## Repository layout
 
 ```
-notebooks/dimir_pipeline.ipynb   main pipeline — all knobs in its Config cell
+notebooks/dmir_pipeline.ipynb   main pipeline — all knobs in its Config cell
 src/                             importable logic (data, models, train, eda, logging)
 scripts/check_pipeline.py        3-task smoke test on real data; run after every change
 logs/experiments.jsonl           one JSON line per run (feeds the paper's tables)

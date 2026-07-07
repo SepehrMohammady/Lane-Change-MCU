@@ -1,4 +1,4 @@
-# DIMIR prepared dataset — facts and findings
+# DMIR prepared dataset — facts and findings
 
 Verified on 2026-07-07 from the pickles in `Materials/*.zip` (extracted to `data/`).
 Data was prepared and normalised by the data provider (ELIOS lab colleague).
