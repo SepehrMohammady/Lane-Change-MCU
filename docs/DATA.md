@@ -39,13 +39,23 @@ spread (mean ≈ 2.0).
    50 × 31 input contract, may be pruned by NAS automatically.
 3. No NaNs in any split.
 
+## Provenance (resolved 2026-07-07 — details in docs/research/dataset-provenance.md)
+
+The data is the ELIOS "Lane Change Intention Recognition Dataset" (Zenodo DOI
+10.5281/zenodo.16686054, MIT, CARLA simulator, 50 drivers, 10 Hz → the window
+is 5 s). The official feature list has 30 channels + fileTime = 31 CSV
+columns; feature identities (ego dynamics, lane geometry, two nearest
+vehicles) are listed in the provenance note. The spiky feature pairs are
+plausibly `curvatureDx*` (numerical derivative → division-by-near-zero).
+
 ## Open questions for the data provider (TO-DO)
 
-- [ ] Names/meaning of the 31 features (needed for the paper's dataset description
-      and for interpreting features 7, 12–15).
-- [ ] Are the test-split spikes on features 12–15 known artefacts? How did the
-      baseline paper handle them (clip / leave / drop)?
-- [ ] Sampling rate of the 50-timestep window (window duration in seconds).
-- [ ] Exact split protocol (by driver? by session? random?) — needed to rule out
-      window leakage across splits.
-- [ ] Canonical DIMIR citation and license.
+- [ ] ⛔ Exact column order of the pickles; is channel 31 fileTime? (drop it
+      if so — no physical meaning, leakage risk).
+- [ ] ⛔ Is the pickle split driver-wise per the official protocol (val users
+      {5,8,10,12,16,19,27}, test {2,7,13,18,25,31,36})? Required for a fair
+      comparison against the published RMSE 0.5102.
+- [ ] Are the test-split spikes on features 12–15 known artefacts (curvatureDx)?
+      How were they handled in the internal 92%/0.42/0.44 runs?
+- [ ] What normalization was applied (StandardScaler fit on train only?).
+- [ ] Provenance of the internal 92%/0.42/0.44 results (model, protocol).
