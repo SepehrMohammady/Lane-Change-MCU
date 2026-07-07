@@ -43,19 +43,40 @@ spread (mean ≈ 2.0).
 
 The data is the ELIOS "Lane Change Intention Recognition Dataset" (Zenodo DOI
 10.5281/zenodo.16686054, MIT, CARLA simulator, 50 drivers, 10 Hz → the window
-is 5 s). The official feature list has 30 channels + fileTime = 31 CSV
-columns; feature identities (ego dynamics, lane geometry, two nearest
-vehicles) are listed in the provenance note. The spiky feature pairs are
-plausibly `curvatureDx*` (numerical derivative → division-by-near-zero).
+is 5 s). Project codename DMIR (Driver Maneuver Intention Recognition,
+ApplePies 2024 precursor paper).
 
-## Open questions for the data provider (TO-DO)
+## Verified answers (2026-07-07, scripts/analysis/ — no colleague needed)
 
-- [ ] ⛔ Exact column order of the pickles; is channel 31 fileTime? (drop it
-      if so — no physical meaning, leakage risk).
-- [ ] ⛔ Is the pickle split driver-wise per the official protocol (val users
-      {5,8,10,12,16,19,27}, test {2,7,13,18,25,31,36})? Required for a fair
-      comparison against the published RMSE 0.5102.
-- [ ] Are the test-split spikes on features 12–15 known artefacts (curvatureDx)?
-      How were they handled in the internal 92%/0.42/0.44 runs?
-- [ ] What normalization was applied (StandardScaler fit on train only?).
-- [ ] Provenance of the internal 92%/0.42/0.44 results (model, protocol).
+1. **Driver-wise split CONFIRMED** (`scripts/analysis/verify_split.py`).
+   Raw per-user H5 sessions (Materials/Overtaking2.zip) matched against the
+   pickles by per-window Pearson correlation (invariant to the normalization):
+   official test users 13 & 2 appear ONLY in the pickle test split, val users
+   10 & 5 ONLY in val, train user 22 ONLY in train (YawRate/LatAcceleration
+   channels, r > 0.9999; SteeringAngle cross-hits are quantization
+   false-positives). The comparison against the published RMSE 0.5102 is
+   therefore apples-to-apples, and there is no window leakage across drivers.
+2. **No fileTime/timestamp channel** in any pickle
+   (`scripts/analysis/fingerprint_channels.py`): no channel is monotonic
+   within windows with near-unique values. No timestamp leakage.
+3. **Spike pairs = `curvatureDx{Right,Left}Lane`.** The spiky pairs are
+   exactly-equal right/left pairs sitting where the curvature-derivative
+   columns fall in the layout: (12,13) for classification/LCL, (14,15) for
+   LCR. Numerical derivative → division-by-near-zero explains the ~5×10⁶
+   magnitudes. Clipping to train range (our default) remains the handling.
+4. **Feature 7 (classification) = `egoLaneWidth`**: constant 3.75 m on the
+   2-lane highway → 0 after standardization. Harmless; NAS may prune it.
+5. **Normalization**: classification stats ≈ StandardScaler fit on train
+   (per-channel mean ≈ 0, std ≈ 1). The LCR set deviates (std up to 3.9,
+   means to −1.2) — its scaler was fit on a different subset; also its
+   channel layout differs (egoLaneWidth at index 9, indicators mid-block,
+   vs index 7 / end-block for classification). Treat tasks as separate
+   input spaces.
+
+## Still open (nice-to-have, non-blocking)
+
+- [ ] Exact name list of all 31 channels per task (ego-block order inferred,
+      not confirmed; the 3 trailing binaries in classification unidentified —
+      likely indicators + one flag).
+- [ ] Provenance of the internal 92%/0.42/0.44 reference results (model,
+      spike handling) — needed only for the paper's "internal reference" row.
