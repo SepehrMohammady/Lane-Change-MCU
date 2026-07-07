@@ -46,6 +46,25 @@ The data is the ELIOS "Lane Change Intention Recognition Dataset" (Zenodo DOI
 is 5 s). Project codename DMIR (Driver Maneuver Intention Recognition,
 ApplePies 2024 precursor paper).
 
+## Feature identities
+
+The exact ordered channel names for both layouts are in
+[docs/research/feature-map.md](research/feature-map.md) and machine-readable in
+[`src/features.py`](../src/features.py). Confirmed from the provider's
+`feature_description` doc + correlation to raw H5 signals. Key point: the
+**turn-signal state is a feature** (channels 28/29 classification, 3/4
+regression) and is heavily label-leaky — see below.
+
+## The turn-indicator label leak (⚠ affects paper framing)
+
+`scripts/analysis/indicator_leak.py`: the two indicator channels alone reach
+**81.5% test accuracy** (full DSCNN 91.5%; internal reference 92%).
+Blinker-active-in-window rate — no-intent 6.5%, LCR 91.7%, LCL 70.7%. The
+3-class headline is largely "read the blinker." Plan: keep indicators for a
+like-for-like baseline comparison, add a with/without ablation, and lead the
+paper with the regression + deployment story. Details in feature-map.md and
+paper/NOTES.md.
+
 ## Verified answers (2026-07-07, scripts/analysis/ — no colleague needed)
 
 1. **Driver-wise split CONFIRMED** (`scripts/analysis/verify_split.py`).
