@@ -1,0 +1,14 @@
+# Python 3.13 — GPU: install torch first with the CUDA 12.8 index (Blackwell/RTX 50xx support):
+#   pip install torch --index-url https://download.pytorch.org/whl/cu128
+torch
+numpy
+pandas
+matplotlib
+seaborn
+scikit-learn
+jupyter
+ipykernel
+tqdm
+torchinfo
+onnx
+onnxruntime
