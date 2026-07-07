@@ -12,11 +12,11 @@ data provider). Published baseline to beat
 ([LC-Intention framework](https://elios-lab.github.io/LC-Intention-Framework/),
 [IEEE 11271346](https://ieeexplore.ieee.org/document/11271346)):
 
-| Task | Metric | Baseline | Ours (so far) |
+| Task | Metric | Baseline | Ours (first untuned DSCNN) |
 |---|---|---|---|
-| 3-class intention (none/LCR/LCL) | accuracy | 92% | 91.5% (first DSCNN baseline) |
-| Time-to-LC regression, LCR | RMSE | 0.42 s | — |
-| Time-to-LC regression, LCL | RMSE | 0.44 s | — |
+| 3-class intention (none/LCR/LCL) | accuracy | 92% | 91.5% |
+| Time-to-LC regression, LCR | RMSE | 0.42 s | 0.439 s |
+| Time-to-LC regression, LCL | RMSE | 0.44 s | 0.459 s |
 
 ## Repository layout
 
