@@ -3,15 +3,17 @@
 # Regression (primary, un-leaky) first, then classification + no-indicator
 # ablation. Each logs to runs/nas/. Usage (from WSL):
 #   bash /mnt/c/Projects/PhD/DIMIR/unas/run_all.sh
-set -e
+# No `set -e`: a failure in one search must not abort the remaining queue.
 REPO="/mnt/c/Projects/PhD/DIMIR"
 RUN="$REPO/unas/full_search.sh"
 
-#            config           rounds epochs
-bash "$RUN"  dmir_lcr         150    100
-bash "$RUN"  dmir_lcl         150    100
-bash "$RUN"  dmir_cls         150     80
-bash "$RUN"  dmir_cls_noind   150     80
+run() { echo ">>> $* @ $(date)"; bash "$RUN" "$@" || echo "!!! $1 FAILED (continuing)"; }
+
+#    config           rounds epochs
+run  dmir_lcr         150    100
+run  dmir_lcl         150    100
+run  dmir_cls         150     80
+run  dmir_cls_noind   150     80
 
 echo "=== ALL SEARCHES DONE ==="
 for c in dmir_lcr dmir_lcl dmir_cls dmir_cls_noind; do
