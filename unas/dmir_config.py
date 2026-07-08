@@ -16,7 +16,15 @@ bound is penalised first. Defaults below target the STM32H7B3I-DK
 Pareto front; tighten peak_mem/model_size afterwards to push toward the
 STM32F401 low-end (96 KB / 512 KB) stretch target.
 """
+import os
+
 import tensorflow as tf
+# Build callbacks from the SAME Keras the fork's models use. The 1D search
+# space builds models with bare `keras` (Keras 3), but importing tfmot flips
+# tf.keras to legacy Keras 2; mixing the two makes Keras-2 callbacks read a
+# Keras-3 optimizer (e.g. ReduceLROnPlateau -> optimizer.lr) and crash. Using
+# keras.callbacks (Keras 3) keeps callbacks and model on the same Keras.
+import keras
 
 from uNAS.config import (TrainingConfig, BoundConfig, AgingEvoConfig,
                          ModelSaverConfig)
@@ -32,33 +40,37 @@ MAC_BOUND = 2_000_000            # MACs; baseline DSCNN ~0.17 M, so generous
 #   classification: 1 - max(val_accuracy)
 #   regression:     min(val_mae)   <-- MAE, not RMSE (loss = MeanAbsoluteError)
 # Our DSCNN baseline test MAE: LCR 0.318, LCL 0.333; published SOTA MAE 0.2978.
-CLS_ERROR_BOUND = 0.10           # <= 10% error  (>= 90% accuracy)
-REG_ERROR_BOUND = 0.30           # target MAE at/under baseline, near SOTA
+CLS_ERROR_BOUND = float(os.environ.get("DMIR_CLS_ERROR_BOUND", "0.10"))  # >=90% acc
+REG_ERROR_BOUND = float(os.environ.get("DMIR_REG_ERROR_BOUND", "0.30"))  # MAE target
+SAVE_CRITERIA = os.environ.get("DMIR_SAVE_CRITERIA", "pareto")
 
 # Search budget. rounds=2000 is the paper default; start smaller for a first
-# end-to-end validation, then scale up.
-ROUNDS = 300
-POPULATION = 100
-SAMPLE = 25
+# end-to-end validation, then scale up. Override for a quick smoke test with
+#   export DMIR_ROUNDS=20
+ROUNDS = int(os.environ.get("DMIR_ROUNDS", "300"))
+POPULATION = int(os.environ.get("DMIR_POPULATION", "100"))
+SAMPLE = int(os.environ.get("DMIR_SAMPLE", "25"))
+EPOCHS = int(os.environ.get("DMIR_EPOCHS", "120"))  # set small (e.g. 3) for smoke
 
 
 def _training_config(dataset, classification):
+    # Keras 3 requires explicit mode= for monitors it can't classify by name.
     if classification:
         cbs = lambda: [
-            tf.keras.callbacks.EarlyStopping(monitor="val_accuracy", patience=12,
-                                             restore_best_weights=True),
-            tf.keras.callbacks.TerminateOnNaN(),
+            keras.callbacks.EarlyStopping(monitor="val_accuracy", mode="max",
+                                          patience=12, restore_best_weights=True),
+            keras.callbacks.TerminateOnNaN(),
         ]
     else:
         cbs = lambda: [
-            tf.keras.callbacks.ReduceLROnPlateau(monitor="val_loss", factor=0.5,
-                                                 patience=15, min_lr=1e-6),
-            tf.keras.callbacks.EarlyStopping(monitor="val_mae", patience=20,
-                                             min_delta=0.005, restore_best_weights=True),
-            tf.keras.callbacks.TerminateOnNaN(),
+            keras.callbacks.ReduceLROnPlateau(monitor="val_loss", mode="min",
+                                              factor=0.5, patience=15, min_lr=1e-6),
+            keras.callbacks.EarlyStopping(monitor="val_mae", mode="min", patience=20,
+                                          min_delta=0.005, restore_best_weights=True),
+            keras.callbacks.TerminateOnNaN(),
         ]
     return TrainingConfig(dataset=dataset, optimizer="adam", callbacks=cbs,
-                          epochs=120, batch_size=256)
+                          epochs=EPOCHS, batch_size=256)
 
 
 def _setup(task, name, error_bound, drop_indicators=False):
@@ -78,7 +90,7 @@ def _setup(task, name, error_bound, drop_indicators=False):
             checkpoint_dir=f"artifacts/{name}",
             rounds=ROUNDS, population_size=POPULATION, sample_size=SAMPLE,
         ),
-        "model_saver_config": ModelSaverConfig(save_criteria="pareto"),
+        "model_saver_config": ModelSaverConfig(save_criteria=SAVE_CRITERIA),
         "serialized_dataset": False,
     }
     return {"config": config, "name": name, "load_from": None,

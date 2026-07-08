@@ -16,6 +16,7 @@ Optional `drop_indicators=True` removes the turn-signal channels for the
 label-leak ablation (indicator channels: classification 28/29, regression 3/4;
 see docs/research/feature-map.md).
 """
+import os
 import pickle
 from pathlib import Path
 from typing import Tuple
@@ -25,8 +26,10 @@ import tensorflow as tf
 
 from uNAS.dataset import Dataset
 
-# Point this at the DMIR repo's data/ directory.
-DATA_ROOT = Path(r"C:\Projects\PhD\DIMIR\data")
+# DMIR repo's data/ directory. Override with the DMIR_DATA_ROOT env var — the
+# fork runs under WSL/Linux where the Windows repo is at /mnt/c/... e.g.
+#   export DMIR_DATA_ROOT=/mnt/c/Projects/PhD/DIMIR/data
+DATA_ROOT = Path(os.environ.get("DMIR_DATA_ROOT", r"C:\Projects\PhD\DIMIR\data"))
 
 _LAYOUT = {
     "classification": ("data-classification", "multi", 3),
