@@ -43,4 +43,23 @@ else:
     print("configs already registered")
 PYEOF
 
+# Patch: free the TF graph after every candidate, else the persistent ray
+# GPUTrainer actor leaks ~200 MB/candidate and OOM-kills a long search.
+python3 - "$FORK/uNAS/search_algorithms/aging_evolution.py" <<'PYEOF'
+import sys
+p = sys.argv[1]
+s = open(p, encoding="utf-8").read()
+if "import gc" not in s:
+    s = s.replace("import ray\n", "import ray\nimport gc\nimport keras\n", 1)
+marker = ("        if self.model_saver:\n"
+          "            self.model_saver.evaluate_and_save(model, val_error, test_error, resource_features)\n")
+cleanup = marker + ("\n        del model, rg\n"
+                    "        keras.backend.clear_session()\n"
+                    "        gc.collect()\n")
+if "keras.backend.clear_session()" not in s:
+    s = s.replace(marker, cleanup)
+open(p, "w", encoding="utf-8").write(s)
+print("patched session cleanup:", s.count("keras.backend.clear_session()"), "site(s)")
+PYEOF
+
 echo "done. Fork at: $FORK"

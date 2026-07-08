@@ -14,6 +14,8 @@ export DMIR_DATA_ROOT="$REPO/data"
 export DMIR_ROUNDS="$ROUNDS" DMIR_EPOCHS="$EPOCHS"
 export DMIR_POPULATION="${DMIR_POPULATION:-50}" DMIR_SAMPLE="${DMIR_SAMPLE:-15}"
 export TF_CPP_MIN_LOG_LEVEL=1
+export TF_FORCE_GPU_ALLOW_GROWTH=true   # don't grab all 8 GB VRAM up front
+export RAY_memory_usage_threshold=0.97  # small headroom bump; real fix is the session-clear patch
 LOGDIR="$REPO/runs/nas"; mkdir -p "$LOGDIR"
 LOG="$LOGDIR/${CONFIG}_r${ROUNDS}_e${EPOCHS}.log"
 echo "config=$CONFIG rounds=$ROUNDS epochs=$EPOCHS -> $LOG"
