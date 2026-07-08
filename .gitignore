@@ -1,6 +1,8 @@
 # Data (large, not versioned — see README for how to obtain)
 data/
 Materials/
+# External µNAS fork checkout (unlicensed upstream; kept out of our MIT tree)
+Materials/uNAS-elios/
 
 # Python
 .venv/
