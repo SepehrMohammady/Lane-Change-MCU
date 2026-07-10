@@ -26,6 +26,8 @@ TASKS = {
     "dmir_lcl": ("regression_lcl", "data-regression-lcl", "lcl"),
     "dmir_cls": ("classification", "data-classification", "multi"),
     "dmir_cls_noind": ("classification", "data-classification", "multi"),
+    "dmir_lcr_rmse": ("regression_lcr", "data-prepared-lcr", "lcr"),
+    "dmir_lcl_rmse": ("regression_lcl", "data-regression-lcl", "lcl"),
 }
 # SOTA / baseline reference points for context.
 REF = {
@@ -33,6 +35,8 @@ REF = {
     "dmir_lcl": "SOTA MAE 0.298 / RMSE 0.510; our DSCNN MAE 0.333 / RMSE 0.459",
     "dmir_cls": "internal ref acc 92%; our DSCNN 91.5%; blinker-only 81.5%",
     "dmir_cls_noind": "no-indicator ablation (blinker channels removed)",
+    "dmir_lcr_rmse": "RMSE-objective; ref transformer 333k @ RMSE 0.42; MAE-run best 0.447",
+    "dmir_lcl_rmse": "RMSE-objective; ref transformer 49k @ RMSE 0.44; MAE-run best 0.501",
 }
 
 
