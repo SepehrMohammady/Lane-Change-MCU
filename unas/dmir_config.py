@@ -51,6 +51,12 @@ ROUNDS = int(os.environ.get("DMIR_ROUNDS", "300"))
 POPULATION = int(os.environ.get("DMIR_POPULATION", "100"))
 SAMPLE = int(os.environ.get("DMIR_SAMPLE", "25"))
 EPOCHS = int(os.environ.get("DMIR_EPOCHS", "120"))  # set small (e.g. 3) for smoke
+# Regression objective: "mae" (default) or "rmse". Requires the model_trainer
+# patch in patch_fork.py; the callbacks below monitor the matching val metric.
+REG_METRIC = os.environ.get("DMIR_REG_METRIC", "mae")
+# Model save policy: "pareto" (default) or "all" (keep every model — avoids
+# chunked-resume pruning a good candidate).
+SAVE_CRITERIA = os.environ.get("DMIR_SAVE_CRITERIA", "pareto")
 
 
 def _training_config(dataset, classification):
@@ -62,10 +68,11 @@ def _training_config(dataset, classification):
             keras.callbacks.TerminateOnNaN(),
         ]
     else:
+        mon = "val_rmse" if REG_METRIC == "rmse" else "val_mae"
         cbs = lambda: [
             keras.callbacks.ReduceLROnPlateau(monitor="val_loss", mode="min",
                                               factor=0.5, patience=15, min_lr=1e-6),
-            keras.callbacks.EarlyStopping(monitor="val_mae", mode="min", patience=20,
+            keras.callbacks.EarlyStopping(monitor=mon, mode="min", patience=20,
                                           min_delta=0.005, restore_best_weights=True),
             keras.callbacks.TerminateOnNaN(),
         ]
@@ -103,6 +110,17 @@ def get_dmir_lcr_setup(**_):
 
 def get_dmir_lcl_setup(**_):
     return _setup("regression_lcl", "dmir_lcl", REG_ERROR_BOUND)
+
+
+# RMSE-objective variants (set DMIR_REG_METRIC=rmse). Distinct names -> fresh
+# artifacts dirs, so they do not collide with the MAE runs. The error_bound is
+# an RMSE target here (published SOTA 0.51; internal reference 0.42/0.44).
+def get_dmir_lcr_rmse_setup(**_):
+    return _setup("regression_lcr", "dmir_lcr_rmse", 0.44)
+
+
+def get_dmir_lcl_rmse_setup(**_):
+    return _setup("regression_lcl", "dmir_lcl_rmse", 0.44)
 
 
 def get_dmir_cls_setup(**_):

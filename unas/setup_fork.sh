@@ -30,6 +30,8 @@ entries = {
     "dmir_lcl":       ("configs.dmir_config", "get_dmir_lcl_setup"),
     "dmir_cls":       ("configs.dmir_config", "get_dmir_cls_setup"),
     "dmir_cls_noind": ("configs.dmir_config", "get_dmir_cls_noind_setup"),
+    "dmir_lcr_rmse":  ("configs.dmir_config", "get_dmir_lcr_rmse_setup"),
+    "dmir_lcl_rmse":  ("configs.dmir_config", "get_dmir_lcl_rmse_setup"),
 }
 lines = "".join(
     f'    "{k}": ("{m}", "{f}"),\n' for k, (m, f) in entries.items()

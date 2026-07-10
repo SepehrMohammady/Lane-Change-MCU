@@ -10,6 +10,7 @@
 Usage:  python3 patch_fork.py /path/to/uNAS/uNAS/search_algorithms/aging_evolution.py
 """
 import sys
+from pathlib import Path
 
 GUARD = '''
     def _safe_evaluate(self, point):
@@ -58,7 +59,55 @@ RETURN_2 = (
 )
 
 
+REG_LOSS_ANCHOR = (
+    "        if dataset.num_classes < 2:#Regression\n"
+    "            loss = tf.keras.losses.MeanAbsoluteError() \n"
+    "            metric = tf.keras.metrics.MeanAbsoluteError(name=\"mae\")\n"
+)
+REG_LOSS_NEW = (
+    "        if dataset.num_classes < 2:#Regression\n"
+    "            import os as _os\n"
+    "            if _os.environ.get('DMIR_REG_METRIC', 'mae') == 'rmse':\n"
+    "                loss = tf.keras.losses.MeanSquaredError()\n"
+    "                metric = tf.keras.metrics.RootMeanSquaredError(name='rmse')\n"
+    "            else:\n"
+    "                loss = tf.keras.losses.MeanAbsoluteError()\n"
+    "                metric = tf.keras.metrics.MeanAbsoluteError(name='mae')\n"
+)
+REG_VALERR_ANCHOR = (
+    "            val_error = log.history[\"val_mae\"][-1] if self.pruning "
+    "and self.pruning.finish_pruning_by_epoch >= epochs else "
+    "min(log.history[\"val_mae\"][check_logs_from_epoch:])\n"
+)
+REG_VALERR_NEW = (
+    "            import os as _os\n"
+    "            _mk = 'val_rmse' if _os.environ.get('DMIR_REG_METRIC', 'mae') == 'rmse' else 'val_mae'\n"
+    "            val_error = log.history[_mk][-1] if self.pruning "
+    "and self.pruning.finish_pruning_by_epoch >= epochs else "
+    "min(log.history[_mk][check_logs_from_epoch:])\n"
+)
+
+
+def patch_trainer(fork_root: str) -> None:
+    """Make regression RMSE-aware when DMIR_REG_METRIC=rmse (model_trainer.py)."""
+    p = Path(fork_root) / "uNAS" / "model_trainer.py"
+    s = p.read_text(encoding="utf-8")
+    if "DMIR_REG_METRIC" in s:
+        print("model_trainer already RMSE-aware"); return
+    assert REG_LOSS_ANCHOR in s, "regression loss anchor not found"
+    assert REG_VALERR_ANCHOR in s, "regression val_error anchor not found"
+    s = s.replace(REG_LOSS_ANCHOR, REG_LOSS_NEW)
+    s = s.replace(REG_VALERR_ANCHOR, REG_VALERR_NEW)
+    p.write_text(s, encoding="utf-8")
+    print("model_trainer patched: RMSE-aware regression")
+
+
 def main(path: str) -> None:
+    # path is .../uNAS/search_algorithms/aging_evolution.py; the fork root is
+    # three levels up. Also patch the sibling model_trainer.py.
+    fork_root = Path(path).resolve().parents[2]
+    patch_trainer(str(fork_root))
+
     with open(path, encoding="utf-8") as f:
         s = f.read()
 
