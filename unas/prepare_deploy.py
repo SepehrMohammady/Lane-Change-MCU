@@ -51,13 +51,19 @@ def prep(task):
 
 def convert(model, xtr, mode):
     conv = tf.lite.TFLiteConverter.from_keras_model(model)
-    if mode == "int8":
+    if mode in ("int8", "int16x8"):
         conv.optimizations = [tf.lite.Optimize.DEFAULT]
         rng = np.random.default_rng(42)
         s = xtr[rng.choice(len(xtr), size=min(500, len(xtr)), replace=False)]
         conv.representative_dataset = lambda: ([s[i:i + 1]] for i in range(len(s)))
-        # ST's privileged scheme for Cortex-M: full-integer int8, per-channel.
-        conv.target_spec.supported_ops = [tf.lite.OpsSet.TFLITE_BUILTINS_INT8]
+        if mode == "int8":
+            # ST's privileged scheme for Cortex-M: full-integer int8, per-channel.
+            conv.target_spec.supported_ops = [tf.lite.OpsSet.TFLITE_BUILTINS_INT8]
+        else:
+            # int8 weights + int16 activations. Preserves accuracy offline; ST
+            # support unconfirmed on the current Core — upload to find out.
+            conv.target_spec.supported_ops = [
+                tf.lite.OpsSet.EXPERIMENTAL_TFLITE_BUILTINS_ACTIVATIONS_INT16_WEIGHTS_INT8]
     return conv.convert()
 
 
@@ -107,10 +113,14 @@ def main(out_dir):
         b8 = convert(m, xtr, "int8")
         (out / f"{tag}_int8.tflite").write_bytes(b8)
         q8 = eval_tflite(b8, xte, yte, is_cls)
+        b16 = convert(m, xtr, "int16x8")
+        (out / f"{tag}_int16x8.tflite").write_bytes(b16)
+        q16 = eval_tflite(b16, xte, yte, is_cls)
         rows.append((tag, m.count_params(), len(b32) / 1024, len(b8) / 1024, fm, q8, is_cls))
         mn = "acc" if is_cls else "MAE"
         print(f"{tag:14} params={m.count_params():>7}  fp32={len(b32)/1024:6.1f}KB  "
-              f"int8={len(b8)/1024:6.1f}KB  float_{mn}={fm:.4f}  int8_{mn}={q8:.4f}")
+              f"int8={len(b8)/1024:6.1f}KB  int16x8={len(b16)/1024:6.1f}KB  | "
+              f"float_{mn}={fm:.4f}  int8_{mn}={q8:.4f}  int16x8_{mn}={q16:.4f}")
 
     print("\n=== files in", out, "===")
     for f in sorted(out.iterdir()):
