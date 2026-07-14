@@ -32,6 +32,16 @@ spread (mean ≈ 2.0).
    [−431, 140]. The p99.9 of the affected features is < 0.5, so these are isolated
    spikes, most likely a division-by-near-zero artefact (TTC-like or ratio signal)
    in the preprocessing.
+   **Provenance lead (2026-07-14, unproven):** a colleague reported some drivers
+   crashed in the simulator and the team deliberately kept their data (she named
+   users 34 and 43 from memory). `Materials/DMIR Test Reports.xlsx` corroborates
+   **User34** (4 collisions + 2 accidents — worst combined with User1's 5 + 1)
+   but shows **0/0 for User43**. Mechanism fits: a collision teleports/resets the
+   ego position, and a derivative-built channel (curvatureDx) explodes at the
+   discontinuity. Consistent with spikes being rare and test-only *if* an
+   affected driver landed in the test split — which we cannot verify (no
+   window→driver mapping in the prepared pickles). Recorded as a plausible
+   hypothesis, not a conclusion.
    **Handling:** `Config.clip_to_train_range=True` clips val/test features to the
    per-feature train min/max. Training data is never modified.
 2. **Feature 7 is constant zero** in the classification training split (std = 0).
