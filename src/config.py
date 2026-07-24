@@ -6,8 +6,7 @@ receive it explicitly — no hidden globals.
 """
 from __future__ import annotations
 
-import json
-from dataclasses import dataclass, field, asdict
+from dataclasses import dataclass, asdict
 from pathlib import Path
 
 PROJECT_ROOT = Path(__file__).resolve().parent.parent

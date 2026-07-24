@@ -56,6 +56,13 @@ On the low-end **NUCLEO-F401RE** (Cortex-M4 @ 84 MHz, 512 KB flash),
 cls_tiny runs at 4.376 ms in 7.2% of the flash, while the reference CNN
 needs 3.38× the board's entire flash and cannot run on it at all.
 
+**Quantization.** Full-int8 PTQ costs accuracy on these wide-dynamic-range
+inputs (cls 92.08 → 86.86%); **quantization-aware training recovers it to
+89.82%**, measured at **1.558 ms** on the H7B3I-DK (the fastest operating point)
+and 7.381 ms on the F401RE. int16×8 preserves accuracy offline but ST Edge AI
+silently dequantizes it, so it is not deployable. See `unas/qat_finetune.py` and
+`docs/research/deployment.md`.
+
 ## Repository layout
 
 ```

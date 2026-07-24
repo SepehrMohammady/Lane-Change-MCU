@@ -54,7 +54,3 @@ class BaselineDSCNN(nn.Module):
 
     def forward(self, x: torch.Tensor) -> torch.Tensor:
         return self.head(self.blocks(self.stem(x)))
-
-
-def count_params(model: nn.Module) -> int:
-    return sum(p.numel() for p in model.parameters() if p.requires_grad)
