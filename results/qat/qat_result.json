@@ -1,0 +1,11 @@
+{
+ "task": "classification",
+ "graph": "cls_best_graph.json",
+ "float32_2d_acc": 0.9208498123922523,
+ "ptq_int8_2d_acc": 0.868623871818274,
+ "qat_int8_2d_acc": 0.8981847682790792,
+ "qat_fakequant_float_acc": 0.8998580265693135,
+ "orig_1d_float_acc": 0.9208,
+ "orig_1d_int8_acc": 0.8686,
+ "qat_int8_tflite_bytes": 101616
+}
