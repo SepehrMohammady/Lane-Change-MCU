@@ -47,7 +47,8 @@ MEASURED_H7B3 = pd.DataFrame([
     ("cls_tiny f32",        "ours", "acc 91.30%",          0.7931,   31_742,    37_954,  9_412),
     ("lcr_best f32",        "ours", "MAE 0.287 s",        14.06,     860_407,   474_522, 20_772),
     ("lcl_best f32",        "ours", "MAE 0.317 s",        28.77,   1_658_927,   423_494, 28_264),
-    ("cls_best int8",       "ours", "acc 86.86%",          1.885,     158_336,   106_738,  8_096),
+    ("cls_best int8 PTQ",   "ours", "acc 86.86%",          1.885,     158_336,   106_738,  8_096),
+    ("cls_best int8 QAT",   "ours", "acc 89.82%",          1.558,     161_570,   131_008,  8_404),
 ], columns=["model", "who", "quality", "latency_ms", "macc", "flash_B", "ram_B"])
 
 # NUCLEO-F401RE, Cortex-M4 @ 84 MHz, 512 KB flash / 96 KB RAM (2026-07-14).
