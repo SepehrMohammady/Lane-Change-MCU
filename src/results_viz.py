@@ -48,17 +48,12 @@ MEASURED_H7B3 = pd.DataFrame([
     ("lcr_best f32",        "ours", "MAE 0.287 s",        14.06,     860_407,   474_522, 20_772),
     ("lcl_best f32",        "ours", "MAE 0.317 s",        28.77,   1_658_927,   423_494, 28_264),
     ("cls_best int8 PTQ",   "ours", "acc 86.86%",          1.885,     158_336,   106_738,  8_096),
+    # int8 *interface* re-export (unas/export_int8_io.py): same weights and
+    # accuracy as the row above, only the I/O tensor dtype differs -- so the
+    # pair is a clean single-variable comparison for RAM and latency.
+    ("cls_best int8 int8-IO", "ours", "acc 86.86%",        1.752,     155_230,   106_446,  5_444),
     ("cls_best int8 QAT",   "ours", "acc 89.82%",          1.558,     161_570,   131_008,  8_404),
 ], columns=["model", "who", "quality", "latency_ms", "macc", "flash_B", "ram_B"])
-
-# int8 *interface* re-export (unas/export_int8_io.py). Flash/RAM are the
-# platform-level optimize output and so comparable with the table above; its
-# LATENCY is deliberately absent because it was benchmarked on a different board
-# (STM32H573I-DK, Cortex-M33 @ 250 MHz, 2.462 ms) and must not be compared to
-# the Cortex-M7 figures. Accuracy is unchanged from the float32-I/O build.
-MEASURED_INT8_IO = {"model": "cls_best int8 (int8 I/O)", "test_acc": 0.8686,
-                    "flash_B": 106_446, "ram_B": 5_444, "macc": 155_230,
-                    "h573_latency_ms": 2.462, "h7b3_latency_ms": None}
 
 # NUCLEO-F401RE, Cortex-M4 @ 84 MHz, 512 KB flash / 96 KB RAM (2026-07-14).
 F401_FLASH_B = 512 * 1024
