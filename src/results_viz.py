@@ -54,7 +54,9 @@ MEASURED_H7B3 = pd.DataFrame([
 # NUCLEO-F401RE, Cortex-M4 @ 84 MHz, 512 KB flash / 96 KB RAM (2026-07-14).
 F401_FLASH_B = 512 * 1024
 # ms @ 84 MHz; the reference CNN does not fit at all (1,769,882 B = 3.38x flash).
-MEASURED_F401 = {"cls_tiny f32": 4.376, "cls_best int8 QAT": 7.381, "cls_best f32": 18.35}
+MEASURED_F401 = {"cls_tiny f32": 4.376, "cls_best int8 QAT": 7.381,
+                 "cls_best f32": 18.35, "lcl_best f32": 162.5}
+# lcr_best (474,522 B = 90.5% of flash, 49,766 B headroom) returned NO result.
 
 # Our test-set evaluation of each deployment artifact
 # (docs/research/deployment.md "Artifacts" table; higher acc / lower MAE better).
@@ -261,14 +263,16 @@ def plot_measured_deployment():
 def plot_f401_fit():
     """The categorical result: the reference CNN cannot run on the F401 at all."""
     rows = [("REF_cnn_multi", 1_769_882, None), ("lcr_best", 474_522, None),
-            ("lcl_best", 423_494, None), ("cls_best", 343_254, "cls_best f32"),
+            ("lcl_best", 423_494, "lcl_best f32"), ("cls_best", 343_254, "cls_best f32"),
             ("cls_best int8 QAT", 131_008, "cls_best int8 QAT"),
             ("cls_tiny", 37_954, "cls_tiny f32")]
     names = [r[0] for r in rows]
     pct = [r[1] / F401_FLASH_B * 100 for r in rows]
     measured = [MEASURED_F401.get(r[2]) for r in rows]
     fig, ax = plt.subplots(figsize=(8, 3.2))
-    colors = [CRITICAL if p > 100 else BLUE for p in pct]
+    # blue = measured on the board; gray = not established; red = cannot fit
+    colors = [CRITICAL if p > 100 else (BLUE if ms is not None else MUTED)
+              for p, ms in zip(pct, measured)]
     ax.barh(range(len(rows)), pct, color=colors, height=0.62)
     ax.axvline(100, color=INK, linewidth=1.4)
     for yi, (p, ms) in enumerate(zip(pct, measured)):
@@ -277,13 +281,17 @@ def plot_f401_fit():
             label += "  — does not fit"
         elif ms is not None:
             label += f"   ({ms} ms measured)"
+        elif names[yi] == "lcr_best":
+            label += "   (no benchmark result — <50 KB headroom)"
+        else:
+            label += "   (not benchmarked)"
         ax.annotate(label, xy=(min(p, 330), yi), xytext=(4, 0),
                     textcoords="offset points", va="center", fontsize=9, color=INK)
     ax.set_yticks(range(len(rows)), names)
     ax.invert_yaxis()
     ax.set_xlabel("flash needed, % of NUCLEO-F401RE (Cortex-M4) — the line at 100% "
                   "is the board's entire 512 KB")
-    ax.set_title("Smallest-board check: every searched model fits; the reference cannot")
+    ax.set_title("Smallest-board check: 4 of 5 models run; the reference cannot fit at all")
     _style(ax)
     fig.tight_layout()
     return fig

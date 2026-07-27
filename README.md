@@ -54,9 +54,13 @@ Float32, optimization *balanced*, board **STM32H7B3I-DK** (Cortex-M7 @
 
 On the low-end **NUCLEO-F401RE** (Cortex-M4 @ 84 MHz, 512 KB flash) the
 reference CNN needs 3.38× the board's entire flash and cannot run at all,
-while every searched model does: cls_tiny 4.376 ms (7.2% of flash),
-cls_best int8-QAT 7.381 ms (25.6%), and the full float32 cls_best —
-the 92.08% headline model — 18.35 ms (65.5%).
+while four of our five models do: cls_tiny 4.376 ms (7.2% of flash),
+cls_best int8-QAT 7.381 ms (25.6%), the full float32 cls_best — the 92.08%
+headline model — 18.35 ms (65.5%), and lcl_best 162.5 ms (80.8%). Only
+`lcr_best` (90.5% of flash, under 50 KB left for the runtime) returned no
+measured time: on this board the practical ceiling is flash *headroom*, and
+it lies between 80.8% and 90.5% occupancy — model size alone is not a
+deployability test.
 
 **Quantization.** Full-int8 PTQ costs accuracy on these wide-dynamic-range
 inputs (cls 92.08 → 86.86%); **quantization-aware training recovers it to
