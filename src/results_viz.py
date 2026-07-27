@@ -51,6 +51,15 @@ MEASURED_H7B3 = pd.DataFrame([
     ("cls_best int8 QAT",   "ours", "acc 89.82%",          1.558,     161_570,   131_008,  8_404),
 ], columns=["model", "who", "quality", "latency_ms", "macc", "flash_B", "ram_B"])
 
+# int8 *interface* re-export (unas/export_int8_io.py). Flash/RAM are the
+# platform-level optimize output and so comparable with the table above; its
+# LATENCY is deliberately absent because it was benchmarked on a different board
+# (STM32H573I-DK, Cortex-M33 @ 250 MHz, 2.462 ms) and must not be compared to
+# the Cortex-M7 figures. Accuracy is unchanged from the float32-I/O build.
+MEASURED_INT8_IO = {"model": "cls_best int8 (int8 I/O)", "test_acc": 0.8686,
+                    "flash_B": 106_446, "ram_B": 5_444, "macc": 155_230,
+                    "h573_latency_ms": 2.462, "h7b3_latency_ms": None}
+
 # NUCLEO-F401RE, Cortex-M4 @ 84 MHz, 512 KB flash / 96 KB RAM (2026-07-14).
 F401_FLASH_B = 512 * 1024
 # ms @ 84 MHz; the reference CNN does not fit at all (1,769,882 B = 3.38x flash).
