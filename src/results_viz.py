@@ -53,7 +53,8 @@ MEASURED_H7B3 = pd.DataFrame([
 
 # NUCLEO-F401RE, Cortex-M4 @ 84 MHz, 512 KB flash / 96 KB RAM (2026-07-14).
 F401_FLASH_B = 512 * 1024
-MEASURED_F401 = {"cls_tiny f32": 4.376}  # ms; REF does not fit (1,769,882 B = 3.38x flash)
+# ms @ 84 MHz; the reference CNN does not fit at all (1,769,882 B = 3.38x flash).
+MEASURED_F401 = {"cls_tiny f32": 4.376, "cls_best int8 QAT": 7.381, "cls_best f32": 18.35}
 
 # Our test-set evaluation of each deployment artifact
 # (docs/research/deployment.md "Artifacts" table; higher acc / lower MAE better).
@@ -259,26 +260,30 @@ def plot_measured_deployment():
 
 def plot_f401_fit():
     """The categorical result: the reference CNN cannot run on the F401 at all."""
-    rows = [("REF_cnn_multi", 1_769_882), ("lcr_best", 474_522),
-            ("lcl_best", 423_494), ("cls_best", 343_254), ("cls_tiny", 37_954)]
+    rows = [("REF_cnn_multi", 1_769_882, None), ("lcr_best", 474_522, None),
+            ("lcl_best", 423_494, None), ("cls_best", 343_254, "cls_best f32"),
+            ("cls_best int8 QAT", 131_008, "cls_best int8 QAT"),
+            ("cls_tiny", 37_954, "cls_tiny f32")]
     names = [r[0] for r in rows]
     pct = [r[1] / F401_FLASH_B * 100 for r in rows]
+    measured = [MEASURED_F401.get(r[2]) for r in rows]
     fig, ax = plt.subplots(figsize=(8, 3.2))
     colors = [CRITICAL if p > 100 else BLUE for p in pct]
     ax.barh(range(len(rows)), pct, color=colors, height=0.62)
     ax.axvline(100, color=INK, linewidth=1.4)
-    ax.annotate("100% = F401's entire 512 KB flash", xy=(100, 0.03),
-                xycoords=("data", "axes fraction"), rotation=90,
-                ha="right", va="bottom", fontsize=8.5, color=INK)
-    for yi, p in enumerate(pct):
-        label = f"{p:.1f}%" + ("  — does not fit" if p > 100 else "")
+    for yi, (p, ms) in enumerate(zip(pct, measured)):
+        label = f"{p:.1f}%"
+        if p > 100:
+            label += "  — does not fit"
+        elif ms is not None:
+            label += f"   ({ms} ms measured)"
         ax.annotate(label, xy=(min(p, 330), yi), xytext=(4, 0),
                     textcoords="offset points", va="center", fontsize=9, color=INK)
     ax.set_yticks(range(len(rows)), names)
     ax.invert_yaxis()
-    ax.set_xlabel("flash needed, % of NUCLEO-F401RE (Cortex-M4)")
-    ax.set_title("Smallest-board check: every searched model fits; the reference cannot "
-                 f"(cls_tiny measured there: {MEASURED_F401['cls_tiny f32']} ms)")
+    ax.set_xlabel("flash needed, % of NUCLEO-F401RE (Cortex-M4) — the line at 100% "
+                  "is the board's entire 512 KB")
+    ax.set_title("Smallest-board check: every searched model fits; the reference cannot")
     _style(ax)
     fig.tight_layout()
     return fig

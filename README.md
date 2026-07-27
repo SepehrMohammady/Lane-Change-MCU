@@ -52,9 +52,11 @@ Float32, optimization *balanced*, board **STM32H7B3I-DK** (Cortex-M7 @
 | lcr_best (117 k) | MAE 0.287 s | 14.06 ms | 474,522 B | 20,772 B |
 | lcl_best (106 k) | MAE 0.317 s | 28.77 ms | 423,494 B | 28,264 B |
 
-On the low-end **NUCLEO-F401RE** (Cortex-M4 @ 84 MHz, 512 KB flash),
-cls_tiny runs at 4.376 ms in 7.2% of the flash, while the reference CNN
-needs 3.38× the board's entire flash and cannot run on it at all.
+On the low-end **NUCLEO-F401RE** (Cortex-M4 @ 84 MHz, 512 KB flash) the
+reference CNN needs 3.38× the board's entire flash and cannot run at all,
+while every searched model does: cls_tiny 4.376 ms (7.2% of flash),
+cls_best int8-QAT 7.381 ms (25.6%), and the full float32 cls_best —
+the 92.08% headline model — 18.35 ms (65.5%).
 
 **Quantization.** Full-int8 PTQ costs accuracy on these wide-dynamic-range
 inputs (cls 92.08 → 86.86%); **quantization-aware training recovers it to
