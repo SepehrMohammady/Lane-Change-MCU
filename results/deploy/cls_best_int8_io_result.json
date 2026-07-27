@@ -1,0 +1,35 @@
+{
+ "task": "classification",
+ "model": "cls_best",
+ "metric": "acc",
+ "float32_io": {
+  "bytes": 112912,
+  "in_dtype": "float32",
+  "in_shape": [
+   1,
+   50,
+   31
+  ],
+  "out_dtype": "float32",
+  "in_scale": 0.0,
+  "in_zero_point": 0,
+  "test_metric": 0.868623871818274
+ },
+ "int8_io": {
+  "bytes": 112568,
+  "in_dtype": "int8",
+  "in_shape": [
+   1,
+   50,
+   31
+  ],
+  "out_dtype": "int8",
+  "in_scale": 1.1057788133621216,
+  "in_zero_point": 38,
+  "test_metric": 0.868623871818274
+ },
+ "interface_equivalent": true,
+ "input_elems": 1550,
+ "predicted_ram_saving_B": 4650,
+ "predicted_ram_B": 3446
+}
