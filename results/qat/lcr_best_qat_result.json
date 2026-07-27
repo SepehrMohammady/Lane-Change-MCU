@@ -1,0 +1,15 @@
+{
+ "task": "regression_lcr",
+ "model": "lcr_best",
+ "metric": "MAE",
+ "graph": "lcr_best_graph.json",
+ "float32_2d": 0.2864640951156616,
+ "ptq_int8_2d": 0.44849127531051636,
+ "qat_int8_2d": 0.4312651455402374,
+ "qat_fakequant_float": 0.43091773986816406,
+ "orig_1d_float": 0.2865,
+ "orig_1d_int8": 0.4485,
+ "qat_recovers_over_ptq": 0.01722612977027893,
+ "remaining_gap_to_float32": 0.1448010504245758,
+ "qat_int8_tflite_bytes": 138096
+}

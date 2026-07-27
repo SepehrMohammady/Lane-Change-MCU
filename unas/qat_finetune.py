@@ -1,20 +1,23 @@
-"""QAT fine-tuning for a searched classification model (cls_best), with an
-honest within-graph comparison against PTQ.
+"""QAT fine-tuning for a searched model, with an honest within-graph comparison
+against PTQ. Works for the classifier and both regression heads.
 
 Why 2D: tfmot's 8-bit scheme only registers 2D layers, so the searched 1D graph
-is re-expressed with width-1 kernels (Conv1D->Conv2D(k,1), Pool1D->Pool2D(p,1)).
-The computation is identical; we PROVE it by checking the float-2D test accuracy
-equals the original (0.9208) and the PTQ-2D accuracy equals the measured 1D
-int8 number (0.8686). PTQ and QAT then run on the SAME 2D graph, so the only
-variable is post-training vs quantization-aware — a fair single-variable test.
+is re-expressed with width-1 kernels (Conv1D->Conv2D(k,1), Pool1D->Pool2D(p,1);
+depthwise strides (s,1)->(s,s), a no-op at width 1). The computation is
+identical, and we PROVE it with two anchors: the float-2D test metric must equal
+the original 1D number, and the PTQ-2D metric must equal the measured 1D int8
+number. PTQ and QAT then run on the SAME 2D graph, so the only variable is
+post-training vs quantization-aware — a fair single-variable test.
 
-Run in the WSL dmir_nas venv (tf_keras / tfmot need TF_USE_LEGACY_KERAS):
+Run in the WSL dmir_nas venv (tf_keras / tfmot need TF_USE_LEGACY_KERAS), after
+exporting the graph with unas/export_graph.py under Keras 3:
   source ~/dmir_nas/env.sh
   DMIR_DATA_ROOT=/mnt/c/Projects/PhD/DIMIR/data TF_USE_LEGACY_KERAS=1 \
-    ~/dmir_nas/bin/python /mnt/c/Projects/PhD/DIMIR/unas/qat_finetune.py \
-    <graph.json> <weights.pkl> <out_dir>
+    ~/dmir_nas/bin/python unas/qat_finetune.py \
+    <task> <graph.json> <weights.pkl> <out_dir>
+  task in {classification, regression_lcr, regression_lcl}
 
-Emits <out_dir>/cls_best_qat_int8.tflite and prints a comparison table.
+Emits <out_dir>/<model>_qat_int8.tflite + <model>_qat_result.json.
 No fabrication: every number is a real test-set evaluation of a real artifact.
 """
 import json
@@ -30,22 +33,28 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 from quantize_eval import LAYOUT, load, to_tflite, eval_tflite  # identical pipeline
 
 K = tf.keras
-TASK = "classification"
-ORIG_FLOAT_ACC = 0.9208   # 1D cls_best, measured (deployment.md)
-ORIG_INT8_ACC = 0.8686    # 1D cls_best int8 PTQ, measured (deployment.md)
+
+# Reference points measured on the ORIGINAL 1D models (docs/research/deployment.md),
+# used as anchors to prove the 2D re-expression is faithful. For classification the
+# metric is accuracy (higher better); for regression it is test MAE (lower better).
+ANCHORS = {
+    "classification":  {"float": 0.9208, "int8": 0.8686, "model": "cls_best"},
+    "regression_lcr":  {"float": 0.2865, "int8": 0.4485, "model": "lcr_best"},
+    "regression_lcl":  {"float": 0.3165, "int8": 0.3440, "model": "lcl_best"},
+}
 
 
-def prep_split(split):
-    folder, sfx, is_cls, _ = LAYOUT[TASK]
-    x = load(TASK, split, "x").astype(np.float32)
-    y = load(TASK, split, "y").astype(np.int64)
-    return x, y
+def prep_split(task, split):
+    _, _, is_cls, _ = LAYOUT[task]
+    x = load(task, split, "x").astype(np.float32)
+    y = load(task, split, "y")
+    return x, (y.astype(np.int64) if is_cls else y.astype(np.float32))
 
 
-def prep_all():
-    xtr, ytr = prep_split("train")
-    xva, yva = prep_split("val")
-    xte, yte = prep_split("test")
+def prep_all(task):
+    xtr, ytr = prep_split(task, "train")
+    xva, yva = prep_split(task, "val")
+    xte, yte = prep_split(task, "test")
     lo, hi = xtr.min(axis=(0, 1)), xtr.max(axis=(0, 1))
     np.clip(xva, lo, hi, out=xva)
     np.clip(xte, lo, hi, out=xte)              # same clip used for the 1D numbers
@@ -116,64 +125,87 @@ def transfer_weights(model, weights):
         layer.set_weights(w)
 
 
-def acc_keras(model, x, y):
+def metric_keras(model, x, y, is_cls):
+    """Accuracy for classification, MAE for regression — same definition the
+    1D numbers in deployment.md use."""
     p = model.predict(x, batch_size=1024, verbose=0)
-    return float((p.argmax(1) == y).mean())
+    if is_cls:
+        return float((p.argmax(1) == y).mean())
+    return float(np.mean(np.abs(p.squeeze(-1) - y)))
 
 
-def main(graph_path, weights_path, out_dir):
+def main(task, graph_path, weights_path, out_dir):
+    if task not in ANCHORS:
+        raise SystemExit(f"task must be one of {sorted(ANCHORS)}")
+    is_cls = LAYOUT[task][2]
+    anchor = ANCHORS[task]
+    name = anchor["model"]
+    mname = "acc" if is_cls else "MAE"
+    better = "higher" if is_cls else "lower"
+
     graph = json.load(open(graph_path))
     weights = pickle.load(open(weights_path, "rb"))
-    (xtr, ytr), (xva, yva), (xte, yte) = prep_all()
+    (xtr, ytr), (xva, yva), (xte, yte) = prep_all(task)
     xtr4, xva4, xte4 = to4d(xtr), to4d(xva), to4d(xte)
     out = Path(out_dir); out.mkdir(parents=True, exist_ok=True)
 
-    # 1) float-2D must reproduce the 1D float accuracy -> proves the reshape
+    # 1) float-2D must reproduce the 1D float metric -> proves the reshape
     model = build_2d(graph)
     transfer_weights(model, weights)
-    float2d = acc_keras(model, xte4, yte)
-    print(f"[anchor 1] float32 2D acc = {float2d:.4f}   (1D orig {ORIG_FLOAT_ACC})")
+    float2d = metric_keras(model, xte4, yte, is_cls)
+    print(f"[anchor 1] float32 2D {mname} = {float2d:.4f}   (1D orig {anchor['float']})")
 
-    # 2) PTQ-2D must reproduce the 1D int8 accuracy -> proves fairness
+    # 2) PTQ-2D must reproduce the 1D int8 metric -> proves the comparison is fair
     ptq = to_tflite(model, xtr4, mode="int8")
-    ptq_acc = eval_tflite(ptq, xte4, yte, is_cls=True)
-    (out / "cls_best_2d_ptq_int8.tflite").write_bytes(ptq)
-    print(f"[anchor 2] PTQ int8 2D acc = {ptq_acc:.4f}   (1D orig {ORIG_INT8_ACC})")
+    ptq_m = eval_tflite(ptq, xte4, yte, is_cls)
+    (out / f"{name}_2d_ptq_int8.tflite").write_bytes(ptq)
+    print(f"[anchor 2] PTQ int8 2D {mname} = {ptq_m:.4f}   (1D orig {anchor['int8']})")
 
     # 3) QAT on the SAME 2D graph
     import tensorflow_model_optimization as tfmot
     qa = tfmot.quantization.keras.quantize_model(model)
-    qa.compile(optimizer=K.optimizers.Adam(2e-4),
-               loss=K.losses.SparseCategoricalCrossentropy(from_logits=True),
-               metrics=["accuracy"])
-    cbs = [K.callbacks.EarlyStopping(monitor="val_accuracy", mode="max",
+    if is_cls:
+        loss, metrics, monitor, mode = (
+            K.losses.SparseCategoricalCrossentropy(from_logits=True),
+            ["accuracy"], "val_accuracy", "max")
+    else:
+        # MAE objective, matching how the regression models were searched/trained
+        loss, metrics, monitor, mode = "mae", ["mae"], "val_mae", "min"
+    lr = float(os.environ.get("DMIR_QAT_LR", "2e-4"))
+    qa.compile(optimizer=K.optimizers.Adam(lr), loss=loss, metrics=metrics)
+    print(f"[QAT] fine-tune lr={lr:g}")
+    cbs = [K.callbacks.EarlyStopping(monitor=monitor, mode=mode,
                                      patience=8, restore_best_weights=True)]
     qa.fit(xtr4, ytr, validation_data=(xva4, yva), epochs=40, batch_size=256,
            callbacks=cbs, verbose=2)
-    qat_float = acc_keras(qa, xte4, yte)
-    print(f"[QAT] fake-quant (still float) test acc = {qat_float:.4f}")
+    qat_float = metric_keras(qa, xte4, yte, is_cls)
+    print(f"[QAT] fake-quant (still float) test {mname} = {qat_float:.4f}")
 
     # 4) convert the QAT model to full int8 TFLite (same converter as PTQ)
     qat_tfl = to_tflite(qa, xtr4, mode="int8")
-    qat_acc = eval_tflite(qat_tfl, xte4, yte, is_cls=True)
-    (out / "cls_best_qat_int8.tflite").write_bytes(qat_tfl)
+    qat_m = eval_tflite(qat_tfl, xte4, yte, is_cls)
+    (out / f"{name}_qat_int8.tflite").write_bytes(qat_tfl)
 
-    print("\n==== RESULT (all test-set, same graph for PTQ vs QAT) ====")
-    print(f"float32 (accuracy operating point) : {float2d:.4f}")
-    print(f"int8 PTQ                           : {ptq_acc:.4f}")
-    print(f"int8 QAT                           : {qat_acc:.4f}")
-    print(f"QAT recovers over PTQ              : {qat_acc - ptq_acc:+.4f}")
-    print(f"remaining gap to float32          : {float2d - qat_acc:+.4f}")
-    print(f"qat int8 tflite bytes             : {len(qat_tfl)}")
+    gain = (qat_m - ptq_m) if is_cls else (ptq_m - qat_m)      # + = QAT better
+    gap = (float2d - qat_m) if is_cls else (qat_m - float2d)   # + = still behind float
+    print(f"\n==== RESULT {name} ({task}) — same graph for PTQ vs QAT ====")
+    print(f"float32 ({better} is better)  : {float2d:.4f}")
+    print(f"int8 PTQ                      : {ptq_m:.4f}")
+    print(f"int8 QAT                      : {qat_m:.4f}")
+    print(f"QAT recovers over PTQ         : {gain:+.4f}")
+    print(f"remaining gap to float32      : {gap:+.4f}")
+    print(f"qat int8 tflite bytes         : {len(qat_tfl)}")
 
-    (out / "qat_result.json").write_text(json.dumps({
-        "task": TASK, "graph": os.path.basename(graph_path),
-        "float32_2d_acc": float2d, "ptq_int8_2d_acc": ptq_acc,
-        "qat_int8_2d_acc": qat_acc, "qat_fakequant_float_acc": qat_float,
-        "orig_1d_float_acc": ORIG_FLOAT_ACC, "orig_1d_int8_acc": ORIG_INT8_ACC,
-        "qat_int8_tflite_bytes": len(qat_tfl),
+    (out / f"{name}_qat_result.json").write_text(json.dumps({
+        "task": task, "model": name, "metric": mname,
+        "graph": os.path.basename(graph_path),
+        "float32_2d": float2d, "ptq_int8_2d": ptq_m, "qat_int8_2d": qat_m,
+        "qat_fakequant_float": qat_float,
+        "orig_1d_float": anchor["float"], "orig_1d_int8": anchor["int8"],
+        "qat_recovers_over_ptq": gain, "remaining_gap_to_float32": gap,
+        "qat_int8_tflite_bytes": len(qat_tfl), "lr": lr,
     }, indent=1))
 
 
 if __name__ == "__main__":
-    main(sys.argv[1], sys.argv[2], sys.argv[3])
+    main(sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4])
