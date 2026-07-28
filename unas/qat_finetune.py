@@ -27,10 +27,18 @@ import sys
 from pathlib import Path
 
 import numpy as np
+import random
 import tensorflow as tf
+
+# Fine-tuning is stochastic; seed it so a re-run reproduces the artifact.
+SEED = 42
+random.seed(SEED)
+np.random.seed(SEED)
+tf.random.set_seed(SEED)
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from quantize_eval import LAYOUT, load, to_tflite, eval_tflite  # identical pipeline
+from export_int8_io import convert_int8, eval_quantized  # int8-interface variant
 
 K = tf.keras
 
@@ -186,6 +194,19 @@ def main(task, graph_path, weights_path, out_dir):
     qat_m = eval_tflite(qat_tfl, xte4, yte, is_cls)
     (out / f"{name}_qat_int8.tflite").write_bytes(qat_tfl)
 
+    # 4b) same trained model, int8 *interface* — combines the QAT accuracy with
+    # the memory/cast saving measured for the int8-I/O build. Emitted from the
+    # SAME `qa` so the pair differs only by interface. Needs the quantizing
+    # evaluator (a plain cast would destroy an int8 input).
+    qat_io = convert_int8(qa, xtr4, int8_io=True)
+    qat_io_m = eval_quantized(qat_io, xte4, yte, is_cls)
+    (out / f"{name}_qat_int8_io.tflite").write_bytes(qat_io)
+    print(f"[QAT+int8 I/O] {mname} = {qat_io_m:.4f}  ({len(qat_io):,} B) "
+          f"{'— matches float32-I/O build' if abs(qat_io_m - qat_m) < 5e-3 else '— DIFFERS, investigate'}")
+
+    # keep the trained fake-quant model so future re-exports need no retraining
+    qa.save(out / f"{name}_qat_model.h5")
+
     gain = (qat_m - ptq_m) if is_cls else (ptq_m - qat_m)      # + = QAT better
     gap = (float2d - qat_m) if is_cls else (qat_m - float2d)   # + = still behind float
     print(f"\n==== RESULT {name} ({task}) — same graph for PTQ vs QAT ====")
@@ -204,6 +225,7 @@ def main(task, graph_path, weights_path, out_dir):
         "orig_1d_float": anchor["float"], "orig_1d_int8": anchor["int8"],
         "qat_recovers_over_ptq": gain, "remaining_gap_to_float32": gap,
         "qat_int8_tflite_bytes": len(qat_tfl), "lr": lr,
+        "qat_int8_io": qat_io_m, "qat_int8_io_tflite_bytes": len(qat_io),
     }, indent=1))
 
 

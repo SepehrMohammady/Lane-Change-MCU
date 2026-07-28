@@ -1,0 +1,18 @@
+{
+ "task": "classification",
+ "model": "cls_best",
+ "metric": "acc",
+ "graph": "cls_best_graph.json",
+ "float32_2d": 0.9208498123922523,
+ "ptq_int8_2d": 0.868623871818274,
+ "qat_int8_2d": 0.8989960450258594,
+ "qat_fakequant_float": 0.895852347632086,
+ "orig_1d_float": 0.9208,
+ "orig_1d_int8": 0.8686,
+ "qat_recovers_over_ptq": 0.03037217320758534,
+ "remaining_gap_to_float32": 0.021853767366392884,
+ "qat_int8_tflite_bytes": 101616,
+ "lr": 0.0002,
+ "qat_int8_io": 0.8989960450258594,
+ "qat_int8_io_tflite_bytes": 101064
+}
