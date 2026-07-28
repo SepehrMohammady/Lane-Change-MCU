@@ -53,6 +53,8 @@ MEASURED_H7B3 = pd.DataFrame([
     # pair is a clean single-variable comparison for RAM and latency.
     ("cls_best int8 int8-IO", "ours", "acc 86.86%",        1.752,     155_230,   106_446,  5_444),
     ("cls_best int8 QAT",   "ours", "acc 89.82%",          1.558,     161_570,   131_008,  8_404),
+    # QAT accuracy + int8 interface: the fastest configuration measured.
+    ("cls_best QAT int8-IO", "ours", "acc 89.90%",         1.435,     158_710,   131_562,  6_204),
 ], columns=["model", "who", "quality", "latency_ms", "macc", "flash_B", "ram_B"])
 
 # NUCLEO-F401RE, Cortex-M4 @ 84 MHz, 512 KB flash / 96 KB RAM (2026-07-14).
