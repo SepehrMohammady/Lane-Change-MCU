@@ -31,3 +31,7 @@ paper/*.fls
 .DS_Store
 Thumbs.db
 .vscode/
+
+# Kept local, not published to GitHub (user decision 2026-07-28)
+course/
+paper/

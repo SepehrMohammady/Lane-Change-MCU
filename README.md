@@ -9,10 +9,9 @@ because the published baseline deployed on the same platform — making the
 on-device comparison like-for-like — and the board is physically available
 in the ELIOS lab.
 
-📚 Course website (A-to-Z of this project), being extended to three
-languages: Farsi at [`course/`](course/), English at `course/en/`, Italian
-at `course/it/`. Enable GitHub Pages (Settings → Pages → main branch, root)
-or open `course/index.html` locally.
+📚 A trilingual course website (Farsi/English/Italian) documenting this project
+A-to-Z, and the LaTeX manuscript, are kept **local only** and are not published
+in this repository.
 
 ## Tasks and targets
 
@@ -80,10 +79,12 @@ scripts/check_pipeline.py        3-task smoke test on real data; run after every
 logs/experiments.jsonl           one JSON line per run (feeds the paper's tables)
 docs/DATA.md                     dataset facts, quirks, open questions
 docs/research/                   literature and toolchain notes
-paper/                           LaTeX draft + main.pdf (rebuilt via scripts/build_paper.ps1) + style guard
-course/                          trilingual course website (Farsi at root, en/, it/)
 LOGBOOK.md                       dated journal of decisions and results
 ```
+
+Two directories exist locally but are gitignored and not published here:
+`paper/` (LaTeX manuscript, built with `scripts/build_paper.ps1`) and `course/`
+(trilingual course website).
 
 ## Setup (Windows, Python 3.13)
 
@@ -110,4 +111,5 @@ The archives are not part of this repository.
 2. After any change to `src/`: `python scripts/check_pipeline.py` must pass.
 3. Paper numbers only from logged runs or cited sources; no placeholder data
    anywhere in the pipeline.
-4. `LOGBOOK.md` records decisions; `course/` is updated as milestones land.
+4. `LOGBOOK.md` records decisions; the local `course/` and `paper/` are updated
+   as milestones land, but are not published in this repository.
