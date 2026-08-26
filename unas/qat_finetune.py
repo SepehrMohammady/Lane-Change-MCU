@@ -12,7 +12,7 @@ post-training vs quantization-aware — a fair single-variable test.
 Run in the WSL dmir_nas venv (tf_keras / tfmot need TF_USE_LEGACY_KERAS), after
 exporting the graph with unas/export_graph.py under Keras 3:
   source ~/dmir_nas/env.sh
-  DMIR_DATA_ROOT=/mnt/c/Projects/PhD/DIMIR/data TF_USE_LEGACY_KERAS=1 \
+  DMIR_DATA_ROOT=/mnt/c/Projects/PhD/DIMIR/datasets/dmir/data TF_USE_LEGACY_KERAS=1 \
     ~/dmir_nas/bin/python unas/qat_finetune.py \
     <task> <graph.json> <weights.pkl> <out_dir>
   task in {classification, regression_lcr, regression_lcl}
@@ -42,7 +42,7 @@ from export_int8_io import convert_int8, eval_quantized  # int8-interface varian
 
 K = tf.keras
 
-# Reference points measured on the ORIGINAL 1D models (docs/research/deployment.md),
+# Reference points measured on the ORIGINAL 1D models (datasets/dmir/docs/deployment.md),
 # used as anchors to prove the 2D re-expression is faithful. For classification the
 # metric is accuracy (higher better); for regression it is test MAE (lower better).
 ANCHORS = {

@@ -10,6 +10,9 @@ from dataclasses import dataclass, asdict
 from pathlib import Path
 
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
+# Per-dataset home. Everything DMIR-specific (data, logs, results, docs) lives
+# here; a second dataset gets its own sibling under datasets/.
+DATASET_ROOT = PROJECT_ROOT / "datasets" / "dmir"
 
 TASKS = ("classification", "regression_lcl", "regression_lcr")
 
@@ -28,12 +31,12 @@ class Config:
     seed: int = 42
 
     # --- data -----------------------------------------------------------
-    data_dir: Path = PROJECT_ROOT / "data"
+    data_dir: Path = DATASET_ROOT / "data"
     # Clip val/test features to the per-feature range observed on train.
     # Motivation: test splits contain a handful of extreme spikes
     # (|x| up to ~5e6 on feature pairs 12/13 and 14/15) never seen in
     # training; clipping keeps them in-distribution without touching
-    # the training data. Documented in docs/DATA.md.
+    # the training data. Documented in datasets/dmir/docs/DATA.md.
     clip_to_train_range: bool = True
     subset_fraction: float = 1.0          # <1.0 = stratified subset (smoke tests)
 
@@ -48,7 +51,7 @@ class Config:
 
     # --- bookkeeping ----------------------------------------------------
     run_name: str = "baseline"
-    log_dir: Path = PROJECT_ROOT / "logs"
+    log_dir: Path = DATASET_ROOT / "logs"
     checkpoint_dir: Path = PROJECT_ROOT / "checkpoints"
     notes: str = ""
 

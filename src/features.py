@@ -1,6 +1,6 @@
 """Verified channel names and roles for the prepared windows.
 
-Two layouts (see docs/research/feature-map.md): the regression tasks keep the
+Two layouts (see datasets/dmir/docs/feature-map.md): the regression tasks keep the
 turn indicators inline (channels 3-4); classification moves them to the end
 (channels 28-29). Names for channels 0-7 (classification) were verified by
 correlating each channel against the raw H5 signals; the rest follow the data

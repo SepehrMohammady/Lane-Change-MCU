@@ -8,7 +8,7 @@ AI at deployment.
 
 Run in the WSL dmir_nas venv:
   source ~/dmir_nas/env.sh
-  DMIR_DATA_ROOT=/mnt/c/Projects/PhD/DIMIR/data \
+  DMIR_DATA_ROOT=/mnt/c/Projects/PhD/DIMIR/datasets/dmir/data \
     ~/dmir_nas/bin/python /mnt/c/Projects/PhD/DIMIR/unas/harvest_fronts.py \
     ~/uNAS/artifacts /mnt/c/Projects/PhD/DIMIR/runs/nas/fronts
 """

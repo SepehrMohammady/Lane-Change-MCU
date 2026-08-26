@@ -3,7 +3,7 @@
 Drop this file into the fork's `dataset/` directory and register it in
 `dataset/__init__.py`. It serves the real prepared DMIR windows (50 timesteps
 x 31 channels) for the three tasks, using the same sanitation as our PyTorch
-pipeline (val/test clipped to the per-channel train range; see docs/DATA.md).
+pipeline (val/test clipped to the per-channel train range; see datasets/dmir/docs/DATA.md).
 
 uNAS convention: return UNBATCHED tf.data.Dataset of (window, label) with
 window shape (timesteps, channels) — our pickles are already (N, 50, 31),
@@ -14,7 +14,7 @@ The prepared pickles already follow the official driver-wise split
 
 Optional `drop_indicators=True` removes the turn-signal channels for the
 label-leak ablation (indicator channels: classification 28/29, regression 3/4;
-see docs/research/feature-map.md).
+see datasets/dmir/docs/feature-map.md).
 """
 import os
 import pickle
@@ -28,7 +28,7 @@ from uNAS.dataset import Dataset
 
 # DMIR repo's data/ directory. Override with the DMIR_DATA_ROOT env var — the
 # fork runs under WSL/Linux where the Windows repo is at /mnt/c/... e.g.
-#   export DMIR_DATA_ROOT=/mnt/c/Projects/PhD/DIMIR/data
+#   export DMIR_DATA_ROOT=/mnt/c/Projects/PhD/DIMIR/datasets/dmir/data
 DATA_ROOT = Path(os.environ.get("DMIR_DATA_ROOT", r"C:\Projects\PhD\DIMIR\data"))
 
 _LAYOUT = {

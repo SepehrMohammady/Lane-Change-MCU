@@ -49,7 +49,7 @@ spread (mean ≈ 2.0).
    50 × 31 input contract, may be pruned by NAS automatically.
 3. No NaNs in any split.
 
-## Provenance (resolved 2026-07-07 — details in docs/research/dataset-provenance.md)
+## Provenance (resolved 2026-07-07 — details in datasets/dmir/docs/dataset-provenance.md)
 
 The data is the ELIOS "Lane Change Intention Recognition Dataset" (Zenodo DOI
 10.5281/zenodo.16686054, MIT, CARLA simulator, 50 drivers, 10 Hz → the window
@@ -59,7 +59,7 @@ ApplePies 2024 precursor paper).
 ## Feature identities
 
 The exact ordered channel names for both layouts are in
-[docs/research/feature-map.md](research/feature-map.md) and machine-readable in
+[datasets/dmir/docs/feature-map.md](feature-map.md) and machine-readable in
 [`src/features.py`](../src/features.py). Confirmed from the provider's
 `feature_description` doc + correlation to raw H5 signals. Key point: the
 **turn-signal state is a feature** (channels 28/29 classification, 3/4

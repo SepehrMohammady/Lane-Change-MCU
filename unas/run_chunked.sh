@@ -18,7 +18,7 @@ source "$VENV/env.sh"
 cp "$REPO/unas/dmir_dataset.py" "$FORK/dataset/dmir_dataset.py"
 cp "$REPO/unas/dmir_config.py"  "$FORK/configs/dmir_config.py"
 python3 "$REPO/unas/patch_fork.py" "$FORK/uNAS/search_algorithms/aging_evolution.py" >/dev/null
-export DMIR_DATA_ROOT="$REPO/data" DMIR_ROUNDS="$TARGET" DMIR_EPOCHS="$EPOCHS"
+export DMIR_DATA_ROOT="$REPO/datasets/dmir/data" DMIR_ROUNDS="$TARGET" DMIR_EPOCHS="$EPOCHS"
 export DMIR_POPULATION="${DMIR_POPULATION:-50}" DMIR_SAMPLE="${DMIR_SAMPLE:-15}"
 export TF_CPP_MIN_LOG_LEVEL=1 TF_FORCE_GPU_ALLOW_GROWTH=true
 mkdir -p "$REPO/runs/nas"

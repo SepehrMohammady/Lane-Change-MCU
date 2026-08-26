@@ -5,7 +5,7 @@ DirectionIndicator, split into two binary channels). If drivers signal before
 a lane change, those channels nearly announce the label, so headline accuracy
 would mostly measure "read the blinker" rather than anticipation.
 
-Verified channel positions (see docs/research/feature-map.md):
+Verified channel positions (see datasets/dmir/docs/feature-map.md):
   classification: indicators at channels 28 (left) and 29 (right).
 
 Findings (2026-07-07): indicator-only test accuracy 0.815 (full model 0.915,

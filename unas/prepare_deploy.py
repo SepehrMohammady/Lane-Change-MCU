@@ -2,7 +2,7 @@
 
 ST Edge AI Core / Developer Cloud accept only float32, int8, uint8 tensors —
 int16x8 is NOT supported (and on Cortex-M is silently dequantized to float32,
-which would yield misleading benchmark numbers). See docs/research/deployment.md.
+which would yield misleading benchmark numbers). See datasets/dmir/docs/deployment.md.
 
 So for each chosen model we emit:
   * <name>_float32.tflite  — accuracy-exact, matches the baseline's FP32

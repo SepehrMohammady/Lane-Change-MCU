@@ -15,7 +15,7 @@ REPO="${REPO:-/mnt/c/Projects/PhD/DIMIR}"
 # CUDA libs for the pip TF wheel (written by env setup); safe if absent.
 [ -f "$VENV/env.sh" ] && source "$VENV/env.sh"
 
-export DMIR_DATA_ROOT="${DMIR_DATA_ROOT:-$REPO/data}"
+export DMIR_DATA_ROOT="${DMIR_DATA_ROOT:-$REPO/datasets/dmir/data}"
 export DMIR_ROUNDS="$ROUNDS"
 # smaller population/faster warmup for the smoke run
 export DMIR_POPULATION="${DMIR_POPULATION:-20}"

@@ -20,7 +20,7 @@ data provider). Published baseline
 ([LC-Intention framework](https://elios-lab.github.io/LC-Intention-Framework/),
 [IEEE 11271346](https://ieeexplore.ieee.org/document/11271346)). Final NAS
 results (test-set evaluation of the searched models; details in
-`docs/research/nas-results.md`):
+`datasets/dmir/docs/nas-results.md`):
 
 | Task | Metric | Published SOTA¹ | Internal ref.² | Ours (NAS) |
 |---|---|---|---|---|
@@ -41,7 +41,7 @@ direction).
 ## Measured on-device (ST Edge AI Developer Cloud, Core 4.0.1)
 
 Float32, optimization *balanced*, board **STM32H7B3I-DK** (Cortex-M7 @
-280 MHz); full tables and analysis in `docs/research/deployment.md`:
+280 MHz); full tables and analysis in `datasets/dmir/docs/deployment.md`:
 
 | Model | quality | latency | flash | RAM |
 |---|--:|--:|--:|--:|
@@ -68,19 +68,27 @@ inputs (cls 92.08 → 86.86%); **quantization-aware training recovers it to
 89.82%**, measured at **1.558 ms** on the H7B3I-DK (the fastest operating point)
 and 7.381 ms on the F401RE. int16×8 preserves accuracy offline but ST Edge AI
 silently dequantizes it, so it is not deployable. See `unas/qat_finetune.py` and
-`docs/research/deployment.md`.
+`datasets/dmir/docs/deployment.md`.
 
 ## Repository layout
 
 ```
-notebooks/dmir_pipeline.ipynb   main pipeline — all knobs in its Config cell
-src/                             importable logic (data, models, train, eda, logging)
+src/                             shared, dataset-agnostic logic (train, logging, env, EDA)
+unas/                            µNAS fork adapters, search launchers, export/quantization tools
+notebooks/dmir_pipeline.ipynb    main DMIR pipeline — all knobs in its Config cell
 scripts/check_pipeline.py        3-task smoke test on real data; run after every change
-logs/experiments.jsonl           one JSON line per run (feeds the paper's tables)
-docs/DATA.md                     dataset facts, quirks, open questions
-docs/research/                   literature and toolchain notes
-LOGBOOK.md                       dated journal of decisions and results
+docs/research/                   shared literature and toolchain notes (µNAS, ST Edge AI, venue)
+LOGBOOK.md                       dated journal of decisions and results (all datasets)
+
+datasets/dmir/                   everything specific to the DMIR dataset
+  ├── data/                      prepared pickles (gitignored)
+  ├── docs/                      DATA.md + dataset/results/deployment notes
+  ├── logs/experiments.jsonl     one JSON line per run (feeds the paper's tables)
+  └── results/                   nas-fronts/, deploy/, qat/ artifacts
 ```
+
+A second dataset gets its own `datasets/<name>/` with the same shape; shared
+code stays in `src/` and `unas/` rather than being copied per dataset.
 
 Two directories exist locally but are gitignored and not published here:
 `paper/` (LaTeX manuscript, built with `scripts/build_paper.ps1`) and `course/`
@@ -100,14 +108,14 @@ used here: set `include-system-site-packages = true` in `.venv/pyvenv.cfg`,
 uninstall those packages from the venv, and install them into the (Microsoft
 Store) system Python instead.
 
-Data: extract `Materials/data-*.zip` into `data/` (folders
+Data: extract `Materials/data-*.zip` into `datasets/dmir/data/` (folders
 `data-classification/`, `data-regression-lcl/`, `data-prepared-lcr/`).
 The archives are not part of this repository.
 
 ## Working rules
 
 1. Every experiment goes through the notebook or scripts — never untracked
-   one-offs; every run appends to `logs/experiments.jsonl`.
+   one-offs; every run appends to `datasets/dmir/logs/experiments.jsonl`.
 2. After any change to `src/`: `python scripts/check_pipeline.py` must pass.
 3. Paper numbers only from logged runs or cited sources; no placeholder data
    anywhere in the pipeline.

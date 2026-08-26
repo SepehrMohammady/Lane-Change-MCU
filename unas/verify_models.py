@@ -5,7 +5,7 @@ and compares against trivial baselines (predict-mean / predict-median). Run in
 the WSL dmir_nas venv:
 
   source ~/dmir_nas/env.sh
-  DMIR_DATA_ROOT=/mnt/c/Projects/PhD/DIMIR/data \
+  DMIR_DATA_ROOT=/mnt/c/Projects/PhD/DIMIR/datasets/dmir/data \
     ~/dmir_nas/bin/python /mnt/c/Projects/PhD/DIMIR/unas/verify_models.py \
     regression_lcr ~/uNAS/artifacts/dmir_lcr/models
 """

@@ -1,7 +1,7 @@
 """Experiment logging.
 
 Two complementary records:
-  * ``logs/experiments.jsonl`` — one JSON line per run: config, metrics,
+  * ``datasets/dmir/logs/experiments.jsonl`` — one JSON line per run: config, metrics,
     environment, timing. Machine-readable; feeds the paper's tables.
   * ``LOGBOOK.md`` — human-readable dated journal of decisions and results.
 """
@@ -12,7 +12,7 @@ import time
 from datetime import datetime, timezone
 from pathlib import Path
 
-from .config import PROJECT_ROOT, Config
+from .config import DATASET_ROOT, PROJECT_ROOT, Config
 from .env_utils import env_report
 
 LOGBOOK = PROJECT_ROOT / "LOGBOOK.md"
@@ -56,7 +56,7 @@ def append_logbook(title: str, body: str) -> None:
 
 
 def read_experiments() -> list[dict]:
-    path = PROJECT_ROOT / "logs" / "experiments.jsonl"
+    path = DATASET_ROOT / "logs" / "experiments.jsonl"
     if not path.exists():
         return []
     with open(path, encoding="utf-8") as f:

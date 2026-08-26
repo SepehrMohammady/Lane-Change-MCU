@@ -6,7 +6,7 @@ normalised by the data provider: windows of 50 timesteps x 31 features.
   classification : y in {0: none, 1: LCR intention, 2: LCL intention}
   regression_*   : y = time-to-lane-change in [0.0, 4.0] s, step 0.1
 
-Known data facts (verified 2026-07-07, see docs/DATA.md):
+Known data facts (verified 2026-07-07, see datasets/dmir/docs/DATA.md):
   * train/val/test are balanced for classification (1/3 each class);
   * test splits contain rare extreme spikes (|x| up to ~5e6) on feature
     pairs (12, 13) for classification/LCL and (14, 15) for LCR, absent

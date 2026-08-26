@@ -4,7 +4,7 @@ Why: `prepare_deploy.py` leaves `inference_input_type`/`inference_output_type` a
 their float32 default, so even the int8 models take FLOAT32 in and out. ST Edge
 AI must then allocate a 50x31 float32 input buffer — 6,200 B — which dominates
 the activation arena and is why cls_best_int8 measured 8,096 B of RAM instead of
-the predicted ~3 KB (docs/research/deployment.md, "Input-bound"). Quantizing the
+the predicted ~3 KB (datasets/dmir/docs/deployment.md, "Input-bound"). Quantizing the
 *weights* does not quantize the *interface*; this script fixes the interface.
 
 Setting an int8 interface changes how the model must be fed: the caller has to
@@ -18,7 +18,7 @@ equivalent: the int8-I/O model must reproduce the float32-I/O int8 accuracy
 
 Run in the WSL dmir_nas venv:
   source ~/dmir_nas/env.sh
-  DMIR_DATA_ROOT=/mnt/c/Projects/PhD/DIMIR/data \
+  DMIR_DATA_ROOT=/mnt/c/Projects/PhD/DIMIR/datasets/dmir/data \
     ~/dmir_nas/bin/python unas/export_int8_io.py <task> <model.h5> <out_dir>
   task in {classification, classification_noind, regression_lcr, regression_lcl}
 
@@ -36,7 +36,7 @@ import tensorflow as tf
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from prepare_deploy import LAYOUT, prep
 
-# Measured float32-I/O int8 references (docs/research/deployment.md).
+# Measured float32-I/O int8 references (datasets/dmir/docs/deployment.md).
 REFERENCE = {
     "classification": {"model": "cls_best", "int8_metric": 0.8686,
                        "measured_ram_B": 8096, "measured_flash_B": 106738},

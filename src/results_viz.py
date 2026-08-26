@@ -2,17 +2,17 @@
 
 Every number in this module traces to a repo artifact — no synthetic values:
 
-- ``results/nas-fronts/*.csv``  — harvested Pareto fronts, independently
+- ``datasets/dmir/results/nas-fronts/*.csv``  — harvested Pareto fronts, independently
   re-evaluated on the test split (unas/harvest_fronts.py, LOGBOOK 2026-07-09/10).
-- ``results/deploy/*.tflite``   — the actual deployment artifacts; file sizes
+- ``datasets/dmir/results/deploy/*.tflite``   — the actual deployment artifacts; file sizes
   are read from disk at call time.
 - ``MEASURED_H7B3`` / ``MEASURED_F401`` — on-device measurements from the
   ST Edge AI Developer Cloud (Core 4.0.1-20581, optimization "balanced",
   allocate inputs/outputs true), boards STM32H7B3I-DK (Cortex-M7 @ 280 MHz)
   and NUCLEO-F401RE (Cortex-M4 @ 84 MHz), measured 2026-07-13/14.
-  Recorded in docs/research/deployment.md and LOGBOOK.md.
+  Recorded in datasets/dmir/docs/deployment.md and LOGBOOK.md.
 - ``QUANT_ACC`` — our own test-set evaluation of each .tflite artifact
-  (docs/research/deployment.md, "Artifacts" table).
+  (datasets/dmir/docs/deployment.md, "Artifacts" table).
 
 Chart style follows the dataviz tokens already used by the course site
 (course/assets/course.css): series-1 blue, series-2 green, muted gray for the
@@ -34,12 +34,13 @@ GRID = "#e1e0d9"
 CRITICAL = "#d03b3b"  # status only: "does not fit"
 
 ROOT = Path(__file__).resolve().parents[1]
-FRONTS_DIR = ROOT / "results" / "nas-fronts"
-DEPLOY_DIR = ROOT / "results" / "deploy"
+DATASET_ROOT = ROOT / "datasets" / "dmir"
+FRONTS_DIR = DATASET_ROOT / "results" / "nas-fronts"
+DEPLOY_DIR = DATASET_ROOT / "results" / "deploy"
 
 # --- measured on-device numbers (ST Edge AI Developer Cloud, real boards) ---
 # STM32H7B3I-DK, Cortex-M7 @ 280 MHz, 1184 KB RAM / 2048 KB flash.
-# Source: docs/research/deployment.md "MEASURED" table (2026-07-13/14).
+# Source: datasets/dmir/docs/deployment.md "MEASURED" table (2026-07-13/14).
 MEASURED_H7B3 = pd.DataFrame([
     # model,                who,   quality label,        lat_ms,  MACC,      flash_B,   ram_B
     ("REF_cnn_multi f32",   "ref", "acc 91.69%",          33.52,  1_965_360, 1_769_882, 39_168),
@@ -68,7 +69,7 @@ MEASURED_F401 = {"cls_tiny f32": 4.376, "cls_best int8 QAT": 7.381,
 # the controlled experiment showing flash headroom, not architecture, is the limit.
 
 # Our test-set evaluation of each deployment artifact
-# (docs/research/deployment.md "Artifacts" table; higher acc / lower MAE better).
+# (datasets/dmir/docs/deployment.md "Artifacts" table; higher acc / lower MAE better).
 QUANT_ACC = pd.DataFrame([
     ("REF_cnn_multi", "acc %", 91.69, 88.27),
     ("cls_best",      "acc %", 92.08, 86.86),

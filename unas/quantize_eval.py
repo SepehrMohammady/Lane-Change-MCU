@@ -8,7 +8,7 @@ Edge AI toolchain (which prefers integer tensor interfaces).
 
 Run in the WSL dmir_nas venv:
   source ~/dmir_nas/env.sh
-  DMIR_DATA_ROOT=/mnt/c/Projects/PhD/DIMIR/data \
+  DMIR_DATA_ROOT=/mnt/c/Projects/PhD/DIMIR/datasets/dmir/data \
     ~/dmir_nas/bin/python /mnt/c/Projects/PhD/DIMIR/unas/quantize_eval.py \
     <task> <h5_path> <out_dir>
 task in {regression_lcr, regression_lcl, classification, classification_noind}
