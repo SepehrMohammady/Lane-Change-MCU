@@ -85,6 +85,8 @@ datasets/dmir/                   everything specific to the DMIR dataset
   ├── docs/                      DATA.md + dataset/results/deployment notes
   ├── logs/experiments.jsonl     one JSON line per run (feeds the paper's tables)
   └── results/                   nas-fronts/, deploy/, qat/ artifacts
+datasets/highd/                  second dataset: highD lane-change prediction
+  (same shape; data gitignored — highD licence forbids redistribution)
 ```
 
 A second dataset gets its own `datasets/<name>/` with the same shape; shared
