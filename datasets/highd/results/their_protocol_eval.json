@@ -1,0 +1,25 @@
+{
+ "protocol": "EarlyLCPred utils.py, exact formulas",
+ "test_scenarios": 693,
+ "lc_scenarios": 463,
+ "accuracy": 0.9109,
+ "recall": 0.9381,
+ "precision": 0.9225,
+ "f1": 0.9302,
+ "auc": 0.9585,
+ "tau_f_s": 4.93,
+ "tau_c_s": 4.79,
+ "ttlc_rmse_s": 0.2763,
+ "ttlc_mean_mse": 0.0764,
+ "paper_table3_proposed": {
+  "accuracy": 0.83,
+  "recall": 0.85,
+  "precision": 0.85,
+  "f1": 0.85,
+  "auc": 0.88,
+  "tau_f_s": 4.75,
+  "tau_c_s": 3.96,
+  "rmse_s": 0.629
+ },
+ "caveat": "our test split has 693 scenarios vs their 698 (0.7%); train/val match their counts exactly (7487/932)"
+}
