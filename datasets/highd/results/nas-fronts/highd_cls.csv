@@ -1,0 +1,14 @@
+model,params,int8_KB,test_acc,test_macro_f1
+model_aaaaab,27294,26.65,0.8688,0.8696
+model_aaaaae,26623,26.0,0.85809,0.85903
+model_aaaaaf,21619,21.11,0.86841,0.86977
+model_aaaaah,38082,37.19,0.87063,0.87087
+model_aaaaai,26602,25.98,0.88478,0.88543
+model_aaaaak,34351,33.55,0.8582,0.86054
+model_aaaaal,38189,37.29,0.88006,0.87946
+model_aaaaam,7904,7.72,0.90526,0.90546
+model_aaaaan,12318,12.03,0.8638,0.86536
+model_aaaaao,28830,28.15,0.87779,0.87898
+model_aaaaap,9010,8.8,0.88961,0.8891
+model_aaaaaq,27040,26.41,0.8779,0.87917
+model_aaaaar,11849,11.57,0.88778,0.88869
