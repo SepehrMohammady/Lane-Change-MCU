@@ -141,3 +141,21 @@ int8 kernels' scratch outweighs the activation-precision saving, and the
 float32 interface still pays the conversion_0/conversion_19 casts visible in
 the per-layer chart. The int8-I/O variant is where the interface cost goes
 away. SVG: `results/deploy/highd_cls_model_aaaaam_int8.tflite.svg`.
+
+`highd_cls_model_aaaaam_int8_io.tflite` (int8 tensor interface — badge
+STAI_FORMAT_S8, 10x18 8-bit in / 3 8-bit out; test acc 89.10%):
+
+| board | measured inference |
+|---|--:|
+| STM32H7B3I-DK | **0.4012 ms** (fastest model measured in the project) |
+| NUCLEO-F401RE | **2.111 ms** |
+
+Footprint: MACC 33,636 (both conversion casts gone — absent from the per-layer
+chart) · flash 27,114 B · **RAM 8,616 B — unchanged vs the float32-interface
+build.** That is the instructive part: on DMIR the int8 interface cut RAM
+8,096 -> 5,444 B because the 6,200 B float input buffer *was* the binding
+allocation; here the input is only 10x18 (720 B float), the peak is set by the
+7.51 KiB of internal activations, and shrinking the input buffer moves nothing.
+Confirms the max-over-live-tensors model of ST's allocator from the DMIR
+campaign: **int8 I/O saves RAM only when the input buffer binds the peak** —
+it still saves latency (-4%) and the casts regardless.
