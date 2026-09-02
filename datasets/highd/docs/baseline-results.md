@@ -77,3 +77,29 @@ published TTLC RMSE of 0.629 s.
 
 Full 150-candidate ttlc history (recovered from the search state after the
 runner overwrote chunk-1 logs): `results/nas-fronts/highd_ttlc_history.csv`.
+
+## Deployment artifacts (2026-09-02, ready for ST Edge AI measurement)
+
+`results/deploy/` — search winners exported to full-int8 PTQ TFLite in both
+tensor interfaces, each variant evaluated on real test windows with the
+interface-honouring evaluator:
+
+| artifact | bytes | test metric |
+|---|--:|---|
+| cls model_aaaaam f32 | 38,440 | acc 90.53% |
+| cls model_aaaaam int8 | 26,280 | acc 89.10% |
+| cls model_aaaaam **int8-I/O** | 25,952 | acc 89.10% |
+| ttlc model_aaaaaw f32 | 125,320 | MAE 0.166 / RMSE 0.261 |
+| ttlc model_aaaaaw int8 | 55,992 | MAE 0.187 / RMSE 0.280 |
+| ttlc model_aaaaaw **int8-I/O** | 55,648 | MAE 0.187 / RMSE 0.280 |
+
+Observations vs the DMIR campaign: PTQ costs the classifier only 1.4 pt here
+(DMIR: 5.2) — the min-max-normalized inputs are far gentler on int8 than
+DMIR's wide-dynamic-range channels — and the interface change is again
+accuracy-neutral. Regression pays relatively more (+13% MAE), the same task
+asymmetry seen on DMIR, so QAT is deferred: unnecessary for cls at 1.4 pt,
+and it failed to rescue regression on DMIR.
+
+Upload list for the boards (H7B3I-DK first, F401 fits trivially):
+`highd_cls_model_aaaaam_int8_io.tflite`, `highd_ttlc_model_aaaaaw_int8_io.tflite`,
+plus the f32 pair for like-for-like float measurements.

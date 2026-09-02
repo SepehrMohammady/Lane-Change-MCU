@@ -1,0 +1,19 @@
+{
+ "task": "highd_cls",
+ "source_h5": "model_aaaaam.h5",
+ "params": 7904,
+ "variants": {
+  "f32": {
+   "bytes": 38440,
+   "acc": 0.90526
+  },
+  "int8": {
+   "bytes": 26280,
+   "acc": 0.891
+  },
+  "int8_io": {
+   "bytes": 25952,
+   "acc": 0.891
+  }
+ }
+}

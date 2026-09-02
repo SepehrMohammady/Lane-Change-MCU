@@ -1,0 +1,22 @@
+{
+ "task": "highd_ttlc",
+ "source_h5": "model_aaaaaw.h5",
+ "params": 27719,
+ "variants": {
+  "f32": {
+   "bytes": 125320,
+   "mae": 0.16561,
+   "rmse": 0.26076
+  },
+  "int8": {
+   "bytes": 55992,
+   "mae": 0.18701,
+   "rmse": 0.27985
+  },
+  "int8_io": {
+   "bytes": 55648,
+   "mae": 0.18701,
+   "rmse": 0.27985
+  }
+ }
+}

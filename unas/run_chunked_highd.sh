@@ -3,6 +3,7 @@
 # Usage (from WSL):  bash /mnt/c/Projects/PhD/DIMIR/unas/run_chunked_highd.sh highd_cls 150 50
 CONFIG="${1:?config}"; TARGET="${2:-150}"; EPOCHS="${3:-50}"
 MAX_CHUNKS="${MAX_CHUNKS:-8}"
+RUN_TAG="$(date +%m%d%H%M)"
 VENV="$HOME/dmir_nas"; FORK="$HOME/uNAS"; REPO="/mnt/c/Projects/PhD/DIMIR"
 STATE="$FORK/artifacts/$CONFIG/${CONFIG}_agingevosearch_state.pickle"
 
@@ -35,7 +36,7 @@ cd "$FORK"
 
 prev_hist=-1
 for chunk in $(seq 1 "$MAX_CHUNKS"); do
-  LOG="$REPO/runs/nas/${CONFIG}_chunk${chunk}.log"
+  LOG="$REPO/runs/nas/${CONFIG}_${RUN_TAG}_chunk${chunk}.log"
   args=(-c "$CONFIG" --seed 42 --save-every 5)
   [ -f "$STATE" ] && args+=(-l "$STATE")
   echo ">>> $CONFIG chunk $chunk @ $(date) (target $TARGET) -> $LOG"

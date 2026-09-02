@@ -81,5 +81,13 @@ def get_highd_cls_setup(**_):
     return _setup("highd_cls", "highd_cls", CLS_ERROR_BOUND)
 
 
+# Tighter accuracy demand: the 0.07-bound run satisfied accuracy early and
+# spent all fitness pressure on size (front peaked at 90.5%). A 0.045 bound
+# (val acc >= 95.5%) keeps accuracy binding for longer.
+def get_highd_cls_tight_setup(**_):
+    return _setup("highd_cls", "highd_cls_tight",
+                  float(os.environ.get("HIGHD_CLS_TIGHT_BOUND", "0.045")))
+
+
 def get_highd_ttlc_setup(**_):
     return _setup("highd_ttlc", "highd_ttlc", REG_ERROR_BOUND)
