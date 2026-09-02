@@ -103,3 +103,21 @@ and it failed to rescue regression on DMIR.
 Upload list for the boards (H7B3I-DK first, F401 fits trivially):
 `highd_cls_model_aaaaam_int8_io.tflite`, `highd_ttlc_model_aaaaaw_int8_io.tflite`,
 plus the f32 pair for like-for-like float measurements.
+
+## Measured on-device (2026-09-02, ST Edge AI Developer Cloud)
+
+`highd_cls_model_aaaaam_f32.tflite` (7,904 params, test acc 90.53%):
+
+| board | measured inference |
+|---|--:|
+| STM32H7B3I-DK (M7 @ 280 MHz) | **0.7614 ms** |
+| NUCLEO-F401RE (M4 @ 84 MHz) | **4.161 ms** |
+
+Per-layer profile (both boards): the first conv (conv2d_1) dominates runtime
+by a wide margin while conv2d_7 holds the most weights — the usual
+early-layer-compute / late-layer-memory split. Report SVG:
+`results/deploy/highd_cls_model_aaaaam_f32.tflite.svg`.
+Flash/RAM/MACC totals not yet recorded — pending from the report page.
+
+Context: DMIR cls_tiny (8k params, 50x31 input) measured 0.7931 ms on the same
+M7; this model (7.9k params, 10x18 input) lands at 0.7614 ms — consistent scale.
