@@ -117,7 +117,10 @@ Per-layer profile (both boards): the first conv (conv2d_1) dominates runtime
 by a wide margin while conv2d_7 holds the most weights — the usual
 early-layer-compute / late-layer-memory split. Report SVG:
 `results/deploy/highd_cls_model_aaaaam_f32.tflite.svg`.
-Flash/RAM/MACC totals not yet recorded — pending from the report page.
+Footprint (Core 4.0.1-20581, balanced, allocate inputs/outputs true):
+**MACC 34,220 · flash 35,010 B** (weights 28.14 KiB + ~6 KiB library) ·
+**RAM 5,328 B** (activations 4.92 KiB + ~288 B library; I/O buffers 0/0).
+Badge STAI_FORMAT_FLOAT, input 10x18 float32.
 
 Context: DMIR cls_tiny (8k params, 50x31 input) measured 0.7931 ms on the same
 M7; this model (7.9k params, 10x18 input) lands at 0.7614 ms — consistent scale.
