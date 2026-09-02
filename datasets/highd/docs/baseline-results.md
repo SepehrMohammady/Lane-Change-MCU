@@ -50,3 +50,30 @@ highd_ttlc, bounds 32 KB / 32 KB / 500k MACs) then map the accuracy-size
 frontier below that, and the winners go through the existing int8/QAT + ST
 Edge AI measurement pipeline — the deployment-cost axis nobody in this
 literature reports.
+
+## NAS search results (2026-09-02, overnight, 150 rounds each)
+
+Both aging-evolution searches ran to completion on the RTX 5070 (pop 50,
+sample 15, bounds 32 KB peak-mem / 32 KB int8 size / 500k MACs; fronts in
+`results/nas-fronts/`, re-evaluated independently on real test windows —
+the fork's console test_error tracks val_error and is never quoted).
+
+**Classification** (13 Pareto models, 7.9k–38k params): best searched point
+90.53% window accuracy @ 7,904 params. The hand baseline (91.1% @ 8,371)
+still leads: with the 0.07 error bound satisfied at ~93% val accuracy, fitness
+pressure goes entirely to size, so the front tilts small instead of accurate.
+Lever for a follow-up: tighten `HIGHD_CLS_ERROR_BOUND`.
+
+**TTLC regression** (25 models after the salvage resume): the first 150-round
+run saved zero models — every candidate's val MAE (best 0.1622) sat above the
+0.16 error bound and `model_saver.py` drops out-of-bound models. Salvage
+resume (+bound 0.20, save-all) captured the population. Best searched points
+on test: MAE 0.1624 / RMSE 0.2614 @ 80k params, and MAE 0.1656 / RMSE 0.2608
+@ 27.7k. The 8.4k baseline (MAE 0.169 / RMSE 0.276) is edged on accuracy at
+3–10x the size — per-parameter the baseline still wins.
+
+Context: every model in these fronts, baseline included, sits far under the
+published TTLC RMSE of 0.629 s.
+
+Full 150-candidate ttlc history (recovered from the search state after the
+runner overwrote chunk-1 logs): `results/nas-fronts/highd_ttlc_history.csv`.
