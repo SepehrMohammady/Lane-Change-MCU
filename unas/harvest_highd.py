@@ -49,7 +49,7 @@ def main(artifacts, out_dir, tasks):
 
     out = Path(out_dir); out.mkdir(parents=True, exist_ok=True)
     for task in tasks:
-        cls = task == "highd_cls"
+        cls = task.startswith("highd_cls")
         mdir = Path(artifacts).expanduser() / task / "models"
         if not mdir.is_dir():
             print(f"{task}: no models dir, skipping"); continue
