@@ -31,6 +31,10 @@ POPULATION = int(os.environ.get("HIGHD_POPULATION", "50"))
 SAMPLE = int(os.environ.get("HIGHD_SAMPLE", "15"))
 EPOCHS = int(os.environ.get("HIGHD_EPOCHS", "50"))
 SAVE_CRITERIA = os.environ.get("HIGHD_SAVE_CRITERIA", "pareto")
+# Parallel candidate evaluations (Ray workers; each claims GPU:0.2 + 6 CPUs).
+# MCU-scale candidates leave the GPU mostly idle per worker, so 2 roughly
+# doubles search throughput; keep <=2 on this 15 GB WSL (OOM history).
+PARALLEL = int(os.environ.get("HIGHD_PARALLEL", "1"))
 
 
 def _training_config(dataset, classification):
@@ -69,6 +73,7 @@ def _setup(task, name, error_bound):
             search_space=Cnn1DSearchSpace(),
             checkpoint_dir=f"artifacts/{name}",
             rounds=ROUNDS, population_size=POPULATION, sample_size=SAMPLE,
+            max_parallel_evaluations=PARALLEL,
         ),
         "model_saver_config": ModelSaverConfig(save_criteria=SAVE_CRITERIA),
         "serialized_dataset": False,

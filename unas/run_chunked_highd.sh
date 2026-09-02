@@ -30,6 +30,13 @@ EOF
 export HIGHD_DATA_ROOT="$REPO/datasets/highd/data/prepared"
 export HIGHD_ROUNDS="$TARGET" HIGHD_EPOCHS="$EPOCHS"
 export HIGHD_POPULATION="${HIGHD_POPULATION:-50}" HIGHD_SAMPLE="${HIGHD_SAMPLE:-15}"
+export HIGHD_PARALLEL="${HIGHD_PARALLEL:-1}"
+# GPU accounting for the paper: snapshot at start + 30 s utilization samples.
+nvidia-smi --query-gpu=name,memory.total,driver_version --format=csv,noheader
+GPULOG="$REPO/runs/nas/${CONFIG}_${RUN_TAG}_gpu.csv"
+( nvidia-smi --query-gpu=timestamp,utilization.gpu,utilization.memory,memory.used,power.draw --format=csv,noheader -l 30 > "$GPULOG" 2>/dev/null ) &
+GPUSAMPLER=$!
+trap "kill $GPUSAMPLER 2>/dev/null" EXIT
 export TF_CPP_MIN_LOG_LEVEL=1 TF_FORCE_GPU_ALLOW_GROWTH=true
 mkdir -p "$REPO/runs/nas"
 cd "$FORK"
