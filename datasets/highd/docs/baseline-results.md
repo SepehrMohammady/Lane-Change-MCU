@@ -124,3 +124,20 @@ Badge STAI_FORMAT_FLOAT, input 10x18 float32.
 
 Context: DMIR cls_tiny (8k params, 50x31 input) measured 0.7931 ms on the same
 M7; this model (7.9k params, 10x18 input) lands at 0.7614 ms — consistent scale.
+
+`highd_cls_model_aaaaam_int8.tflite` (int8 weights, float32 I/O — badge
+STAI_FORMAT_FLOAT; test acc 89.10%):
+
+| board | measured inference |
+|---|--:|
+| STM32H7B3I-DK | **0.4181 ms** (1.82x vs f32) |
+| NUCLEO-F401RE | **2.168 ms** (1.92x vs f32) |
+
+Footprint: MACC 34,002 · flash 27,438 B (weights 7.94 KiB — 3.54x smaller —
+but library grows ~6 -> ~19 KiB, the int8-kernel overhead that dominates tiny
+models, same pattern as DMIR) · **RAM 8,616 B** (activations 7.51 KiB + 924 B
+library). Note RAM is HIGHER than the f32 build's 5,328 B: at this scale the
+int8 kernels' scratch outweighs the activation-precision saving, and the
+float32 interface still pays the conversion_0/conversion_19 casts visible in
+the per-layer chart. The int8-I/O variant is where the interface cost goes
+away. SVG: `results/deploy/highd_cls_model_aaaaam_int8.tflite.svg`.
