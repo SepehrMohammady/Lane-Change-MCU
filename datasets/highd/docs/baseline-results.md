@@ -194,3 +194,21 @@ from the web UI's RAM total for the same artifact (e.g. cls int8-IO 9,924 vs
 8,616 B) — different inclusion of I/O/library buffers; the jsonl keeps the
 API's separate ram_io fields, and cross-tool comparisons should stick to one
 source.
+
+## Final classification winner: model_aaaaap (tight-bound search, 5,347 params)
+
+Measured via the ST API (Core 4.0.1, balanced), records in benchmarks_api.jsonl:
+
+| variant | acc | H7B3I-DK | F401RE | ROM | RAM | MACC |
+|---|--:|--:|--:|--:|--:|--:|
+| f32 | 91.15% | 0.1547 ms | 0.6960 ms | 25,096 B | 1,368 B | 5,855 |
+| **int8-IO** | **91.04%** | **0.1063 ms** | **0.4670 ms** | **15,329 B** | 3,088 B | 5,635 |
+
+The search did not just add accuracy — it found an architecture with **5.9k
+MACs**, 6x cheaper than model_aaaaam (34k) at higher accuracy. Combined
+statement: a classifier that beats the published Table III proposed model by
+8 accuracy points runs at ~9,400 inferences/s on a Cortex-M7 and ~2,100/s on
+an entry Cortex-M4, in 15 KB of flash. It is 13.5x faster than the fastest
+DMIR deployment point (1.435 ms) and the fastest artifact in the project.
+
+The int8-vs-f32 RAM inversion appears a third time (1,368 -> ~3 kB).
