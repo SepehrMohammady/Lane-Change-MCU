@@ -159,3 +159,38 @@ allocation; here the input is only 10x18 (720 B float), the peak is set by the
 Confirms the max-over-live-tensors model of ST's allocator from the DMIR
 campaign: **int8 I/O saves RAM only when the input buffer binds the peak** —
 it still saves latency (-4%) and the casts regardless.
+
+## Measured via the ST Edge AI REST API (2026-09-02, batch of 8)
+
+Automated through ST's official Developer Cloud Python client (same engine:
+Core 4.0.1, balanced, allocate I/O true). Raw records:
+`results/deploy/benchmarks_api.jsonl`.
+
+**Re-verification of the manual measurements** — the API re-ran two artifacts
+measured by hand earlier the same day:
+
+| artifact | manual | API | delta |
+|---|--:|--:|--:|
+| cls f32 @ H7B3 | 0.7614 ms | 0.7641 ms | +0.35% |
+| cls int8-IO @ H7B3 | 0.4012 ms | 0.4016 ms | +0.09% |
+
+Board-farm repeatability is under 0.4%, and the manually pasted numbers are
+confirmed accurate.
+
+**TTLC winner (model_aaaaaw, 27.7k params), all variants, both boards:**
+
+| variant | H7B3I-DK | F401RE | ROM (H7B3) | RAM (H7B3, API) | MACC |
+|---|--:|--:|--:|--:|--:|
+| f32 | 1.0382 ms | 5.0578 ms | 117,438 B | 3,004 B | 47,070 |
+| int8 | 0.6744 ms | 2.9922 ms | 55,233 B | 11,040 B | 46,777 |
+| int8-IO | **0.6576 ms** | **2.9396 ms** | 54,933 B | 10,740 B | 46,415 |
+
+Same shapes as the classifier: int8 1.54-1.72x faster, the int8 interface adds
+a further ~2.5% and removes the casts, and **int8 RAM exceeds f32 RAM**
+(3,004 -> ~11 kB) — the int8-scratch-dominates-at-small-scale pattern, even
+more pronounced here. fp32 cycles/MAC = 6.2, consistent with every fp32
+measurement in the project. Accounting note: the API's ram_B differs slightly
+from the web UI's RAM total for the same artifact (e.g. cls int8-IO 9,924 vs
+8,616 B) — different inclusion of I/O/library buffers; the jsonl keeps the
+API's separate ram_io fields, and cross-tool comparisons should stick to one
+source.
