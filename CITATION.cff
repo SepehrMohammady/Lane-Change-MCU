@@ -11,6 +11,7 @@ authors:
       ELIOS Lab, Department of Electrical, Electronic and Telecommunications
       Engineering and Naval Architecture (DITEN), University of Genoa, Italy
 repository-code: https://github.com/SepehrMohammady/LC-Intention-NAS
+license: MIT
 abstract: >-
   Constrained neural architecture search for driver-intention and
   surrounding-vehicle manoeuvre prediction, evaluated on two driving datasets

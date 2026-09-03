@@ -1,10 +1,9 @@
-"""INT8 post-training quantization + honest accuracy check for chosen models.
+"""INT8 post-training quantization and accuracy check for chosen models.
 
 Converts a saved Keras .h5 to an INT8 TFLite model (weights + activations),
 calibrated on real DMIR train windows, then evaluates BOTH the float model and
 the INT8 TFLite model on the test set so we can report the quantization drop and
-the real .tflite byte size. A second uint8-I/O TFLite is also written for the ST
-Edge AI toolchain (which prefers integer tensor interfaces).
+the real .tflite byte size.
 
 Run in the WSL dmir_nas venv:
   source ~/dmir_nas/env.sh

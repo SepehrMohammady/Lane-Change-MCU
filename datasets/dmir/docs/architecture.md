@@ -78,7 +78,7 @@ Input 50×31 ────┤                                                 ├
   → Flatten(184) → FC(249) + ReLU → FC(1)
 ```
 
-Two observations worth reporting:
+Two observations:
 
 - **Task shapes topology.** The search space permits parallel branches for every
   task, but only regression used them; the classifiers stayed essentially
@@ -142,8 +142,8 @@ proportion to difficulty:
 | lcl_best | TTLC regression | **3** | 2 (one 3-way) | **11.4%** |
 
 The classifiers stayed essentially sequential and FC-dominated; the regression
-models fanned out and shifted their budget into convolutions. Discovered, not
-imposed.
+models fanned out and shifted their budget into convolutions. Nothing in the
+search space required this.
 
 ## RAM = max(input floor, widest layer)
 

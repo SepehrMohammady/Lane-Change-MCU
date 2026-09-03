@@ -48,8 +48,7 @@ The baseline alone already exceeds every published Table III number at 8.4k
 params. The NAS searches (`unas/run_chunked_highd.sh`, configs highd_cls /
 highd_ttlc, bounds 32 KB / 32 KB / 500k MACs) then map the accuracy-size
 frontier below that, and the winners go through the existing int8/QAT + ST
-Edge AI measurement pipeline — the deployment-cost axis nobody in this
-literature reports.
+Edge AI measurement pipeline, an axis their Table III does not report.
 
 ## NAS search results (2026-09-02, overnight, 150 rounds each)
 
@@ -94,8 +93,8 @@ interface-honouring evaluator:
 | ttlc model_aaaaaw **int8-I/O** | 55,648 | MAE 0.187 / RMSE 0.280 |
 
 Observations vs the DMIR campaign: PTQ costs the classifier only 1.4 pt here
-(DMIR: 5.2) — the min-max-normalized inputs are far gentler on int8 than
-DMIR's wide-dynamic-range channels — and the interface change is again
+against 5.2 pt on DMIR, because the min-max-normalized inputs quantize better
+than DMIR's wide-dynamic-range channels. The interface change is again
 accuracy-neutral. Regression pays relatively more (+13% MAE), the same task
 asymmetry seen on DMIR, so QAT is deferred: unnecessary for cls at 1.4 pt,
 and it failed to rescue regression on DMIR.
@@ -133,8 +132,7 @@ STAI_FORMAT_FLOAT; test acc 89.10%):
 | STM32H7B3I-DK | **0.4181 ms** (1.82x vs f32) |
 | NUCLEO-F401RE | **2.168 ms** (1.92x vs f32) |
 
-Footprint: MACC 34,002 · flash 27,438 B (weights 7.94 KiB — 3.54x smaller —
-but library grows ~6 -> ~19 KiB, the int8-kernel overhead that dominates tiny
+Footprint: MACC 34,002 · flash 27,438 B (weights 7.94 KiB, 3.54x smaller; but the library grows ~6 -> ~19 KiB, the int8-kernel overhead that dominates tiny
 models, same pattern as DMIR) · **RAM 8,616 B** (activations 7.51 KiB + 924 B
 library). Note RAM is HIGHER than the f32 build's 5,328 B: at this scale the
 int8 kernels' scratch outweighs the activation-precision saving, and the
@@ -150,9 +148,9 @@ STAI_FORMAT_S8, 10x18 8-bit in / 3 8-bit out; test acc 89.10%):
 | STM32H7B3I-DK | **0.4012 ms** (fastest model measured in the project) |
 | NUCLEO-F401RE | **2.111 ms** |
 
-Footprint: MACC 33,636 (both conversion casts gone — absent from the per-layer
-chart) · flash 27,114 B · **RAM 8,616 B — unchanged vs the float32-interface
-build.** That is the instructive part: on DMIR the int8 interface cut RAM
+Footprint: MACC 33,636 (both conversion casts gone, absent from the per-layer
+chart) · flash 27,114 B · **RAM 8,616 B, unchanged vs the float32-interface
+build.** On DMIR the int8 interface cut RAM
 8,096 -> 5,444 B because the 6,200 B float input buffer *was* the binding
 allocation; here the input is only 10x18 (720 B float), the peak is set by the
 7.51 KiB of internal activations, and shrinking the input buffer moves nothing.
@@ -204,8 +202,8 @@ Measured via the ST API (Core 4.0.1, balanced), records in benchmarks_api.jsonl:
 | f32 | 91.15% | 0.1547 ms | 0.6960 ms | 25,096 B | 1,368 B | 5,855 |
 | **int8-IO** | **91.04%** | **0.1063 ms** | **0.4670 ms** | **15,329 B** | 3,088 B | 5,635 |
 
-The search did not just add accuracy — it found an architecture with **5.9k
-MACs**, 6x cheaper than model_aaaaam (34k) at higher accuracy. Combined
+The search also cut compute: this architecture needs **5.9k MACs**, 6x fewer
+than model_aaaaam (34k), at higher accuracy. Combined
 statement: a classifier that beats the published Table III proposed model by
 8 accuracy points runs at ~9,400 inferences/s on a Cortex-M7 and ~2,100/s on
 an entry Cortex-M4, in 15 KB of flash. It is 13.5x faster than the fastest

@@ -42,3 +42,6 @@ checklist.html
 
 # Local course entry point (course/ itself is local-only)
 index.html
+
+# Agent working notes, kept local
+CLAUDE.md

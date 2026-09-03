@@ -59,7 +59,7 @@ Re-checked against the **currently served** docs on 2026-07-14 (not just the old
 forum post):
 
 - The hosted docs under `stedgeai-dc.st.com/assets/embedded-docs/` return
-  `Last-Modified: Thu, 04 Jun 2026` — i.e. refreshed ~5 weeks ago — and still
+  `Last-Modified: Thu, 04 Jun 2026` — i.e. refreshed ~5 weeks ago, and still
   self-identify as *"ST Edge AI Core Technology 4.0.0"* (`quantization.html`
   rev r1.5).
 - `quantization.html`: *"ST Edge AI Core supports 8-bit integer-based (int8 or
@@ -146,7 +146,7 @@ int32 bias throughout; float32 I/O with a Quantize/Dequantize wrapper).
 
 Two things stand out vs the int8 PTQ point (1.885 ms, 104 KiB):
 - **Faster: 1.558 vs 1.885 ms** (−17%). Both are int8 with identical weights; the
-  difference is the op path — the width-1 **Conv2D** kernels ST emits appear
+  difference is the op path: the width-1 **Conv2D** kernels ST emits appear
   better-optimized than the 1D convs of the PTQ model. Reported as an observation,
   not a proven mechanism: the QAT-vs-PTQ latency also carries the 1D→2D change, so
   the speed-up cannot be attributed to QAT alone (a PTQ-2D on-device run would
@@ -218,7 +218,7 @@ scaling below).
 **The headline here is categorical, not a ratio: the reference CNN cannot run on
 this board at all.** Its 1,769,882 B of flash is **3.38× the F401's entire
 512 KB**. No optimization setting fixes that. Every searched model is *smaller*
-than the board's flash — but see the headroom caveat under the table:
+than the board's flash, but see the headroom caveat under the table:
 
 | model | flash | % of F401 flash | benchmark on the board |
 |---|--:|--:|---|
@@ -268,7 +268,7 @@ model's structure — **what blocked the fp32 build was its flash footprint**, a
 shrinking it 3.2× is sufficient to make the same network deployable. This
 upgrades the headroom account from a plausible explanation to a demonstrated
 one (ST still reports no reason for the dash, so the *precise* failure mode
-inside the toolchain remains unreported — but the cause is now isolated).
+inside the toolchain remains unreported, but the cause is now isolated).
 
 **Consequence worth stating in the paper:** on this board quantization is not
 merely a size/speed optimisation for `lcr_best`; it is the difference between a
@@ -305,7 +305,7 @@ activation-resolution loss lands directly on the output. The relative damage
 from int8 PTQ shows this plainly: the classifier loses 5.7% of its accuracy,
 while LCR's error grows by **57%** and LCL's by 9%. Fine-tuning adapts *weights*,
 but the information destroyed here is in the *activation representation* of
-wide-dynamic-range inputs — which is why weight adaptation cannot recover it.
+wide-dynamic-range inputs, which is why weight adaptation cannot recover it.
 
 **Practical consequence.** The honest operating-point table is asymmetric:
 - **Classification** — three usable points: float32 (92.08%), int8 QAT (89.82%,
@@ -316,7 +316,7 @@ wide-dynamic-range inputs — which is why weight adaptation cannot recover it.
   accuracy and should be reported as a deployability fallback, not a result.
 
 Artifacts: `datasets/dmir/results/qat/{lcr,lcl}_best_qat_int8.tflite` and their
-`*_qat_result.json`. Not benchmarked on-device — the accuracy makes them
+`*_qat_result.json`. They were not benchmarked on-device; the accuracy makes them
 uninteresting as operating points, and `lcr_best_int8` (PTQ) already supplies
 the F401 latency figure.
 
@@ -336,7 +336,7 @@ the baseline paper's own report that their Transformer did not fit the F401.
 | lcl_best fp32 | 1,658,927 | 28.77 ms | **162.5 ms** | 5.65× | 1.69× |
 
 Against a clock ratio of 3.33×, the M4 is consistently **1.4–1.7× slower per
-clock** — the M7's dual-issue pipeline and cache — and the factor shrinks as the
+clock** (the M7's dual-issue pipeline and cache), and the factor shrinks as the
 kernels get more efficient. Cycles per MAC:
 
 | model | MACC | M7 | M4 |
@@ -410,7 +410,7 @@ script reproduces `prepare_deploy.py` exactly.
 
 *Note on the evaluator:* `eval_tflite` in `prepare_deploy.py` / `quantize_eval.py`
 only **casts** (`.astype(dtype)`). That is a harmless no-op for a float32
-interface — so every number measured so far is unaffected — but it would
+interface, so every number measured so far is unaffected, but it would
 silently destroy an int8 input. `export_int8_io.py` therefore carries its own
 evaluator that quantizes in and dequantizes out.
 
@@ -419,7 +419,7 @@ float32-I/O build already quantizes the input internally with the same scale (th
 visible `conversion_0` op); the int8 interface just moves that cast off the
 device. The float32 interface was costing RAM and buying nothing.
 
-**✔ MEASURED (2026-07-27) — direction confirmed, my magnitude was wrong.**
+**✔ MEASURED (2026-07-27) — direction confirmed, magnitude wrong.**
 
 Same board (STM32H7B3I-DK), same settings, same weights — **only the tensor
 interface differs**, so this is a clean single-variable comparison:
@@ -444,20 +444,19 @@ at `pool_1` and end at `gemm_26`, where the float32-I/O build began with
 `conversion_0` and ended with `conversion_14`. That is the predicted effect, and
 it also accounts for the MACC drop.
 
-**Where my prediction failed, and why it matters.** I predicted ~3,446 B by
-*subtracting* the buffer saving (6,200 − 1,550 = 4,650 B) from the measured
-8,096 B. Measured is 5,444 B — I was **2.0 KB optimistic**. The error is
-methodological: peak RAM is a **max over simultaneously-live tensors plus kernel
-scratch, not a sum**, which is exactly the principle stated in the RAM-regimes
-section below — and which I failed to apply to my own forecast. Shrinking the
-input buffer from 6,200 B to 1,550 B did not subtract 4,650 B from the arena; it
-removed the input as *the binding constraint*, after which the widest internal
-activation set the new floor at 3,543 B. The lesson generalises: once you are no
-longer input-bound, further input shrinking buys nothing.
+**Where our prediction failed.** We predicted ~3,446 B by *subtracting* the
+buffer saving (6,200 − 1,550 = 4,650 B) from the measured 8,096 B. Measured is
+5,444 B, so we were **2.0 KB optimistic**. The error is methodological: peak RAM
+is a **max over simultaneously-live tensors plus kernel scratch, not a sum**,
+the principle stated in the RAM-regimes section below and not applied to our own
+forecast. Shrinking the input buffer from 6,200 B to 1,550 B did not subtract
+4,650 B from the arena; it removed the input as *the binding constraint*, after
+which the widest internal activation set the new floor at 3,543 B. Once the
+input is no longer the binding constraint, shrinking it further buys nothing.
 
 **What it settles.** int8 is now unambiguously the RAM-efficient point: 5,444 B
 vs float32's 9,456 B (**1.74×**, up from a marginal 1.17×). The input-floor
-account is confirmed on hardware — the floor was real, it moved when the
+account is confirmed on hardware, the floor was real, it moved when the
 interface changed, and it stopped mattering once it fell below the internal peak.
 
 **Revised int8 operating points on the H7B3I-DK** (all same board/settings):
@@ -523,7 +522,7 @@ The QAT rows carry ~22 KiB more library than the PTQ rows because of the width-1
 2D re-expression, which is a cost of the tooling and not of quantisation; a
 native-1D QAT would remove it (`paper/NOTES.md`).
 
-**Bonus: what the `STAI_FORMAT_*` badge actually means.** This run resolves an
+**What the `STAI_FORMAT_*` badge actually means.** This run resolves an
 earlier open puzzle. We once cited `STAI_FORMAT_FLOAT` as evidence that the
 int16×8 model had been dequantized, then retracted it after the genuinely-int8
 build showed the same badge. Now that a build with an int8 *interface* reports
@@ -533,7 +532,7 @@ remains the sound discriminator for the int16×8 finding.
 
 **2. Width-bound (`lcr_best`, 20.8 KB).** Its wide 116-channel conv emits
 25×116×4 B = 11.6 KB; peak ≈ input 6.2 + 11.6 ≈ 17.8 KB against 18.91 KiB
-reported. Width — not depth or parameter count — moves RAM.
+reported. Width moves RAM; depth and parameter count do not.
 
 **3. Liveness-bound (`lcl_best`, 26.46 KiB).** Here the chain rule
 `max(input, widest layer in+out)` **fails**, and the reason is not the one that
@@ -592,7 +591,7 @@ estimator is therefore near-exact once the convention is matched.
 
 ### Per-layer time does not track MACs on ST's float32 path
 
-**The robust claim (well supported, safe to publish).** On ST's float32 kernels,
+**The well-supported claim (safe to publish).** On ST's float32 kernels,
 MAC count does not rank per-layer cost — not approximately, not even ordinally in
 the tail. Evidence across three models and both boards:
 
@@ -602,7 +601,7 @@ the tail. Evidence across three models and both boards:
 - *cls_tiny (M4)*: `pool_7` is an average-pool with **zero MACs** and is one of
   the largest bars; `gemm_13` has 24% of the model's MACs and is a small bar.
 - *Both boards*: **7.0 cycles/MAC (M7) and 11.6 cycles/MAC (M4)** on cores with
-  single-cycle MAC instructions — an order of magnitude of pure overhead.
+  single-cycle MAC instructions, an order of magnitude of pure overhead.
 
 The unifying explanation is that at these tensor sizes nothing is
 arithmetic-bound; per-op overhead and memory traffic dominate, so zero-MAC ops
@@ -646,7 +645,7 @@ What survives, stated carefully:
 2. Run the ablation: re-export one no-ReLU conv with a ReLU appended, shapes held
    constant; see whether its bar collapses. Cheap and decisive.
 
-The paper currently states only the robust claim (MACs do not predict per-layer
+The paper currently states only the well-supported claim (MACs do not predict per-layer
 time on the float32 path), not the mechanism.
 
 ### Where the reference CNN spends its budget (per-layer, from the DC charts)
@@ -678,7 +677,7 @@ the largest FC, all computed from the deployed `.tflite` files):
 
 lcl_best is the only model whose flash is not FC-dominated at all. (Earlier drafts
 quoted "82–95%" for the classifiers and "~95%" for the reference; both were
-inflated — the true figures are 82.5–90.9% and 93.0%.)
+inflated, the true figures are 82.5–90.9% and 93.0%.)
 
 ## Benchmark plan (ST Edge AI Developer Cloud)
 
@@ -694,7 +693,7 @@ Priority 1 — main deployment table, board **STM32H7B3I-DK**, float32:
 4. `lcr_best_float32.tflite`
 5. `lcl_best_float32.tflite`
 
-Priority 2 — the low-end story, board **NUCLEO-F401RE**, float32:
+Priority 2, the low-end story, board **NUCLEO-F401RE**, float32:
 6. `cls_tiny_float32.tflite` (the baseline's Transformer did not fit the F401)
 
 Priority 3 — quantify the int8 operating point, **STM32H7B3I-DK**:

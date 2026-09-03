@@ -74,7 +74,8 @@ them: fronts in `results/nas-fronts/*.csv`, the three winning Keras models in
 
 ## 5. Deployment artifacts and on-device measurements
 
-`results/deploy/` holds each winner as float32 / int8 / int8-interface TFLite,
+Built with `unas/prepare_deploy_highd.py`, `results/deploy/` holds each winner as
+float32 / int8 / int8-interface TFLite,
 with the accuracy of every variant in `*_deploy.json`. On-device numbers come
 from the ST Edge AI Developer Cloud board farm (Core 4.0.1, balanced) and are
 recorded per run in `results/deploy/benchmarks_api.jsonl`.

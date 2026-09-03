@@ -9,7 +9,7 @@ because the published baseline deployed on the same platform — making the
 on-device comparison like-for-like — and the board is physically available
 in the ELIOS lab.
 
-📚 A trilingual course website (Farsi/English/Italian) documenting this project
+A trilingual course website (Farsi/English/Italian) documenting this project
 A-to-Z, and the LaTeX manuscript, are kept **local only** and are not published
 in this repository.
 
@@ -76,6 +76,7 @@ silently dequantizes it, so it is not deployable. See `unas/qat_finetune.py` and
 src/                             shared, dataset-agnostic logic (train, logging, env, EDA)
 unas/                            µNAS fork adapters, search launchers, export/quantization tools
 notebooks/dmir_pipeline.ipynb    main DMIR pipeline — all knobs in its Config cell
+scripts/run_baseline.py          train the baseline on one DMIR task and log the run
 scripts/check_pipeline.py        3-task smoke test on real data; run after every change
 docs/research/                   shared literature and toolchain notes (µNAS, ST Edge AI, venue)
 LOGBOOK.md                       dated journal of decisions and results (all datasets)
@@ -92,9 +93,9 @@ datasets/highd/                  second dataset: highD lane-change prediction
 A second dataset gets its own `datasets/<name>/` with the same shape; shared
 code stays in `src/` and `unas/` rather than being copied per dataset.
 
-Two directories exist locally but are gitignored and not published here:
-`paper/` (LaTeX manuscript, built with `scripts/build_paper.ps1`) and `course/`
-(trilingual course website).
+Kept locally and not published here: `paper/` (the LaTeX manuscript, built with
+`scripts/build_paper.ps1`), `course/` (the trilingual course website), and
+`CLAUDE.md` (working notes for the coding agent).
 
 ## Setup (Windows, Python 3.13)
 
@@ -113,6 +114,21 @@ Store) system Python instead.
 Data: extract `Materials/data-*.zip` into `datasets/dmir/data/` (folders
 `data-classification/`, `data-regression-lcl/`, `data-prepared-lcr/`).
 The archives are not part of this repository.
+
+## Licence and data
+
+The code and documentation in this repository are released under the MIT
+licence (`LICENSE`). The datasets are **not** covered by it and are not
+redistributed here:
+
+- **DMIR / Lane Change Intention Recognition** — MIT, Zenodo
+  [10.5281/zenodo.16686054](https://doi.org/10.5281/zenodo.16686054).
+- **highD** — free for academic use on request from
+  [levelxdata.com/highd-dataset](https://levelxdata.com/highd-dataset/);
+  redistribution is not permitted, so obtain your own copy.
+
+Cite this work through `CITATION.cff`, and cite the dataset papers separately
+when you use the data.
 
 ## Working rules
 
