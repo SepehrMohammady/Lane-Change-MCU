@@ -60,7 +60,7 @@ ApplePies 2024 precursor paper).
 
 The exact ordered channel names for both layouts are in
 [datasets/dmir/docs/feature-map.md](feature-map.md) and machine-readable in
-[`src/features.py`](../src/features.py). Confirmed from the provider's
+[`src/features.py`](../../../src/features.py). Confirmed from the provider's
 `feature_description` doc + correlation to raw H5 signals. Key point: the
 **turn-signal state is a feature** (channels 28/29 classification, 3/4
 regression) and is heavily label-leaky — see below.

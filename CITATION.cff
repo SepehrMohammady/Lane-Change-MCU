@@ -1,0 +1,65 @@
+cff-version: 1.2.0
+title: >-
+  LC-Intention-NAS: hardware-constrained neural architecture search for
+  lane-change intention and time-to-lane-change prediction
+message: If you use this software or its results, please cite it.
+type: software
+authors:
+  - given-names: Sepehr
+    family-names: Mohammady
+    affiliation: >-
+      ELIOS Lab, Department of Electrical, Electronic and Telecommunications
+      Engineering and Naval Architecture (DITEN), University of Genoa, Italy
+repository-code: https://github.com/SepehrMohammady/LC-Intention-NAS
+abstract: >-
+  Constrained neural architecture search for driver-intention and
+  surrounding-vehicle manoeuvre prediction, evaluated on two driving datasets
+  and deployed to Arm Cortex-M microcontrollers with measured flash, RAM and
+  inference latency from the ST Edge AI board farm.
+keywords:
+  - neural architecture search
+  - TinyML
+  - lane change prediction
+  - time to lane change
+  - quantization
+  - STM32
+  - embedded machine learning
+  - intelligent transportation systems
+references:
+  - type: article
+    title: >-
+      Early Lane Change Prediction for Automated Driving Systems Using
+      Multi-Task Attention-Based Convolutional Neural Networks
+    authors:
+      - family-names: Mozaffari
+        given-names: Sajjad
+      - family-names: Arnold
+        given-names: Eduardo
+      - family-names: Dianati
+        given-names: Mehrdad
+      - family-names: Fallah
+        given-names: Saber
+    journal: IEEE Transactions on Intelligent Vehicles
+    volume: 7
+    issue: 3
+    start: 758
+    end: 770
+    year: 2022
+    notes: Protocol followed for the highD experiments.
+  - type: conference-paper
+    title: >-
+      The highD Dataset: A Drone Dataset of Naturalistic Vehicle Trajectories
+      on German Highways for Validation of Highly Automated Driving Systems
+    authors:
+      - family-names: Krajewski
+        given-names: Robert
+      - family-names: Bock
+        given-names: Julian
+      - family-names: Kloeker
+        given-names: Laurent
+      - family-names: Eckstein
+        given-names: Lutz
+    collection-title: >-
+      2018 IEEE 21st International Conference on Intelligent Transportation
+      Systems (ITSC)
+    year: 2018
