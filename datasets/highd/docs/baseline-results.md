@@ -210,3 +210,25 @@ an entry Cortex-M4, in 15 KB of flash. It is 13.5x faster than the fastest
 DMIR deployment point (1.435 ms) and the fastest artifact in the project.
 
 The int8-vs-f32 RAM inversion appears a third time (1,368 -> ~3 kB).
+
+## The searched classifier under their metric definitions (2026-09-08)
+
+`eval_their_protocol.py` scored only the hand baseline. Applying the same
+transcribed formulas to the tight-search winner (`results/models/
+highd_cls_tight_model_aaaaap.h5`, 5,347 params; record in
+`results/their_protocol_eval_model_aaaaap.json`):
+
+| metric | hand CNN 8.4k | searched 5.3k | their proposed |
+|---|--:|--:|--:|
+| accuracy | 0.911 | 0.912 | 0.83 |
+| precision | 0.923 | 0.966 | 0.85 |
+| recall | 0.938 | 0.896 | 0.85 |
+| F1 | 0.930 | 0.930 | 0.85 |
+| AUC | 0.959 | 0.962 | 0.88 |
+| τ_f (first correct) | 4.93 s | 4.73 s | 4.75 s |
+| τ_c (robust) | 4.79 s | 4.53 s | 3.96 s |
+
+Same F1 by a different route: the searched model trades recall for precision
+(fewer false lane-change alarms, later first correct call), so its robust
+prediction horizon is 0.26 s shorter than the baseline's. Both remain well
+above the published 3.96 s.

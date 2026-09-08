@@ -1,0 +1,12 @@
+{
+ "model": "highd_cls_tight_model_aaaaap",
+ "params": 5347,
+ "accuracy": 0.9115,
+ "recall": 0.8964,
+ "precision": 0.9656,
+ "f1": 0.9297,
+ "auc": 0.9622,
+ "tau_f_s": 4.73,
+ "tau_c_s": 4.53,
+ "test_scenarios": 693
+}
