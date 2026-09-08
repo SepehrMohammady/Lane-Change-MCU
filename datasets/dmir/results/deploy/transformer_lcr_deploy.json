@@ -1,0 +1,27 @@
+{
+ "model": "transformer_lcr",
+ "source": "Materials/Models/transformer_lcr.keras",
+ "params": 333505,
+ "test_rmse": 0.8395,
+ "test_mae": 0.6712,
+ "reported_rmse": 0.42,
+ "rebuild_matches_reported": false,
+ "tflite_builtin_only": true,
+ "tflite_bytes": 1356020,
+ "ops": [
+  "ADD",
+  "BATCH_MATMUL",
+  "DELEGATE",
+  "FULLY_CONNECTED",
+  "MEAN",
+  "MUL",
+  "NEG",
+  "RESHAPE",
+  "RSQRT",
+  "SOFTMAX",
+  "SQUARED_DIFFERENCE",
+  "STRIDED_SLICE",
+  "TRANSPOSE"
+ ],
+ "flex_ops": []
+}

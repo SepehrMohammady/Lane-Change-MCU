@@ -707,3 +707,42 @@ Scriptable alternative (avoids UI clicking): the `stm32ai_dc` Python client
 pwd, version))`, `get_benchmark_boards()`, `upload_model()`, `benchmark(
 CliParameters(model=...), 'STM32H7B3I-DK')`. Also local: X-CUBE-AI "Validate on
 target" in CubeMX with the board you own (highest fidelity, no queue).
+
+## Reference Transformers on the boards (2026-09-08)
+
+The internal reference regressors are Transformers and had never been deployed,
+so "is a Transformer viable on this MCU?" had only ever been answered by
+argument. `unas/transformer_deploy.py` rebuilds each one from the configuration
+stored inside its `.keras` file (three custom layer classes exist in no public
+repository, so the file cannot be loaded directly) and loads the original
+weights.
+
+**Scope of this measurement.** The rebuild is architecturally exact — parameter
+counts match the originals to the unit, 333,505 and 49,089 — but it does not
+reproduce the reported test RMSE (0.42 / 0.44), so the weight mapping is
+unverified and **no accuracy claim is made from these artifacts**. Latency,
+flash and RAM are functions of the operator graph and tensor shapes rather than
+of weight values, so those are reported. The JSON records carry `usable_for`
+and `not_usable_for` fields stating this.
+
+| model (float32) | params | MACC | H7B3I-DK | F401RE | flash | RAM |
+|---|--:|--:|--:|--:|--:|--:|
+| Transformer LCR (reference) | 333,505 | 95,209,897 | 368.82 ms | does not fit | 1,368,946 B | 143,300 B |
+| lcr_best (searched) | 117,404 | 860,407 | 14.06 ms | 28.10 ms (int8) | 474,522 B | 20,772 B |
+| Transformer LCL (reference) | 49,089 | 33,949,021 | 45.64 ms | 248.37 ms | 221,150 B | 66,916 B |
+| lcl_best (searched) | 105,769 | 1,658,927 | 28.77 ms | 162.5 ms | 423,494 B | 28,264 B |
+
+The LCL row is the informative one: that Transformer carries **fewer than half**
+the parameters of our LCL model yet needs 20× the MACs and 1.59× the time.
+Attention recomputes across the sequence, so parameter count understates
+Transformer cost badly, and comparisons drawn on parameter counts alone measure
+the wrong quantity. For LCR the gap is 111× the MACs and 26.2× the latency.
+
+The LCR Transformer fails on the F401 for two independent reasons: 1,368,946 B
+of flash against 524,288 B available, and 143,300 B of RAM against 98,304 B.
+
+Conversion note: both convert with TFLite **builtin operators only** — no
+TF-select fallback — using BATCH_MATMUL, SOFTMAX, MEAN, RSQRT,
+SQUARED_DIFFERENCE, TRANSPOSE, STRIDED_SLICE and FULLY_CONNECTED. So a
+Transformer of this size *is* compilable for an MCU; the objection is cost, not
+feasibility, and claiming infeasibility would be wrong.
