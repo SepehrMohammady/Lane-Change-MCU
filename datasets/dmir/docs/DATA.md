@@ -104,8 +104,8 @@ paper/NOTES.md.
 
 ## Still open (nice-to-have, non-blocking)
 
-- [ ] Exact name list of all 31 channels per task (ego-block order inferred,
-      not confirmed; the 3 trailing binaries in classification unidentified —
-      likely indicators + one flag).
+- [x] Exact identity of all 31 classification channels, including the two
+      neighbour-car blocks: recovered and verified against the pickle on
+      2026-09-09 (feature-map.md, last section).
 - [ ] Provenance of the internal 92%/0.42/0.44 reference results (model,
       spike handling) — needed only for the paper's "internal reference" row.
