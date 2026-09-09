@@ -305,6 +305,25 @@ def first_robust(probs, t, direction):
     return float(tt[pre][k])
 
 
+def hazard_block(e, t_flag):
+    """The recorded vehicle in the target lane (object slot 11, the scenario's
+    dedicated left car): when it is level with the ego, and when the recorded
+    driver actually started steering. Used by the what-if overlay."""
+    seq = [(f["t"], next((o for o in f["objs"] if o["slot"] == 11), None)) for f in e["frames"]]
+    seq = [(t, o) for t, o in seq if o is not None]
+    t_al = None
+    for (t0, o0), (t1, o1) in zip(seq, seq[1:]):
+        if o0["long"] < 0 <= o1["long"]:
+            t_al = t0 + (t1 - t0) * (-o0["long"]) / (o1["long"] - o0["long"])
+            break
+    f0 = min(e["frames"], key=lambda f: abs(f["t"] - t_flag))
+    steer = next((f["t"] for f in e["frames"] if f["t"] >= t_flag and f["y"] - f0["y"] > 0.4), None)
+    at_flag = next((o for o in f0["objs"] if o["slot"] == 11), None)
+    return {"slot": 11, "id": seq[0][1]["id"] if seq else None, "t_alongside": None if t_al is None else round(t_al, 3),
+            "steer_start": steer, "at_flag": at_flag,
+            "note": "recorded car in the target lane; the recorded driver waited for it before steering"}
+
+
 def main_select():
     events = json.loads((RACE / "events.json").read_text())
     d = np.load(RACE / "windows.npz")
@@ -341,6 +360,7 @@ def main_select():
     scen["t_windows"] = d["t"][m][order].round(1).tolist()
     scen["probs"] = {k: P[k][m][order].round(4).tolist() for k in MODELS}
     scen["flags"] = chosen["flags"]
+    scen["hazard"] = hazard_block(e, chosen["flags"]["best"])
     scen["population"] = {"n_events": len(events), "n_ok": len(ok), "median_flag_best": med,
                           "flags_all": [s["flags"] for s in ok]}
     (RACE / "scenario.json").write_text(json.dumps(scen))
