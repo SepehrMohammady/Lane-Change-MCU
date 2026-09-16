@@ -317,7 +317,7 @@ reported test accuracy was at least 88.5%, five seeds each under the search reci
    the best single run (5,347 params, 91.15%) ranks 16th of 17 by its mean.
 2. **No saved classifier reaches the hand-built CNN.** The best means (91.3% at
    80 k and 75 k) are 0.8 points below it at nine to ten times its parameters.
-   Five seeds do not resolve that gap (Welch p = 0.15 and 0.06), so the defensible
+   Five seeds do not resolve that gap (Welch p = 0.145 and 0.055), so the defensible
    statement is that the search found no classifier more accurate than the
    hand-built one, not that all are worse. The small tighter-search winner is
    clearly behind (88.66 ± 1.98%). The smallest model with a stable mean is
