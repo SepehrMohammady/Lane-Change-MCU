@@ -1,0 +1,331 @@
+{
+  "_about": "Every on-device measurement of the DMIR campaign in one machine-readable place. Values are copied from the measured tables in datasets/dmir/docs/deployment.md (manual ST Edge AI Developer Cloud runs) and from benchmarks_api.jsonl (API runs, referenced by artifact name as {\"api\": ...} so the raw record is read, not a copy); each variant names its source. Nothing here is estimated. Board RAM/flash are ST's reported totals (weights + activations + library).",
+  "dataset": "dmir",
+  "toolchain": "ST Edge AI Core 4.0.1-20581, balanced optimization, allocate inputs/outputs",
+  "boards": {
+    "STM32H7B3I-DK": {
+      "core": "Cortex-M7",
+      "mhz": 280,
+      "flash_b": 2097152,
+      "ram_b": 1212416
+    },
+    "NUCLEO-F401RE": {
+      "core": "Cortex-M4",
+      "mhz": 84,
+      "flash_b": 524288,
+      "ram_b": 98304
+    }
+  },
+  "models": [
+    {
+      "id": "ref_cnn",
+      "label": "Reference CNN",
+      "role": "reference",
+      "task": "classification",
+      "params": 441347,
+      "arch_svg": "REF_cnn_multi_float32.tflite.svg",
+      "note": "Colleague's internal reference model, evaluated by us on the same test split.",
+      "variants": [
+        {
+          "precision": "fp32",
+          "io": "float32",
+          "metric": {
+            "acc": 0.9169
+          },
+          "boards": {
+            "STM32H7B3I-DK": {
+              "latency_ms": 33.52,
+              "macc": 1965360,
+              "flash_b": 1769882,
+              "ram_b": 39168
+            },
+            "NUCLEO-F401RE": {
+              "fits": false,
+              "why": "needs 1,769,882 B of flash, 3.38x the board's 524,288 B"
+            }
+          },
+          "source": "datasets/dmir/docs/deployment.md, measured table (H7B3I-DK) and F401RE fit table"
+        }
+      ]
+    },
+    {
+      "id": "cls_best",
+      "label": "Searched, best accuracy",
+      "role": "searched",
+      "task": "classification",
+      "params": 83803,
+      "arch_svg": "cls_best_float32.tflite.svg",
+      "variants": [
+        {
+          "precision": "fp32",
+          "io": "float32",
+          "metric": {
+            "acc": 0.9208
+          },
+          "boards": {
+            "STM32H7B3I-DK": {
+              "latency_ms": 3.628,
+              "macc": 158094,
+              "flash_b": 343254,
+              "ram_b": 9456
+            },
+            "NUCLEO-F401RE": {
+              "latency_ms": 18.35,
+              "flash_b": 343254,
+              "ram_b": 9456
+            }
+          },
+          "source": "datasets/dmir/docs/deployment.md, measured tables"
+        },
+        {
+          "precision": "int8 PTQ",
+          "io": "float32",
+          "metric": {
+            "acc": 0.8686
+          },
+          "boards": {
+            "STM32H7B3I-DK": {
+              "latency_ms": 1.885,
+              "macc": 158336,
+              "flash_b": 106738,
+              "ram_b": 8096
+            }
+          },
+          "source": "datasets/dmir/docs/deployment.md, measured table"
+        },
+        {
+          "precision": "int8 PTQ",
+          "io": "int8",
+          "metric": {
+            "acc": 0.8686
+          },
+          "boards": {
+            "STM32H7B3I-DK": {
+              "latency_ms": 1.752,
+              "macc": 155230,
+              "flash_b": 106446,
+              "ram_b": 5444
+            }
+          },
+          "source": "datasets/dmir/docs/deployment.md, measured table"
+        },
+        {
+          "precision": "int8 QAT",
+          "io": "float32",
+          "metric": {
+            "acc": 0.8982
+          },
+          "boards": {
+            "STM32H7B3I-DK": {
+              "latency_ms": 1.558,
+              "macc": 161570,
+              "flash_b": 131008,
+              "ram_b": 8404
+            },
+            "NUCLEO-F401RE": {
+              "latency_ms": 7.381,
+              "flash_b": 131008,
+              "ram_b": 8404
+            }
+          },
+          "source": "datasets/dmir/docs/deployment.md, measured tables"
+        },
+        {
+          "precision": "int8 QAT",
+          "io": "int8",
+          "metric": {
+            "acc": 0.899
+          },
+          "boards": {
+            "STM32H7B3I-DK": {
+              "latency_ms": 1.435,
+              "macc": 158710,
+              "flash_b": 131562,
+              "ram_b": 6204
+            }
+          },
+          "source": "datasets/dmir/docs/deployment.md, measured table"
+        }
+      ]
+    },
+    {
+      "id": "cls_tiny",
+      "label": "Searched, smallest",
+      "role": "searched",
+      "task": "classification",
+      "params": 7953,
+      "arch_svg": "cls_tiny_float32.tflite.svg",
+      "variants": [
+        {
+          "precision": "fp32",
+          "io": "float32",
+          "metric": {
+            "acc": 0.913
+          },
+          "boards": {
+            "STM32H7B3I-DK": {
+              "latency_ms": 0.7931,
+              "macc": 31742,
+              "flash_b": 37954,
+              "ram_b": 9412
+            },
+            "NUCLEO-F401RE": {
+              "latency_ms": 4.376,
+              "flash_b": 37954,
+              "ram_b": 9412
+            }
+          },
+          "source": "datasets/dmir/docs/deployment.md, measured tables"
+        }
+      ]
+    },
+    {
+      "id": "lcr_best",
+      "label": "Searched, time to right lane change",
+      "role": "searched",
+      "task": "regression_lcr",
+      "params": 117404,
+      "arch_svg": "lcr_best_float32.tflite.svg",
+      "variants": [
+        {
+          "precision": "fp32",
+          "io": "float32",
+          "metric": {
+            "mae": 0.2865,
+            "rmse": 0.4466
+          },
+          "boards": {
+            "STM32H7B3I-DK": {
+              "latency_ms": 14.06,
+              "macc": 860407,
+              "flash_b": 474522,
+              "ram_b": 20772
+            },
+            "NUCLEO-F401RE": {
+              "fits": false,
+              "why": "no result returned: 474,522 B leaves only 49,766 B of flash headroom for the runtime"
+            }
+          },
+          "source": "datasets/dmir/docs/deployment.md, measured table and flash-headroom tables"
+        },
+        {
+          "precision": "int8 PTQ",
+          "io": "float32",
+          "metric": {
+            "mae": 0.4485
+          },
+          "boards": {
+            "NUCLEO-F401RE": {
+              "latency_ms": 28.1,
+              "flash_b": 150504
+            }
+          },
+          "source": "datasets/dmir/docs/deployment.md, controlled headroom experiment"
+        }
+      ]
+    },
+    {
+      "id": "lcl_best",
+      "label": "Searched, time to left lane change",
+      "role": "searched",
+      "task": "regression_lcl",
+      "params": 105769,
+      "arch_svg": "lcl_best_float32.tflite.svg",
+      "variants": [
+        {
+          "precision": "fp32",
+          "io": "float32",
+          "metric": {
+            "mae": 0.3165,
+            "rmse": 0.466
+          },
+          "boards": {
+            "STM32H7B3I-DK": {
+              "latency_ms": 28.77,
+              "macc": 1658927,
+              "flash_b": 423494,
+              "ram_b": 28264
+            },
+            "NUCLEO-F401RE": {
+              "latency_ms": 162.5,
+              "flash_b": 423494,
+              "ram_b": 28264
+            }
+          },
+          "source": "datasets/dmir/docs/deployment.md, measured tables"
+        }
+      ]
+    },
+    {
+      "id": "tr_lcr",
+      "label": "Transformer, right (reference)",
+      "role": "transformer",
+      "task": "regression_lcr",
+      "params": 333505,
+      "note": "Internal reference Transformer rebuilt from its stored configuration. Architecture exact; accuracy NOT claimed from the rebuild (reported RMSE 0.42 is the colleague's figure).",
+      "variants": [
+        {
+          "precision": "fp32",
+          "io": "float32",
+          "metric": {
+            "rmse_reported": 0.42
+          },
+          "boards": {
+            "STM32H7B3I-DK": {
+              "api": "transformer_lcr_fp32.tflite"
+            },
+            "NUCLEO-F401RE": {
+              "fits": false,
+              "why": "1,368,946 B of flash against 524,288 B, and 143,300 B of RAM against 98,304 B"
+            }
+          },
+          "source": "datasets/dmir/results/deploy/benchmarks_api.jsonl; deployment.md, reference Transformers"
+        }
+      ]
+    },
+    {
+      "id": "tr_lcl",
+      "label": "Transformer, left (reference)",
+      "role": "transformer",
+      "task": "regression_lcl",
+      "params": 49089,
+      "note": "Internal reference Transformer rebuilt from its stored configuration. Architecture exact; accuracy NOT claimed from the rebuild (reported RMSE 0.44 is the colleague's figure).",
+      "variants": [
+        {
+          "precision": "fp32",
+          "io": "float32",
+          "metric": {
+            "rmse_reported": 0.44
+          },
+          "boards": {
+            "STM32H7B3I-DK": {
+              "api": "transformer_lcl_fp32.tflite"
+            },
+            "NUCLEO-F401RE": {
+              "api": "transformer_lcl_fp32.tflite"
+            }
+          },
+          "source": "datasets/dmir/results/deploy/benchmarks_api.jsonl; deployment.md, reference Transformers"
+        }
+      ]
+    }
+  ],
+  "references": {
+    "published_sota": {
+      "label": "Published Transformer (Forneris et al., IEEE SPL 2026)",
+      "task": "single TTLC regression, both directions, 30 channels",
+      "params_approx": 54000,
+      "rmse": 0.5102,
+      "mae": 0.2978,
+      "note": "Different formulation (one model for both directions, free-ride windows included); comparison is indicative, as the paper states."
+    },
+    "internal_transformers": {
+      "rmse_lcr": 0.42,
+      "rmse_lcl": 0.44,
+      "params_lcr": 333505,
+      "params_lcl": 49089
+    },
+    "indicator_only_acc": 0.815,
+    "no_indicator_best_acc": 0.911
+  }
+}

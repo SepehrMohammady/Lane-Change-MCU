@@ -232,3 +232,138 @@ Same F1 by a different route: the searched model trades recall for precision
 (fewer false lane-change alarms, later first correct call), so its robust
 prediction horizon is 0.26 s shorter than the baseline's. Both remain well
 above the published 3.96 s.
+
+## Seed study: the searched classifier does not beat the hand-built CNN (2026-09-16)
+
+Every number above comes from one training run. The final models were retrained
+from scratch with five seeds (`unas/seed_variance.py` for the searched Keras
+models, `train_highd.py <task> <run> <seed>` for the hand-built PyTorch CNN), and
+the searched models a second time under the hand-built model's recipe (AdamW
+3e-3, weight decay 1e-4, at most 60 epochs, early stopping patience 8), so that
+searched and hand-built differ only in architecture. Records:
+`results/seeds/seed_variance.jsonl`, `results/seeds/seed_variance_final.jsonl`,
+`logs/experiments.jsonl` (`highd_baseline_*_seed*`).
+
+Test accuracy, mean ± sample std over five seeds [min, max]:
+
+| model | params | search recipe | hand-built's recipe | single run reported |
+|---|--:|--:|--:|--:|
+| searched, tighter search (model_aaaaap) | 5,347 | 88.89 ± 2.90% [84.41, 91.72] | 89.19 ± 2.20% [86.59, 92.27] | 91.15% |
+| searched, first search (model_aaaaam) | 7,904 | 90.80 ± 0.79% [89.72, 91.56] | 90.84 ± 0.75% [89.66, 91.63] | 90.53% |
+| hand-built CNN | 8,371 | — | **92.11 ± 0.71%** [91.28, 92.99] | 91.09% |
+
+Time-to-lane-change test RMSE (s):
+
+| model | params | search recipe | hand-built's recipe | single run reported |
+|---|--:|--:|--:|--:|
+| searched regressor (model_aaaaaw) | 27,719 | 0.276 ± 0.011 [0.259, 0.286] | 0.316 ± 0.074 [0.270, 0.447] | 0.261 |
+| hand-built CNN | 8,371 | — | 0.276 ± 0.009 [0.270, 0.292] | 0.276 |
+
+What this changes:
+
+1. **Every model and every seed still beats the published model** (accuracy 0.83,
+   RMSE 0.629). That claim holds.
+2. **The claim that the search beats the hand-built CNN does not hold.** The
+   tighter-search winner's 91.15% was a favourable run: its five-seed mean is
+   2.3 points lower, and its spread is four times the hand-built model's. The
+   search scores each candidate with one run, so the candidate it keeps is partly
+   the one whose run went well. The same recipe gives the same gap, so the recipe
+   is not the explanation. On the regression task the searched model only ties
+   the hand-built one, at 3.3 times the parameters.
+3. **A likely structural cause: the hand-built model lies outside the search
+   space.** The µNAS 1D space (`cnn1d_schema.py`, `cnn1d_architecture.py`) ends in
+   an optional average or max pool of size 2, 4 or 6, a Flatten, at least one
+   hidden Dense layer of 10-256 units and the output layer, with no dropout. The
+   pool acts globally only when the sequence is already down to the pool size or
+   shorter, and a hidden Dense layer always follows it. The hand-built CNN ends in
+   global average pooling and dropout straight into the output layer, so the
+   search could not have produced it. The dense head is also what dominates
+   runtime in the profiled DMIR models (82-93% for the classifiers).
+4. Two further observations. The model kept by the tighter search differs from
+   a candidate that scored 83.0% (model_aaaaan, same 5,347 parameters) only in
+   one pooling layer (max against average). And repeating a seed does not repeat
+   the result exactly (seed 0 gave 84.4% and 86.0% in two runs): GPU kernels are
+   not deterministic, so seeds fix initialisation and data order, not the run.
+
+### Re-ranking every saved classifier by its seed mean
+
+`unas/rerank_front.py` retrained all 17 saved classifiers from both searches whose
+reported test accuracy was at least 88.5%, five seeds each under the search recipe
+(`results/seeds/rerank_cls.jsonl`, 85 runs).
+
+| params | search | reported | 5-seed mean ± std | [min, max] |
+|--:|---|--:|--:|--:|
+| 5,347 | tighter (model_aaaaap) | 91.15% | 88.66 ± 1.98% | [85.99, 90.82] |
+| 7,904 | first (model_aaaaam) | 90.53% | 90.65 ± 1.12% | [89.26, 91.82] |
+| 9,010 | first (model_aaaaap) | 88.96% | 90.70 ± 0.54% | [90.17, 91.33] |
+| 11,849 | first (model_aaaaar) | 88.78% | 89.92 ± 1.03% | [88.38, 90.99] |
+| 15,073 | tighter (model_aaaaag) | 89.43% | 90.11 ± 0.82% | [88.98, 91.21] |
+| 28,805 | tighter (model_aaaaaq) | 88.68% | 89.25 ± 0.47% | [88.54, 89.66] |
+| 38,166 | tighter (model_aaaabk) | 89.34% | 88.43 ± 1.42% | [85.99, 89.61] |
+| 44,117 | tighter (model_aaaabs) | 89.55% | 89.75 ± 0.57% | [88.82, 90.34] |
+| 62,991 | tighter (model_aaaaak) | 88.95% | 90.64 ± 0.80% | [89.72, 91.53] |
+| 63,741 | tighter (model_aaaaae) | 89.28% | 91.11 ± 0.69% | [90.07, 92.00] |
+| 64,067 | tighter (model_aaaaaz) | 90.67% | 90.20 ± 1.41% | [87.90, 91.50] |
+| 69,344 | tighter (model_aaaaas) | 88.81% | 90.36 ± 0.76% | [89.37, 91.45] |
+| 74,649 | tighter (model_aaaaay) | 88.82% | 91.26 ± 0.38% | [90.86, 91.76] |
+| 79,987 | tighter (model_aaaaah) | 89.52% | **91.28 ± 0.90%** | [90.18, 92.10] |
+| 80,379 | tighter (model_aaaaau) | 89.26% | 90.78 ± 1.58% | [88.66, 92.45] |
+| 88,546 | tighter (model_aaaaam) | 90.45% | 90.11 ± 0.67% | [89.22, 91.05] |
+| 89,850 | tighter (model_aaaaac) | 88.54% | 90.72 ± 1.19% | [89.62, 92.38] |
+| 8,371 | hand-built CNN (its recipe) | 91.09% | **92.11 ± 0.71%** | [91.28, 92.99] |
+
+1. **The single run carried no ranking information.** Spearman correlation between
+   reported accuracy and five-seed mean is −0.19 over the 17 models; the model with
+   the best single run (5,347 params, 91.15%) ranks 16th of 17 by its mean.
+2. **No saved classifier reaches the hand-built CNN.** The best means (91.3% at
+   80 k and 75 k) are 0.8 points below it at nine to ten times its parameters.
+   Five seeds do not resolve that gap (Welch p = 0.15 and 0.06), so the defensible
+   statement is that the search found no classifier more accurate than the
+   hand-built one, not that all are worse. The small tighter-search winner is
+   clearly behind (88.66 ± 1.98%). The smallest model with a stable mean is
+   9,010 params at 90.70 ± 0.54%.
+3. On average the retrains score 0.8 points *above* their reported runs, the
+   opposite of what selection alone would produce. The search recipe and the retrain
+   recipe are the same code path, so this is not settled; see the next section for
+   why the reported runs are not reliable references for the saved files.
+
+### The saved search files do not match the search's own records
+
+Evaluating saved files against the fork's `metadatas.json` showed mismatches:
+`highd_cls_tight/model_aaaaan.h5` scores 83.5% on validation while its metadata row
+says 90.3%; `model_aaaaap.h5` scores 92.4% against 90.5%. Two causes in the fork's
+`ModelSaver`:
+
+- it restarts its file counter in every process (`self.iteration = 0`, empty
+  `stored_models`), so a resumed chunk writes `model_aaaaaa.h5` again over the first
+  chunk's file (the `highd_cls` chunk 2 log restarts at "Stored models: 1");
+- with `HIGHD_PARALLEL=2` each Ray worker holds its own saver, so two workers write
+  the same names into one folder, and `metadatas.json` keeps whichever list was
+  flushed last.
+
+Separately, the fork's logged `test_error` agrees with `val_error` to about 1e-4 for
+every candidate, although the saved files differ by one to four points between the
+two splits. It was not traced further.
+
+What this does and does not affect: every accuracy, error and board number in this
+project comes from evaluating or retraining the saved files themselves
+(`harvest_highd.py`, `seed_variance.py`, `rerank_front.py`), so those numbers hold.
+What does not hold is that the saved files form the search's Pareto front, or that
+the fork's metadata describes them. The DMIR searches ran through the same chunked
+saver (`run_chunked.sh`), so the same caveat applies there. Fix before any new
+search: persist the counter and the stored list across chunks, give each worker
+unique file names, and store the evaluated validation accuracy inside each file.
+
+Open decisions for the paper: report seed means throughout; decide whether to extend
+the search space with a global-pooling head (optional hidden layer, dropout) and
+re-run the searches with the saver fixed and the final front scored over seeds.
+
+## Note on the Transformer latency used in the highD replay
+
+The replay (T4.5 deck) quotes 368.82 ms for "a reference-size Transformer". That
+is the DMIR regression Transformer, built for 50 time steps × 31 features. The
+same architecture on the highD input (10 × 18) needs 5.0× fewer floating-point
+operations (29.7 M against 5.9 M, counted with the TensorFlow profiler on the
+rebuilt graph; parameters 333,505 against 325,025). Board latency does not follow
+operation counts exactly, so the highD figure is unmeasured: do not publish the
+12 m distance for highD without measuring a highD-shaped Transformer on the board.

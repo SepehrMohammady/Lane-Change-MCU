@@ -22,40 +22,51 @@ data provider). Published baseline
 results (test-set evaluation of the searched models; details in
 `datasets/dmir/docs/nas-results.md`):
 
-| Task | Metric | Published SOTA¹ | Internal ref.² | Ours (NAS) |
-|---|---|---|---|---|
-| 3-class intention (none/LCR/LCL) | accuracy | — | 92% @ 441 k params | **92.08% @ 84 k** (5× smaller) |
-| — tiny variant | accuracy | — | — | 91.30% @ ~8 k (55× smaller) |
-| — no-turn-indicator ablation | accuracy | — | — | 91.1% |
-| Time-to-LC regression, LCR | RMSE / MAE (s) | 0.510 / 0.298 | 0.42 / — | **0.447 / 0.287** |
-| Time-to-LC regression, LCL | RMSE / MAE (s) | 0.510 / 0.298¹ | 0.44 / — | 0.466 / 0.317 |
+| Task | Metric | Published SOTA¹ | Internal ref.² | Ours, search run | Ours, retrained 5×³ |
+|---|---|---|---|---|---|
+| 3-class intention (none/LCR/LCL) | accuracy | — | 92% @ 441 k params | 92.08% @ 84 k (5× smaller) | 91.45 ± 0.59% (reference CNN, same recipe: 91.33 ± 0.50%) |
+| — tiny variant | accuracy | — | — | 91.30% @ ~8 k (55× smaller) | 91.19 ± 0.32% |
+| — no-turn-indicator ablation | accuracy | — | — | 91.1% | 89.99 ± 0.66% |
+| Time-to-LC regression, LCR | RMSE / MAE (s) | 0.510 / 0.298 | 0.42 / — | 0.447 / 0.287 | 0.483 ± 0.021 / 0.326 ± 0.016 |
+| Time-to-LC regression, LCL | RMSE / MAE (s) | 0.510 / 0.298¹ | 0.44 / — | 0.466 / 0.317 | 0.496 ± 0.012 / 0.351 ± 0.013 |
+| Hand-built DSCNN (10 k), intention | accuracy | — | — | 91.51% | 91.50 ± 0.47% |
+| Hand-built DSCNN (10 k), LCR / LCL | RMSE (s) | 0.510 | 0.42 / 0.44 | 0.439 / 0.459 | 0.454 ± 0.008 / 0.469 ± 0.010 |
 
 ¹ Published SOTA (Forneris et al., SPL 2026, Transformer) reports a *single*
-combined TTLC, not per-direction: LCR beats it on both RMSE and MAE; for LCL
-our RMSE 0.466 is below 0.510 but the comparison is directionally valid
-rather than strict, and LCL MAE 0.317 does not beat 0.298 (LCL is the harder
-direction).
+combined TTLC, not per-direction, so the comparison is directional rather than
+strict. Retrained 5×, both searched RMSE means stay below 0.510 (one LCR seed,
+0.518, does not), every DSCNN run is below it, and no MAE mean beats 0.298.
 ² Internal unpublished reference uses a different train/threshold protocol
 (soft comparison); its RMSE 0.42 (LCR) / 0.44 (LCL) is **not yet beaten**.
+³ Same architecture re-initialised and retrained with five seeds
+(`unas/seed_variance.py`, `scripts/run_baseline.py <task> <seed>`; records in
+`datasets/dmir/results/seeds/` and `datasets/dmir/logs/experiments.jsonl`). The
+search trains each candidate once and keeps the best, so its single runs lean
+optimistic; quote the seed means. Under identical training the searched classifiers
+match the 441 k reference rather than beat it, and the hand-built 10 k DSCNN matches
+them on intention and has lower RMSE on both regression tasks, also when the
+searched models are trained with the DSCNN's recipe (details and tests in
+`datasets/dmir/docs/nas-results.md`). Latency, flash and RAM below depend only on
+the graph and are unaffected.
 
 ## Measured on-device (ST Edge AI Developer Cloud, Core 4.0.1)
 
 Float32, optimization *balanced*, board **STM32H7B3I-DK** (Cortex-M7 @
 280 MHz); full tables and analysis in `datasets/dmir/docs/deployment.md`:
 
-| Model | quality | latency | flash | RAM |
+| Model | quality (5-seed mean) | latency | flash | RAM |
 |---|--:|--:|--:|--:|
-| reference CNN (441 k) | 91.69% | 33.52 ms | 1,769,882 B | 39,168 B |
-| cls_best (84 k) | **92.08%** | 3.628 ms | 343,254 B | 9,456 B |
-| cls_tiny (8 k) | 91.30% | 0.793 ms | 37,954 B | 9,412 B |
-| lcr_best (117 k) | MAE 0.287 s | 14.06 ms | 474,522 B | 20,772 B |
-| lcl_best (106 k) | MAE 0.317 s | 28.77 ms | 423,494 B | 28,264 B |
+| reference CNN (441 k) | 91.33% | 33.52 ms | 1,769,882 B | 39,168 B |
+| cls_best (84 k) | 91.45% | 3.628 ms | 343,254 B | 9,456 B |
+| cls_tiny (8 k) | 91.19% | 0.793 ms | 37,954 B | 9,412 B |
+| lcr_best (117 k) | MAE 0.326 s | 14.06 ms | 474,522 B | 20,772 B |
+| lcl_best (106 k) | MAE 0.351 s | 28.77 ms | 423,494 B | 28,264 B |
 
 On the low-end **NUCLEO-F401RE** (Cortex-M4 @ 84 MHz, 512 KB flash) the
 reference CNN needs 3.38× the board's entire flash and cannot run at all,
 while every one of our architectures does: cls_tiny 4.376 ms (7.2% of flash),
-cls_best int8-QAT 7.381 ms (25.0%), the full float32 cls_best — the 92.08%
-headline model — 18.35 ms (65.5%), and lcl_best 162.5 ms (80.8%). The one
+cls_best int8-QAT 7.381 ms (25.0%), the full float32 cls_best — the
+headline classifier — 18.35 ms (65.5%), and lcl_best 162.5 ms (80.8%). The one
 build that returned no measured time was `lcr_best` in float32 (90.5% of
 flash, under 50 KB left for the runtime) — yet the **int8 build of that same
 network runs in 28.10 ms** at 28.7% of flash. Same architecture, same board,
@@ -64,7 +75,7 @@ runtime rather than model size or supported operators: on this board
 quantization is what makes the widest model deployable at all.
 
 **Quantization.** Full-int8 PTQ costs accuracy on these wide-dynamic-range
-inputs (cls 92.08 → 86.86%); **quantization-aware training recovers it to
+inputs (deployed cls_best weights, 92.08 → 86.86%); **quantization-aware training recovers it to
 89.82%**, measured at **1.558 ms** on the H7B3I-DK (the fastest operating point)
 and 7.381 ms on the F401RE. int16×8 preserves accuracy offline but ST Edge AI
 silently dequantizes it, so it is not deployable. See `unas/qat_finetune.py` and
@@ -79,19 +90,28 @@ notebooks/dmir_pipeline.ipynb    main DMIR pipeline — all knobs in its Config 
 scripts/run_baseline.py          train the baseline on one DMIR task and log the run
 scripts/check_pipeline.py        3-task smoke test on real data; run after every change
 docs/research/                   shared literature and toolchain notes (µNAS, ST Edge AI, venue)
+dashboard/                       results explorer: one interactive page for every dataset (build.py)
 LOGBOOK.md                       dated journal of decisions and results (all datasets)
 
 datasets/dmir/                   everything specific to the DMIR dataset
   ├── data/                      prepared pickles (gitignored)
   ├── docs/                      DATA.md + dataset/results/deployment notes
   ├── logs/experiments.jsonl     one JSON line per run (feeds the paper's tables)
-  └── results/                   nas-fronts/, deploy/, qat/ artifacts
+  └── results/                   nas-fronts/, deploy/ (+ measurements.json), qat/, seeds/
 datasets/highd/                  second dataset: highD lane-change prediction
   (same shape; data gitignored — highD licence forbids redistribution)
 ```
 
 A second dataset gets its own `datasets/<name>/` with the same shape; shared
 code stays in `src/` and `unas/` rather than being copied per dataset.
+
+To browse every result in one place, build the results explorer and open the page
+it writes (standard library only, opens offline):
+
+```
+python dashboard/build.py            # dashboard/dist/results-explorer.html
+python dashboard/build.py --share    # copy for outside the lab (no raw-trajectory media)
+```
 
 Kept locally and not published here: `paper/` (the LaTeX manuscript, built with
 `scripts/build_paper.ps1`), `course/` (the trilingual course website), and

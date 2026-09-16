@@ -1,0 +1,290 @@
+{
+  "_about": "Every on-device measurement of the highD campaign. Variants measured through the ST API point at their record in benchmarks_api.jsonl by artifact name ({\"api\": ...}), so the build reads the raw record instead of a copy. The three model_aaaaam variants were measured by hand in the web UI; their numbers come from datasets/highd/docs/baseline-results.md (API re-runs of two agree within 0.35%). The web UI reports one footprint, attached to the H7B3I-DK; the API shows flash and RAM differ slightly per board. Nothing here is estimated.",
+  "dataset": "highd",
+  "toolchain": "ST Edge AI Core 4.0.1-20581, balanced optimization, allocate inputs/outputs",
+  "boards": {
+    "STM32H7B3I-DK": {
+      "core": "Cortex-M7",
+      "mhz": 280,
+      "flash_b": 2097152,
+      "ram_b": 1212416
+    },
+    "NUCLEO-F401RE": {
+      "core": "Cortex-M4",
+      "mhz": 84,
+      "flash_b": 524288,
+      "ram_b": 98304
+    }
+  },
+  "models": [
+    {
+      "id": "baseline_cls",
+      "label": "Hand-built CNN",
+      "role": "baseline",
+      "task": "highd_cls",
+      "params": 8371,
+      "note": "Hand-designed depthwise-separable CNN (PyTorch). Scored with the published metric definitions; not deployed.",
+      "variants": [
+        {
+          "precision": "fp32",
+          "io": "float32",
+          "metric": {
+            "acc": 0.9109,
+            "f1": 0.9302,
+            "auc": 0.9585,
+            "tau_c_s": 4.79
+          },
+          "boards": {},
+          "source": "datasets/highd/results/their_protocol_eval.json"
+        }
+      ]
+    },
+    {
+      "id": "cls_aaaaap",
+      "label": "Searched classifier (tighter search)",
+      "role": "searched",
+      "task": "highd_cls",
+      "params": 5347,
+      "variants": [
+        {
+          "precision": "fp32",
+          "io": "float32",
+          "metric": {
+            "acc": 0.91153
+          },
+          "boards": {
+            "STM32H7B3I-DK": {
+              "api": "highd_cls_model_aaaaap_f32.tflite"
+            },
+            "NUCLEO-F401RE": {
+              "api": "highd_cls_model_aaaaap_f32.tflite"
+            }
+          },
+          "source": "datasets/highd/results/deploy/benchmarks_api.jsonl"
+        },
+        {
+          "precision": "int8 PTQ",
+          "io": "int8",
+          "metric": {
+            "acc": 0.91037
+          },
+          "boards": {
+            "STM32H7B3I-DK": {
+              "api": "highd_cls_model_aaaaap_int8_io.tflite"
+            },
+            "NUCLEO-F401RE": {
+              "api": "highd_cls_model_aaaaap_int8_io.tflite"
+            }
+          },
+          "source": "datasets/highd/results/deploy/benchmarks_api.jsonl"
+        }
+      ]
+    },
+    {
+      "id": "cls_aaaaam",
+      "label": "Searched classifier (first search)",
+      "role": "searched",
+      "task": "highd_cls",
+      "params": 7904,
+      "arch_svg": "highd_cls_model_aaaaam_f32.tflite.svg",
+      "variants": [
+        {
+          "precision": "fp32",
+          "io": "float32",
+          "metric": {
+            "acc": 0.90526
+          },
+          "boards": {
+            "STM32H7B3I-DK": {
+              "latency_ms": 0.7614,
+              "macc": 34220,
+              "flash_b": 35010,
+              "ram_b": 5328
+            },
+            "NUCLEO-F401RE": {
+              "latency_ms": 4.161
+            }
+          },
+          "source": "datasets/highd/docs/baseline-results.md (manual; API re-run 0.7641 ms on H7B3I-DK)"
+        },
+        {
+          "precision": "int8 PTQ",
+          "io": "float32",
+          "metric": {
+            "acc": 0.891
+          },
+          "boards": {
+            "STM32H7B3I-DK": {
+              "latency_ms": 0.4181,
+              "macc": 34002,
+              "flash_b": 27438,
+              "ram_b": 8616
+            },
+            "NUCLEO-F401RE": {
+              "latency_ms": 2.168
+            }
+          },
+          "source": "datasets/highd/docs/baseline-results.md (manual)"
+        },
+        {
+          "precision": "int8 PTQ",
+          "io": "int8",
+          "metric": {
+            "acc": 0.891
+          },
+          "boards": {
+            "STM32H7B3I-DK": {
+              "latency_ms": 0.4012,
+              "macc": 33636,
+              "flash_b": 27114,
+              "ram_b": 8616
+            },
+            "NUCLEO-F401RE": {
+              "latency_ms": 2.111
+            }
+          },
+          "source": "datasets/highd/docs/baseline-results.md (manual; API re-run 0.4016 ms on H7B3I-DK)"
+        }
+      ]
+    },
+    {
+      "id": "baseline_ttlc",
+      "label": "Hand-built CNN, time to lane change",
+      "role": "baseline",
+      "task": "highd_ttlc",
+      "params": 8371,
+      "note": "Hand-designed depthwise-separable CNN (PyTorch). Not deployed.",
+      "variants": [
+        {
+          "precision": "fp32",
+          "io": "float32",
+          "metric": {
+            "mae": 0.169,
+            "rmse": 0.2763
+          },
+          "boards": {},
+          "source": "datasets/highd/results/their_protocol_eval.json; baseline-results.md"
+        }
+      ]
+    },
+    {
+      "id": "ttlc_aaaaaw",
+      "label": "Searched regressor",
+      "role": "searched",
+      "task": "highd_ttlc",
+      "params": 27719,
+      "arch_svg": "highd_ttlc_model_aaaaaw_f32.tflite.svg",
+      "variants": [
+        {
+          "precision": "fp32",
+          "io": "float32",
+          "metric": {
+            "mae": 0.16561,
+            "rmse": 0.26076
+          },
+          "boards": {
+            "STM32H7B3I-DK": {
+              "api": "highd_ttlc_model_aaaaaw_f32.tflite"
+            },
+            "NUCLEO-F401RE": {
+              "api": "highd_ttlc_model_aaaaaw_f32.tflite"
+            }
+          },
+          "source": "datasets/highd/results/deploy/benchmarks_api.jsonl"
+        },
+        {
+          "precision": "int8 PTQ",
+          "io": "float32",
+          "metric": {
+            "mae": 0.18701,
+            "rmse": 0.27985
+          },
+          "boards": {
+            "STM32H7B3I-DK": {
+              "api": "highd_ttlc_model_aaaaaw_int8.tflite"
+            },
+            "NUCLEO-F401RE": {
+              "api": "highd_ttlc_model_aaaaaw_int8.tflite"
+            }
+          },
+          "source": "datasets/highd/results/deploy/benchmarks_api.jsonl"
+        },
+        {
+          "precision": "int8 PTQ",
+          "io": "int8",
+          "metric": {
+            "mae": 0.18701,
+            "rmse": 0.27985
+          },
+          "boards": {
+            "STM32H7B3I-DK": {
+              "api": "highd_ttlc_model_aaaaaw_int8_io.tflite"
+            },
+            "NUCLEO-F401RE": {
+              "api": "highd_ttlc_model_aaaaaw_int8_io.tflite"
+            }
+          },
+          "source": "datasets/highd/results/deploy/benchmarks_api.jsonl"
+        }
+      ]
+    }
+  ],
+  "references": {
+    "published": {
+      "label": "Mozaffari et al., IEEE T-IV 2022 (proposed model)",
+      "acc": 0.83,
+      "recall": 0.85,
+      "precision": 0.85,
+      "f1": 0.85,
+      "auc": 0.88,
+      "tau_f_s": 4.75,
+      "tau_c_s": 3.96,
+      "ttlc_rmse": 0.629,
+      "note": "Published Table III. Their model is not public, so it cannot be measured on a board."
+    },
+    "published_best_baseline": {
+      "label": "Best baseline in that paper",
+      "acc": 0.79,
+      "f1": 0.82,
+      "auc": 0.86,
+      "tau_c_s": 3.76,
+      "ttlc_rmse": 0.841
+    },
+    "searched_their_metrics": {
+      "acc": 0.9115,
+      "precision": 0.9656,
+      "recall": 0.8964,
+      "f1": 0.9297,
+      "auc": 0.9622,
+      "tau_f_s": 4.73,
+      "tau_c_s": 4.53,
+      "source": "datasets/highd/results/their_protocol_eval_model_aaaaap.json"
+    },
+    "baseline_their_metrics": {
+      "acc": 0.9109,
+      "precision": 0.9225,
+      "recall": 0.9381,
+      "f1": 0.9302,
+      "auc": 0.9585,
+      "tau_f_s": 4.93,
+      "tau_c_s": 4.79,
+      "ttlc_rmse": 0.2763,
+      "source": "datasets/highd/results/their_protocol_eval.json"
+    },
+    "splits": {
+      "train": [
+        7487,
+        7487
+      ],
+      "val": [
+        932,
+        932
+      ],
+      "test": [
+        693,
+        698
+      ],
+      "_format": "[ours, paper]"
+    }
+  }
+}

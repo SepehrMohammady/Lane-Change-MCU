@@ -1,7 +1,9 @@
 """Train the baseline DSCNN on one task with full data and log the run.
 
-Usage:  python scripts/run_baseline.py <task>
+Usage:  python scripts/run_baseline.py <task> [seed]
         task in {classification, regression_lcl, regression_lcr}
+        seed    optional; runs other than the default seed are logged as
+                baseline-dscnn-seed<n> (seed study, see nas-results.md)
 """
 from __future__ import annotations
 
@@ -18,9 +20,13 @@ from src.models import BaselineDSCNN
 from src.train import evaluate, train_model
 
 
-def main(task: str) -> None:
+def main(task: str, seed: int | None = None) -> None:
     cfg = Config(task=task, run_name="baseline-dscnn",
                  notes="depthwise-separable CNN baseline")
+    if seed is not None:
+        cfg.seed = seed
+        cfg.run_name = f"baseline-dscnn-seed{seed}"
+        cfg.notes = "depthwise-separable CNN baseline, seed study"
     seed_everything(cfg.seed)
     device = pick_device()
     bundle = load_task(cfg)
@@ -41,4 +47,4 @@ def main(task: str) -> None:
 
 
 if __name__ == "__main__":
-    main(sys.argv[1])
+    main(sys.argv[1], int(sys.argv[2]) if len(sys.argv) > 2 else None)

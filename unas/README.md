@@ -57,6 +57,25 @@ Output: Pareto-front `.h5` models + a state `.pickle` under
 feed to ST Edge AI / STM32Cube.AI for the STM32H7B3I-DK flash/RAM/latency
 numbers (see docs/research/stm32-toolchain.md).
 
+**Known issue in the fork's saver.** `uNAS/model_saver.py` starts every process
+with an empty model list and a file counter at zero, and each Ray worker holds its
+own saver. Resumed chunks (`run_chunked*.sh`) and `*_PARALLEL=2` therefore write the
+same file names into one folder, so saved `.h5` files overwrite each other and
+`metadatas.json` stops describing them. Never quote the fork's metadata or console
+`test_error`; evaluate the saved files (`harvest_fronts.py`, `harvest_highd.py`) and
+fix the saver before the next search.
+
+## Seed studies
+
+| script | what it does | output |
+|---|---|---|
+| `seed_variance.py` | retrains each final architecture from scratch with seeds 0-4; `RECIPE=search` (the fork's trainer), `final` (hand-built highD recipe) or `dscnn` (hand-built DMIR recipe) | `datasets/*/results/seeds/seed_variance*.jsonl` |
+| `rerank_front.py` | retrains every saved highD classifier above `RERANK_FLOOR` with five seeds and ranks them by mean | `datasets/highd/results/seeds/rerank_cls.jsonl` |
+
+Both run in the WSL `dmir_nas` venv and resume from their output files. The
+hand-built baselines take a seed argument: `scripts/run_baseline.py <task> <seed>`
+(DMIR) and `datasets/highd/train_highd.py <task> <run> <seed>`.
+
 ## Thresholds (first pass, in `dmir_config.py`)
 
 | Bound | Value | Rationale |

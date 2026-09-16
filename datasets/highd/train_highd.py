@@ -78,16 +78,16 @@ def batches(*arrays, bs, shuffle, device):
         yield [torch.from_numpy(a[j]).to(device) for a in arrays]
 
 
-def main(task: str, run_name: str):
+def main(task: str, run_name: str, seed: int = SEED, save_weights: bool = True):
     assert task in ("cls", "ttlc")
-    seed_everything(SEED)
+    seed_everything(seed)
     device = "cuda" if torch.cuda.is_available() else "cpu"
     t0 = time.perf_counter()
     record = {"run_name": run_name,
               "started_utc": datetime.now(timezone.utc).isoformat(timespec="seconds"),
               "config": {"dataset": "highD", "protocol": "EarlyLCPred T-IV 2022",
                          "task": task, "model": "BaselineDSCNN",
-                         "in_len": IN_LEN, "n_features": 18, "seed": SEED,
+                         "in_len": IN_LEN, "n_features": 18, "seed": seed,
                          "widths": [32, 48, 64], "lr": 3e-3, "batch_size": 256,
                          "epochs": 60, "early_stop_patience": 8,
                          "normalization": "minmax-train"},
@@ -198,12 +198,16 @@ def main(task: str, run_name: str):
     LOGS.mkdir(parents=True, exist_ok=True)
     with open(LOGS / "experiments.jsonl", "a", encoding="utf-8") as f:
         f.write(json.dumps(record, ensure_ascii=False) + "\n")
-    RESULTS.mkdir(parents=True, exist_ok=True)
-    torch.save(model.state_dict(), RESULTS / f"{run_name}.pt")
+    if save_weights:
+        RESULTS.mkdir(parents=True, exist_ok=True)
+        torch.save(model.state_dict(), RESULTS / f"{run_name}.pt")
     print(json.dumps(record["metrics"], indent=1), flush=True)
 
 
 if __name__ == "__main__":
+    # python train_highd.py <cls|ttlc> [run_name] [seed]
+    # A seed other than the default is a variance run: metrics are logged, weights are not kept.
     task = sys.argv[1]
     run_name = sys.argv[2] if len(sys.argv) > 2 else f"highd_baseline_{task}"
-    main(task, run_name)
+    seed = int(sys.argv[3]) if len(sys.argv) > 3 else SEED
+    main(task, run_name, seed=seed, save_weights=(seed == SEED))
