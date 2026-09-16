@@ -44,7 +44,7 @@ strict. Retrained 5×, both searched RMSE means stay below 0.510 (one LCR seed,
 search trains each candidate once and keeps the best, so its single runs lean
 optimistic; quote the seed means. Under identical training the searched classifiers
 match the 441 k reference rather than beat it, and the hand-built 10 k DSCNN matches
-them on intention and has lower RMSE on both regression tasks, also when the
+them on intention and has lower mean RMSE on both regression tasks, also when the
 searched models are trained with the DSCNN's recipe (details and tests in
 `datasets/dmir/docs/nas-results.md`). Latency, flash and RAM below depend only on
 the graph and are unaffected.
