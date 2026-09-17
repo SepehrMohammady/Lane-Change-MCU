@@ -1,13 +1,17 @@
-# LC-Intention-NAS: Lane-Change Prediction under Microcontroller Budgets
+# Lane-Change-MCU
 
-PhD research project (ELIOS Lab, University of Genoa, SYNERGIES project).
-Constrained neural architecture search on the Lane Change Intention Recognition
-driving time-series dataset (LCIR; `dmir` is the internal codename used in folder
-names). Goal: beat the published LC-Intention baseline with models small enough for
-deployment on the **STM32H7B3I-DK**, and publish in a Q1 venue. The H7B3I-DK was
-chosen because the published baseline deployed on the same platform, which makes
-the on-device comparison like-for-like, and because the board is available in the
-ELIOS lab. A second dataset, highD, follows the same pipeline; exiD is planned.
+Lane-change prediction on STM32 microcontrollers. Searched (µNAS) and hand-designed
+1D CNNs for driver intention on the Lane Change Intention Recognition dataset
+(LCIR; `dmir` is the internal codename used in folder names) and for lane changes
+of surrounding vehicles on highD, with exiD planned next. Every final model is
+retrained with five seeds, and latency, flash and RAM are measured on a Cortex-M7
+(STM32H7B3I-DK) and a Cortex-M4 (NUCLEO-F401RE) board.
+
+PhD research project (ELIOS Lab, University of Genoa, SYNERGIES project). The
+H7B3I-DK was chosen because the published LCIR baseline deployed on the same
+platform, which makes the on-device comparison like-for-like, and because the
+board is available in the ELIOS lab. The repository was called LC-Intention-NAS
+until September 2026; GitHub redirects the old address.
 
 A trilingual course website (Farsi/English/Italian) documenting this project
 A-to-Z, and the LaTeX manuscript, are kept **local only** and are not published
