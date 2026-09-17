@@ -1,13 +1,13 @@
-# LC-Intention-NAS — Lane-Change Intention Prediction under MCU Budgets
+# LC-Intention-NAS: Lane-Change Prediction under Microcontroller Budgets
 
 PhD research project (ELIOS Lab, University of Genoa, SYNERGIES project).
-Constrained neural architecture search on the Lane Change Intention
-Recognition driving time-series dataset (codename DMIR); goal: beat
-the published LC-Intention baseline with models small enough for deployment
-on the **STM32H7B3I-DK**, and publish in a Q1 venue. The H7B3I-DK was chosen
-because the published baseline deployed on the same platform — making the
-on-device comparison like-for-like — and the board is physically available
-in the ELIOS lab.
+Constrained neural architecture search on the Lane Change Intention Recognition
+driving time-series dataset (LCIR; `dmir` is the internal codename used in folder
+names). Goal: beat the published LC-Intention baseline with models small enough for
+deployment on the **STM32H7B3I-DK**, and publish in a Q1 venue. The H7B3I-DK was
+chosen because the published baseline deployed on the same platform, which makes
+the on-device comparison like-for-like, and because the board is available in the
+ELIOS lab. A second dataset, highD, follows the same pipeline; exiD is planned.
 
 A trilingual course website (Farsi/English/Italian) documenting this project
 A-to-Z, and the LaTeX manuscript, are kept **local only** and are not published
@@ -25,12 +25,12 @@ results (test-set evaluation of the searched models; details in
 | Task | Metric | Published SOTA¹ | Internal ref.² | Ours, search run | Ours, retrained 5×³ |
 |---|---|---|---|---|---|
 | 3-class intention (none/LCR/LCL) | accuracy | — | 92% @ 441 k params | 92.08% @ 84 k (5× smaller) | 91.45 ± 0.59% (reference CNN, same recipe: 91.33 ± 0.50%) |
-| — tiny variant | accuracy | — | — | 91.30% @ ~8 k (55× smaller) | 91.19 ± 0.32% |
-| — no-turn-indicator ablation | accuracy | — | — | 91.1% | 89.99 ± 0.66% |
+| Intention, tiny variant | accuracy | — | — | 91.30% @ ~8 k (55× smaller) | 91.19 ± 0.32% |
+| Intention without turn signal | accuracy | — | — | 91.1% | 89.99 ± 0.66% |
 | Time-to-LC regression, LCR | RMSE / MAE (s) | 0.510 / 0.298 | 0.42 / — | 0.447 / 0.287 | 0.483 ± 0.021 / 0.326 ± 0.016 |
 | Time-to-LC regression, LCL | RMSE / MAE (s) | 0.510 / 0.298¹ | 0.44 / — | 0.466 / 0.317 | 0.496 ± 0.012 / 0.351 ± 0.013 |
-| Hand-built DSCNN (10 k), intention | accuracy | — | — | 91.51% | 91.50 ± 0.47% |
-| Hand-built DSCNN (10 k), LCR / LCL | RMSE (s) | 0.510 | 0.42 / 0.44 | 0.439 / 0.459 | 0.454 ± 0.008 / 0.469 ± 0.010 |
+| Hand-designed DSCNN (10 k), intention | accuracy | — | — | 91.51% | 91.50 ± 0.47% |
+| Hand-designed DSCNN (10 k), LCR / LCL | RMSE (s) | 0.510 | 0.42 / 0.44 | 0.439 / 0.459 | 0.454 ± 0.008 / 0.469 ± 0.010 |
 
 ¹ Published SOTA (Forneris et al., SPL 2026, Transformer) reports a *single*
 combined TTLC, not per-direction, so the comparison is directional rather than
@@ -43,9 +43,9 @@ strict. Retrained 5×, both searched RMSE means stay below 0.510 (one LCR seed,
 `datasets/dmir/results/seeds/` and `datasets/dmir/logs/experiments.jsonl`). The
 search trains each candidate once and keeps the best, so its single runs lean
 optimistic; quote the seed means. Under identical training the searched classifiers
-match the 441 k reference rather than beat it, and the hand-built 10 k DSCNN matches
-them on intention and has lower mean RMSE on both regression tasks, also when the
-searched models are trained with the DSCNN's recipe (details and tests in
+match the 441 k reference rather than beat it, and the hand-designed 10 k DSCNN
+matches them on intention and has lower mean RMSE on both regression tasks, also
+when the searched models are trained with the DSCNN's recipe (details and tests in
 `datasets/dmir/docs/nas-results.md`). Latency, flash and RAM below depend only on
 the graph and are unaffected.
 
@@ -62,23 +62,22 @@ Float32, optimization *balanced*, board **STM32H7B3I-DK** (Cortex-M7 @
 | lcr_best (117 k) | MAE 0.326 s | 14.06 ms | 474,522 B | 20,772 B |
 | lcl_best (106 k) | MAE 0.351 s | 28.77 ms | 423,494 B | 28,264 B |
 
-On the low-end **NUCLEO-F401RE** (Cortex-M4 @ 84 MHz, 512 KB flash) the
-reference CNN needs 3.38× the board's entire flash and cannot run at all,
+On the low-end **NUCLEO-F401RE** (STM32F401RE, Cortex-M4 @ 84 MHz, 512 KB flash)
+the reference CNN needs 3.38× the board's entire flash and cannot run at all,
 while every one of our architectures does: cls_tiny 4.376 ms (7.2% of flash),
-cls_best int8-QAT 7.381 ms (25.0%), the full float32 cls_best — the
-headline classifier — 18.35 ms (65.5%), and lcl_best 162.5 ms (80.8%). The one
-build that returned no measured time was `lcr_best` in float32 (90.5% of
-flash, under 50 KB left for the runtime) — yet the **int8 build of that same
-network runs in 28.10 ms** at 28.7% of flash. Same architecture, same board,
-only the numeric format differs, so the limit here is flash *headroom* for the
-runtime rather than model size or supported operators: on this board
-quantization is what makes the widest model deployable at all.
+cls_best int8-QAT 7.381 ms (25.0%), the full float32 cls_best 18.35 ms (65.5%),
+and lcl_best 162.5 ms (80.8%). The one build that returned no measured time was
+`lcr_best` in float32 (90.5% of flash, under 50 KB left for the runtime), yet the
+**int8 build of that same network runs in 28.10 ms** at 28.7% of flash. Same
+architecture, same board, only the numeric format differs, so the limit here is
+flash *headroom* for the runtime rather than model size or supported operators:
+on this board quantization is what makes the widest model deployable at all.
 
 **Quantization.** Full-int8 PTQ costs accuracy on these wide-dynamic-range
-inputs (deployed cls_best weights, 92.08 → 86.86%); **quantization-aware training recovers it to
-89.82%**, measured at **1.558 ms** on the H7B3I-DK (the fastest operating point)
-and 7.381 ms on the F401RE. int16×8 preserves accuracy offline but ST Edge AI
-silently dequantizes it, so it is not deployable. See `unas/qat_finetune.py` and
+inputs (deployed cls_best weights, 92.08 → 86.86%); **quantization-aware training
+recovers it to 89.82%**, measured at **1.558 ms** on the H7B3I-DK and 7.381 ms on
+the F401RE. int16×8 preserves accuracy offline but ST Edge AI silently dequantizes
+it, so it is not deployable. See `unas/qat_finetune.py` and
 `datasets/dmir/docs/deployment.md`.
 
 ## Repository layout
@@ -86,24 +85,24 @@ silently dequantizes it, so it is not deployable. See `unas/qat_finetune.py` and
 ```
 src/                             shared, dataset-agnostic logic (train, logging, env, EDA)
 unas/                            µNAS fork adapters, search launchers, export/quantization tools
-notebooks/dmir_pipeline.ipynb    main DMIR pipeline — all knobs in its Config cell
-scripts/run_baseline.py          train the baseline on one DMIR task and log the run
+notebooks/dmir_pipeline.ipynb    main LCIR pipeline; all knobs in its Config cell
+scripts/run_baseline.py          train the baseline on one LCIR task and log the run
 scripts/check_pipeline.py        3-task smoke test on real data; run after every change
 docs/research/                   shared literature and toolchain notes (µNAS, ST Edge AI, venue)
 dashboard/                       results explorer: one interactive page for every dataset (build.py)
 LOGBOOK.md                       dated journal of decisions and results (all datasets)
 
-datasets/dmir/                   everything specific to the DMIR dataset
+datasets/dmir/                   everything specific to LCIR (codename dmir)
   ├── data/                      prepared pickles (gitignored)
   ├── docs/                      DATA.md + dataset/results/deployment notes
   ├── logs/experiments.jsonl     one JSON line per run (feeds the paper's tables)
   └── results/                   nas-fronts/, deploy/ (+ measurements.json), qat/, seeds/
 datasets/highd/                  second dataset: highD lane-change prediction
-  (same shape; data gitignored — highD licence forbids redistribution)
+  (same shape; data gitignored because the highD licence forbids redistribution)
 ```
 
-A second dataset gets its own `datasets/<name>/` with the same shape; shared
-code stays in `src/` and `unas/` rather than being copied per dataset.
+A new dataset gets its own `datasets/<name>/` with the same shape; shared code
+stays in `src/` and `unas/` rather than being copied per dataset.
 
 To browse every result in one place, build the results explorer and open the page
 it writes (standard library only, opens offline):
@@ -141,9 +140,9 @@ The code and documentation in this repository are released under the MIT
 licence (`LICENSE`). The datasets are **not** covered by it and are not
 redistributed here:
 
-- **DMIR / Lane Change Intention Recognition** — MIT, Zenodo
+- **LCIR, Lane Change Intention Recognition** (codename DMIR): MIT, Zenodo
   [10.5281/zenodo.16686054](https://doi.org/10.5281/zenodo.16686054).
-- **highD** — free for academic use on request from
+- **highD**: free for academic use on request from
   [levelxdata.com/highd-dataset](https://levelxdata.com/highd-dataset/);
   redistribution is not permitted, so obtain your own copy.
 
@@ -152,8 +151,8 @@ when you use the data.
 
 ## Working rules
 
-1. Every experiment goes through the notebook or scripts — never untracked
-   one-offs; every run appends to `datasets/dmir/logs/experiments.jsonl`.
+1. Every experiment goes through the notebook or scripts, never through untracked
+   one-offs; every run appends to `datasets/<name>/logs/experiments.jsonl`.
 2. After any change to `src/`: `python scripts/check_pipeline.py` must pass.
 3. Paper numbers only from logged runs or cited sources; no placeholder data
    anywhere in the pipeline.

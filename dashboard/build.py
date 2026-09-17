@@ -77,7 +77,7 @@ def resolve_measurements(reg_path: Path, api_path: Path, svg_dir: Path):
 def short_recipe(label):
     label = label or ""
     for key, short in (("search recipe", "search recipe"), ("DSCNN recipe", "DSCNN recipe"),
-                       ("baseline recipe", "hand-built recipe")):
+                       ("baseline recipe", "hand-designed recipe")):
         if label.startswith(key):
             return short
     return label
@@ -133,7 +133,7 @@ DSCNN_METRICS = {"test_accuracy": "acc", "test_macro_f1": "macro_f1", "test_rmse
 
 
 def dscnn_runs(log_path: Path):
-    """The hand-built DMIR DSCNN: seeded runs (scripts/run_baseline.py <task> <seed>) and its first logged run."""
+    """The hand-designed DMIR DSCNN: seeded runs (scripts/run_baseline.py <task> <seed>) and its first logged run."""
     seeded, first = {}, {}
     for r in read_jsonl(log_path):
         name, task = r.get("run_name", ""), r.get("config", {}).get("task")
@@ -221,7 +221,7 @@ def build_dmir(share: bool):
     def dscnn_ref(task, metric):
         if task not in dscnn_first:
             return None
-        return {"kind": "point", "label": "hand-built DSCNN", "params": DSCNN_PARAMS[task],
+        return {"kind": "point", "label": "hand-designed DSCNN", "params": DSCNN_PARAMS[task],
                 "value": dscnn_first[task][metric], "seed_key": "dmir_dscnn_" + task}
 
     tasks = [
@@ -295,7 +295,7 @@ def build_dmir(share: bool):
                       "src": data_uri(MEDIA / "race/race_whatif.gif", "image/gif")})
 
     return {
-        "id": "dmir", "name": "DMIR", "title": "Lane Change Intention Recognition", "status": "complete", "accent": 1,
+        "id": "dmir", "name": "LCIR", "title": "Lane Change Intention Recognition", "status": "complete", "accent": 1,
         "facts": [
             ["Whose behaviour", "The driver of the car (ego view)"],
             ["Recorded in", "CARLA driving simulator, 50 drivers"],
@@ -311,7 +311,7 @@ def build_dmir(share: bool):
         "kpis": [
             {"label": "Accuracy, five seeds", "value": mean_only(stat(seeds, "dmir_cls_best", "acc")),
              "sub": f"84 k params · reference CNN {mean_only(stat(seeds, 'dmir_ref_cnn', 'acc'))} · "
-                    f"hand-built DSCNN {mean_only(stat(seeds, 'dmir_dscnn_classification', 'acc'))}",
+                    f"hand-designed DSCNN {mean_only(stat(seeds, 'dmir_dscnn_classification', 'acc'))}",
              "seed": f"one search run: {seeds['dmir_cls_best']['original']['acc'] * 100:.2f}%" if "dmir_cls_best" in seeds else None},
             {"label": "Smallest model", "value": "8 k",
              "sub": f"{mean_only(stat(seeds, 'dmir_cls_tiny', 'acc'))} over five seeds, 37 KB of flash",
@@ -346,7 +346,7 @@ def reg_rows(seeds, refs, side, task, key, size):
     if stat(seeds, key, "rmse"):
         rows.append([f"searched, {size}", stat(seeds, key, "rmse")["mean"], "ours"])
     if stat(seeds, "dmir_dscnn_" + task, "rmse"):
-        rows.append(["hand-built DSCNN, 10 k", stat(seeds, "dmir_dscnn_" + task, "rmse")["mean"], "ours2"])
+        rows.append(["hand-designed DSCNN, 10 k", stat(seeds, "dmir_dscnn_" + task, "rmse")["mean"], "ours2"])
     rows += [[f"internal Transformer, {round(internal[0] / 1000)} k", internal[1], "ref"],
              ["published Transformer, ~54 k", refs["published_sota"]["rmse"], "pub"]]
     return {"task": side, "rows": rows}
@@ -371,13 +371,13 @@ def build_highd(share: bool):
                     {"label": "tighter search", "rows": read_front(fr / "highd_cls_tight.csv", "test_acc")}],
          "picks": [{"id": "cls_aaaaap", "model": "model_aaaaap", "front": 1, "params": 5347, "label": "searched (tighter search)", "seed_key": "highd_cls_aaaaap"},
                    {"id": "cls_aaaaam", "model": "model_aaaaam", "front": 0, "params": 7904, "label": "searched (first search)", "seed_key": "highd_cls_aaaaam"}],
-         "refs": [{"kind": "point", "label": "hand-built CNN", "params": 8371, "value": 0.9109, "seed_key": "highd_baseline_cls"},
+         "refs": [{"kind": "point", "label": "hand-designed CNN", "params": 8371, "value": 0.9109, "seed_key": "highd_baseline_cls"},
                   {"kind": "line", "label": "published model (T-IV 2022)", "value": refs["published"]["acc"]}]},
         {"id": "highd_ttlc", "label": "Time to lane change", "long": "Seconds until the lane crossing (0.2 to 5.2 s)",
          "metric": {"key": "rmse", "name": "test RMSE (s)", "better": "low", "fmt": "s3"},
          "fronts": [{"label": "search", "rows": read_front(fr / "highd_ttlc.csv", "test_rmse")}],
          "picks": [{"id": "ttlc_aaaaaw", "model": "model_aaaaaw", "front": 0, "params": 27719, "label": "searched", "seed_key": "highd_ttlc_aaaaaw"}],
-         "refs": [{"kind": "point", "label": "hand-built CNN", "params": 8371, "value": 0.2763, "seed_key": "highd_baseline_ttlc"},
+         "refs": [{"kind": "point", "label": "hand-designed CNN", "params": 8371, "value": 0.2763, "seed_key": "highd_baseline_ttlc"},
                   {"kind": "line", "label": "published model (T-IV 2022)", "value": refs["published"]["ttlc_rmse"]}]},
     ]
 
@@ -393,14 +393,14 @@ def build_highd(share: bool):
     pub, hb, sr = refs["published"], refs["baseline_their_metrics"], refs["searched_their_metrics"]
     bench = {
         "metrics": [
-            {"name": "Accuracy", "fmt": "f3", "better": "high", "rows": [["published", pub["acc"]], ["hand-built", hb["acc"]], ["searched", 0.91153]]},
-            {"name": "F1", "fmt": "f3", "better": "high", "rows": [["published", pub["f1"]], ["hand-built", hb["f1"]], ["searched", sr["f1"]]]},
-            {"name": "AUC", "fmt": "f3", "better": "high", "rows": [["published", pub["auc"]], ["hand-built", hb["auc"]], ["searched", sr["auc"]]]},
-            {"name": "Robust horizon (s)", "fmt": "s2", "better": "high", "rows": [["published", pub["tau_c_s"]], ["hand-built", hb["tau_c_s"]], ["searched", sr["tau_c_s"]]]},
-            {"name": "Time-to-change RMSE (s)", "fmt": "s3", "better": "low", "rows": [["published", pub["ttlc_rmse"]], ["hand-built", hb["ttlc_rmse"]], ["searched", 0.2608]]},
+            {"name": "Accuracy", "fmt": "f3", "better": "high", "rows": [["published", pub["acc"]], ["hand-designed", hb["acc"]], ["searched", 0.91153]]},
+            {"name": "F1", "fmt": "f3", "better": "high", "rows": [["published", pub["f1"]], ["hand-designed", hb["f1"]], ["searched", sr["f1"]]]},
+            {"name": "AUC", "fmt": "f3", "better": "high", "rows": [["published", pub["auc"]], ["hand-designed", hb["auc"]], ["searched", sr["auc"]]]},
+            {"name": "Robust horizon (s)", "fmt": "s2", "better": "high", "rows": [["published", pub["tau_c_s"]], ["hand-designed", hb["tau_c_s"]], ["searched", sr["tau_c_s"]]]},
+            {"name": "Time-to-change RMSE (s)", "fmt": "s3", "better": "low", "rows": [["published", pub["ttlc_rmse"]], ["hand-designed", hb["ttlc_rmse"]], ["searched", 0.2608]]},
         ],
         "splits": refs["splits"],
-        "notes": ["Our accuracy moves by one to three points between training seeds (Robustness tab); every seed stays above the published figure.",
+        "notes": ["Our accuracy moves by one to three points between training seeds (Seeds tab); every seed stays above the published figure.",
                   "Scored with the metric functions transcribed from the published code.",
                   "Our reimplementation of their protocol, not a run of their own code.",
                   "Their model is not public, so its cost cannot be measured on a board."],
@@ -431,12 +431,12 @@ def build_highd(share: bool):
                             f"{pm(stat(seeds, 'highd_cls_aaaaap', 'acc'))}, still above the published 83%, which reports no hardware cost."},
         "kpis": [
             {"label": "Accuracy, five seeds", "value": mean_only(stat(base, "highd_baseline_cls", "acc")),
-             "sub": "hand-built 8.4 k CNN · published 83%",
+             "sub": "hand-designed 8.4 k CNN · published 83%",
              "seed": (f"best searched model: {rerank['best_mean']['stats']['mean'] * 100:.1f}% at "
                       f"{rerank['best_mean']['params'] / 1000:.0f} k") if rerank else None},
             {"label": "Robust horizon", "value": "4.53 s", "sub": "deployed 5.3 k model · published 3.96 s"},
             {"label": "Time-to-change RMSE", "value": mean_only(stat(seeds, "highd_ttlc_aaaaaw", "rmse"), False),
-             "sub": "five seeds, searched and hand-built alike · published 0.629 s",
+             "sub": "five seeds, searched and hand-designed alike · published 0.629 s",
              "seed": f"one search run: {seeds['highd_ttlc_aaaaaw']['original']['rmse']:.3f} s" if "highd_ttlc_aaaaaw" in seeds else None},
             {"label": "Split check", "value": "2 of 3 exact", "sub": "test 693 vs 698"},
         ],
@@ -444,7 +444,7 @@ def build_highd(share: bool):
                      ["Board runs", str(sum(len(v["boards"]) for m in reg["models"] for v in m["variants"]))],
                      ["Boards", "2"]],
         "tasks": tasks, "registry": reg, "quant": quant,
-        "seeds": {**seeds, **base}, "seeds_final": seeds_final, "final_label": "hand-built recipe",
+        "seeds": {**seeds, **base}, "seeds_final": seeds_final, "final_label": "hand-designed recipe",
         "rerank": rerank, "rerank_ref": "highd_baseline_cls",
         "bench": bench, "media": media,
     }

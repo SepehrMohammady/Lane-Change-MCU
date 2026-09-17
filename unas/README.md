@@ -1,8 +1,8 @@
-# DMIR × µNAS integration
+# LCIR (DMIR) × µNAS integration
 
 We run the constrained architecture search with the **ELIOS lab µNAS fork**
 (https://github.com/Elios-Lab/uNAS) rather than reimplementing it: the colleague's
-directive ("take µNAS code"), and the fork already provides exactly what we need —
+directive ("take µNAS code"), and the fork already provides what we need:
 1D multi-channel CNN search space, regression (`num_classes=1`), QAT during
 search, and INT8 TFLite output compatible with the ST Edge AI tools.
 
@@ -22,7 +22,7 @@ MIT with the rest of the repo).
   Setting the thresholds = setting our STM32H7B3I-DK budget.
 
 `val_error` per the fork's trainer: classification `1 - max(val_accuracy)`;
-regression `min(val_mae)` (loss is MAE — optimise/threshold on **MAE**, not RMSE).
+regression `min(val_mae)` (the loss is MAE, so optimise and threshold on **MAE**, not RMSE).
 
 ## Files here
 
@@ -69,7 +69,7 @@ fix the saver before the next search.
 
 | script | what it does | output |
 |---|---|---|
-| `seed_variance.py` | retrains each final architecture from scratch with seeds 0-4; `RECIPE=search` (the fork's trainer), `final` (hand-built highD recipe) or `dscnn` (hand-built DMIR recipe) | `datasets/*/results/seeds/seed_variance*.jsonl` |
+| `seed_variance.py` | retrains each final architecture from scratch with seeds 0-4; `RECIPE=search` (the fork's trainer), `final` (hand-designed highD recipe) or `dscnn` (hand-designed LCIR recipe) | `datasets/*/results/seeds/seed_variance*.jsonl` |
 | `rerank_front.py` | retrains every saved highD classifier above `RERANK_FLOOR` with five seeds and ranks them by mean | `datasets/highd/results/seeds/rerank_cls.jsonl` |
 
 Both run in the WSL `dmir_nas` venv and resume from their output files. The
@@ -89,10 +89,10 @@ hand-built baselines take a seed argument: `scripts/run_baseline.py <task> <seed
 Tighten `peak_mem`/`model_size` after the first front to push toward the
 STM32F401 low-end stretch (96 KB / 512 KB).
 
-## Environment (the open decision — see docs/research/unas-integration.md)
+## Environment (see docs/research/unas-integration.md)
 
 The fork is **TensorFlow**, not PyTorch. On Windows it pins `tensorflow<2.11`
 + `numpy==1.23.5` + Python ≤3.10, and that old TF cannot use the RTX 5070
-(Blackwell needs CUDA 12.8) — so Windows = CPU-only search. GPU needs Linux/WSL2
+(Blackwell needs CUDA 12.8), so on Windows the search runs on the CPU only. GPU needs Linux/WSL2
 with `tensorflow[and-cuda]` (2.18), and Blackwell support there is unverified.
 Options and recommendation in the integration note.

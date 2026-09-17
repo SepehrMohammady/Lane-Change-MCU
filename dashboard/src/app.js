@@ -146,7 +146,7 @@
   };
   const DS_VIEWS = [
     ["overview", "Overview"], ["search", "Search"], ["hardware", "Hardware"], ["quant", "Quantization"],
-    ["robust", "Robustness"], ["bench", "Benchmark"], ["scenario", "Scenario"],
+    ["robust", "Seeds"], ["bench", "Benchmark"], ["scenario", "Scenario"],
   ];
   function route() {
     const [a, b, c] = decodeURIComponent(location.hash.slice(1)).split("/");
@@ -206,7 +206,7 @@
     const shortcuts = h("div", { class: "grid g3" }, [
       ["search", "Search", "Every model the search saved, and where the picks sit."],
       ["hardware", "Hardware", "Latency, flash and RAM measured on both boards."],
-      ["robust", "Robustness", "The final models retrained with five seeds."],
+      ["robust", "Seeds", "The final models retrained with five seeds."],
     ].map(([id, t, c]) => h("button", { class: "card", type: "button", style: "text-align:left;cursor:pointer", onclick: () => go(d.id + "/" + id) },
       h("h2", {}, t + " →"), h("p", { class: "cap" }, c))));
     return [hero, h("div", { class: "section-title" }, "Headline"), kpis, h("div", { style: "height:16px" }), pipe,
@@ -562,7 +562,7 @@
       reg.length ? chartCard("Time-to-change regressors", "Mean absolute error in seconds before and after conversion.", dumbbell(reg, "MAE (s)"), { table: table(reg), after: legend }) : null)];
   }
 
-  // ------------------------------------------------------------ robustness (seeds)
+  // ------------------------------------------------------------ seeds (five retrainings per model)
   function stripPlot(d, rows, metric, fmt, better) {
     const W = 760, rowH = 46, M = { l: 250, r: 40, t: 10, b: 38 }, H = M.t + M.b + rowH * rows.length;
     const vals = rows.flatMap(r => [...r.runs.map(x => x[metric]), r.orig ?? r.runs[0][metric]]).filter(v => v != null);
@@ -613,7 +613,7 @@
       const target = t.metric.key === "acc" ? acc : rm;
       const name = lbl => target === rm ? t.label + " · " + lbl : lbl;
       const recipeOf = (pool, key) => (pool && pool[key] && pool[key].recipe_short) || "search recipe";
-      const finalLabel = d.final_label || "hand-built recipe";
+      const finalLabel = d.final_label || "hand-designed recipe";
       for (const p of t.picks) {
         target.push(push(d.seeds, p.seed_key, name(p.label), "searched", recipeOf(d.seeds, p.seed_key), t.metric.key));
         if (d.seeds_final) target.push(push(d.seeds_final, p.seed_key, name(p.label), "searched", finalLabel, t.metric.key));
@@ -630,7 +630,7 @@
     if (!A.length && !R.length) return [h("section", { class: "card" }, h("p", { class: "empty" }, "Seed runs for this dataset have not finished yet. Rebuild the page when they do."))];
     const legend = () => h("div", { class: "legend" },
       h("span", {}, h("i", { class: "sw", style: "background:var(--acc)" }), "searched, one dot per seed"),
-      h("span", {}, h("i", { class: "sw", style: "background:var(--ref)" }), "reference / hand-built"),
+      h("span", {}, h("i", { class: "sw", style: "background:var(--ref)" }), "reference / hand-designed"),
       h("span", {}, h("i", { class: "sw sq", style: "background:var(--acc);opacity:.25" }), "mean ± 1 std"),
       h("span", {}, h("i", { class: "sw sq", style: "border:1.5px solid var(--ink);transform:rotate(45deg);width:9px;height:9px" }), "the single run reported so far"));
     const table = (rows, pct) => () => simpleTable(["model", "recipe", "seeds", "mean", "std", "min", "max", "reported run"],
@@ -648,7 +648,7 @@
       const rows = RR.rows.map(g => ({ label: f.int(g.params) + " params", role: "searched", recipe: g.search, runs: g.runs, stats: g.stats, orig: g.orig }));
       const ref = d.rerank_ref && d.seeds[d.rerank_ref];
       const refPoint = d.tasks.flatMap(t => t.refs).find(r => r.seed_key === d.rerank_ref);
-      if (ref && ref.stats.acc) rows.unshift({ label: "hand-built CNN", role: "reference", recipe: ref.recipe_short, runs: ref.runs, stats: ref.stats.acc, orig: refPoint ? refPoint.value : null });
+      if (ref && ref.stats.acc) rows.unshift({ label: "hand-designed CNN", role: "reference", recipe: ref.recipe_short, runs: ref.runs, stats: ref.stats.acc, orig: refPoint ? refPoint.value : null });
       out.push(h("div", { style: "height:16px" }));
       out.push(chartCard("Every saved classifier, retrained",
         RR.n + " models from both searches, five seeds each, smallest at the top. The single run did not predict the average: rank correlation " +
@@ -693,7 +693,7 @@
         h("section", { class: "card" }, h("h2", {}, "Read before comparing"), B.notes.map(n => h("p", { class: "note" }, "• " + n)))));
     } else {
       out.push(h("div", { class: "grid g3" }, B.metrics.map(m => chartCard(m.name, m.better === "high" ? "higher is better" : "lower is better",
-        barsH(m.rows.map(r => [r[0], r[1], r[0] === "searched" ? "ours" : r[0] === "hand-built" ? "ours2" : "ref"]), m.fmt, m.better, 340)))));
+        barsH(m.rows.map(r => [r[0], r[1], r[0] === "searched" ? "ours" : r[0] === "hand-designed" ? "ours2" : "ref"]), m.fmt, m.better, 340)))));
       out.push(h("div", { style: "height:16px" }));
       const sp = B.splits;
       out.push(h("div", { class: "grid g2" },
@@ -736,7 +736,7 @@
     const arch = m.arch_svg_markup ? (() => { const box = h("div", { class: "arch" }); box.innerHTML = m.arch_svg_markup; return box; })() : null;
     drawer.replaceChildren(...[
       h("button", { class: "icon-btn close", type: "button", "aria-label": "Close", onclick: closeDrawer }, "✕"),
-      h("div", { class: "eyebrow" }, d.name + " · " + ({ searched: "found by the search", reference: "reference model", transformer: "reference Transformer", baseline: "hand-built baseline" }[m.role] || m.role)),
+      h("div", { class: "eyebrow" }, d.name + " · " + ({ searched: "found by the search", reference: "reference model", transformer: "reference Transformer", baseline: "hand-designed baseline" }[m.role] || m.role)),
       h("h3", {}, m.label),
       h("p", { class: "cap" }, f.int(m.params) + " parameters"),
       m.note ? h("p", { class: "note" }, m.note) : null,

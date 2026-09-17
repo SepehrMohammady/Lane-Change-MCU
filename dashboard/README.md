@@ -1,7 +1,7 @@
 # Results explorer
 
 One page for every dataset in the project: search fronts, on-board measurements,
-quantization, seed robustness, the published comparisons and the scenario replays.
+quantization, five-seed retraining, the published comparisons and the scenario replays.
 It is a single self-contained HTML file, so it opens offline and travels as one
 attachment.
 
@@ -20,7 +20,7 @@ files directly:
 | Search | `datasets/*/results/nas-fronts/*.csv` |
 | Hardware | `datasets/*/results/deploy/measurements.json`, resolved against `benchmarks_api.jsonl` |
 | Quantization, Benchmark | the same registries and the published figures they cite |
-| Robustness | `datasets/*/results/seeds/*.jsonl` (search recipe, same-recipe controls, highD re-rank) and the seeded hand-built runs in `datasets/*/logs/experiments.jsonl` |
+| Seeds | `datasets/*/results/seeds/*.jsonl` (search recipe, same-recipe controls, highD re-rank) and the seeded hand-built runs in `datasets/*/logs/experiments.jsonl` |
 | Scenario | the replay GIFs under `Materials/T4.5/` (local only) |
 
 ## Which file to send
@@ -35,7 +35,7 @@ raw highD trajectories that the dataset licence does not let us pass on.
 - Hover any mark for its numbers; click a searched model for its measurements,
   sources and architecture.
 - Every chart has a **Table** button with the same values.
-- Links are shareable: `#highd/robust`, or `#dmir/hardware/cls_best` to open a model.
+- Links are shareable: `#highd/robust` (Seeds tab), or `#dmir/hardware/cls_best` to open an LCIR model.
 - `?theme=light` or `?theme=dark` in the address forces a theme (useful on a projector).
 
 ## Adding a dataset
