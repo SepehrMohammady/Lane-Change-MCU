@@ -392,6 +392,7 @@
   };
   const variantName = v => v.precision + (v.io === "int8" ? " · int8 I/O" : "");
   const roleColor = role => role === "searched" ? "var(--acc)" : "var(--ref)";
+  const HAND_SW = "background:transparent;border:2px solid var(--ink);box-sizing:border-box";
 
   function latencyPlot(d) {
     const rows = variantRows(d).filter(r => r.b && r.b.latency_ms != null).sort((a, b) => a.b.latency_ms - b.b.latency_ms);
@@ -410,6 +411,8 @@
       const y = M.t + rowH * i + rowH / 2, x = X(r.b.latency_ms), dist = state.speed / 3.6 * r.b.latency_ms / 1000;
       const shape = r.m.role === "transformer"
         ? s("path", { d: `M${x} ${y - 6} L${x + 6} ${y + 5} L${x - 6} ${y + 5} Z`, fill: "var(--ref)", stroke: "var(--card)", "stroke-width": 2 })
+        : r.m.role === "baseline"
+          ? s("circle", { cx: x, cy: y, r: 5.5, fill: "var(--card)", stroke: "var(--ink)", "stroke-width": 2.5 })
         : r.m.role === "reference"
           ? s("rect", { x: x - 5, y: y - 5, width: 10, height: 10, transform: `rotate(45 ${x} ${y})`, fill: "var(--ref)", stroke: "var(--card)", "stroke-width": 2 })
           : s("circle", { cx: x, cy: y, r: 6, fill: roleColor(r.m.role), stroke: "var(--card)", "stroke-width": 2 });
@@ -482,7 +485,7 @@
       wrap.replaceChildren(h("table", { class: "tbl" },
         h("thead", {}, h("tr", {}, th("Model"), th("Build"), th("Accuracy / error"), th("Params", "params", true), th("M7 latency", "lat1", true), th("M4 latency", "lat2", true), th("Flash", "flash", true), th("RAM", null, true))),
         h("tbody", {}, sorted.map(r => h("tr", { class: "click", onclick: () => openModel(d, r.m.id) },
-          h("td", { class: "nowrap" }, h("span", { class: "role" }, h("i", { class: "sw", style: `background:${roleColor(r.m.role)}` }), r.m.label)),
+          h("td", { class: "nowrap" }, h("span", { class: "role" }, h("i", { class: "sw", style: r.m.role === "baseline" ? HAND_SW : `background:${roleColor(r.m.role)}` }), r.m.label)),
           h("td", { class: "nowrap" }, variantName(r.v)), h("td", { class: "nowrap" }, metricText(r.v)), h("td", { class: "num" }, f.params(r.m.params)),
           h("td", { class: "num" }, cell(r.b1, "latency_ms")), h("td", { class: "num" }, cell(r.b2, "latency_ms")),
           h("td", { class: "num" }, r.b1.flash_b != null ? f.bytes(r.b1.flash_b) : r.b2.flash_b != null ? f.bytes(r.b2.flash_b) : h("span", { class: "dash" }, "–")),
@@ -507,6 +510,7 @@
     const legend = h("div", { class: "legend" },
       h("span", {}, h("i", { class: "sw", style: "background:var(--acc)" }), "searched"),
       h("span", {}, h("i", { class: "sw sq", style: "background:var(--ref);transform:rotate(45deg)" }), "reference model"),
+      d.registry.models.some(m => m.role === "baseline") ? h("span", {}, h("i", { class: "sw", style: HAND_SW }), "hand-designed") : null,
       d.registry.models.some(m => m.role === "transformer") ? h("span", {}, h("i", { class: "sw", style: "background:var(--ref);clip-path:polygon(50% 0,100% 100%,0 100%);border-radius:0" }), "reference Transformer") : null);
     return [controls,
       chartCard("Latency on " + BOARD_SHORT[state.board],
@@ -899,6 +903,7 @@
     for (const p of pts) {
       const x = X(p.b.latency_ms), y = Y(p.b.flash_b), col = p.m.role === "searched" ? `var(--s${p.d.accent})` : "var(--ref)";
       const shape = p.m.role === "searched" ? s("circle", { cx: x, cy: y, r: 6, fill: col, stroke: "var(--card)", "stroke-width": 2 })
+        : p.m.role === "baseline" ? s("circle", { cx: x, cy: y, r: 5.5, fill: "var(--card)", stroke: `var(--s${p.d.accent})`, "stroke-width": 2.5 })
         : p.m.role === "transformer" ? s("path", { d: `M${x} ${y - 7} L${x + 7} ${y + 5} L${x - 7} ${y + 5} Z`, fill: col, stroke: "var(--card)", "stroke-width": 2 })
           : s("rect", { x: x - 5, y: y - 5, width: 10, height: 10, transform: `rotate(45 ${x} ${y})`, fill: col, stroke: "var(--card)", "stroke-width": 2 });
       const g = s("g", { class: "mk", style: "cursor:pointer", onclick: () => openModel(p.d, p.m.id) }, shape, s("circle", { class: "hit", cx: x, cy: y, r: 13 }));
@@ -907,6 +912,8 @@
     }
     const legend = h("div", { class: "legend" },
       live.filter(d => d.registry).map(d => h("span", {}, h("i", { class: "sw", style: `background:var(--s${d.accent})` }), d.name + ", searched")),
+      live.some(d => d.registry && d.registry.models.some(m => m.role === "baseline"))
+        ? h("span", {}, h("i", { class: "sw", style: HAND_SW }), "hand-designed (ring, in the dataset colour)") : null,
       h("span", {}, h("i", { class: "sw sq", style: "background:var(--ref);transform:rotate(45deg)" }), "reference model"),
       h("span", {}, h("i", { class: "sw", style: "background:var(--ref);clip-path:polygon(50% 0,100% 100%,0 100%);border-radius:0" }), "reference Transformer"));
     const cmpRows = [

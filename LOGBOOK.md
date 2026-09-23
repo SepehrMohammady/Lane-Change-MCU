@@ -760,3 +760,44 @@ had 8,371 hard-coded for both tasks. All now give 8.2 k (8,241) for TTLC; the ex
 both counts from the run logs. No result changes. The paper's transfer paragraph now also
 says that the five highD source models are new runs with deterministic kernels (92.61% on
 highD, against 92.11% for the Table III runs; Welch p = 0.29).
+
+## 2026-09-23 16:56 — Hand-designed CNNs measured on both boards; v2 search set up; QUB code checked
+
+Board runs. The hand-designed CNNs (PyTorch) were rebuilt in Keras with the same weights
+(`unas/deploy_hand_cnn.py`, outputs within 5.2e-5 of PyTorch) and converted exactly like
+the searched models; 26 runs through the ST API (`unas/st_benchmark.py`, Core 4.0.1,
+balanced), none failed. The LCIR DSCNN weights had never been kept, so one run per task
+was retrained with `scripts/run_baseline.py <task> --save` (90.96%, RMSE 0.439 / 0.459 s).
+
+- LCIR intention, 10.5 k: 3.272 ms on the M7, 18.70 ms on the M4, 51,382 B flash,
+  171,971 MACC. The searched 8 k model has the same five-seed accuracy and runs in
+  0.793 ms, 4.1 times faster: the one place where the search wins on cost.
+- LCIR time to lane change, 10.3 k: 3.265 ms against 14.06 / 28.77 ms for the searched
+  regressors, with lower RMSE.
+- highD classifier, 8.4 k: 0.669 ms FP32 and 0.350 ms int8 on the M7; more accurate and
+  12% faster than the searched 7.9 k model, 4.3 times slower than the 5.3 k one, which
+  is about 3 points less accurate. highD TTLC, 8.2 k: 0.667 ms against 1.038 ms at the
+  same RMSE.
+- PTQ: LCIR intention 90.96% to 87.14%, LCR RMSE 0.439 to 0.652 s; highD 0.2 points and
+  0.022 s.
+
+Search. The fork's ModelSaver restarts its file names in every process and applied its
+error bound and Pareto test to the test error. `unas/safe_saver.py` saves every
+candidate within the resource bounds under a unique name with a JSON sidecar and never
+uses test error; `unas/cnn1d_gap.py` adds a global-average-pooling head, zero to three
+hidden Dense layers and a searched dropout rate, so the hand-designed DSCNN's layer
+sequence is inside the space; `unas/select_by_seeds.py` retrains the 12 best single-run
+candidates with five seeds and chooses on the validation mean. Smoke-tested over two
+chunks; the highD v2 searches (classifier, then TTLC; same budgets and recipe as the
+first searches) are running.
+
+QUB. TrajPred holds their later trajectory predictors, not the T-IV 2022 model; no
+trained weights are public in any of the author's repositories. The T-IV model is
+ATTCNN3 in EarlyLCPred (3.22 M parameters, 38.1 M MACs, bird's-eye-view image input
+10 x 80 x 200; exports to standard ONNX). EarlyLCPred has no licence. To measure it
+like-for-like we need their trained checkpoint, the exact scenario lists and their
+permission.
+
+Paper (local): Table V has the hand-designed rows, and the cost section, discussion and
+conclusion give the comparison; it is 9 pages until the v2 results are in and the text
+is cut. Explorer: hand-designed builds are drawn as rings.

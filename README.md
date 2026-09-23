@@ -64,8 +64,15 @@ Float32, optimization *balanced*, board **STM32H7B3I-DK** (Cortex-M7 @
 | reference CNN (441 k) | 91.33% | 33.52 ms | 1,769,882 B | 39,168 B |
 | cls_best (84 k) | 91.45% | 3.628 ms | 343,254 B | 9,456 B |
 | cls_tiny (8 k) | 91.19% | 0.793 ms | 37,954 B | 9,412 B |
+| hand-designed DSCNN (10.5 k) | 91.50% | 3.272 ms | 51,382 B | 11,632 B |
 | lcr_best (117 k) | MAE 0.326 s | 14.06 ms | 474,522 B | 20,772 B |
 | lcl_best (106 k) | MAE 0.351 s | 28.77 ms | 423,494 B | 28,264 B |
+| hand-designed DSCNN, LCR and LCL (10.3 k) | MAE 0.324 / 0.338 s | 3.265 ms | 50,862 B | 11,632 B |
+
+At the same five-seed accuracy on intention, the searched 8 k model runs 4.1 times
+faster than the hand-designed DSCNN, whose strided first convolution over all 31
+channels needs most of its 171,971 MACs. For time to lane change the hand-designed
+network is both more accurate and faster than the searched regressors.
 
 On the low-end **NUCLEO-F401RE** (STM32F401RE, Cortex-M4 @ 84 MHz, 512 KB flash)
 the reference CNN needs 3.38× the board's entire flash and cannot run at all,
@@ -112,6 +119,11 @@ both. Five seeds each, test sets:
 - The architectures found by the highD search fall at least 11 points behind the
   hand-designed CNN on exiD, under the search recipe and under the hand-designed
   one.
+- On the boards the hand-designed highD CNN takes 0.669 ms (float32) and 0.350 ms
+  (int8) on the Cortex-M7: more accurate and faster than the 7.9 k searched
+  classifier, 4.3 times slower than the 5.3 k one, which is about 3 points less
+  accurate over five seeds. For time to lane change it matches the searched 28 k
+  regressor's RMSE at 0.667 against 1.038 ms.
 - exiD models have the board cost of the highD builds: same graphs, other weights.
 
 Details: `datasets/highd/README.md`, `datasets/exid/README.md`,

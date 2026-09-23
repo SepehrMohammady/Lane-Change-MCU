@@ -1,0 +1,31 @@
+{
+ "task": "reg",
+ "source": "datasets\\dmir\\results\\hand\\baseline-dscnn-deploy_regression_lcl.pt",
+ "params": 10321,
+ "input_shape": [
+  50,
+  31
+ ],
+ "parity_max_abs_diff": 7.152557373046875e-07,
+ "keras_float": {
+  "rmse": 0.45888,
+  "mae": 0.33263
+ },
+ "variants": {
+  "float32": {
+   "bytes": 49592,
+   "rmse": 0.45888,
+   "mae": 0.33263
+  },
+  "int8": {
+   "bytes": 26280,
+   "rmse": 0.47992,
+   "mae": 0.35211
+  },
+  "int8_io": {
+   "bytes": 25952,
+   "rmse": 0.47991,
+   "mae": 0.35211
+  }
+ }
+}

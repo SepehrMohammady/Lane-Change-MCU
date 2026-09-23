@@ -746,3 +746,38 @@ TF-select fallback — using BATCH_MATMUL, SOFTMAX, MEAN, RSQRT,
 SQUARED_DIFFERENCE, TRANSPOSE, STRIDED_SLICE and FULLY_CONNECTED. So a
 Transformer of this size *is* compilable for an MCU; the objection is cost, not
 feasibility, and claiming infeasibility would be wrong.
+
+## Hand-designed DSCNN on the boards (2026-09-23)
+
+The DSCNN is a PyTorch model. `scripts/run_baseline.py <task> --save` trained one run
+per task and kept the weights (`datasets/dmir/results/hand/`);
+`scripts/export_hand_cnn.py` exports them and `unas/deploy_hand_cnn.py` rebuilds the
+network in Keras layer by layer (explicit zero padding, so the strided convolutions
+see the same samples as PyTorch), checks the outputs against PyTorch (largest
+difference 3.7e-6) and converts it exactly like the searched models: float32, full
+int8 PTQ with float I/O and with int8 I/O, 500 calibration windows. Every file is
+scored on the full test set; `unas/st_benchmark.py` measured them through the ST API
+(Core 4.0.1, balanced; records in `results/deploy/benchmarks_api.jsonl`).
+
+| model | build | test | H7B3I-DK | F401RE | flash | RAM | MACC |
+|---|---|--:|--:|--:|--:|--:|--:|
+| intention, 10,451 params | float32 | 90.96% | 3.272 ms | 18.70 ms | 51,382 B | 11,632 B | 171,971 |
+| | int8 PTQ | 87.14% | 1.261 ms | 6.043 ms | 30,319 B | 11,396 B | 173,205 |
+| | int8 PTQ, int8 I/O | 87.14% | 1.132 ms | 5.607 ms | 30,047 B | 9,388 B | 170,099 |
+| LCR, 10,321 params | float32 | RMSE 0.439 s | 3.265 ms | 18.83 ms | 50,862 B | 11,632 B | 171,841 |
+| | int8 PTQ | RMSE 0.652 s | 1.258 ms | 6.042 ms | 31,139 B | 10,976 B | 173,071 |
+| | int8 PTQ, int8 I/O | RMSE 0.652 s | 1.128 ms | 5.611 ms | 30,871 B | 8,968 B | 169,969 |
+| LCL, 10,321 params | float32 | RMSE 0.459 s | 3.265 ms | 18.83 ms | 50,862 B | 11,632 B | 171,841 |
+
+What this settles:
+
+- **Intention:** the searched 8 k model (cls_tiny, 91.19 ± 0.32% over five seeds)
+  and the DSCNN (91.50 ± 0.47%) are equally accurate, and cls_tiny runs 4.1 times
+  faster (0.793 against 3.272 ms) with 5.4 times fewer MACs. The DSCNN's strided
+  first convolution over all 31 channels holds 124,000 of its MACs. This is the one
+  place where the search wins on cost against the hand-designed network.
+- **Time to lane change:** the DSCNN is more accurate over five seeds (0.454 / 0.469 s
+  against 0.483 / 0.496 s) and faster (3.265 ms against 14.06 and 28.77 ms).
+- **int8:** PTQ costs the DSCNN 3.8 points on intention and raises the LCR RMSE from
+  0.439 to 0.652 s, the same wide-range-input problem as the searched models; QAT was
+  not run for the DSCNN.
