@@ -35,6 +35,14 @@ def read_json(p: Path, default=None):
     return json.loads(p.read_text(encoding="utf-8")) if p.exists() else default
 
 
+def hand_params(root: Path, prefix: str):
+    """Parameter count of the hand-designed CNN, from the first logged run with this prefix."""
+    for r in read_jsonl(root / "logs/experiments.jsonl"):
+        if r.get("run_name", "").startswith(prefix) and r.get("config", {}).get("n_params"):
+            return r["config"]["n_params"]
+    return None
+
+
 def read_jsonl(p: Path):
     if not p.exists():
         return []
@@ -372,13 +380,13 @@ def build_highd(share: bool):
                     {"label": "tighter search", "rows": read_front(fr / "highd_cls_tight.csv", "test_acc")}],
          "picks": [{"id": "cls_aaaaap", "model": "model_aaaaap", "front": 1, "params": 5347, "label": "searched (tighter search)", "seed_key": "highd_cls_aaaaap"},
                    {"id": "cls_aaaaam", "model": "model_aaaaam", "front": 0, "params": 7904, "label": "searched (first search)", "seed_key": "highd_cls_aaaaam"}],
-         "refs": [{"kind": "point", "label": "hand-designed CNN", "params": 8371, "value": 0.9109, "seed_key": "highd_baseline_cls"},
+         "refs": [{"kind": "point", "label": "hand-designed CNN", "params": hand_params(HIGHD, "highd_baseline_cls"), "value": 0.9109, "seed_key": "highd_baseline_cls"},
                   {"kind": "line", "label": "published model (T-IV 2022)", "value": refs["published"]["acc"]}]},
         {"id": "highd_ttlc", "label": "Time to lane change", "long": "Seconds until the lane crossing (0.2 to 5.2 s)",
          "metric": {"key": "rmse", "name": "test RMSE (s)", "better": "low", "fmt": "s3"},
          "fronts": [{"label": "search", "rows": read_front(fr / "highd_ttlc.csv", "test_rmse")}],
          "picks": [{"id": "ttlc_aaaaaw", "model": "model_aaaaaw", "front": 0, "params": 27719, "label": "searched", "seed_key": "highd_ttlc_aaaaaw"}],
-         "refs": [{"kind": "point", "label": "hand-designed CNN", "params": 8371, "value": 0.2763, "seed_key": "highd_baseline_ttlc"},
+         "refs": [{"kind": "point", "label": "hand-designed CNN", "params": hand_params(HIGHD, "highd_baseline_ttlc"), "value": 0.2763, "seed_key": "highd_baseline_ttlc"},
                   {"kind": "line", "label": "published model (T-IV 2022)", "value": refs["published"]["ttlc_rmse"]}]},
     ]
 
@@ -474,6 +482,7 @@ def build_exid(share: bool):
                 "headline": {"value": "next", "label": "third dataset", "sub": "Same pipeline as highD."}}
     kinds = meta["kinds"]
     evals = read_jsonl(EXID / "results/transfer.jsonl")
+    hand = {t: hand_params(EXID, f"exid_baseline_{t}") for t in ("cls", "ttlc")}
 
     def runs(task, method, eval_on="exiD", fraction=1.0):
         return sorted((r for r in evals if r["task"] == task and r["method"] == method
@@ -499,7 +508,7 @@ def build_exid(share: bool):
                 fractions[mid] = [{"fraction": fr, "stats": stats_of([r["metrics"][metric] for r in runs(task, mid, "exiD", fr)])}
                                   for fr in (0.1, 0.25, 1.0)]
         tasks.append({"task": task, "label": label, "metric": metric, "fmt": fmt, "better": better,
-                      "methods": methods, "fractions": fractions, "by_kind": by_kind, "on_highd": on_highd})
+                      "params": hand[task], "methods": methods, "fractions": fractions, "by_kind": by_kind, "on_highd": on_highd})
 
     searched_zero = [{"model": r["model"], "params": r["params"], "task": r["task"], "eval_on": r["eval_on"],
                       "metrics": {k: v for k, v in r["metrics"].items() if k != "by_group"}}
@@ -513,7 +522,7 @@ def build_exid(share: bool):
         if rr:
             seeds[f"exid_baseline_{task}"] = {
                 "runs": [{"seed": r["seed"], **{k: v for k, v in r["metrics"].items() if isinstance(v, float)}} for r in rr],
-                "params": 8371, "recipe": "hand-designed recipe", "recipe_short": "hand-designed recipe", "original": {}}
+                "params": hand[task], "recipe": "hand-designed recipe", "recipe_short": "hand-designed recipe", "original": {}}
             seeds[f"exid_baseline_{task}"]["stats"] = {
                 k: stats_of([x.get(k) for x in seeds[f"exid_baseline_{task}"]["runs"]])
                 for k in (("acc", "macro_f1") if task == "cls" else ("mae", "rmse"))}
@@ -522,12 +531,12 @@ def build_exid(share: bool):
          "metric": {"key": "acc", "name": "test accuracy", "better": "high", "fmt": "pct"},
          "picks": [{"id": "exid_cls_aaaaap", "label": "searched on highD, 5.3 k", "seed_key": "exid_cls_aaaaap"},
                    {"id": "exid_cls_aaaaam", "label": "searched on highD, 7.9 k", "seed_key": "exid_cls_aaaaam"}],
-         "refs": [{"kind": "point", "label": "hand-designed CNN", "params": 8371, "seed_key": "exid_baseline_cls"}],
+         "refs": [{"kind": "point", "label": "hand-designed CNN", "params": hand["cls"], "seed_key": "exid_baseline_cls"}],
          "fronts": []},
         {"id": "exid_ttlc", "label": "Time to lane change",
          "metric": {"key": "rmse", "name": "test RMSE (s)", "better": "low", "fmt": "s3"},
          "picks": [{"id": "exid_ttlc_aaaaaw", "label": "searched on highD, 28 k", "seed_key": "exid_ttlc_aaaaaw"}],
-         "refs": [{"kind": "point", "label": "hand-designed CNN", "params": 8371, "seed_key": "exid_baseline_ttlc"}],
+         "refs": [{"kind": "point", "label": "hand-designed CNN", "params": hand["ttlc"], "seed_key": "exid_baseline_ttlc"}],
          "fronts": []},
     ]
 

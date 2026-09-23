@@ -759,7 +759,7 @@
         t.methods.flatMap(m => [["exiD", m.stats], ["highD", t.on_highd[m.id]]].filter(([, st]) => st).map(([on, st]) =>
           [m.label, on, st.n, fmtMetric(t.fmt, st.mean), t.fmt === "pct" ? (st.std * 100).toFixed(2) + " pt" : st.std.toFixed(3)])), [2, 3, 4]);
       out.push(chartCard(t.label + ": does a highD model work on exiD?",
-        "Hand-designed CNN (8.4 k parameters), five seeds each, exiD test set. The fine-tuned model starts from the highD weights and uses the same recipe.",
+        "Hand-designed CNN (" + f.params(t.params) + " parameters), five seeds each, exiD test set. The fine-tuned model starts from the highD weights and uses the same recipe.",
         stripPlot(d, rows, t.metric, t.fmt, t.better), { table: tbl, after: legend() }));
       out.push(h("div", { style: "height:16px" }));
       out.push(h("div", { class: "grid g2" },

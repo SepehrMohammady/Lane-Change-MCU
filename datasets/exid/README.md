@@ -34,7 +34,7 @@ described in `docs/DATA.md`.
 python datasets/exid/run_experiments.py
 ```
 
-Hand-designed DSCNN (8,371 parameters, shared training loop in
+Hand-designed DSCNN (8,371 parameters, 8,241 for TTLC, shared training loop in
 `src/lc_windows.py`), seeds 0-4: trained on exiD; a highD model applied to exiD
 as it is; the same highD model fine-tuned on exiD with the same recipe; both
 again with 10% and 25% of the exiD training data. Every model is also tested on
@@ -51,13 +51,16 @@ The architectures found by the highD searches are retrained on exiD with
 
 | model | trained on | accuracy | TTLC RMSE |
 |---|---|--:|--:|
-| hand-designed CNN, 8.4 k | exiD | 89.93 ± 0.24% | 0.406 ± 0.008 s |
-| hand-designed CNN, 8.4 k | highD, applied as is | 61.24 ± 2.32% | 0.867 ± 0.062 s |
+| hand-designed CNN | exiD | 89.93 ± 0.24% | 0.406 ± 0.008 s |
+| hand-designed CNN | highD, applied as is | 61.24 ± 2.32% | 0.867 ± 0.062 s |
 | same weights, exiD input scaling | highD, applied as is | 38.93 ± 4.66% | 1.209 ± 0.067 s |
-| hand-designed CNN, 8.4 k | highD, then fine-tuned on exiD | 90.13 ± 0.22% | 0.393 ± 0.002 s |
+| hand-designed CNN | highD, then fine-tuned on exiD | 90.13 ± 0.22% | 0.393 ± 0.002 s |
 | searched on highD, 5.3 k | exiD (search / hand recipe) | 76.67 ± 3.52 / 77.99 ± 0.84% | – |
 | searched on highD, 7.9 k | exiD (search / hand recipe) | 77.91 ± 1.11 / 78.59 ± 1.59% | – |
 | searched on highD, 28 k | exiD (search / hand recipe) | – | 0.487 ± 0.074 / 0.588 ± 0.069 s |
+
+The hand-designed CNN has 8,371 parameters as a classifier and 8,241 in its TTLC
+version.
 
 The model trained on exiD scores 84.64 ± 0.67% on the highD test set; the highD
 model scores 61.24% on exiD, so exiD carries over to highD much better than the

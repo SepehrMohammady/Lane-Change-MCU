@@ -10,7 +10,7 @@ RTX 5070 laptop, ~30 s per run. Runs logged in `logs/experiments.jsonl`
 vs Table III of Mozaffari et al., T-IV 2022 (test split; theirs 698 scenarios,
 ours 693 — see DATA.md):
 
-| metric | ours (8.4k, state features) | their proposed (BEV+attention CNN) | their best baseline |
+| metric | ours (8.4k, TTLC 8.2k, state features) | their proposed (BEV+attention CNN) | their best baseline |
 |---|--:|--:|--:|
 | accuracy | **0.911** | 0.83 | 0.79 (LSTM1) |
 | recall | **0.938** | 0.85 | 0.90 (LSTM1) |
@@ -68,7 +68,7 @@ run saved zero models — every candidate's val MAE (best 0.1622) sat above the
 0.16 error bound and `model_saver.py` drops out-of-bound models. Salvage
 resume (+bound 0.20, save-all) captured the population. Best searched points
 on test: MAE 0.1624 / RMSE 0.2614 @ 80k params, and MAE 0.1656 / RMSE 0.2608
-@ 27.7k. The 8.4k baseline (MAE 0.169 / RMSE 0.276) is edged on accuracy at
+@ 27.7k. The 8.2k TTLC baseline (MAE 0.169 / RMSE 0.276) is edged on accuracy at
 3–10x the size — per-parameter the baseline still wins.
 
 Context: every model in these fronts, baseline included, sits far under the
@@ -257,7 +257,7 @@ Time-to-lane-change test RMSE (s):
 | model | params | search recipe | hand-built's recipe | single run reported |
 |---|--:|--:|--:|--:|
 | searched regressor (model_aaaaaw) | 27,719 | 0.276 ± 0.011 [0.259, 0.286] | 0.316 ± 0.074 [0.270, 0.447] | 0.261 |
-| hand-built CNN | 8,371 | — | 0.276 ± 0.009 [0.270, 0.292] | 0.276 |
+| hand-built CNN | 8,241 | — | 0.276 ± 0.009 [0.270, 0.292] | 0.276 |
 
 What this changes:
 
