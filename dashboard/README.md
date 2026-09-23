@@ -22,6 +22,7 @@ files directly:
 | Quantization, Benchmark | the same registries and the published figures they cite |
 | Seeds | `datasets/*/results/seeds/*.jsonl` (search recipe, same-recipe controls, highD re-rank) and the seeded hand-built runs in `datasets/*/logs/experiments.jsonl` |
 | Scenario | the replay GIFs under `Materials/T4.5/` (local only) |
+| exiD: Transfer, Seeds | `datasets/exid/results/transfer.jsonl`, `transfer_searched.jsonl`, `seeds/*.jsonl`, `prepared_meta.json` |
 
 ## Which file to send
 

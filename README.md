@@ -3,9 +3,10 @@
 Lane-change prediction on STM32 microcontrollers. Searched (µNAS) and hand-designed
 1D CNNs for driver intention on the Lane Change Intention Recognition dataset
 (LCIR; `dmir` is the internal codename used in folder names) and for lane changes
-of surrounding vehicles on highD, with exiD planned next. Every final model is
-retrained with five seeds, and latency, flash and RAM are measured on a Cortex-M7
-(STM32H7B3I-DK) and a Cortex-M4 (NUCLEO-F401RE) board.
+of surrounding vehicles on motorway sections (highD) and at motorway entries and
+exits (exiD). Every final model is retrained with five seeds, and latency, flash
+and RAM are measured on a Cortex-M7 (STM32H7B3I-DK) and a Cortex-M4 (NUCLEO-F401RE)
+board.
 
 PhD research project (ELIOS Lab, University of Genoa, SYNERGIES project). The
 H7B3I-DK was chosen because the published LCIR baseline deployed on the same
@@ -84,6 +85,38 @@ the F401RE. int16×8 preserves accuracy offline but ST Edge AI silently dequanti
 it, so it is not deployable. See `unas/qat_finetune.py` and
 `datasets/dmir/docs/deployment.md`.
 
+## highD and exiD: lane changes of surrounding vehicles
+
+highD and exiD were recorded from a drone on German motorways, highD on straight
+sections and exiD at entries and exits. highD follows the protocol of Mozaffari et
+al. (IEEE T-IV 2022), reimplemented with its training and validation splits
+reproduced exactly. exiD is prepared in the same scenario format
+(`datasets/exid/prepare_exid.py`), so the same networks and board builds apply to
+both. Five seeds each, test sets:
+
+| model | highD accuracy | highD TTLC RMSE | exiD accuracy | exiD TTLC RMSE |
+|---|--:|--:|--:|--:|
+| published (Mozaffari et al.) | 83% | 0.629 s | – | – |
+| hand-designed CNN, 8.4 k, trained on that dataset | 92.11 ± 0.71% | 0.276 ± 0.009 s | 89.93 ± 0.24% | 0.406 ± 0.008 s |
+| best searched classifier of 17 (80 k), highD | 91.28 ± 0.90% | – | – | – |
+| searched on highD, 5.3 k and 7.9 k, trained on exiD | – | – | 76.7–78.6% | – |
+| hand-designed CNN trained on highD, applied as is | – | – | 61.24 ± 2.32% | 0.867 ± 0.062 s |
+| the same, fine-tuned on exiD | – | – | 90.13 ± 0.22% | 0.393 ± 0.002 s |
+
+- On highD every retrained model beats the published figures, and the deployed
+  5.3 k int8 classifier predicts in 0.106 ms on the Cortex-M7.
+- A highD model at motorway junctions gets exits right in 33% of the windows and
+  lane keeping in 45%; trained on exiD, 94% and 85%.
+- Starting from highD weights adds 1.3 points with 10% of the exiD training data,
+  and nothing measurable with all of it.
+- The architectures found by the highD search fall at least 11 points behind the
+  hand-designed CNN on exiD, under the search recipe and under the hand-designed
+  one.
+- exiD models have the board cost of the highD builds: same graphs, other weights.
+
+Details: `datasets/highd/README.md`, `datasets/exid/README.md`,
+`datasets/exid/docs/DATA.md`.
+
 ## Repository layout
 
 ```
@@ -103,6 +136,8 @@ datasets/dmir/                   everything specific to LCIR (codename dmir)
   └── results/                   nas-fronts/, deploy/ (+ measurements.json), qat/, seeds/
 datasets/highd/                  second dataset: highD lane-change prediction
   (same shape; data gitignored because the highD licence forbids redistribution)
+datasets/exid/                   third dataset: exiD, prepared in the highD format
+  (same shape; data gitignored because the exiD licence forbids redistribution)
 ```
 
 A new dataset gets its own `datasets/<name>/` with the same shape; shared code
@@ -148,6 +183,9 @@ redistributed here:
   [10.5281/zenodo.16686054](https://doi.org/10.5281/zenodo.16686054).
 - **highD**: free for academic use on request from
   [levelxdata.com/highd-dataset](https://levelxdata.com/highd-dataset/);
+  redistribution is not permitted, so obtain your own copy.
+- **exiD**: free for non-commercial use on request from
+  [levelxdata.com/exid-dataset](https://levelxdata.com/exid-dataset/);
   redistribution is not permitted, so obtain your own copy.
 
 Cite this work through `CITATION.cff`, and cite the dataset papers separately

@@ -26,6 +26,7 @@ HERE = Path(__file__).resolve().parent
 ROOT = HERE.parent
 DMIR = ROOT / "datasets" / "dmir"
 HIGHD = ROOT / "datasets" / "highd"
+EXID = ROOT / "datasets" / "exid"
 MEDIA = ROOT / "Materials" / "T4.5"
 
 
@@ -450,20 +451,139 @@ def build_highd(share: bool):
     }
 
 
-def build_exid():
-    return {"id": "exid", "name": "exiD", "title": "Motorway entries and exits", "status": "planned", "accent": 3,
-            "facts": [["Whose behaviour", "Other vehicles at on- and off-ramps"],
-                      ["Recorded in", "German motorway junctions, filmed by drone (RWTH Aachen)"],
-                      ["Planned task", "Manoeuvre and time-to-merge in interactive ramp scenes"],
-                      ["Status", "Access to the data still to be requested"]],
-            "headline": {"value": "next", "label": "third dataset",
-                         "sub": "Same pipeline. Harder, more interactive scenes than highD."}}
+EXID_METHODS = [("scratch", "trained on exiD", "s3"),
+                ("zero-shot", "highD model, applied as is", "s2"),
+                ("fine-tune", "highD model, fine-tuned on exiD", "s1")]
+
+
+def stats_of(values):
+    v = [x for x in values if x is not None]
+    if not v:
+        return None
+    return {"mean": statistics.fmean(v), "std": statistics.stdev(v) if len(v) > 1 else 0.0,
+            "min": min(v), "max": max(v), "n": len(v)}
+
+
+def build_exid(share: bool):
+    meta = read_json(EXID / "results/prepared_meta.json")
+    if meta is None:
+        return {"id": "exid", "name": "exiD", "title": "Motorway entries and exits", "status": "planned", "accent": 3,
+                "facts": [["Whose behaviour", "Other vehicles at on- and off-ramps"],
+                          ["Recorded in", "German motorway junctions, filmed by drone (RWTH Aachen)"],
+                          ["Status", "Data not prepared yet"]],
+                "headline": {"value": "next", "label": "third dataset", "sub": "Same pipeline as highD."}}
+    kinds = meta["kinds"]
+    evals = read_jsonl(EXID / "results/transfer.jsonl")
+
+    def runs(task, method, eval_on="exiD", fraction=1.0):
+        return sorted((r for r in evals if r["task"] == task and r["method"] == method
+                       and r["eval_on"] == eval_on and r.get("fraction", 1.0) == fraction),
+                      key=lambda r: r["seed"])
+
+    tasks = []
+    for task, label, metric, fmt, better in (("cls", "Lane-change prediction", "acc", "pct", "high"),
+                                              ("ttlc", "Time to lane change", "rmse", "s3", "low")):
+        methods, fractions, by_kind, on_highd = [], {}, {}, {}
+        for mid, mlabel, color in EXID_METHODS:
+            rr = runs(task, mid)
+            methods.append({"id": mid, "label": mlabel, "color": color,
+                            "runs": [{"seed": r["seed"], metric: r["metrics"][metric]} for r in rr],
+                            "stats": stats_of([r["metrics"][metric] for r in rr])})
+            on_highd[mid] = stats_of([r["metrics"][metric] for r in runs(task, mid, "highD")])
+            groups = {}
+            for r in rr:
+                for g, v in (r["metrics"].get("by_group") or {}).items():
+                    groups.setdefault(g, []).append(v[metric])
+            by_kind[mid] = {g: stats_of(v) for g, v in groups.items()}
+            if mid != "zero-shot":
+                fractions[mid] = [{"fraction": fr, "stats": stats_of([r["metrics"][metric] for r in runs(task, mid, "exiD", fr)])}
+                                  for fr in (0.1, 0.25, 1.0)]
+        tasks.append({"task": task, "label": label, "metric": metric, "fmt": fmt, "better": better,
+                      "methods": methods, "fractions": fractions, "by_kind": by_kind, "on_highd": on_highd})
+
+    searched_zero = [{"model": r["model"], "params": r["params"], "task": r["task"], "eval_on": r["eval_on"],
+                      "metrics": {k: v for k, v in r["metrics"].items() if k != "by_group"}}
+                     for r in read_jsonl(EXID / "results/transfer_searched.jsonl")]
+
+    # Seeds view: searched highD architectures retrained on exiD, and the hand-designed CNN
+    seeds = seed_summary(read_jsonl(EXID / "results/seeds/seed_variance.jsonl"))
+    seeds_final = seed_summary(read_jsonl(EXID / "results/seeds/seed_variance_final.jsonl"))
+    for task in ("cls", "ttlc"):
+        rr = runs(task, "scratch")
+        if rr:
+            seeds[f"exid_baseline_{task}"] = {
+                "runs": [{"seed": r["seed"], **{k: v for k, v in r["metrics"].items() if isinstance(v, float)}} for r in rr],
+                "params": 8371, "recipe": "hand-designed recipe", "recipe_short": "hand-designed recipe", "original": {}}
+            seeds[f"exid_baseline_{task}"]["stats"] = {
+                k: stats_of([x.get(k) for x in seeds[f"exid_baseline_{task}"]["runs"]])
+                for k in (("acc", "macro_f1") if task == "cls" else ("mae", "rmse"))}
+    seed_tasks = [
+        {"id": "exid_cls", "label": "Lane-change prediction",
+         "metric": {"key": "acc", "name": "test accuracy", "better": "high", "fmt": "pct"},
+         "picks": [{"id": "exid_cls_aaaaap", "label": "searched on highD, 5.3 k", "seed_key": "exid_cls_aaaaap"},
+                   {"id": "exid_cls_aaaaam", "label": "searched on highD, 7.9 k", "seed_key": "exid_cls_aaaaam"}],
+         "refs": [{"kind": "point", "label": "hand-designed CNN", "params": 8371, "seed_key": "exid_baseline_cls"}],
+         "fronts": []},
+        {"id": "exid_ttlc", "label": "Time to lane change",
+         "metric": {"key": "rmse", "name": "test RMSE (s)", "better": "low", "fmt": "s3"},
+         "picks": [{"id": "exid_ttlc_aaaaaw", "label": "searched on highD, 28 k", "seed_key": "exid_ttlc_aaaaaw"}],
+         "refs": [{"kind": "point", "label": "hand-designed CNN", "params": 8371, "seed_key": "exid_baseline_ttlc"}],
+         "fronts": []},
+    ]
+
+    def mean_of(task, mid, eval_on="exiD"):
+        t = next(x for x in tasks if x["task"] == task)
+        st = next(m for m in t["methods"] if m["id"] == mid)["stats"] if eval_on == "exiD" else t["on_highd"].get(mid)
+        return st
+
+    def pct(st):
+        return f"{st['mean'] * 100:.1f}%" if st else "–"
+
+    cls_scratch, cls_zero, cls_ft = (mean_of("cls", m) for m in ("scratch", "zero-shot", "fine-tune"))
+    ttlc_scratch = mean_of("ttlc", "scratch")
+    reverse = mean_of("cls", "scratch", "highD")
+    total = sum(meta["stats"][s]["scenarios"] for s in meta["stats"])
+    lc_total = sum(meta["stats"][s]["RLC"] + meta["stats"][s]["LLC"] for s in meta["stats"])
+    by_kind_total = {k: sum(meta["stats"][s]["by_kind"][k] for s in meta["stats"]) for k in kinds}
+    return {
+        "id": "exid", "name": "exiD", "title": "Motorway entries and exits", "status": "complete", "accent": 3,
+        "views": ["overview", "transfer", "robust"],
+        "shortcuts": [["transfer", "Transfer", "highD models on exiD: as they are, fine-tuned, and against training on exiD."],
+                      ["robust", "Seeds", "Every exiD model trained five times."]],
+        "facts": [
+            ["Whose behaviour", "Other vehicles at motorway entries and exits"],
+            ["Recorded in", "7 German motorway junctions, filmed by drone (RWTH Aachen, fka)"],
+            ["Input", "10 time steps × 18 track features (2 s at 5 Hz), the highD format"],
+            ["Tasks", "Lane-change prediction (3 classes) · time to lane change"],
+            ["Protocol", "highD protocol adapted to exiD (Lanelet2 maps, curved roads)"],
+            ["Test split", "Latest recordings of every location, 8.5% of the time"],
+            ["Data", "On request from levelXdata · not redistributable"],
+        ],
+        "headline": {"value": pct(cls_scratch), "label": "accuracy when trained on exiD, five seeds",
+                     "sub": (f"A highD model applied as is reaches {pct(cls_zero)}; fine-tuned on exiD, {pct(cls_ft)}. "
+                             f"Same 8.4 k network and the same board cost as on highD.") if cls_zero else
+                            "Same 8.4 k network and the same board cost as on highD."},
+        "kpis": [
+            {"label": "Trained on exiD", "value": pct(cls_scratch), "sub": "hand-designed CNN, five seeds"},
+            {"label": "highD model as is", "value": pct(cls_zero), "sub": "no exiD training at all"},
+            {"label": "Fine-tuned", "value": pct(cls_ft), "sub": "highD weights, then exiD"},
+            {"label": "Time-to-change RMSE", "value": f"{ttlc_scratch['mean']:.3f} s" if ttlc_scratch else "–",
+             "sub": "trained on exiD, five seeds",
+             "seed": f"exiD model on highD: {pct(reverse)}" if reverse else None},
+        ],
+        "pipeline_title": "Same format, same networks, same boards",
+        "pipeline_caption": "exiD is prepared in the highD scenario format, so the highD networks, training code and board builds carry over unchanged.",
+        "pipeline": [["Recordings", "93"], ["Scenarios", f"{total:,}"], ["Lane changes", f"{lc_total:,}"],
+                     ["Merges and exits", f"{by_kind_total['merge from on-ramp'] + by_kind_total['exit to off-ramp']:,}"]],
+        "tasks": seed_tasks, "seeds": seeds, "seeds_final": seeds_final, "final_label": "hand-designed recipe",
+        "transfer": {"tasks": tasks, "kinds": kinds, "searched_zero": searched_zero},
+    }
 
 
 def main():
     share = "--share" in sys.argv
     data = {"built": date.today().isoformat(), "share": share,
-            "datasets": [build_dmir(share), build_highd(share), build_exid()]}
+            "datasets": [build_dmir(share), build_highd(share), build_exid(share)]}
     status = HERE / "status.local.json"
     if not share and status.exists():
         data["status"] = read_json(status)
