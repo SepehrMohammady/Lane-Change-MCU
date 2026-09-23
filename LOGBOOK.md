@@ -801,3 +801,20 @@ permission.
 Paper (local): Table V has the hand-designed rows, and the cost section, discussion and
 conclusion give the comparison; it is 9 pages until the v2 results are in and the text
 is cut. Explorer: hand-designed builds are drawn as rings.
+
+## 2026-09-23 17:40 — Board cost does not depend on the weights; the published highD model measured locally
+
+Controlled check (`unas/weight_check.py`): the hand-designed highD classifier converted
+with its trained weights and with random weights (same graph), both as float32 and as
+int8 with int8 I/O, measured on both boards in one batch. RAM and MACC are identical,
+flash differs by 4 bytes in the int8 builds, and latency by +0.02 % (float32, M7),
++0.05 % (float32, M4), -0.32 % (int8, M7) and -0.63 % (int8, M4), within the farm's
+run-to-run spread. Records in `datasets/highd/results/deploy/weight_check/`.
+
+With that, the model of Mozaffari et al. (T-IV 2022, EarlyLCPred's ATTCNN3) was measured
+with random weights on both boards, as float32 and int8. The code has no licence and QUB
+has not shared its checkpoint, so the files and numbers stay local (`qub/measurements/`)
+until QUB agrees; the measurement is to be repeated with their trained weights.
+`unas/st_benchmark.py` now also records the external-memory fields of each run.
+
+Paper (local): the TODO markers are red again (xcolor, draft only).
