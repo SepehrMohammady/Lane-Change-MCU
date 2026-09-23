@@ -1,4 +1,4 @@
-# highD — reproducing these results
+# highD: reproducing these results
 
 Everything here follows the problem definition of **Mozaffari et al., "Early
 Lane Change Prediction for Automated Driving Systems Using Multi-Task
@@ -22,7 +22,7 @@ python datasets/highd/prepare_highd.py
 Writes `data/prepared/{train,val,test}.npz`. **Verification checkpoint:** the
 printed scenario counts must be **7,487 / 932 / 693**. The first two match the
 paper exactly; our test split is 5 scenarios (0.7%) short of the 698 reported,
-a discrepancy we have documented but not resolved — see `docs/DATA.md`.
+a discrepancy we have documented but not resolved (see `docs/DATA.md`).
 
 ## 2. Reproduce the headline comparison (~10 s, CPU is fine)
 
@@ -36,7 +36,7 @@ their double-counted false positives, their 101-point AUC sweep, their
 τ_f / τ_c prediction times, their TTLC ground truth `(26-i)/5`). Reproduces
 `results/their_protocol_eval.json`:
 
-| metric | ours (8.4k params) | their Table III proposed |
+| metric | ours (8.4k params; TTLC 8.2k) | their Table III proposed |
 |---|--:|--:|
 | accuracy | 0.911 | 0.83 |
 | F1 | 0.930 | 0.85 |
@@ -44,7 +44,7 @@ their double-counted false positives, their 101-point AUC sweep, their
 | τ_c | 4.79 s | 3.96 s |
 | TTLC RMSE | 0.276 s | 0.629 s |
 
-**This is our reimplementation of their protocol, not their harness.** The
+**This is our reimplementation of their protocol, not their evaluation code.** The
 metric code is a transcription and the extraction matches on two of three
 splits; treat it as such.
 

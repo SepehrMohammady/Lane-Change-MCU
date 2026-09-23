@@ -97,7 +97,7 @@ both. Five seeds each, test sets:
 | model | highD accuracy | highD TTLC RMSE | exiD accuracy | exiD TTLC RMSE |
 |---|--:|--:|--:|--:|
 | published (Mozaffari et al.) | 83% | 0.629 s | – | – |
-| hand-designed CNN, 8.4 k, trained on that dataset | 92.11 ± 0.71% | 0.276 ± 0.009 s | 89.93 ± 0.24% | 0.406 ± 0.008 s |
+| hand-designed CNN (8.4 k, TTLC 8.2 k), trained on that dataset | 92.11 ± 0.71% | 0.276 ± 0.009 s | 89.93 ± 0.24% | 0.406 ± 0.008 s |
 | best searched classifier of 17 (80 k), highD | 91.28 ± 0.90% | – | – | – |
 | searched on highD, 5.3 k and 7.9 k, trained on exiD | – | – | 76.7–78.6% | – |
 | hand-designed CNN trained on highD, applied as is | – | – | 61.24 ± 2.32% | 0.867 ± 0.062 s |

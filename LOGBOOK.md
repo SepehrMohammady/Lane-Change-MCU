@@ -729,8 +729,8 @@ The highD training loop moved to `src/lc_windows.py` and is shared by both datas
 highD wrapper gives bit-identical results on CPU). It now uses deterministic cuDNN
 kernels, so a repeated seed repeats its result; older highD runs predate this.
 
-Results, hand-designed 8.4 k CNN, five seeds, exiD test set: trained on exiD 89.93 +/- 0.24%
-(TTLC RMSE 0.406 +/- 0.008 s); the highD model as is 61.24 +/- 2.32% (0.867 +/- 0.062 s);
+Results, hand-designed CNN (8,371 parameters, 8,241 for TTLC), five seeds, exiD test set:
+trained on exiD 89.93 +/- 0.24% (TTLC RMSE 0.406 +/- 0.008 s); the highD model as is 61.24 +/- 2.32% (0.867 +/- 0.062 s);
 the same weights with exiD input scaling 38.93 +/- 4.66%, so scaling is not the cause;
 highD weights fine-tuned on exiD 90.13 +/- 0.22% (0.393 +/- 0.002 s). A highD start helps
 only with little data: +1.3 points with 10% of the training scenarios (p = 0.02), +0.6
@@ -749,3 +749,14 @@ section, layout and licence lines.
 Open: board runs of the hand-designed CNNs (needs an ST login session); architecture
 search on exiD only after the saver fix and a pooling-head option; QUB needs its own exiD
 access.
+
+## 2026-09-23 14:04 — Correction: size of the hand-designed TTLC CNN
+
+The hand-designed CNN has 8,371 parameters as a classifier and 8,241 with its single TTLC
+output (config.n_params in the highD and exiD run logs). Several places called the TTLC
+model 8.4 k: the paper's seed table and highD metrics table, the exiD table note, the
+section text, the README tables, the highD baseline notes, and the results explorer, which
+had 8,371 hard-coded for both tasks. All now give 8.2 k (8,241) for TTLC; the explorer reads
+both counts from the run logs. No result changes. The paper's transfer paragraph now also
+says that the five highD source models are new runs with deterministic kernels (92.61% on
+highD, against 92.11% for the Table III runs; Welch p = 0.29).
