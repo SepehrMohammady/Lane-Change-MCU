@@ -1,0 +1,27 @@
+{
+ "task": "cls",
+ "source": "datasets\\highd\\results\\highd_baseline_cls_v2.pt",
+ "params": 8371,
+ "input_shape": [
+  10,
+  18
+ ],
+ "parity_max_abs_diff": 5.245208740234375e-05,
+ "keras_float": {
+  "acc": 0.91087
+ },
+ "variants": {
+  "f32": {
+   "bytes": 41796,
+   "acc": 0.91087
+  },
+  "int8": {
+   "bytes": 24392,
+   "acc": 0.90881
+  },
+  "int8_io": {
+   "bytes": 24056,
+   "acc": 0.90876
+  }
+ }
+}

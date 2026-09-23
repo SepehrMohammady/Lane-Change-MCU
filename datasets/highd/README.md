@@ -89,6 +89,17 @@ Final classifier, **5,347 parameters, 91.15% (float) / 91.04% (int8)**:
 | float32 | 0.1547 ms | 0.6960 ms | 25,096 B | 1,368 B |
 | int8 (int8 I/O) | 0.1063 ms | 0.4670 ms | 15,329 B | 3,088 B |
 
+Hand-designed CNN (PyTorch, rebuilt in Keras with the same weights by
+`unas/deploy_hand_cnn.py` and converted the same way), measured through the API
+(`unas/st_benchmark.py`):
+
+| model | variant | test | STM32H7B3I-DK | NUCLEO-F401RE | flash | RAM |
+|---|---|--:|--:|--:|--:|--:|
+| classifier, 8,371 params | float32 | 91.09% | 0.669 ms | 3.647 ms | 43,050 B | 3,204 B |
+| | int8 (int8 I/O) | 90.88% | 0.350 ms | 1.713 ms | 27,979 B | 7,084 B |
+| TTLC, 8,241 params | float32 | RMSE 0.276 s | 0.667 ms | 3.658 ms | 42,526 B | 3,204 B |
+| | int8 (int8 I/O) | RMSE 0.298 s | 0.348 ms | 1.709 ms | 28,783 B | 6,664 B |
+
 Repeatability: two artifacts were measured both by hand through the web UI and
 again through the API; the two paths agreed to +0.35% and +0.09%.
 

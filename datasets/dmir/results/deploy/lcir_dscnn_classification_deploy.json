@@ -1,0 +1,27 @@
+{
+ "task": "cls",
+ "source": "datasets\\dmir\\results\\hand\\baseline-dscnn-deploy_classification.pt",
+ "params": 10451,
+ "input_shape": [
+  50,
+  31
+ ],
+ "parity_max_abs_diff": 3.6954879760742188e-06,
+ "keras_float": {
+  "acc": 0.90964
+ },
+ "variants": {
+  "float32": {
+   "bytes": 50116,
+   "acc": 0.90964
+  },
+  "int8": {
+   "bytes": 26472,
+   "acc": 0.87136
+  },
+  "int8_io": {
+   "bytes": 26136,
+   "acc": 0.87136
+  }
+ }
+}

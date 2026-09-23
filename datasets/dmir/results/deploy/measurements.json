@@ -308,6 +308,152 @@
           "source": "datasets/dmir/results/deploy/benchmarks_api.jsonl; deployment.md, reference Transformers"
         }
       ]
+    },
+    {
+      "id": "dscnn_cls",
+      "label": "Hand-designed DSCNN",
+      "role": "baseline",
+      "task": "classification",
+      "params": 10451,
+      "note": "Hand-designed depthwise-separable CNN (PyTorch), rebuilt layer by layer in Keras with the same weights (unas/deploy_hand_cnn.py, outputs agree within 1e-4) and converted and measured like the searched models. Weights: scripts/run_baseline.py <task> --save (one run).",
+      "variants": [
+        {
+          "precision": "fp32",
+          "io": "float32",
+          "metric": {
+            "acc": 0.90964
+          },
+          "boards": {
+            "STM32H7B3I-DK": {
+              "api": "lcir_dscnn_classification_float32.tflite"
+            },
+            "NUCLEO-F401RE": {
+              "api": "lcir_dscnn_classification_float32.tflite"
+            }
+          },
+          "source": "datasets/dmir/results/deploy/lcir_dscnn_classification_deploy.json; benchmarks_api.jsonl"
+        },
+        {
+          "precision": "int8 PTQ",
+          "io": "float32",
+          "metric": {
+            "acc": 0.87136
+          },
+          "boards": {
+            "STM32H7B3I-DK": {
+              "api": "lcir_dscnn_classification_int8.tflite"
+            },
+            "NUCLEO-F401RE": {
+              "api": "lcir_dscnn_classification_int8.tflite"
+            }
+          },
+          "source": "datasets/dmir/results/deploy/lcir_dscnn_classification_deploy.json; benchmarks_api.jsonl"
+        },
+        {
+          "precision": "int8 PTQ",
+          "io": "int8",
+          "metric": {
+            "acc": 0.87136
+          },
+          "boards": {
+            "STM32H7B3I-DK": {
+              "api": "lcir_dscnn_classification_int8_io.tflite"
+            },
+            "NUCLEO-F401RE": {
+              "api": "lcir_dscnn_classification_int8_io.tflite"
+            }
+          },
+          "source": "datasets/dmir/results/deploy/lcir_dscnn_classification_deploy.json; benchmarks_api.jsonl"
+        }
+      ]
+    },
+    {
+      "id": "dscnn_lcr",
+      "label": "Hand-designed, time to right lane change",
+      "role": "baseline",
+      "task": "regression_lcr",
+      "params": 10321,
+      "note": "Hand-designed depthwise-separable CNN (PyTorch), rebuilt layer by layer in Keras with the same weights (unas/deploy_hand_cnn.py, outputs agree within 1e-4) and converted and measured like the searched models. Weights: scripts/run_baseline.py <task> --save (one run).",
+      "variants": [
+        {
+          "precision": "fp32",
+          "io": "float32",
+          "metric": {
+            "mae": 0.31822,
+            "rmse": 0.43928
+          },
+          "boards": {
+            "STM32H7B3I-DK": {
+              "api": "lcir_dscnn_regression_lcr_float32.tflite"
+            },
+            "NUCLEO-F401RE": {
+              "api": "lcir_dscnn_regression_lcr_float32.tflite"
+            }
+          },
+          "source": "datasets/dmir/results/deploy/lcir_dscnn_regression_lcr_deploy.json; benchmarks_api.jsonl"
+        },
+        {
+          "precision": "int8 PTQ",
+          "io": "float32",
+          "metric": {
+            "mae": 0.50248,
+            "rmse": 0.65231
+          },
+          "boards": {
+            "STM32H7B3I-DK": {
+              "api": "lcir_dscnn_regression_lcr_int8.tflite"
+            },
+            "NUCLEO-F401RE": {
+              "api": "lcir_dscnn_regression_lcr_int8.tflite"
+            }
+          },
+          "source": "datasets/dmir/results/deploy/lcir_dscnn_regression_lcr_deploy.json; benchmarks_api.jsonl"
+        },
+        {
+          "precision": "int8 PTQ",
+          "io": "int8",
+          "metric": {
+            "mae": 0.50248,
+            "rmse": 0.65231
+          },
+          "boards": {
+            "STM32H7B3I-DK": {
+              "api": "lcir_dscnn_regression_lcr_int8_io.tflite"
+            },
+            "NUCLEO-F401RE": {
+              "api": "lcir_dscnn_regression_lcr_int8_io.tflite"
+            }
+          },
+          "source": "datasets/dmir/results/deploy/lcir_dscnn_regression_lcr_deploy.json; benchmarks_api.jsonl"
+        }
+      ]
+    },
+    {
+      "id": "dscnn_lcl",
+      "label": "Hand-designed, time to left lane change",
+      "role": "baseline",
+      "task": "regression_lcl",
+      "params": 10321,
+      "note": "Hand-designed depthwise-separable CNN (PyTorch), rebuilt layer by layer in Keras with the same weights (unas/deploy_hand_cnn.py, outputs agree within 1e-4) and converted and measured like the searched models. Weights: scripts/run_baseline.py <task> --save (one run).",
+      "variants": [
+        {
+          "precision": "fp32",
+          "io": "float32",
+          "metric": {
+            "mae": 0.33263,
+            "rmse": 0.45888
+          },
+          "boards": {
+            "STM32H7B3I-DK": {
+              "api": "lcir_dscnn_regression_lcl_float32.tflite"
+            },
+            "NUCLEO-F401RE": {
+              "api": "lcir_dscnn_regression_lcl_float32.tflite"
+            }
+          },
+          "source": "datasets/dmir/results/deploy/lcir_dscnn_regression_lcl_deploy.json; benchmarks_api.jsonl"
+        }
+      ]
     }
   ],
   "references": {

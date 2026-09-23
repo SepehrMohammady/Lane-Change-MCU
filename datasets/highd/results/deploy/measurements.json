@@ -19,23 +19,62 @@
   "models": [
     {
       "id": "baseline_cls",
-      "label": "Hand-built CNN",
+      "label": "Hand-designed CNN",
       "role": "baseline",
       "task": "highd_cls",
       "params": 8371,
-      "note": "Hand-designed depthwise-separable CNN (PyTorch). Scored with the published metric definitions; not deployed.",
+      "note": "Hand-designed depthwise-separable CNN (PyTorch), rebuilt layer by layer in Keras with the same weights (unas/deploy_hand_cnn.py, outputs agree within 1e-4) and converted and measured like the searched models. Weights: the committed checkpoints scored in their_protocol_eval.json.",
       "variants": [
         {
           "precision": "fp32",
           "io": "float32",
           "metric": {
-            "acc": 0.9109,
+            "acc": 0.91087,
             "f1": 0.9302,
             "auc": 0.9585,
             "tau_c_s": 4.79
           },
-          "boards": {},
-          "source": "datasets/highd/results/their_protocol_eval.json"
+          "boards": {
+            "STM32H7B3I-DK": {
+              "api": "highd_dscnn_cls_f32.tflite"
+            },
+            "NUCLEO-F401RE": {
+              "api": "highd_dscnn_cls_f32.tflite"
+            }
+          },
+          "source": "datasets/highd/results/deploy/highd_dscnn_cls_deploy.json; benchmarks_api.jsonl"
+        },
+        {
+          "precision": "int8 PTQ",
+          "io": "float32",
+          "metric": {
+            "acc": 0.90881
+          },
+          "boards": {
+            "STM32H7B3I-DK": {
+              "api": "highd_dscnn_cls_int8.tflite"
+            },
+            "NUCLEO-F401RE": {
+              "api": "highd_dscnn_cls_int8.tflite"
+            }
+          },
+          "source": "datasets/highd/results/deploy/highd_dscnn_cls_deploy.json; benchmarks_api.jsonl"
+        },
+        {
+          "precision": "int8 PTQ",
+          "io": "int8",
+          "metric": {
+            "acc": 0.90876
+          },
+          "boards": {
+            "STM32H7B3I-DK": {
+              "api": "highd_dscnn_cls_int8_io.tflite"
+            },
+            "NUCLEO-F401RE": {
+              "api": "highd_dscnn_cls_int8_io.tflite"
+            }
+          },
+          "source": "datasets/highd/results/deploy/highd_dscnn_cls_deploy.json; benchmarks_api.jsonl"
         }
       ]
     },
@@ -149,21 +188,62 @@
     },
     {
       "id": "baseline_ttlc",
-      "label": "Hand-built CNN, time to lane change",
+      "label": "Hand-designed CNN, time to lane change",
       "role": "baseline",
       "task": "highd_ttlc",
-      "params": 8371,
-      "note": "Hand-designed depthwise-separable CNN (PyTorch). Not deployed.",
+      "params": 8241,
+      "note": "Hand-designed depthwise-separable CNN (PyTorch), rebuilt layer by layer in Keras with the same weights (unas/deploy_hand_cnn.py, outputs agree within 1e-4) and converted and measured like the searched models. Weights: the committed checkpoints scored in their_protocol_eval.json.",
       "variants": [
         {
           "precision": "fp32",
           "io": "float32",
           "metric": {
-            "mae": 0.169,
-            "rmse": 0.2763
+            "mae": 0.16885,
+            "rmse": 0.27633
           },
-          "boards": {},
-          "source": "datasets/highd/results/their_protocol_eval.json; baseline-results.md"
+          "boards": {
+            "STM32H7B3I-DK": {
+              "api": "highd_dscnn_ttlc_f32.tflite"
+            },
+            "NUCLEO-F401RE": {
+              "api": "highd_dscnn_ttlc_f32.tflite"
+            }
+          },
+          "source": "datasets/highd/results/deploy/highd_dscnn_ttlc_deploy.json; benchmarks_api.jsonl"
+        },
+        {
+          "precision": "int8 PTQ",
+          "io": "float32",
+          "metric": {
+            "mae": 0.19167,
+            "rmse": 0.29785
+          },
+          "boards": {
+            "STM32H7B3I-DK": {
+              "api": "highd_dscnn_ttlc_int8.tflite"
+            },
+            "NUCLEO-F401RE": {
+              "api": "highd_dscnn_ttlc_int8.tflite"
+            }
+          },
+          "source": "datasets/highd/results/deploy/highd_dscnn_ttlc_deploy.json; benchmarks_api.jsonl"
+        },
+        {
+          "precision": "int8 PTQ",
+          "io": "int8",
+          "metric": {
+            "mae": 0.19167,
+            "rmse": 0.29785
+          },
+          "boards": {
+            "STM32H7B3I-DK": {
+              "api": "highd_dscnn_ttlc_int8_io.tflite"
+            },
+            "NUCLEO-F401RE": {
+              "api": "highd_dscnn_ttlc_int8_io.tflite"
+            }
+          },
+          "source": "datasets/highd/results/deploy/highd_dscnn_ttlc_deploy.json; benchmarks_api.jsonl"
         }
       ]
     },

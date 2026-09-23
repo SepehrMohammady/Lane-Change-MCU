@@ -367,3 +367,27 @@ operations (29.7 M against 5.9 M, counted with the TensorFlow profiler on the
 rebuilt graph; parameters 333,505 against 325,025). Board latency does not follow
 operation counts exactly, so the highD figure is unmeasured: do not publish the
 12 m distance for highD without measuring a highD-shaped Transformer on the board.
+
+## Hand-designed CNN on the boards (2026-09-23)
+
+The committed checkpoints (`results/highd_baseline_{cls,ttlc}_v2.pt`, the ones scored
+in `their_protocol_eval.json`) were rebuilt in Keras with `unas/deploy_hand_cnn.py`
+(outputs equal to PyTorch within 5.2e-5), converted like the searched models and
+measured through the API (`unas/st_benchmark.py`, Core 4.0.1, balanced).
+
+| model | build | test | H7B3I-DK | F401RE | flash | RAM | MACC |
+|---|---|--:|--:|--:|--:|--:|--:|
+| classifier, 8,371 params | float32 | 91.09% | 0.669 ms | 3.647 ms | 43,050 B | 3,204 B | 27,091 |
+| | int8 PTQ | 90.88% | 0.367 ms | 1.767 ms | 28,279 B | 7,372 B | 27,025 |
+| | int8 PTQ, int8 I/O | 90.88% | 0.350 ms | 1.713 ms | 27,979 B | 7,084 B | 26,659 |
+| TTLC, 8,241 params | float32 | RMSE 0.276 s | 0.667 ms | 3.658 ms | 42,526 B | 3,204 B | 26,961 |
+| | int8 PTQ | RMSE 0.298 s | 0.364 ms | 1.754 ms | 29,083 B | 6,952 B | 26,891 |
+| | int8 PTQ, int8 I/O | RMSE 0.298 s | 0.348 ms | 1.709 ms | 28,783 B | 6,664 B | 26,529 |
+
+Against the searched models (five-seed means, `results/seeds/`): the hand-designed
+classifier (92.11 ± 0.71%) is more accurate than the 7.9 k searched one
+(90.80 ± 0.79%) and 12% faster in float32 (0.669 against 0.761 ms); the 5.3 k
+searched model is 4.3 times faster (0.155 ms) at 88.89 ± 2.90%. For TTLC the two
+networks have the same RMSE (0.276 s) and the hand-designed one runs in 0.667 ms
+against 1.038 ms. A repeat of the float32 classifier on the H7B3I-DK gave 0.6695 ms
+against 0.669 ms.
