@@ -59,6 +59,13 @@ The architectures found by the highD searches are retrained on exiD with
 | searched on highD, 7.9 k | exiD (search / hand recipe) | 77.91 ± 1.11 / 78.59 ± 1.59% | – |
 | searched on highD, 28 k | exiD (search / hand recipe) | – | 0.487 ± 0.074 / 0.588 ± 0.069 s |
 
+The three searched rows are being re-measured: these Keras runs trained on the
+stored scenario order (recordings and locations in sequence) with a 2,048-window
+shuffle buffer, while the PyTorch runs of the hand-designed CNN shuffle the whole
+set. Shuffled once, the hand-designed CNN's layer sequence built in Keras goes from
+71-78% to 87-89% on exiD (`unas/shuffle_check.py`), so the gap in these rows is
+mostly the training order, not the architectures.
+
 The hand-designed CNN has 8,371 parameters as a classifier and 8,241 in its TTLC
 version.
 

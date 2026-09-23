@@ -106,7 +106,7 @@ both. Five seeds each, test sets:
 | published (Mozaffari et al.) | 83% | 0.629 s | – | – |
 | hand-designed CNN (8.4 k, TTLC 8.2 k), trained on that dataset | 92.11 ± 0.71% | 0.276 ± 0.009 s | 89.93 ± 0.24% | 0.406 ± 0.008 s |
 | best searched classifier of 17 (80 k), highD | 91.28 ± 0.90% | – | – | – |
-| searched on highD, 5.3 k and 7.9 k, trained on exiD | – | – | 76.7–78.6% | – |
+| searched on highD, 5.3 k and 7.9 k, trained on exiD¹ | – | – | 76.7–78.6% | – |
 | hand-designed CNN trained on highD, applied as is | – | – | 61.24 ± 2.32% | 0.867 ± 0.062 s |
 | the same, fine-tuned on exiD | – | – | 90.13 ± 0.22% | 0.393 ± 0.002 s |
 
@@ -116,9 +116,11 @@ both. Five seeds each, test sets:
   lane keeping in 45%; trained on exiD, 94% and 85%.
 - Starting from highD weights adds 1.3 points with 10% of the exiD training data,
   and nothing measurable with all of it.
-- The architectures found by the highD search fall at least 11 points behind the
-  hand-designed CNN on exiD, under the search recipe and under the hand-designed
-  one.
+- ¹ Being re-measured. These Keras runs trained on the stored scenario order with a
+  2,048-window shuffle buffer; shuffled once, the hand-designed CNN's own layers in
+  Keras gain 12 points on exiD (`unas/shuffle_check.py`). The earlier claim that the
+  architectures found on highD fall 11 points behind does not hold until the re-runs
+  are in.
 - On the boards the hand-designed highD CNN takes 0.669 ms (float32) and 0.350 ms
   (int8) on the Cortex-M7: more accurate and faster than the 7.9 k searched
   classifier, 4.3 times slower than the 5.3 k one, which is about 3 points less

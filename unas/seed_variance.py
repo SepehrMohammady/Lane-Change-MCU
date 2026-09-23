@@ -98,7 +98,23 @@ RUNS = {
                           "highd_cls", {}, "logits", {}),
     "exid_ttlc_aaaaaw":  ("exid", "datasets/highd/results/models/highd_ttlc_model_aaaaaw.h5",
                           "highd_ttlc", {}, "mae", {}),
+    # v2 search (global-average-pooling space, five-seed validation choice, unas/select_by_seeds.py);
+    # its search-recipe seeds are in datasets/highd/results/seeds/select_highd_cls_v2.jsonl
+    "highd_cls_v2_best": ("highd", "datasets/highd/results/nas-v2/highd_cls_v2/model_1790187214617755015_765300.h5",
+                          "highd_cls", {}, "logits", {"acc": 0.9046}),
+    "exid_cls_v2_best":  ("exid", "datasets/highd/results/nas-v2/highd_cls_v2/model_1790187214617755015_765300.h5",
+                          "highd_cls", {}, "logits", {}),
+    # the hand-designed CNN's layer sequence built in the v2 space (unas/build_hand_like.py):
+    # same architecture as the hand-designed CNN, trained by the search's recipe
+    "highd_cls_hand_in_v2": ("highd", "datasets/highd/results/nas-v2/hand_like_in_v2_space.h5",
+                             "highd_cls", {}, "logits", {}),
+    "exid_cls_hand_in_v2":  ("exid", "datasets/highd/results/nas-v2/hand_like_in_v2_space.h5",
+                             "highd_cls", {}, "logits", {}),
 }
+# Runs chosen at run time (for example a search's chosen model): SV_EXTRA_JSON names a JSON
+# file {key: [dataset, h5, task, adapter kwargs, loss kind, reference metric]}.
+if os.environ.get("SV_EXTRA_JSON"):
+    RUNS.update({k: tuple(v) for k, v in json.loads(Path(os.environ["SV_EXTRA_JSON"]).read_text()).items()})
 EXID_ROOT = REPO / "datasets" / "exid" / "data" / "prepared"
 
 
@@ -231,6 +247,7 @@ def main(only):
                               if RECIPE == "search" else RECIPE_LABEL[RECIPE]),
                    "epochs_run": len(hist.history["loss"]), "wall_s": round(wall, 1),
                    "test": metrics_out, "original_run": orig,
+                   "train_order": getattr(ds, "train_order", "as stored"),
                    "utc": datetime.now(timezone.utc).isoformat(timespec="seconds")}
             with open(out[ds_name], "a", encoding="utf-8") as f:
                 f.write(json.dumps(rec) + "\n")

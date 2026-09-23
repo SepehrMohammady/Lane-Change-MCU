@@ -35,7 +35,7 @@ FRONTS = {   # front csv -> directory of that search's saved models (fork artifa
     "highd_cls": ("datasets/highd/results/nas-fronts/highd_cls.csv", "~/uNAS/artifacts/highd_cls/models"),
     "highd_cls_tight": ("datasets/highd/results/nas-fronts/highd_cls_tight.csv", "~/uNAS/artifacts/highd_cls_tight/models"),
 }
-OUT = REPO / "datasets/highd/results/seeds/rerank_cls.jsonl"
+OUT = REPO / os.environ.get("RERANK_OUT", "datasets/highd/results/seeds/rerank_cls.jsonl")
 
 
 def main():
@@ -68,7 +68,8 @@ def main():
             acc = float((net.predict(xte, batch_size=2048, verbose=0).argmax(1) == yte).mean())
             rec = {"search": search, "model": model, "params": params, "seed": seed, "reported_acc": reported,
                    "test_acc": acc, "epochs_run": len(hist.history["loss"]), "wall_s": round(time.perf_counter() - t0, 1),
-                   "recipe": "search recipe", "utc": datetime.now(timezone.utc).isoformat(timespec="seconds")}
+                   "recipe": "search recipe", "train_order": getattr(ds, "train_order", "as stored"),
+                   "utc": datetime.now(timezone.utc).isoformat(timespec="seconds")}
             with open(OUT, "a", encoding="utf-8") as f:
                 f.write(json.dumps(rec) + "\n")
             print(f"[{search}/{model} {params}] seed {seed}: {acc:.4f} (reported {reported:.4f})", flush=True)

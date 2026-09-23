@@ -45,6 +45,7 @@ import seed_variance as sv                                  # noqa: E402  (sets 
 tf, keras = sv.tf, sv.keras
 REPO = sv.REPO
 SEEDS = [int(x) for x in os.environ.get("SEEDS", "0,1,2,3,4").split(",")]
+TAG = os.environ.get("SEL_TAG", "")          # suffix of the output files, e.g. "_permuted"
 
 
 def load_candidates(search: str) -> list[dict]:
@@ -108,7 +109,7 @@ def main(search: str, k: int = 12) -> None:
         for suffix in (".h5", ".json"):
             src = Path(r["h5"]).with_suffix(suffix)
             shutil.copy2(src, dest / src.name)
-    out = REPO / "datasets/highd/results/seeds" / f"select_{search}.jsonl"
+    out = REPO / "datasets/highd/results/seeds" / f"select_{search}{TAG}.jsonl"
     done = {}
     if out.exists():
         for line in out.read_text().splitlines():
@@ -123,7 +124,8 @@ def main(search: str, k: int = 12) -> None:
             res = train_one(r["h5"], ds, task, seed)
             rec = {"search": search, "model": name, "params": r["params"], "seed": seed,
                    "search_val_error": r["val_error"], "pmu": r["pmu"], "ms": r["ms"], "macs": r["macs"],
-                   "recipe": "search recipe", **res, "utc": datetime.now(timezone.utc).isoformat(timespec="seconds")}
+                   "recipe": "search recipe", "train_order": getattr(ds, "train_order", "as stored"),
+                   **res, "utc": datetime.now(timezone.utc).isoformat(timespec="seconds")}
             done[(name, seed)] = rec
             with open(out, "a", encoding="utf-8") as f:
                 f.write(json.dumps(rec) + "\n")
@@ -147,7 +149,8 @@ def main(search: str, k: int = 12) -> None:
                      "smallest": "fewest parameters within one standard error of the best mean validation metric"},
            "best": best["model"], "smallest": smallest["model"], "table": table,
            "utc": datetime.now(timezone.utc).isoformat(timespec="seconds")}
-    (dest / "selection.json").write_text(json.dumps(sel, indent=1))
+    sel["train_order"] = getattr(ds, "train_order", "as stored")
+    (dest / f"selection{TAG}.json").write_text(json.dumps(sel, indent=1))
     for t in table:
         tag = ("best " if t is best else "") + ("smallest" if t is smallest else "")
         print(f"{t['model']:>34} {t['params']:>7,}  val {t['val']['mean']:.4f}±{t['val']['std']:.4f}  "

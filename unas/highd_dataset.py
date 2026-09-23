@@ -64,6 +64,16 @@ class HighD_Dataset(Dataset):
             else:
                 m = y != 0                       # LC windows only, ttlc in [0.2, 5.2]
                 self._data[s] = (xn[m], ttlc[m].astype(np.float32))
+        # The prepared splits are stored scenario by scenario in recording order (exiD also
+        # by location), and the fork's trainer and our Keras scripts shuffle with a buffer of
+        # 2,048 windows, about 79 neighbouring scenarios: batches then come from one recording
+        # and can hold a single class. Permuting the training windows once lets that buffer
+        # mix the whole set (unas/shuffle_check.py: +12 points for one model on exiD).
+        # Added 2026-09-23; records made before that were trained on the stored order.
+        x, y = self._data["train"]
+        perm = np.random.default_rng(0).permutation(len(y))
+        self._data["train"] = (x[perm], y[perm])
+        self.train_order = "permuted once (seed 0)"
         self._input_shape = (IN_LEN, 18)
 
     def _ds(self, split):

@@ -57,7 +57,7 @@ def _training_config(dataset, classification):
                           epochs=EPOCHS, batch_size=256)
 
 
-def _setup(task, name, error_bound, v2=False):
+def _setup(task, name, error_bound, v2=False, model_size_bound=None, mac_bound=None):
     classification = task == "highd_cls"
     dataset = HighD_Dataset(task=task)
     if v2:
@@ -69,8 +69,8 @@ def _setup(task, name, error_bound, v2=False):
         "bound_config": BoundConfig(
             error_bound=error_bound,
             peak_mem_bound=PEAK_MEM_BOUND,
-            model_size_bound=MODEL_SIZE_BOUND,
-            mac_bound=MAC_BOUND,
+            model_size_bound=model_size_bound or MODEL_SIZE_BOUND,
+            mac_bound=mac_bound or MAC_BOUND,
         ),
         "search_algorithm": AgingEvoSearch,
         "search_config": AgingEvoConfig(
@@ -119,3 +119,16 @@ def get_highd_cls_v2_setup(**_):
 
 def get_highd_ttlc_v2_setup(**_):
     return _setup("highd_ttlc", "highd_ttlc_v2" + V2_SUFFIX, REG_ERROR_BOUND, v2=True)
+
+
+# v3 (2026-09-23): the v2 space and saver with budgets at the hand-designed CNN's cost. The
+# v2 classifier search ran with an error bound (0.045) that no candidate reaches, so the
+# error term always dominated the fitness and cost never counted: its chosen model matches
+# the hand-designed CNN's accuracy but runs 4.2 times slower. Here model size and MACs are
+# bounded at what the fork's resource model gives for the hand-designed CNN's layer sequence
+# (unas/build_hand_like.py: 8,051 B, 13,648 MACs), rounded up to 8 KiB and 14,000 MACs, and
+# the error bound is the hand-designed CNN's validation level (0.06). Question: can the search
+# match the hand-designed CNN's accuracy at equal or lower cost?
+def get_highd_cls_v3_setup(**_):
+    return _setup("highd_cls", "highd_cls_v3" + V2_SUFFIX, float(os.environ.get("HIGHD_V3_ERROR_BOUND", "0.06")),
+                  v2=True, model_size_bound=8 * 1024, mac_bound=14_000)

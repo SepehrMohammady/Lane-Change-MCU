@@ -818,3 +818,39 @@ until QUB agrees; the measurement is to be repeated with their trained weights.
 `unas/st_benchmark.py` now also records the external-memory fields of each run.
 
 Paper (local): the TODO markers are red again (xcolor, draft only).
+
+## 2026-09-23 23:18 — v2 classifier search results; the Keras training order was not shuffled
+
+v2 highD classifier search (global-average-pooling space, fixed saver): about 152
+candidates over three chunks (two WSL out-of-memory restarts, resumed from the saved
+state), 88 saved within the budgets. Five-seed selection on validation data chose a
+21,476-parameter model (Flatten head, no hidden Dense layer, dropout 0.1): test
+91.17 +/- 0.28% under the search recipe and 92.12 +/- 0.24% under the hand-designed
+recipe, equal to the hand-designed CNN (92.11 +/- 0.71%, Welch p = 0.99). On the boards
+it takes 2.812 ms (FP32) and 1.275 ms (int8 I/O) on the M7 against 0.669 / 0.350 ms for
+the hand-designed CNN, with 140,989 MACC. The v2 run used the tight error bound (0.045),
+which no candidate reaches, so the error term always set the fitness and cost never
+counted; a v3 search with budgets at the hand-designed CNN's cost is queued.
+
+The hand-designed CNN's layer sequence built in the v2 space (unas/build_hand_like.py)
+and trained with the search recipe reaches 91.18 +/- 0.64% on highD, the same as the v2
+choice. On exiD the same Keras model reached only 77.5% (search recipe) and 74.6% (hand
+recipe), against 89.9% for the PyTorch network, although the architecture matches. Cause:
+the prepared highD and exiD training sets are stored scenario by scenario in recording
+order (exiD also by location), and the fork's trainer and our Keras scripts shuffle with
+a 2,048-window buffer, about 79 neighbouring scenarios, so batches come from one
+recording and can hold one class. The PyTorch trainer permutes the whole set. Permuting
+once before training (unas/shuffle_check.py, three seeds) moves the model from
+71.1 / 77.1 / 78.3% to 88.3 / 89.0 / 87.2% on exiD. LCIR is not affected (its windows are
+already mixed: every 2,048-window block holds 31-36% of each class).
+
+Consequences. The exiD result "architectures found on highD fall at least 11 points
+behind" is mostly this training-order effect, and every Keras number on highD and exiD
+(seed studies of the searched models, the re-rank of 17 classifiers, the v2 selection,
+and the fitness inside the searches) was trained on the stored order. Fixed in
+unas/highd_dataset.py (training windows permuted once, seed 0; records now carry
+train_order). The TTLC v2 search was stopped (97 candidates, stored order). Re-runs are
+queued into new files with the suffix _permuted: exiD transfer of the searched
+architectures, the v2 re-selection and controls, the highD seed studies, the re-rank,
+then the v3 search. The claim is flagged in the READMEs and in the paper until then.
+PyTorch results (hand-designed CNNs, exiD transfer study) are not affected.
