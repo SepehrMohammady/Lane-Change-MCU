@@ -1,13 +1,13 @@
 #!/bin/bash
 # Chunked highD search (same OOM-safe pattern as run_chunked.sh).
 # Usage (from WSL):  bash /mnt/c/Projects/PhD/DIMIR/unas/run_chunked_highd.sh highd_cls 150 50
-# The *_v2 configs use the global-average-pooling search space (unas/cnn1d_gap.py) and the
+# The *_v2 and *_v3 configs use the global-average-pooling search space (unas/cnn1d_gap.py) and the
 # fixed model saver (unas/safe_saver.py); HIGHD_V2_SUFFIX renames their artifact folder.
 CONFIG="${1:?config}"; TARGET="${2:-150}"; EPOCHS="${3:-50}"
 MAX_CHUNKS="${MAX_CHUNKS:-8}"
 RUN_TAG="$(date +%m%d%H%M)"
 VENV="$HOME/dmir_nas"; FORK="$HOME/uNAS"; REPO="/mnt/c/Projects/PhD/DIMIR"
-case "$CONFIG" in *_v2) NAME="$CONFIG${HIGHD_V2_SUFFIX:-}" ;; *) NAME="$CONFIG" ;; esac
+case "$CONFIG" in *_v2|*_v3) NAME="$CONFIG${HIGHD_V2_SUFFIX:-}" ;; *) NAME="$CONFIG" ;; esac
 STATE="$FORK/artifacts/$NAME/${NAME}_agingevosearch_state.pickle"
 
 source "$VENV/env.sh"
@@ -26,7 +26,7 @@ p = sys.argv[1]
 s = open(p).read()
 entries = {"highd_cls": "get_highd_cls_setup", "highd_cls_tight": "get_highd_cls_tight_setup",
            "highd_ttlc": "get_highd_ttlc_setup", "highd_cls_v2": "get_highd_cls_v2_setup",
-           "highd_ttlc_v2": "get_highd_ttlc_v2_setup"}
+           "highd_ttlc_v2": "get_highd_ttlc_v2_setup", "highd_cls_v3": "get_highd_cls_v3_setup"}
 new = [f'    "{k}": ("configs.highd_config", "{f}"),' for k, f in entries.items() if f'"{k}"' not in s]
 if new:
     s = s.replace("_CONFIGS = {", "_CONFIGS = {" + chr(10) + chr(10).join(new), 1)
