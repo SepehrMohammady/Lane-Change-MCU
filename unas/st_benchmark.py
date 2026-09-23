@@ -40,6 +40,9 @@ def record(path: Path, board: str, res, wall_s: float) -> dict:
             "activations_B": res.activations_size, "rom_B": res.rom_size, "ram_B": res.ram_size,
             "ram_io_B": res.total_ram_io_size, "lib_flash_est_B": res.estimated_library_flash_size,
             "cli_version": res.cli_version_str, "device": res.device, "wall_s": round(wall_s, 1),
+            "use_external_flash": res.use_external_flash, "use_external_ram": res.use_external_ram,
+            "internal_flash_B": res.internal_flash_consumption, "external_flash_B": res.external_flash_consumption,
+            "internal_ram_B": res.internal_ram_consumption, "external_ram_B": res.external_ram_consumption,
             "utc": datetime.now(timezone.utc).isoformat(timespec="seconds")}
 
 
