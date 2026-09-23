@@ -27,6 +27,10 @@ on validation accuracy (classifiers) or validation RMSE (regressors) with the be
 weights restored, and MSE loss for every regressor. Output goes to
 seed_variance_dscnn.jsonl.
 
+The exid_* runs train the architectures found by the highD searches on exiD
+(same scenario format, datasets/exid/prepare_exid.py), with the highD search
+callbacks and epoch cap; they have no single run of their own to compare with.
+
 Resume-safe: (model, seed) pairs already in the output file are skipped.
 
 Run in the WSL dmir_nas venv:
@@ -87,7 +91,15 @@ RUNS = {
                           "classification", {"drop_indicators": True}, "logits", {}),
     "dmir_ref_cnn":      ("dmir", "datasets/dmir/results/deploy/REF_cnn_multi.h5",
                           "classification", {}, "softmax", {"acc": 0.9169}),
+    # architectures from the highD searches, trained on exiD
+    "exid_cls_aaaaap":   ("exid", "datasets/highd/results/models/highd_cls_tight_model_aaaaap.h5",
+                          "highd_cls", {}, "logits", {}),
+    "exid_cls_aaaaam":   ("exid", "datasets/highd/results/models/highd_cls_model_aaaaam.h5",
+                          "highd_cls", {}, "logits", {}),
+    "exid_ttlc_aaaaaw":  ("exid", "datasets/highd/results/models/highd_ttlc_model_aaaaaw.h5",
+                          "highd_ttlc", {}, "mae", {}),
 }
+EXID_ROOT = REPO / "datasets" / "exid" / "data" / "prepared"
 
 
 def callbacks(ds_name, loss_kind):
@@ -147,7 +159,8 @@ def compile_args(loss_kind):
 
 def main(only):
     out = {"dmir": REPO / "datasets/dmir/results/seeds" / OUT_NAME,
-           "highd": REPO / "datasets/highd/results/seeds" / OUT_NAME}
+           "highd": REPO / "datasets/highd/results/seeds" / OUT_NAME,
+           "exid": REPO / "datasets/exid/results/seeds" / OUT_NAME}
     done = set()
     for f in out.values():
         f.parent.mkdir(parents=True, exist_ok=True)
@@ -164,7 +177,8 @@ def main(only):
             continue
         ck = (ds_name, task, tuple(sorted(kw.items())))
         if ck not in cache:
-            cache[ck] = (DMIR_Dataset(task=task, **kw) if ds_name == "dmir" else HighD_Dataset(task=task))
+            cache[ck] = (DMIR_Dataset(task=task, **kw) if ds_name == "dmir"
+                         else HighD_Dataset(task=task, root=EXID_ROOT if ds_name == "exid" else None))
         ds = cache[ck]
         xte, yte = ds._data["test"]
         is_cls = loss_kind in ("logits", "softmax")

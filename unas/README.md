@@ -71,6 +71,8 @@ fix the saver before the next search.
 |---|---|---|
 | `seed_variance.py` | retrains each final architecture from scratch with seeds 0-4; `RECIPE=search` (the fork's trainer), `final` (hand-designed highD recipe) or `dscnn` (hand-designed LCIR recipe) | `datasets/*/results/seeds/seed_variance*.jsonl` |
 | `rerank_front.py` | retrains every saved highD classifier above `RERANK_FLOOR` with five seeds and ranks them by mean | `datasets/highd/results/seeds/rerank_cls.jsonl` |
+| `seed_variance.py exid_*` | trains the architectures found by the highD searches on exiD (both recipes) | `datasets/exid/results/seeds/seed_variance*.jsonl` |
+| `transfer_eval.py` | applies the deployed highD searched models to exiD with the highD input scaling | `datasets/exid/results/transfer_searched.jsonl` |
 
 Both run in the WSL `dmir_nas` venv and resume from their output files. The
 hand-built baselines take a seed argument: `scripts/run_baseline.py <task> <seed>`
