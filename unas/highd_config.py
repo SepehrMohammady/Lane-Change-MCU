@@ -57,9 +57,13 @@ def _training_config(dataset, classification):
                           epochs=EPOCHS, batch_size=256)
 
 
-def _setup(task, name, error_bound):
+def _setup(task, name, error_bound, v2=False):
     classification = task == "highd_cls"
     dataset = HighD_Dataset(task=task)
+    if v2:
+        from configs.cnn1d_gap import GapCnn1DSearchSpace
+        from configs.safe_saver import install
+        install()                       # fork builds SafeModelSaver for this run
     config = {
         "training_config": _training_config(dataset, classification),
         "bound_config": BoundConfig(
@@ -70,12 +74,14 @@ def _setup(task, name, error_bound):
         ),
         "search_algorithm": AgingEvoSearch,
         "search_config": AgingEvoConfig(
-            search_space=Cnn1DSearchSpace(),
+            search_space=GapCnn1DSearchSpace() if v2 else Cnn1DSearchSpace(),
             checkpoint_dir=f"artifacts/{name}",
             rounds=ROUNDS, population_size=POPULATION, sample_size=SAMPLE,
             max_parallel_evaluations=PARALLEL,
         ),
-        "model_saver_config": ModelSaverConfig(save_criteria=SAVE_CRITERIA),
+        # v2: keep every candidate within the resource bounds; selection happens
+        # afterwards on validation data (unas/select_by_seeds.py)
+        "model_saver_config": ModelSaverConfig(save_criteria="boundaries" if v2 else SAVE_CRITERIA),
         "serialized_dataset": False,
     }
     return {"config": config, "name": name, "load_from": None,
@@ -96,3 +102,20 @@ def get_highd_cls_tight_setup(**_):
 
 def get_highd_ttlc_setup(**_):
     return _setup("highd_ttlc", "highd_ttlc", REG_ERROR_BOUND)
+
+
+# v2 (2026-09-23): search space with a global-average-pooling head, zero to three
+# hidden Dense layers and a searched dropout rate (configs/cnn1d_gap.py), and the saver
+# of configs/safe_saver.py. Same recipe, budgets and error bounds as the first searches,
+# so the head is the only change to what the search can find. HIGHD_V2_SUFFIX renames the
+# artifact folder (used for smoke tests).
+V2_SUFFIX = os.environ.get("HIGHD_V2_SUFFIX", "")
+
+
+def get_highd_cls_v2_setup(**_):
+    return _setup("highd_cls", "highd_cls_v2" + V2_SUFFIX,
+                  float(os.environ.get("HIGHD_CLS_TIGHT_BOUND", "0.045")), v2=True)
+
+
+def get_highd_ttlc_v2_setup(**_):
+    return _setup("highd_ttlc", "highd_ttlc_v2" + V2_SUFFIX, REG_ERROR_BOUND, v2=True)

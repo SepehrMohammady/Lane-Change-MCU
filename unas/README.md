@@ -30,6 +30,11 @@ regression `min(val_mae)` (the loss is MAE, so optimise and threshold on **MAE**
 |---|---|---|
 | `dmir_dataset.py` | `dataset/dmir_dataset.py` | serves the real DMIR pickles (all 3 tasks), train-range clipping, optional indicator drop |
 | `dmir_config.py` | `configs/dmir_config.py` | search configs + STM32H7B3I-DK thresholds |
+| `highd_dataset.py`, `highd_config.py` | `dataset/`, `configs/` | highD (and exiD) windows; highD search configs, including the `*_v2` ones |
+| `cnn1d_gap.py` | `configs/cnn1d_gap.py` | the fork's 1D search space plus a global-average-pooling head, zero to three hidden Dense layers and a searched dropout rate (used by the `*_v2` configs) |
+| `safe_saver.py` | `configs/safe_saver.py` | model saver with unique file names and a JSON sidecar per model (validation error, resources); keeps every candidate within the resource bounds and never uses test error (used by the `*_v2` configs) |
+
+`run_chunked_highd.sh` copies the highD files into the fork and registers the configs.
 
 Register in the fork:
 - `dataset/__init__.py`: `from .dmir_dataset import DMIR_Dataset`
@@ -73,6 +78,16 @@ fix the saver before the next search.
 | `rerank_front.py` | retrains every saved highD classifier above `RERANK_FLOOR` with five seeds and ranks them by mean | `datasets/highd/results/seeds/rerank_cls.jsonl` |
 | `seed_variance.py exid_*` | trains the architectures found by the highD searches on exiD (both recipes) | `datasets/exid/results/seeds/seed_variance*.jsonl` |
 | `transfer_eval.py` | applies the deployed highD searched models to exiD with the highD input scaling | `datasets/exid/results/transfer_searched.jsonl` |
+| `select_by_seeds.py <search>` | v2 searches: shortlists the 12 candidates with the best single-run validation metric, retrains each with five seeds, picks the best mean validation metric and the smallest model within one standard error of it; test data never enter the choice | `datasets/highd/results/seeds/select_<search>.jsonl`, `datasets/highd/results/nas-v2/<search>/` |
+
+## Hand-designed CNNs on the boards
+
+| script | what it does |
+|---|---|
+| `../scripts/export_hand_cnn.py` | exports the PyTorch DSCNN weights in Keras layout, with reference outputs, calibration and test windows (Windows venv) |
+| `deploy_hand_cnn.py` | rebuilds the DSCNN in Keras, checks it against PyTorch, writes float32 / int8 / int8-I/O TFLite files and scores each on the test set (WSL) |
+| `st_benchmark.py` | measures TFLite files on the ST Edge AI Developer Cloud boards with ST's client; credentials from `STM32AI_USERNAME` / `STM32AI_PASSWORD`, never written to disk |
+| `../scripts/register_hand_cnn.py` | adds the measured builds to `datasets/*/results/deploy/measurements.json` |
 
 Both run in the WSL `dmir_nas` venv and resume from their output files. The
 hand-built baselines take a seed argument: `scripts/run_baseline.py <task> <seed>`
