@@ -710,3 +710,42 @@ The Lane Change Intention Recognition data is now called LCIR in the paper, the 
 ## 2026-09-17 15:30 — Repository renamed to Lane-Change-MCU
 
 The GitHub repository is now github.com/SepehrMohammady/Lane-Change-MCU (formerly LC-Intention-NAS); GitHub redirects the old address. The old name no longer described the project: highD and exiD predict lane changes of surrounding vehicles rather than driver intention, and the work now compares searched with hand-designed models and measures them on two microcontrollers. Updated the git remote, README title and opening paragraph, CITATION.cff (title, URL, abstract), and the local course pages and notes. The paper keeps the repository citation as a placeholder until the author details are settled.
+
+## 2026-09-23 13:09 — exiD prepared in the highD format; transfer study; paper and explorer updated
+
+exiD v2.1 (levelXdata, non-commercial, no redistribution) arrived and is prepared in the
+highD scenario format by `datasets/exid/prepare_exid.py`: 93 recordings at 7 motorway
+junctions, 20,820 scenarios (train/val/test 16,446 / 2,617 / 1,757), 13,896 lane changes,
+of which 4,657 merges from on-ramps and 2,128 exits. Adaptations, all in
+`datasets/exid/docs/DATA.md`: crossings from the laneChange flag; side from the sign of
+latLaneCenterOffset (agrees with the Lanelet2 adjacency on all 1,603 checked crossings);
+exiD's latVelocity is in the vehicle frame, so lateral velocity and acceleration are
+2-s Savitzky-Golay derivatives of the lane-relative offset (window chosen to match highD's
+lane-change kinematics, not on accuracy); distances projected on the heading; lane
+existence from the Lanelet2 maps; hard-shoulder crossings dropped; the latest recordings
+of every location form the test split.
+
+The highD training loop moved to `src/lc_windows.py` and is shared by both datasets (the
+highD wrapper gives bit-identical results on CPU). It now uses deterministic cuDNN
+kernels, so a repeated seed repeats its result; older highD runs predate this.
+
+Results, hand-designed 8.4 k CNN, five seeds, exiD test set: trained on exiD 89.93 +/- 0.24%
+(TTLC RMSE 0.406 +/- 0.008 s); the highD model as is 61.24 +/- 2.32% (0.867 +/- 0.062 s);
+the same weights with exiD input scaling 38.93 +/- 4.66%, so scaling is not the cause;
+highD weights fine-tuned on exiD 90.13 +/- 0.22% (0.393 +/- 0.002 s). A highD start helps
+only with little data: +1.3 points with 10% of the training scenarios (p = 0.02), +0.6
+with 25% (p = 0.12), +0.2 with all (p = 0.22). The highD model gets exits right in 33.2%
+of the windows and lane keeping in 45.4% (exiD-trained: 94.2% and 84.7%). The exiD model
+scores 84.64 +/- 0.67% on highD. The highD-searched architectures retrained on exiD reach
+76.7-78.6% under both recipes, at least 11 points below the hand-designed CNN. Board cost
+of exiD models equals the highD builds (same graphs).
+
+Paper (local): Section III-C and V-D, Table IV and Fig. 6, title covering the three
+datasets, still 8 pages; `check_numbers.py` covers the exiD values. Results explorer:
+exiD with Overview, Transfer and Seeds views; the Compare page's log-axis labels no longer
+print float noise (0.30000000000000004 ms); project name Lane-Change-MCU. READMEs: exiD
+section, layout and licence lines.
+
+Open: board runs of the hand-designed CNNs (needs an ST login session); architecture
+search on exiD only after the saver fix and a pooling-head option; QUB needs its own exiD
+access.

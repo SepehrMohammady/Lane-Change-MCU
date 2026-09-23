@@ -103,7 +103,7 @@
       const out = [], mults = (l1 - l0) > 2.4 ? [1, 3] : [1, 2, 5];
       const u0 = Math.log10(d0 / unit), u1 = Math.log10(d1 / unit);
       for (let e = Math.floor(u0); e <= Math.ceil(u1); e++) for (const m of mults) {
-        const v = m * Math.pow(10, e) * unit;
+        const v = Number((m * Math.pow(10, e)).toPrecision(6)) * unit;
         if (v >= d0 * 0.999 && v <= d1 * 1.001) out.push(v);
       }
       return out;
@@ -111,7 +111,7 @@
     return sc;
   }
   const tickParams = v => v >= 1e6 ? v / 1e6 + " M" : v >= 1e3 ? v / 1e3 + " k" : String(v);
-  const tickMs = v => v >= 1 ? v + " ms" : v + " ms";
+  const tickMs = v => v + " ms";
 
   function chartCard(title, caption, body, opts = {}) {
     const box = h("div", { class: "chart-box" }, body);
@@ -144,16 +144,18 @@
     task: store.get("task", {}),
     recipe: store.get("recipe", "search"),
   };
-  const DS_VIEWS = [
+  const ALL_VIEWS = [
     ["overview", "Overview"], ["search", "Search"], ["hardware", "Hardware"], ["quant", "Quantization"],
-    ["robust", "Seeds"], ["bench", "Benchmark"], ["scenario", "Scenario"],
+    ["transfer", "Transfer"], ["robust", "Seeds"], ["bench", "Benchmark"], ["scenario", "Scenario"],
   ];
+  const DEFAULT_VIEWS = ["overview", "search", "hardware", "quant", "robust", "bench", "scenario"];
+  const viewsOf = d => ALL_VIEWS.filter(([id]) => (d.views || DEFAULT_VIEWS).includes(id));
   function route() {
     const [a, b, c] = decodeURIComponent(location.hash.slice(1)).split("/");
     if (a === "compare" || (a === "status" && D.status)) return { page: a };
     const d = ds(a) ? a : "dmir";
     const planned = ds(d).status === "planned";
-    const v = DS_VIEWS.some(x => x[0] === b) && !planned ? b : "overview";
+    const v = viewsOf(ds(d)).some(x => x[0] === b) && !planned ? b : "overview";
     return { page: "ds", ds: d, view: v, model: c };
   }
   const go = hash => { if (location.hash.slice(1) !== hash) location.hash = hash; else render(); };
@@ -173,7 +175,7 @@
 
     const tabs = document.getElementById("tab-nav");
     if (r.page === "ds" && ds(r.ds).status !== "planned") {
-      tabs.replaceChildren(...DS_VIEWS.map(([id, label]) => h("button", {
+      tabs.replaceChildren(...viewsOf(ds(r.ds)).map(([id, label]) => h("button", {
         type: "button", "aria-current": String(r.view === id), onclick: () => go(r.ds + "/" + id),
       }, label)));
     } else tabs.replaceChildren();
@@ -199,15 +201,15 @@
       h("div", { class: "t-label" }, k.label), h("div", { class: "t-value" }, k.value), h("div", { class: "t-sub" }, k.sub),
       k.seed ? h("div", { class: "t-seed" }, k.seed) : null)));
     const pipe = h("section", { class: "card" },
-      h("div", { class: "card-head" }, h("div", {}, h("h2", {}, "From search to silicon"),
-        h("p", { class: "cap" }, "Search under memory and compute limits, quantize, then measure on real boards."))),
+      h("div", { class: "card-head" }, h("div", {}, h("h2", {}, d.pipeline_title || "From search to silicon"),
+        h("p", { class: "cap" }, d.pipeline_caption || "Search under memory and compute limits, quantize, then measure on real boards."))),
       h("div", { class: "pipe" }, d.pipeline.map(([l, n]) => h("div", { class: "step" }, h("div", { class: "n" }, n), h("div", { class: "l" }, l)))));
 
-    const shortcuts = h("div", { class: "grid g3" }, [
+    const shortcuts = h("div", { class: "grid g3" }, (d.shortcuts || [
       ["search", "Search", "Every model the search saved, and where the picks sit."],
       ["hardware", "Hardware", "Latency, flash and RAM measured on both boards."],
       ["robust", "Seeds", "The final models retrained with five seeds."],
-    ].map(([id, t, c]) => h("button", { class: "card", type: "button", style: "text-align:left;cursor:pointer", onclick: () => go(d.id + "/" + id) },
+    ]).map(([id, t, c]) => h("button", { class: "card", type: "button", style: "text-align:left;cursor:pointer", onclick: () => go(d.id + "/" + id) },
       h("h2", {}, t + " →"), h("p", { class: "cap" }, c))));
     return [hero, h("div", { class: "section-title" }, "Headline"), kpis, h("div", { style: "height:16px" }), pipe,
       h("div", { style: "height:16px" }), shortcuts];
@@ -577,7 +579,7 @@
       (fmt === "pct" ? "test accuracy" : "test RMSE (s)") + (better === "high" ? " · right is better" : " · left is better")));
     rows.forEach((r, i) => {
       const y = M.t + rowH * i + rowH / 2, st = r.stats;
-      const col = r.role === "searched" ? "var(--acc)" : "var(--ref)";
+      const col = r.color ? `var(--${r.color})` : r.role === "searched" ? "var(--acc)" : "var(--ref)";
       svg.append(s("text", { class: "lbl", x: M.l - 12, y: y - 2, "text-anchor": "end" }, r.label),
         s("text", { class: "lbl-m", x: M.l - 12, y: y + 11, "text-anchor": "end" }, r.recipe + " · " + st.n + " seeds"));
       svg.append(s("rect", { x: X(st.mean - st.std), width: Math.max(2, X(st.mean + st.std) - X(st.mean - st.std)), y: y - 9, height: 18, rx: 4,
@@ -609,9 +611,10 @@
       return { label, role, recipe: recipeLabel, runs: g.runs, stats: g.stats[metricKey], orig: g.original && g.original[metricKey] };
     };
     const acc = [], rm = [];
+    const regTasks = d.tasks.filter(t => t.metric.key !== "acc");
     for (const t of d.tasks) {
       const target = t.metric.key === "acc" ? acc : rm;
-      const name = lbl => target === rm ? t.label + " · " + lbl : lbl;
+      const name = lbl => target === rm && regTasks.length > 1 ? t.label + " · " + lbl : lbl;
       const recipeOf = (pool, key) => (pool && pool[key] && pool[key].recipe_short) || "search recipe";
       const finalLabel = d.final_label || "hand-designed recipe";
       for (const p of t.picks) {
@@ -632,7 +635,8 @@
       h("span", {}, h("i", { class: "sw", style: "background:var(--acc)" }), "searched, one dot per seed"),
       h("span", {}, h("i", { class: "sw", style: "background:var(--ref)" }), "reference / hand-designed"),
       h("span", {}, h("i", { class: "sw sq", style: "background:var(--acc);opacity:.25" }), "mean ± 1 std"),
-      h("span", {}, h("i", { class: "sw sq", style: "border:1.5px solid var(--ink);transform:rotate(45deg);width:9px;height:9px" }), "the single run reported so far"));
+      d.tasks.some(t => t.refs.some(r => r.value != null)) || Object.values(d.seeds || {}).some(g => g.original && Object.keys(g.original).length)
+        ? h("span", {}, h("i", { class: "sw sq", style: "border:1.5px solid var(--ink);transform:rotate(45deg);width:9px;height:9px" }), "the single run reported so far") : null);
     const table = (rows, pct) => () => simpleTable(["model", "recipe", "seeds", "mean", "std", "min", "max", "reported run"],
       rows.map(r => {
         const v = x => pct ? f.pct(x) : x.toFixed(3);
@@ -640,9 +644,10 @@
           v(r.stats.min), v(r.stats.max), r.orig != null ? v(r.orig) : "–"];
       }), [2, 3, 4, 5, 6, 7]);
     const out = [];
-    if (A.length) out.push(chartCard("Classifiers across seeds", "Each architecture retrained from scratch five times. Where the diamond sits outside the band, the reported number was a favourable run.",
+    const anyOrig = rows => rows.some(r => r.orig != null);
+    if (A.length) out.push(chartCard("Classifiers across seeds", "Each architecture retrained from scratch five times." + (anyOrig(A) ? " Where the diamond sits outside the band, the reported number was a favourable run." : ""),
       stripPlot(d, A, "acc", "pct", "high"), { table: table(A, true), after: legend() }));
-    if (R.length) { out.push(h("div", { style: "height:16px" })); out.push(chartCard("Regressors across seeds", "Test RMSE in seconds.", stripPlot(d, R, "rmse", "s3", "low"), { table: table(R, false), after: legend() })); }
+    if (R.length) { out.push(h("div", { style: "height:16px" })); out.push(chartCard("Regressors across seeds", (regTasks.length === 1 ? regTasks[0].label + ": test" : "Test") + " RMSE in seconds.", stripPlot(d, R, "rmse", "s3", "low"), { table: table(R, false), after: legend() })); }
     const RR = d.rerank;
     if (RR) {
       const rows = RR.rows.map(g => ({ label: f.int(g.params) + " params", role: "searched", recipe: g.search, runs: g.runs, stats: g.stats, orig: g.orig }));
@@ -656,6 +661,125 @@
         stripPlot(d, rows, "acc", "pct", "high"), { table: table(rows, true), after: legend() }));
     }
     return out;
+  }
+
+  // ------------------------------------------------------------ transfer (exiD)
+  const METHOD_KEY = { "scratch": "trained on exiD", "zero-shot": "highD model as is", "fine-tune": "highD, fine-tuned" };
+  function fractionChart(t) {
+    const W = 480, H = 300, M = { l: 58, r: 20, t: 18, b: 46 };
+    const xs = [0.1, 0.25, 1.0], X = logScale(0.08, 1.25, M.l, W - M.r);
+    const pts = [];
+    for (const [mid, list] of Object.entries(t.fractions)) for (const p of list) if (p.stats) pts.push(p.stats.mean - p.stats.std, p.stats.mean + p.stats.std);
+    const zero = t.methods.find(m => m.id === "zero-shot").stats;
+    if (zero) pts.push(zero.mean);
+    if (!pts.length) return h("p", { class: "empty" }, "Runs still in progress.");
+    let lo = Math.min(...pts), hi = Math.max(...pts);
+    const pad = (hi - lo) * 0.1 || 0.01; lo -= pad; hi += pad;
+    const Y = linScale(lo, hi, H - M.b, M.t);
+    const svg = s("svg", { class: "chart", viewBox: `0 0 ${W} ${H}`, role: "img", "aria-label": "Accuracy against share of exiD training data" });
+    for (const v of Y.ticks(5)) svg.append(s("line", { class: "gridline", x1: M.l, x2: W - M.r, y1: Y(v), y2: Y(v) }),
+      s("text", { class: "ax-tick", x: M.l - 8, y: Y(v) + 4, "text-anchor": "end" }, t.fmt === "pct" ? (v * 100).toFixed(0) + "%" : v.toFixed(2)));
+    for (const x of xs) svg.append(s("text", { class: "ax-tick", x: X(x), y: H - M.b + 18, "text-anchor": "middle" }, (x * 100) + "%"));
+    svg.append(s("line", { class: "baseline", x1: M.l, x2: W - M.r, y1: H - M.b, y2: H - M.b }),
+      s("text", { class: "ax-title", x: (M.l + W - M.r) / 2, y: H - 6, "text-anchor": "middle" }, "share of the exiD training scenarios (log scale)"),
+      s("text", { class: "ax-title", x: 14, y: (M.t + H - M.b) / 2, transform: `rotate(-90 14 ${(M.t + H - M.b) / 2})`, "text-anchor": "middle" },
+        (t.fmt === "pct" ? "exiD test accuracy" : "exiD test RMSE (s)") + (t.better === "high" ? "  ↑ better" : "  ↓ better")));
+    if (zero) {
+      const up = t.better === "high" ? -6 : 16;
+      svg.append(s("line", { x1: M.l, x2: W - M.r, y1: Y(zero.mean), y2: Y(zero.mean), stroke: "var(--s2)", "stroke-width": 1.5, "stroke-dasharray": "5 4" }),
+        s("text", { class: "lbl-m", x: W - M.r, y: Y(zero.mean) + up, "text-anchor": "end" }, "highD model as is, no exiD data: " + fmtMetric(t.fmt, zero.mean)));
+    }
+    const firsts = {};
+    for (const [mid, color] of [["scratch", "s3"], ["fine-tune", "s1"]]) {
+      const list = (t.fractions[mid] || []).filter(p => p.stats);
+      if (!list.length) continue;
+      svg.append(s("polyline", { points: list.map(p => `${X(p.fraction)},${Y(p.stats.mean)}`).join(" "), fill: "none", stroke: `var(--${color})`, "stroke-width": 2 }));
+      for (const p of list) {
+        const x = X(p.fraction), y = Y(p.stats.mean);
+        const g = s("g", { class: "mk" },
+          s("line", { x1: x, x2: x, y1: Y(p.stats.mean - p.stats.std), y2: Y(p.stats.mean + p.stats.std), stroke: `var(--${color})`, "stroke-width": 2 }),
+          s("circle", { cx: x, cy: y, r: 5, fill: `var(--${color})`, stroke: "var(--card)", "stroke-width": 2 }),
+          s("circle", { class: "hit", cx: x, cy: y, r: 13 }));
+        hover(g, () => tipRows(METHOD_KEY[mid] + " · " + (p.fraction * 100) + "% of exiD", fmtMetric(t.fmt, p.stats.mean) + " ± " + (t.fmt === "pct" ? (p.stats.std * 100).toFixed(2) + " pt" : p.stats.std.toFixed(3)), [["seeds", p.stats.n]]));
+        svg.append(g);
+      }
+      firsts[mid] = list[0];
+    }
+    if (firsts.scratch && firsts["fine-tune"]) {             // label both lines at 10%, the one above goes up
+      const hi = Y(firsts.scratch.stats.mean) < Y(firsts["fine-tune"].stats.mean) ? "scratch" : "fine-tune";
+      for (const mid of ["scratch", "fine-tune"]) {
+        const p = firsts[mid];
+        svg.append(s("text", { class: "lbl", x: X(p.fraction) + 8, y: Y(p.stats.mean) + (mid === hi ? -12 : 20) }, METHOD_KEY[mid]));
+      }
+    }
+    return svg;
+  }
+  function kindChart(t, kinds) {
+    const order = kinds.filter(k => Object.values(t.by_kind).some(m => m[k]));
+    const methods = [["scratch", "s3"], ["zero-shot", "s2"], ["fine-tune", "s1"]].filter(([m]) => t.by_kind[m] && Object.keys(t.by_kind[m]).length);
+    if (!order.length || !methods.length) return h("p", { class: "empty" }, "Runs still in progress.");
+    const W = 480, rowH = 40, M = { l: 142, r: 20, t: 10, b: 40 }, H = M.t + M.b + rowH * order.length;
+    const vals = methods.flatMap(([m]) => order.map(k => t.by_kind[m][k]).filter(Boolean).flatMap(st => [st.mean - st.std, st.mean + st.std]));
+    let lo = Math.min(...vals), hi = Math.max(...vals);
+    const pad = (hi - lo) * 0.08 || 0.01; lo -= pad; hi += pad;
+    const X = linScale(lo, hi, M.l, W - M.r);
+    const svg = s("svg", { class: "chart", viewBox: `0 0 ${W} ${H}`, role: "img", "aria-label": "Result by lane-change kind" });
+    for (const v of X.ticks(4)) svg.append(s("line", { class: "gridline", x1: X(v), x2: X(v), y1: M.t, y2: H - M.b }),
+      s("text", { class: "ax-tick", x: X(v), y: H - M.b + 16, "text-anchor": "middle" }, t.fmt === "pct" ? (v * 100).toFixed(0) + "%" : v.toFixed(2)));
+    svg.append(s("text", { class: "ax-title", x: (M.l + W - M.r) / 2, y: H - 4, "text-anchor": "middle" },
+      (t.fmt === "pct" ? "exiD test accuracy" : "exiD test RMSE (s)") + (t.better === "high" ? " · right is better" : " · left is better")));
+    order.forEach((k, i) => {
+      const y0 = M.t + rowH * i + rowH / 2;
+      svg.append(s("text", { class: "lbl", x: M.l - 12, y: y0 + 4, "text-anchor": "end" }, k));
+      methods.forEach(([m, color], j) => {
+        const st = t.by_kind[m][k];
+        if (!st) return;
+        const y = y0 + (j - (methods.length - 1) / 2) * 9, x = X(st.mean);
+        const g = s("g", { class: "mk" },
+          s("line", { x1: X(st.mean - st.std), x2: X(st.mean + st.std), y1: y, y2: y, stroke: `var(--${color})`, "stroke-width": 2 }),
+          s("circle", { cx: x, cy: y, r: 4.5, fill: `var(--${color})`, stroke: "var(--card)", "stroke-width": 1.5 }),
+          s("circle", { class: "hit", cx: x, cy: y, r: 11 }));
+        hover(g, () => tipRows(k + " · " + METHOD_KEY[m], fmtMetric(t.fmt, st.mean) + " ± " + (t.fmt === "pct" ? (st.std * 100).toFixed(2) + " pt" : st.std.toFixed(3)), [["seeds", st.n]]));
+        svg.append(g);
+      });
+    });
+    return svg;
+  }
+  function viewTransfer(d) {
+    const T = d.transfer, out = [];
+    const legend = () => h("div", { class: "legend" },
+      h("span", {}, h("i", { class: "sw", style: "background:var(--s3)" }), "trained on exiD"),
+      h("span", {}, h("i", { class: "sw", style: "background:var(--s2)" }), "highD model, applied as is"),
+      h("span", {}, h("i", { class: "sw", style: "background:var(--s1)" }), "highD model, fine-tuned on exiD"));
+    for (const t of T.tasks) {
+      const rows = t.methods.filter(m => m.stats).map(m => ({ label: m.label, recipe: m.id === "fine-tune" ? "same recipe, highD start" : m.id === "zero-shot" ? "no exiD training" : "hand-designed recipe",
+        runs: m.runs, stats: m.stats, color: m.color, role: "reference" }));
+      if (!rows.length) continue;
+      const tbl = () => simpleTable(["model", "tested on", "seeds", "mean", "std"],
+        t.methods.flatMap(m => [["exiD", m.stats], ["highD", t.on_highd[m.id]]].filter(([, st]) => st).map(([on, st]) =>
+          [m.label, on, st.n, fmtMetric(t.fmt, st.mean), t.fmt === "pct" ? (st.std * 100).toFixed(2) + " pt" : st.std.toFixed(3)])), [2, 3, 4]);
+      out.push(chartCard(t.label + ": does a highD model work on exiD?",
+        "Hand-designed CNN (8.4 k parameters), five seeds each, exiD test set. The fine-tuned model starts from the highD weights and uses the same recipe.",
+        stripPlot(d, rows, t.metric, t.fmt, t.better), { table: tbl, after: legend() }));
+      out.push(h("div", { style: "height:16px" }));
+      out.push(h("div", { class: "grid g2" },
+        chartCard("With less exiD data", "Training on 10%, 25% and all exiD training scenarios; the same random subset for both.",
+          fractionChart(t), { table: () => simpleTable(["model", "share of exiD", "seeds", "mean", "std"],
+            Object.entries(t.fractions).flatMap(([mid, list]) => list.filter(p => p.stats).map(p => [METHOD_KEY[mid], (p.fraction * 100) + "%", p.stats.n,
+              fmtMetric(t.fmt, p.stats.mean), t.fmt === "pct" ? (p.stats.std * 100).toFixed(2) + " pt" : p.stats.std.toFixed(3)])), [2, 3, 4]) }),
+        chartCard("By kind of lane change", "exiD test scenarios grouped by what the vehicle does; mean ± std over five seeds.",
+          kindChart(t, T.kinds), { after: legend(),  table: () => simpleTable(["kind", "model", "mean", "std"],
+            T.kinds.flatMap(k => Object.entries(t.by_kind).filter(([, bk]) => bk[k]).map(([m, bk]) => [k, METHOD_KEY[m], fmtMetric(t.fmt, bk[k].mean),
+              t.fmt === "pct" ? (bk[k].std * 100).toFixed(2) + " pt" : bk[k].std.toFixed(3)])), [2, 3]) })));
+      out.push(h("div", { style: "height:16px" }));
+    }
+    if (T.searched_zero && T.searched_zero.length) {
+      out.push(h("section", { class: "card" }, h("h2", {}, "Searched highD models, applied to exiD as deployed"),
+        h("p", { class: "cap" }, "The deployed weights of the three models found by the highD searches, one run each."),
+        simpleTable(["model", "parameters", "tested on", "result"], T.searched_zero.map(r => [r.model.replace("highd_", ""), f.int(r.params), r.eval_on,
+          r.task === "cls" ? f.pct(r.metrics.acc) : "RMSE " + f.s3(r.metrics.rmse)]), [1])));
+    }
+    return out.length ? out : [h("section", { class: "card" }, h("p", { class: "empty" }, "Runs still in progress."))];
   }
 
   // ------------------------------------------------------------ benchmark
@@ -756,13 +880,13 @@
     const live = D.datasets.filter(d => d.status !== "planned");
     const W = 760, H = 400, M = { l: 64, r: 30, t: 16, b: 44 };
     const pts = [];
-    for (const d of live) for (const m of d.registry.models) for (const v of m.variants) {
+    for (const d of live) for (const m of (d.registry || { models: [] }).models) for (const v of m.variants) {
       const b = v.boards["STM32H7B3I-DK"];
       if (b && b.latency_ms != null && b.flash_b != null) pts.push({ d, m, v, b });
     }
     const X = logScale(Math.min(...pts.map(p => p.b.latency_ms)) / 1.8, Math.max(...pts.map(p => p.b.latency_ms)) * 1.8, M.l, W - M.r);
     const Y = logScale(Math.min(...pts.map(p => p.b.flash_b)) / 1.8, Math.max(...pts.map(p => p.b.flash_b)) * 1.8, H - M.b, M.t);
-    const svg = s("svg", { class: "chart", viewBox: `0 0 ${W} ${H}`, role: "img", "aria-label": "Every measured build, both datasets" });
+    const svg = s("svg", { class: "chart", viewBox: `0 0 ${W} ${H}`, role: "img", "aria-label": "Every measured build" });
     for (const t of Y.ticks(1024)) svg.append(s("line", { class: "gridline", x1: M.l, x2: W - M.r, y1: Y(t), y2: Y(t) }),
       s("text", { class: "ax-tick", x: M.l - 8, y: Y(t) + 4, "text-anchor": "end" }, f.bytes(t)));
     for (const t of X.ticks()) svg.append(s("text", { class: "ax-tick", x: X(t), y: H - M.b + 18, "text-anchor": "middle" }, tickMs(t)));
@@ -782,7 +906,7 @@
       svg.append(g);
     }
     const legend = h("div", { class: "legend" },
-      live.map(d => h("span", {}, h("i", { class: "sw", style: `background:var(--s${d.accent})` }), d.name + ", searched")),
+      live.filter(d => d.registry).map(d => h("span", {}, h("i", { class: "sw", style: `background:var(--s${d.accent})` }), d.name + ", searched")),
       h("span", {}, h("i", { class: "sw sq", style: "background:var(--ref);transform:rotate(45deg)" }), "reference model"),
       h("span", {}, h("i", { class: "sw", style: "background:var(--ref);clip-path:polygon(50% 0,100% 100%,0 100%);border-radius:0" }), "reference Transformer"));
     const cmpRows = [
@@ -791,10 +915,10 @@
       ["Headline", ...D.datasets.map(d => d.headline.value + " " + d.headline.label)],
       ["Status", ...D.datasets.map(d => d.status)],
     ];
-    return [h("section", { class: "card" }, h("h2", {}, "Three datasets, one pipeline"), h("p", { class: "cap" }, "Different prediction problems, the same search and measurement chain."),
+    return [h("section", { class: "card" }, h("h2", {}, "Three datasets, one pipeline"), h("p", { class: "cap" }, "Different prediction problems, one training and measurement chain."),
       h("div", { style: "height:10px" }), simpleTable(["", ...D.datasets.map(d => d.name)], cmpRows)),
     h("div", { style: "height:16px" }),
-    chartCard("Everything measured, both datasets", "Each mark is one build on the Cortex-M7. The red line is the Cortex-M4 board's total flash; a build just under it can still fail there, because the runtime needs room too.", svg, { after: legend })];
+    chartCard("Everything measured on the boards", "Each mark is one build on the Cortex-M7. The red line is the Cortex-M4 board's total flash; a build just under it can still fail there, because the runtime needs room too. exiD models run on the highD builds (same graphs, other weights), so they add no marks.", svg, { after: legend })];
   }
 
   // ------------------------------------------------------------ status (local build only)
@@ -819,11 +943,11 @@
     else if (r.page === "status") nodes = viewStatus();
     else {
       const d = ds(r.ds);
-      nodes = ({ overview: viewOverview, search: viewSearch, hardware: viewHardware, quant: viewQuant, robust: viewRobust, bench: viewBench, scenario: viewScenario })[r.view](d);
+      nodes = ({ overview: viewOverview, search: viewSearch, hardware: viewHardware, quant: viewQuant, transfer: viewTransfer, robust: viewRobust, bench: viewBench, scenario: viewScenario })[r.view](d);
     }
     app.replaceChildren(...[].concat(nodes).filter(Boolean));
     if (r.page === "ds" && r.model) openModel(ds(r.ds), r.model);
-    document.title = (r.page === "ds" ? ds(r.ds).name + " · " : r.page === "compare" ? "Compare · " : "Status · ") + "Lane-change NAS results";
+    document.title = (r.page === "ds" ? ds(r.ds).name + " · " : r.page === "compare" ? "Compare · " : "Status · ") + "Lane-Change-MCU results";
   }
 
   // theme toggle
