@@ -10,7 +10,9 @@ Tasks:
   highd_ttlc — TTLC regression (seconds, their (26-s)/5 convention) on LC
                windows only
 
-Env: HIGHD_DATA_ROOT points at datasets/highd/data/prepared (WSL path).
+Env: HIGHD_DATA_ROOT points at datasets/highd/data/prepared (WSL path). The
+same adapter serves exiD, which is prepared in this format
+(datasets/exid/prepare_exid.py): pass root=<datasets/exid/data/prepared>.
 """
 import os
 from pathlib import Path
@@ -28,8 +30,8 @@ IN_LEN, SEQ_LEN, FPS = 10, 35, 5
 N_SLIDES = SEQ_LEN - IN_LEN + 1
 
 
-def _windows(split):
-    z = np.load(DATA_ROOT / f"{split}.npz")
+def _windows(split, root=None):
+    z = np.load(Path(root or DATA_ROOT) / f"{split}.npz")
     feats, label, cross = z["feats"], z["label"], z["cross_idx"]
     S = len(feats)
     sw = np.lib.stride_tricks.sliding_window_view(feats, IN_LEN, axis=1)
@@ -44,13 +46,13 @@ def _windows(split):
 
 
 class HighD_Dataset(Dataset):
-    def __init__(self, task="highd_cls"):
+    def __init__(self, task="highd_cls", root=None):
         assert task in ("highd_cls", "highd_ttlc")
         self._task = task
         cls = task == "highd_cls"
         self._num_classes = 3 if cls else 1
 
-        splits = {s: _windows(s) for s in ("train", "val", "test")}
+        splits = {s: _windows(s, root) for s in ("train", "val", "test")}
         lo = splits["train"][0].reshape(-1, 18).min(0)
         hi = splits["train"][0].reshape(-1, 18).max(0)
 

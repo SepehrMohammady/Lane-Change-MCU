@@ -34,6 +34,7 @@ sys.path.insert(0, str(ROOT))
 from src.models.baseline import BaselineDSCNN                      # noqa: E402
 from train_highd import (load_split, make_windows, norm_stats,      # noqa: E402
                          apply_norm, IN_LEN, SEQ_LEN, FPS, N_SLIDES)
+from src.lc_windows import early_metrics                            # noqa: E402
 
 FPS_F = float(FPS)
 
@@ -68,70 +69,14 @@ def main():
     preds = probs.argmax(-1)                      # (S, 26)
     labels = label.astype(np.int64)               # (S,)
 
-    T = N_SLIDES
-    hits = preds == labels[:, None]
-    is_lc = labels != 0
-
-    # --- their calc_classification_metrics -----------------------------------
-    acc_t = hits.mean(0)
-    tp_t = (hits & is_lc[:, None]).sum(0)
-    fn_t = (~hits & is_lc[:, None]).sum(0)
-    fp_t = ((~hits) & (~is_lc)[:, None]).sum(0) + \
-           ((~hits) & is_lc[:, None] & (preds != 0)).sum(0)
-    recall_t = tp_t / np.maximum(tp_t + fn_t, 1)
-    prec_t = tp_t / np.maximum(tp_t + fp_t, 1)
-    accuracy = float(acc_t.mean())
-    recall = float(recall_t.mean())
-    precision = float(prec_t.mean())
-    f1 = 2 * precision * recall / (precision + recall)
-
-    # --- their AUC: threshold sweep over LC-class probabilities --------------
-    thr_range = np.arange(0, 101) / 100
-    tpr_v, fpr_v = np.zeros(101), np.zeros(101)
-    n = S * T
-    for i, thr in enumerate(thr_range):
-        m = probs >= thr                          # (S,T,3)
-        lk = ~(m[:, :, 1] | m[:, :, 2])
-        sc = np.stack([np.where(lk, probs[:, :, 0], -1.0),
-                       np.where(m[:, :, 1], probs[:, :, 1], 0.0),
-                       np.where(m[:, :, 2], probs[:, :, 2], 0.0)], -1)
-        pr = sc.argmax(-1)
-        h = pr == labels[:, None]
-        tp = (h & is_lc[:, None]).sum() / n
-        fn = (~h & is_lc[:, None]).sum() / n
-        fp = (((~h) & (~is_lc)[:, None]).sum() +
-              ((~h) & is_lc[:, None] & (pr != 0)).sum()) / n
-        tn = (h & (~is_lc)[:, None]).sum() / n
-        tpr_v[i] = tp / max(tp + fn, 1e-12)
-        fpr_v[i] = fp / max(fp + tn, 1e-12)
-    order = np.argsort(fpr_v)
-    auc = float(np.trapezoid(tpr_v[order], fpr_v[order]))
-
-    # --- their calc_avg_pred_time (ACCEPTED_GAP=0) ---------------------------
-    tps_lc = (hits & is_lc[:, None])[is_lc]       # (n_lc, T)
-    r = np.flip(tps_lc, 1)                        # index 0 = closest to crossing
-    n_lc = len(r)
-    first_false = np.full(n_lc, T, dtype=float)
-    last_true = np.zeros(n_lc)
-    for i in range(n_lc):
-        nz = np.nonzero(r[i])[0]
-        if len(nz):
-            last_true[i] = nz[-1] + 1
-        ff = np.nonzero(~r[i])[0]
-        if len(ff):
-            first_false[i] = ff[0]
-    tau_c = float(first_false.mean() / FPS_F)
-    tau_f = float(last_true.mean() / FPS_F)
-
-    # --- their calc_regression_metrics ---------------------------------------
     ttlc_model = BaselineDSCNN(n_features=18, n_outputs=1).to(device)
     ttlc_model.load_state_dict(torch.load(
         HERE / "results" / "highd_baseline_ttlc_v2.pt", weights_only=True))
+    is_lc = labels != 0
     ttlc_pred = predict(ttlc_model, xn, device).reshape(S, N_SLIDES)[is_lc]
-    gt = (T - np.arange(T)) / FPS_F               # 5.2 .. 0.2
-    mse_t = ((ttlc_pred - gt[None, :]) ** 2).mean(0)
-    rmse = float(np.sqrt(mse_t.mean()))
-    mean_mse = float(mse_t.mean())
+    m = early_metrics(probs, labels, ttlc_pred)
+    accuracy, recall, precision, f1, auc = m["accuracy"], m["recall"], m["precision"], m["f1"], m["auc"]
+    tau_f, tau_c, rmse, mean_mse = m["tau_f_s"], m["tau_c_s"], m["ttlc_rmse_s"], m["ttlc_mean_mse"]
 
     out = {"protocol": "EarlyLCPred utils.py, exact formulas",
            "test_scenarios": int(S), "lc_scenarios": int(is_lc.sum()),

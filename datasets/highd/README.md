@@ -55,7 +55,9 @@ python datasets/highd/train_highd.py cls
 python datasets/highd/train_highd.py ttlc
 ```
 
-Expect ~±0.3 accuracy points of run-to-run variation (cuDNN nondeterminism).
+The training loop (`src/lc_windows.py`) now uses deterministic cuDNN kernels, so
+a repeated seed repeats its result. The committed checkpoints were trained before
+that change; expect a retrain to differ from them by about ±0.3 accuracy points.
 
 ## 4. Architecture search (optional, ~1.5 h on one RTX 5070)
 
