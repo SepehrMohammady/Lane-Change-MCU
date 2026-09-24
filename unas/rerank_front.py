@@ -29,7 +29,8 @@ import seed_variance as sv                                  # noqa: E402  (sets 
 
 tf, keras = sv.tf, sv.keras
 REPO = sv.REPO
-FLOOR = float(os.environ.get("RERANK_FLOOR", "0.895"))
+FLOOR = float(os.environ.get("RERANK_FLOOR", "0.895"))       # the 17-model re-rank used 0.885
+CEIL = float(os.environ.get("RERANK_CEIL", "inf"))          # upper limit, to split a re-rank over two runs
 SEEDS = [int(x) for x in os.environ.get("SEEDS", "0,1,2,3,4").split(",")]
 FRONTS = {   # front csv -> directory of that search's saved models (fork artifacts)
     "highd_cls": ("datasets/highd/results/nas-fronts/highd_cls.csv", "~/uNAS/artifacts/highd_cls/models"),
@@ -48,7 +49,7 @@ def main():
     todo = []
     for search, (csv_path, model_dir) in FRONTS.items():
         for r in csv.DictReader(open(REPO / csv_path)):
-            if float(r["test_acc"]) >= FLOOR:
+            if FLOOR <= float(r["test_acc"]) < CEIL:
                 todo.append((search, r["model"].replace(".h5", ""), int(r["params"]), float(r["test_acc"]),
                              Path(os.path.expanduser(model_dir)) / (r["model"].replace(".h5", "") + ".h5")))
     todo.sort(key=lambda t: t[2])
