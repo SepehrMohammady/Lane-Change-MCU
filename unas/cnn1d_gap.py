@@ -15,6 +15,15 @@ Convolution blocks, their mutations and the resource model (peak memory, model s
 MACs) are the fork's. Global average pooling enters the resource model as average
 pooling over the full sequence length, which has the same output shape and cost.
 With these options the space contains the hand-designed DSCNN's layer sequence.
+
+Faithful cost (2026-09-24, *_v4 configs). The fork's resource graph pads no convolution
+("valid") while the Keras model it trains pads every one ("same"), and its optional
+max-pool before a convolution rounds the length up where Keras rounds it down. On the
+10-step highD windows the graph therefore shrinks the sequence after each wide kernel
+and under-counts MACs, weights and activations (unas/resource_bias.py measures by how
+much). FaithfulGapCnn1DArchitecture builds the resource graph with the Keras model's
+shapes; FaithfulGapCnn1DSearchSpace searches with it. GapCnn1DArchitecture keeps the
+fork's graph, so the v2 and v3 searches stay reproducible.
 """
 from copy import deepcopy
 
@@ -24,6 +33,8 @@ from uNAS.cnn1d import Cnn1DArchitecture, Cnn1DSearchSpace
 from uNAS.cnn1d.cnn1d_morphisms import produce_all_morphs
 from uNAS.cnn1d.cnn1d_random_generators import random_arch_1d, random_dense_block
 from uNAS.cnn1d.cnn1d_schema import get_schema
+from uNAS.resource_models.graph import Graph, OperatorDesc
+from uNAS.resource_models.ops import Add, Conv1D, Dense, DWConv1D, Input, Pool1D
 from uNAS.schema_types import Boolean, Categorical, Discrete
 
 DROPOUTS = [0.0, 0.1, 0.2, 0.3]
@@ -67,8 +78,59 @@ class GapCnn1DArchitecture(Cnn1DArchitecture):
             self._building = "keras"
 
 
+class FloorPool1D(Pool1D):
+    """Max pooling without padding (Keras MaxPool1D default): the length rounds down."""
+
+    def __call__(self, x):
+        OperatorDesc.__call__(self, x)
+        batch_size, length, channels = x.shape
+        return self._produce_output(shape=(batch_size, length // self.pool_size, channels))
+
+
+class FaithfulGapCnn1DArchitecture(GapCnn1DArchitecture):
+    """GapCnn1DArchitecture whose resource graph has the shapes of the Keras model it trains."""
+
+    def to_resource_graph(self, input_shape, num_classes, element_type=np.uint8, batch_size=1,
+                          pruned_weights=None):
+        if pruned_weights:
+            raise NotImplementedError("the searches using this space do not prune")
+
+        def conv_layer(x, l):
+            if l["has_prepool"] and x.shape[1] > 1:
+                x = FloorPool1D(pool_size=min(2, x.shape[1]), type="max")(x)
+            kernel_size = 1 if l["type"] == "1x1Conv1D" else min(l["ker_size"], x.shape[1])
+            stride = 1 if l["type"] == "1x1Conv1D" or not l["1x_stride"] else 2
+            act = "relu" if l["has_relu"] else None
+            if l["type"] in ("Conv1D", "1x1Conv1D"):
+                return Conv1D(filters=l["filters"], kernel_size=kernel_size, stride=stride,
+                              padding="same", batch_norm=l["has_bn"], activation=act)(x)
+            return DWConv1D(kernel_size=kernel_size, stride=stride, padding="same",
+                            batch_norm=l["has_bn"], activation=act)(x)
+
+        def pooling_layer(x, l):
+            size = l["pool_size"] if isinstance(l["pool_size"], int) else l["pool_size"][0]
+            return Pool1D(pool_size=min(size, x.shape[1]), type=l["type"])(x)
+
+        def dense_layer(x, l):
+            return Dense(units=l["units"], preflatten_input=True, activation=l["activation"])(x)
+
+        g = Graph(element_type)
+        self._building = "graph"
+        try:
+            with g.as_current():
+                i = Input(shape=(batch_size,) + tuple(input_shape))
+                o = self._assemble_a_network(i, num_classes, conv_layer, pooling_layer, dense_layer,
+                                             lambda xs: Add(all_equal_shape=False)(xs), lambda x: x)
+                g.add_output(o)
+        finally:
+            self._building = "keras"
+        return g
+
+
 class GapCnn1DSearchSpace(Cnn1DSearchSpace):
     """The fork's Cnn1DSearchSpace with the head options above."""
+
+    arch_class = GapCnn1DArchitecture
 
     @property
     def schema(self):
@@ -85,7 +147,7 @@ class GapCnn1DSearchSpace(Cnn1DSearchSpace):
         n_dense = np.random.randint(0, MAX_DENSE + 1)
         arch["dense_blocks"] = [random_dense_block(i) for i in range(n_dense)]
         arch["head_dropout"] = float(np.random.choice(DROPOUTS))
-        return GapCnn1DArchitecture(arch)
+        return self.arch_class(arch)
 
     def produce_morphs(self, arch):
         parent = arch.architecture
@@ -115,8 +177,14 @@ class GapCnn1DSearchSpace(Cnn1DSearchSpace):
                 a = deepcopy(parent)
                 a["head_dropout"] = DROPOUTS[j]
                 morphs.append(a)
-        return [GapCnn1DArchitecture(a) for a in morphs]
+        return [self.arch_class(a) for a in morphs]
 
     def to_keras_model(self, arch, input_shape=None, num_classes=None, **kwargs):
         return arch.to_keras_model(input_shape=input_shape or self.input_shape,
                                    num_classes=num_classes or self.num_classes, **kwargs)
+
+
+class FaithfulGapCnn1DSearchSpace(GapCnn1DSearchSpace):
+    """GapCnn1DSearchSpace whose cost model describes the trained Keras models."""
+
+    arch_class = FaithfulGapCnn1DArchitecture

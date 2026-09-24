@@ -57,13 +57,16 @@ def _training_config(dataset, classification):
                           epochs=EPOCHS, batch_size=256)
 
 
-def _setup(task, name, error_bound, v2=False, model_size_bound=None, mac_bound=None):
+def _setup(task, name, error_bound, v2=False, model_size_bound=None, mac_bound=None, faithful=False):
     classification = task == "highd_cls"
     dataset = HighD_Dataset(task=task)
+    space = Cnn1DSearchSpace
     if v2:
-        from configs.cnn1d_gap import GapCnn1DSearchSpace
+        from configs.cnn1d_gap import FaithfulGapCnn1DSearchSpace, GapCnn1DSearchSpace
         from configs.safe_saver import install
         install()                       # fork builds SafeModelSaver for this run
+        # faithful: resource graph with the shapes of the trained Keras model
+        space = FaithfulGapCnn1DSearchSpace if faithful else GapCnn1DSearchSpace
     config = {
         "training_config": _training_config(dataset, classification),
         "bound_config": BoundConfig(
@@ -74,7 +77,7 @@ def _setup(task, name, error_bound, v2=False, model_size_bound=None, mac_bound=N
         ),
         "search_algorithm": AgingEvoSearch,
         "search_config": AgingEvoConfig(
-            search_space=GapCnn1DSearchSpace() if v2 else Cnn1DSearchSpace(),
+            search_space=space(),
             checkpoint_dir=f"artifacts/{name}",
             rounds=ROUNDS, population_size=POPULATION, sample_size=SAMPLE,
             max_parallel_evaluations=PARALLEL,
@@ -133,3 +136,22 @@ def get_highd_ttlc_v2_setup(**_):
 def get_highd_cls_v3_setup(**_):
     return _setup("highd_cls", "highd_cls_v3" + V2_SUFFIX, float(os.environ.get("HIGHD_V3_ERROR_BOUND", "0.06")),
                   v2=True, model_size_bound=8 * 1024, mac_bound=14_000)
+
+
+# v4 (2026-09-24): v3 with a resource model that describes the trained networks. The fork's
+# graph pads no convolution while its Keras models pad every one, so on the 10-step windows
+# it under-counts: the v3 choice counted 2,891 B and 2,963 MACs in the fork and 19,800 MACC on
+# the board, above the v3 budget (unas/resource_bias.py measures the gap for every search).
+# FaithfulGapCnn1DSearchSpace (configs/cnn1d_gap.py) builds the graph with the Keras shapes.
+# Budgets: the hand-designed layer sequence (unas/build_hand_like.py) under that graph,
+# 8,211 B and 26,240 MACs for the classifier and 8,081 B and 26,112 MACs for TTLC (board MACC
+# of the hand-designed CNNs: 27,091 and 26,961). Error bounds: the hand-designed CNNs'
+# validation level, 0.06 (error rate) and 0.16 s (MAE; five-seed mean 0.156 s).
+def get_highd_cls_v4_setup(**_):
+    return _setup("highd_cls", "highd_cls_v4" + V2_SUFFIX, float(os.environ.get("HIGHD_V3_ERROR_BOUND", "0.06")),
+                  v2=True, faithful=True, model_size_bound=8_211, mac_bound=26_240)
+
+
+def get_highd_ttlc_v4_setup(**_):
+    return _setup("highd_ttlc", "highd_ttlc_v4" + V2_SUFFIX, REG_ERROR_BOUND,
+                  v2=True, faithful=True, model_size_bound=8_081, mac_bound=26_112)
