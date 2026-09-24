@@ -649,7 +649,7 @@
       }), [2, 3, 4, 5, 6, 7]);
     const out = [];
     const anyOrig = rows => rows.some(r => r.orig != null);
-    if (A.length) out.push(chartCard("Classifiers across seeds", "Each architecture retrained from scratch five times." + (anyOrig(A) ? " Where the diamond sits outside the band, the reported number was a favourable run." : ""),
+    if (A.length) out.push(chartCard("Classifiers across seeds", "Each architecture retrained from scratch five times." + (anyOrig(A) ? " The diamond is the single run reported before retraining; outside the band it was a lucky or an unlucky run." : ""),
       stripPlot(d, A, "acc", "pct", "high"), { table: table(A, true), after: legend() }));
     if (R.length) { out.push(h("div", { style: "height:16px" })); out.push(chartCard("Regressors across seeds", (regTasks.length === 1 ? regTasks[0].label + ": test" : "Test") + " RMSE in seconds.", stripPlot(d, R, "rmse", "s3", "low"), { table: table(R, false), after: legend() })); }
     const RR = d.rerank;
