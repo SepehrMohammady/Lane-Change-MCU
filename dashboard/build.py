@@ -43,6 +43,16 @@ def hand_params(root: Path, prefix: str):
     return None
 
 
+def permuted(p: Path) -> Path:
+    """The re-run with the training windows shuffled (2026-09-23) when it exists.
+
+    Keras runs on highD and exiD made before that date trained on the stored scenario
+    order (see LOGBOOK 2026-09-23); their re-runs live next to them with "_permuted"
+    in the name and replace them here."""
+    q = p.with_name(p.stem + "_permuted" + p.suffix)
+    return q if q.exists() else p
+
+
 def read_jsonl(p: Path):
     if not p.exists():
         return []
@@ -366,8 +376,8 @@ def build_highd(share: bool):
     reg = resolve_measurements(HIGHD / "results/deploy/measurements.json",
                                HIGHD / "results/deploy/benchmarks_api.jsonl", HIGHD / "results/deploy")
     refs = reg["references"]
-    seeds = seed_summary(read_jsonl(HIGHD / "results/seeds/seed_variance.jsonl"))
-    seeds_final = seed_summary(read_jsonl(HIGHD / "results/seeds/seed_variance_final.jsonl"))
+    seeds = seed_summary(read_jsonl(permuted(HIGHD / "results/seeds/seed_variance.jsonl")))
+    seeds_final = seed_summary(read_jsonl(permuted(HIGHD / "results/seeds/seed_variance_final.jsonl")))
     base = seed_summary(baseline_seeds(HIGHD / "logs/experiments.jsonl", "highd_baseline_cls")
                         + baseline_seeds(HIGHD / "logs/experiments.jsonl", "highd_baseline_ttlc"))
     rerank = rerank_summary(HIGHD / "results/seeds/rerank_cls.jsonl",
@@ -515,8 +525,8 @@ def build_exid(share: bool):
                      for r in read_jsonl(EXID / "results/transfer_searched.jsonl")]
 
     # Seeds view: searched highD architectures retrained on exiD, and the hand-designed CNN
-    seeds = seed_summary(read_jsonl(EXID / "results/seeds/seed_variance.jsonl"))
-    seeds_final = seed_summary(read_jsonl(EXID / "results/seeds/seed_variance_final.jsonl"))
+    seeds = seed_summary(read_jsonl(permuted(EXID / "results/seeds/seed_variance.jsonl")))
+    seeds_final = seed_summary(read_jsonl(permuted(EXID / "results/seeds/seed_variance_final.jsonl")))
     for task in ("cls", "ttlc"):
         rr = runs(task, "scratch")
         if rr:
