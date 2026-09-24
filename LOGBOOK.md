@@ -901,3 +901,24 @@ Paper (local): v3 in method, results, Table IV and discussion (the red TODO is r
 the exiD transfer text was condensed and the number audit now also reads tab_exid.tex;
 8 pages, 10 TODO markers (all author, funding and repository items, energy, one
 reference title).
+
+## 2026-09-24 17:26 — Published LCIR board numbers; no energy from the Developer Cloud; TTLC search restarted
+
+Table III of the SPL paper (Forneris et al., 2026) is text in the accepted author version,
+so the exact STM32H7B3 numbers do not need library access. FP32, measured end to end: their
+Transformer 114.8 ms, 242 KB model, 138.9 KB RAM, 85 mW, 9.76 mJ; their 1DCNN 7.1 ms, 101 KB,
+15.9 KB, 70 mW, 0.50 mJ. Full table in datasets/dmir/docs/sota-baseline.md; MSE = RMSE^2 and
+energy = power x time hold on every row. Our two hand-designed LCIR regressors, one per
+direction, need 2 x 3.265 = 6.5 ms on the same MCU in FP32 (18 times less) and 11.4 KiB of
+RAM each. The Table III 1DCNN (0.544 s) is not the 0.5746 s run of their repository.
+
+Energy per inference: the Developer Cloud returns time, cycles, flash, RAM and MACC but no
+power, so none of our builds has an energy figure. SPL measured power with a USB meter between
+supply and board; the same method on the lab's STM32H7B3I-DK is the like-for-like option.
+
+TTLC v2 search restarted on the fixed pipeline: highd_ttlc_v2_p, v2 space and saver, training
+windows shuffled once, 150 candidates in chunks, then the five-seed validation choice.
+
+Paper (local): MicroNAS cited as its journal version (Sci. Rep. 15, 2025); the published
+board numbers in the comparison section; the limitation says why energy is missing. 8 pages,
+9 TODO markers. Story and author list are left for the final pass.

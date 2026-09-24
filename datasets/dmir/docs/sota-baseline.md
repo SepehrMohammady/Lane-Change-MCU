@@ -46,11 +46,24 @@ RMSE 0.629–0.7.
 ## Published deployment (our comparison axis)
 
 - Toolchain: STM32CubeMX + STM32Cube.AI, **FP32 only — no quantization**.
-- High-end: **STM32H7B3** (280 MHz, 1.4 MB RAM, 2 MB flash). Exact per-model
-  flash/RAM/latency/power are in Table III (rasterized image; needs
-  institutional access — TO-DO). Qualitative: 1DCNN most compact and ~10×
-  faster/lower-energy than the other DL models; Transformer small flash but
-  RAM-heavy; XGBoost best latency/RAM/energy but big model file.
+- High-end: **STM32H7B3** (280 MHz, 1.4 MB RAM, 2 MB flash). Table III of the
+  paper (read 2026-09-24 from the accepted author version, where the table is
+  text; the note of 2026-07-07 had taken it for an image only):
+
+  | Model | RMSE (s) | MSE | MAE (s) | Model size (KB) | Memory (KB) | Inference (ms) | Power (mW) | Energy (mJ) |
+  |---|--:|--:|--:|--:|--:|--:|--:|--:|
+  | XGBoost | 0.528 | 0.279 | 0.335 | 355 | 1.5 | 0.3 | 45 | 0.01 |
+  | 1DCNN | 0.544 | 0.296 | 0.310 | 101 | 15.9 | 7.1 | 70 | 0.50 |
+  | LSTM | 0.549 | 0.301 | 0.302 | 682 | 13.3 | 217.3 | 65 | 14.12 |
+  | GRU | 0.568 | 0.323 | 0.299 | 643 | 50.2 | 193.4 | 65 | 12.57 |
+  | Transformer | **0.510** | 0.260 | 0.298 | 242 | 138.9 | 114.8 | 85 | 9.76 |
+
+  Consistency checks on the transcription: MSE = RMSE² and energy = power ×
+  inference time hold on every row. Latency is measured end to end on the
+  device; power "through a USB multimeter connected between the power supply
+  and the device"; "Memory" is RAM (the text calls the Transformer's 138.9 KB
+  its RAM footprint). The Developer Cloud we use reports no power, so our
+  builds have no energy figure yet.
 - Low-end: **STM32F401** (84 MHz, 96 KiB RAM, 512 KiB flash): XGBoost 1.15 ms
   / 50 mW / 0.06 mJ; 1DCNN 40.8 ms / 90 mW / 3.7 mJ; Transformer does not fit.
 
@@ -67,8 +80,10 @@ deployment numbers, ideally on the same two boards.
 
 ## Open questions
 
-- [ ] Table III exact values (get PDF via institutional access).
+- [x] Table III exact values (2026-09-24, table above).
 - [x] Driver-wise split confirmed — `scripts/analysis/verify_split.py`
       reproduces the official val/test user sets exactly (see DATA.md and
       dataset-provenance.md), so the comparison to 0.5102 is apples-to-apples.
 - [ ] Which 1DCNN config is in Table III (paper says 64+32; repo ships 32+32).
+      Table III gives it RMSE 0.544 s and 101 KB, so the 0.5746 s repository
+      result above is not the Table III model.
