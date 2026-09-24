@@ -380,7 +380,7 @@ def build_highd(share: bool):
     seeds_final = seed_summary(read_jsonl(permuted(HIGHD / "results/seeds/seed_variance_final.jsonl")))
     base = seed_summary(baseline_seeds(HIGHD / "logs/experiments.jsonl", "highd_baseline_cls")
                         + baseline_seeds(HIGHD / "logs/experiments.jsonl", "highd_baseline_ttlc"))
-    rerank = rerank_summary(HIGHD / "results/seeds/rerank_cls.jsonl",
+    rerank = rerank_summary(permuted(HIGHD / "results/seeds/rerank_cls.jsonl"),
                             {"highd_cls": "first search", "highd_cls_tight": "tighter search"})
 
     tasks = [
