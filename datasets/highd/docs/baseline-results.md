@@ -384,10 +384,44 @@ measured through the API (`unas/st_benchmark.py`, Core 4.0.1, balanced).
 | | int8 PTQ | RMSE 0.298 s | 0.364 ms | 1.754 ms | 29,083 B | 6,952 B | 26,891 |
 | | int8 PTQ, int8 I/O | RMSE 0.298 s | 0.348 ms | 1.709 ms | 28,783 B | 6,664 B | 26,529 |
 
-Against the searched models (five-seed means, `results/seeds/`): the hand-designed
-classifier (92.11 ± 0.71%) is more accurate than the 7.9 k searched one
-(90.80 ± 0.79%) and 12% faster in float32 (0.669 against 0.761 ms); the 5.3 k
-searched model is 4.3 times faster (0.155 ms) at 88.89 ± 2.90%. For TTLC the two
+Against the searched models (five-seed means with the training windows shuffled,
+`results/seeds/*_permuted.jsonl`, see the section below): the hand-designed
+classifier (92.11 ± 0.71%) is as accurate as the 7.9 k searched one
+(92.16 ± 0.71%) and 12% faster in float32 (0.669 against 0.761 ms); the 5.3 k
+searched model is 4.3 times faster (0.155 ms) at 90.83 ± 1.57%. For TTLC the two
 networks have the same RMSE (0.276 s) and the hand-designed one runs in 0.667 ms
 against 1.038 ms. A repeat of the float32 classifier on the H7B3I-DK gave 0.6695 ms
 against 0.669 ms.
+
+## Training order, and the v2 search (2026-09-23/24)
+
+The prepared splits are stored scenario by scenario in recording order, and the fork's
+trainer and our Keras scripts shuffle with a 2,048-window buffer (about 79 scenarios),
+so batches came from one recording and could hold one class. `unas/highd_dataset.py`
+now permutes the training windows once (seed 0); every Keras result below uses that
+order (`results/seeds/*_permuted.jsonl`). The searches themselves ran on the stored
+order. Five seeds, test accuracy:
+
+| model | search recipe | hand recipe | before the fix (search recipe) |
+|---|--:|--:|--:|
+| searched 5.3 k (tighter search) | 90.83 ± 1.57% | 87.85 ± 4.17% | 88.89 ± 2.90% |
+| searched 7.9 k (first search) | 92.16 ± 0.71% | 92.36 ± 0.78% | 90.80 ± 0.79% |
+| hand-designed layers built in the v2 space | 92.40 ± 0.61% | 91.35 ± 1.35% | 91.18 ± 0.64% |
+| v2 search choice, 24,191 params | 91.09 ± 0.66% | 92.51 ± 0.41% | – |
+| hand-designed CNN (PyTorch) | – | 92.11 ± 0.71% | – |
+| searched TTLC 28 k (RMSE) | 0.282 ± 0.016 s | 0.267 ± 0.010 s | 0.276 ± 0.011 s |
+
+Re-rank of the 17 saved classifiers (`results/seeds/rerank_cls_permuted.jsonl`): the
+7.9 k model now has the best five-seed mean, 92.49 ± 0.36%; Spearman rho between the
+kept single run and the mean is 0.17 (p = 0.50); the best single run ranks 12th; the
+retrains average 1.53 points above the kept runs, which were trained on the stored
+order. One run of the 5.3 k model under the hand recipe reaches 81.44%, below the
+published 0.83; every model stays above it on average.
+
+v2 search (`unas/cnn1d_gap.py`, `unas/safe_saver.py`, `unas/select_by_seeds.py`): 88 of
+about 150 candidates saved; the 12 best single runs retrained five times each land at
+90.84-91.73% (search recipe). The choice (best five-seed validation mean, 93.80%) runs
+in 2.891 ms (float32) and 1.447 ms (int8 I/O) on the H7B3I-DK, 4.3 times the
+hand-designed CNN, at the same accuracy under the same recipe. Loose budgets and an
+error bound no candidate reaches left cost little weight in the fitness; a v3 search
+with budgets at the hand-designed CNN's cost is running.

@@ -854,3 +854,30 @@ queued into new files with the suffix _permuted: exiD transfer of the searched
 architectures, the v2 re-selection and controls, the highD seed studies, the re-rank,
 then the v3 search. The claim is flagged in the READMEs and in the paper until then.
 PyTorch results (hand-designed CNNs, exiD transfer study) are not affected.
+
+## 2026-09-24 03:37 — Results with the training windows shuffled: searched models match the hand-designed CNNs
+
+Re-runs with the training windows permuted once (files *_permuted), five seeds, test:
+
+- highD: searched 7.9 k 92.16 +/- 0.71% (search recipe) and 92.36 +/- 0.78% (hand
+  recipe) against the hand-designed CNN's 92.11 +/- 0.71% (p = 0.91 / 0.61); searched
+  5.3 k 90.83 +/- 1.57% (one hand-recipe run reaches 81.44%, below the published 0.83);
+  searched TTLC 0.282 / 0.267 s against 0.276 s. Re-rank of the 17 saved classifiers:
+  best mean 92.49 +/- 0.36% (the 7.9 k model), Spearman rho 0.17 (p = 0.50), best single
+  run 12th; retrains average 1.53 points above the kept runs (those were trained on the
+  stored order).
+- exiD: the architectures found on highD reach 89.50 / 89.47% (7.9 k), 87.40 / 85.97%
+  (5.3 k) and RMSE 0.394 / 0.396 s (28 k) against 89.93% and 0.406 s for the
+  hand-designed CNN. The earlier "at least 11 points behind" came from the stored order.
+- v2 re-selection: a 24,191-parameter model, 91.09 +/- 0.66% (search recipe) and
+  92.51 +/- 0.41% (hand recipe), 89.31 / 89.64% on exiD; on the boards 2.891 ms (float32)
+  and 1.447 ms (int8 I/O) on the M7, 4.3 times the hand-designed CNN.
+
+Correction to the entry of 2026-09-23: the fork divides each normalized objective by a
+random weight before taking the maximum, so cost can still decide a draw when the error
+bound is out of reach; the v2 fitness gave cost little weight rather than none.
+
+Paper (local): results, discussion, abstract and conclusion rewritten on these numbers,
+v2 rows in Tables III and V, Fig. 5 (single run against mean) dropped for space (Fig. 3b
+shows the same candidates), back to 8 pages; a red TODO marks where the v3 result goes.
+READMEs and the highD notes carry the corrected numbers.

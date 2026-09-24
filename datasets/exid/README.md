@@ -55,16 +55,17 @@ The architectures found by the highD searches are retrained on exiD with
 | hand-designed CNN | highD, applied as is | 61.24 ± 2.32% | 0.867 ± 0.062 s |
 | same weights, exiD input scaling | highD, applied as is | 38.93 ± 4.66% | 1.209 ± 0.067 s |
 | hand-designed CNN | highD, then fine-tuned on exiD | 90.13 ± 0.22% | 0.393 ± 0.002 s |
-| searched on highD, 5.3 k | exiD (search / hand recipe) | 76.67 ± 3.52 / 77.99 ± 0.84% | – |
-| searched on highD, 7.9 k | exiD (search / hand recipe) | 77.91 ± 1.11 / 78.59 ± 1.59% | – |
-| searched on highD, 28 k | exiD (search / hand recipe) | – | 0.487 ± 0.074 / 0.588 ± 0.069 s |
+| searched on highD, 5.3 k | exiD (search / hand recipe) | 87.40 ± 0.14 / 85.97 ± 1.21% | – |
+| searched on highD, 7.9 k | exiD (search / hand recipe) | 89.50 ± 0.31 / 89.47 ± 0.13% | – |
+| searched on highD, 28 k | exiD (search / hand recipe) | – | 0.394 ± 0.008 / 0.396 ± 0.010 s |
+| v2 search choice, 24 k | exiD (search / hand recipe) | 89.31 ± 0.08 / 89.64 ± 0.42% | – |
 
-The three searched rows are being re-measured: these Keras runs trained on the
-stored scenario order (recordings and locations in sequence) with a 2,048-window
-shuffle buffer, while the PyTorch runs of the hand-designed CNN shuffle the whole
-set. Shuffled once, the hand-designed CNN's layer sequence built in Keras goes from
-71-78% to 87-89% on exiD (`unas/shuffle_check.py`), so the gap in these rows is
-mostly the training order, not the architectures.
+The searched rows are Keras runs with the training windows permuted once
+(`results/seeds/seed_variance*_permuted.jsonl`). The prepared splits are stored
+scenario by scenario (recordings and locations in sequence), and the search tool
+shuffles with a 2,048-window buffer; earlier runs on the stored order
+(`seed_variance.jsonl`, `seed_variance_final.jsonl`) reached only 76.7-78.6% and are
+kept for the record. The PyTorch runs of the hand-designed CNN shuffle the whole set.
 
 The hand-designed CNN has 8,371 parameters as a classifier and 8,241 in its TTLC
 version.
