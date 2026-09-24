@@ -881,3 +881,23 @@ Paper (local): results, discussion, abstract and conclusion rewritten on these n
 v2 rows in Tables III and V, Fig. 5 (single run against mean) dropped for space (Fig. 3b
 shows the same candidates), back to 8 pages; a red TODO marks where the v3 result goes.
 READMEs and the highD notes carry the corrected numbers.
+
+## 2026-09-24 06:48 — v3 search with budgets at the hand-designed CNN's cost
+
+v3 highD classifier search: the v2 space and saver, training windows shuffled, model size
+bounded at 8 KiB and MACs at 14,000 (the fork's count for the hand-designed layer
+sequence: 8,051 B, 13,648 MACs), error bound 0.06. About 154 candidates, 85 saved
+(6.6k-11.6k params). Five-seed validation choice: 7,919 params, test 91.00 +/- 2.31%
+(search recipe) and 88.56 +/- 3.32% (hand recipe, one run 83.88%), 87.75 / 87.72% on exiD.
+On the boards: 0.366 ms (FP32) and 0.298 ms (int8 I/O) on the M7, 1.797 / 1.490 ms on the
+M4, 36,342 / 25,088 B flash: 1.8 and 1.2 times faster than the hand-designed CNN.
+
+So at the hand-designed CNN's cost the search finds faster models, about a point less
+accurate and less stable over seeds, and no better trade-off than the 5.3 k model of the
+first searches (90.83 +/- 1.57%, 0.155 / 0.106 ms). The efficiency results that stand:
+LCIR intention 4.1 times faster at equal accuracy, highD 4.3 times faster for 1.3 points.
+
+Paper (local): v3 in method, results, Table IV and discussion (the red TODO is resolved);
+the exiD transfer text was condensed and the number audit now also reads tab_exid.tex;
+8 pages, 10 TODO markers (all author, funding and repository items, energy, one
+reference title).

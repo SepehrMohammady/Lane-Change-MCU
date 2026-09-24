@@ -109,6 +109,7 @@ both. Five seeds each, test sets:
 | searched classifier, 5.3 k¹ | 90.83 ± 1.57% | – | 87.40 ± 0.14% | – |
 | searched TTLC regressor, 28 k¹ | – | 0.282 ± 0.016 s | – | 0.394 ± 0.008 s |
 | v2 search (global-pooling space), 24 k² | 91.09 ± 0.66% | – | 89.31 ± 0.08% | – |
+| v3 search (budgets at the hand-designed cost), 7.9 k³ | 91.00 ± 2.31% | – | 87.75 ± 1.07% | – |
 | hand-designed CNN trained on highD, applied as is | – | – | 61.24 ± 2.32% | 0.867 ± 0.062 s |
 | the same, fine-tuned on exiD | – | – | 90.13 ± 0.22% | 0.393 ± 0.002 s |
 
@@ -129,6 +130,12 @@ both. Five seeds each, test sets:
   to the space (`unas/cnn1d_gap.py`) and chooses on the five-seed validation mean
   (`unas/select_by_seeds.py`); under the hand-designed CNN's recipe its choice
   reaches 92.51 ± 0.41%.
+- ³ The v3 search keeps that space with budgets at the hand-designed CNN's cost
+  (8 KiB int8 size, 14,000 MACs as the tool counts them). Its choice runs in 0.366 ms
+  (float32) and 0.298 ms (int8) on the Cortex-M7, 1.8 and 1.2 times faster than the
+  hand-designed CNN, but is 1.1 points less accurate on average and less stable over
+  seeds (88.56 ± 3.32% under the hand-designed recipe); the 5.3 k model of the first
+  searches remains the better trade-off.
 - On the boards the hand-designed highD CNN takes 0.669 ms (float32) and 0.350 ms
   (int8) on the Cortex-M7: as accurate as the 7.9 k searched classifier and 12%
   faster, 4.3 times slower than the 5.3 k one, which is 1.3 points less accurate

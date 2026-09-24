@@ -17,7 +17,8 @@ H = ROOT / "datasets/highd/results"
 BOARDS = ("STM32H7B3I-DK", "NUCLEO-F401RE")
 VARIANTS = (("fp32", "float32", "f32"), ("int8 PTQ", "float32", "int8"), ("int8 PTQ", "int8", "int8_io"))
 SEARCHES = (("highd_cls_v2", "cls_v2", "Searched classifier (v2 search)", "highd_cls"),
-            ("highd_ttlc_v2", "ttlc_v2", "Searched regressor (v2 search)", "highd_ttlc"))
+            ("highd_ttlc_v2", "ttlc_v2", "Searched regressor (v2 search)", "highd_ttlc"),
+            ("highd_cls_v3", "cls_v3", "Searched classifier (v3 search, budgets at the hand-designed cost)", "highd_cls"))
 
 
 def main() -> None:
