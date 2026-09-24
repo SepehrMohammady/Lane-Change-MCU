@@ -442,3 +442,25 @@ Against the hand-designed CNN (92.11 ± 0.71%, 0.669 / 0.350 ms): 1.8 times fast
 float32 and 1.2 times in int8, 1.1 points less accurate on average under the search
 recipe, with single runs down to 83.88% under the hand recipe. The 5.3 k model of the
 first searches (90.83 ± 1.57%, 0.155 / 0.106 ms) remains the better cost trade-off.
+
+## TTLC v2, and the cost the searches saw (2026-09-24)
+
+TTLC v2 search on the fixed pipeline (`highd_ttlc_v2_p`, training windows shuffled): 150
+candidates, 94 saved. Five-seed validation choice: 25,883 parameters, test RMSE
+0.2751 ± 0.0063 s under the search recipe, about the hand-designed CNN's 0.276 ± 0.009 s with
+three times the parameters. Hand-recipe and exiD controls are queued.
+
+The fork's resource graph pads no convolution while the Keras model it trains pads every
+one (see `unas/README.md`), so on these 10-step windows the searches saw a fraction of the
+real cost (`unas/resource_bias.py`, `datasets/highd/results/resource_bias.json`):
+
+| network | counted by the fork (B / MACs) | Keras model (weights / MACs) | board MACC (M7, FP32) |
+|---|--:|--:|--:|
+| v2 classifier choice | 18,162 / 66,755 | 22,883 / 150,697 | 153,280 |
+| v3 classifier choice | 2,891 / 2,963 | 7,499 / 19,579 | 19,800 |
+| TTLC v2 choice | 10,023 / 14,381 | 25,395 / 36,723 | to be measured |
+| hand-designed layer sequence | 8,051 / 13,648 | 8,211 / 26,240 | 27,091 (the hand-designed CNN) |
+
+The v3 budget of 14,000 MACs therefore did not bound the real cost of its choice. The v4
+configs (`highd_cls_v4`, `highd_ttlc_v4`) search with a graph that has the Keras shapes, with
+budgets at the hand-designed CNNs' cost under that graph; results follow.

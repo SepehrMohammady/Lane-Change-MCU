@@ -31,7 +31,7 @@ regression `min(val_mae)` (the loss is MAE, so optimise and threshold on **MAE**
 | `dmir_dataset.py` | `dataset/dmir_dataset.py` | serves the real DMIR pickles (all 3 tasks), train-range clipping, optional indicator drop |
 | `dmir_config.py` | `configs/dmir_config.py` | search configs + STM32H7B3I-DK thresholds |
 | `highd_dataset.py`, `highd_config.py` | `dataset/`, `configs/` | highD (and exiD) windows; highD search configs, including the `*_v2` ones |
-| `cnn1d_gap.py` | `configs/cnn1d_gap.py` | the fork's 1D search space plus a global-average-pooling head, zero to three hidden Dense layers and a searched dropout rate (used by the `*_v2` configs) |
+| `cnn1d_gap.py` | `configs/cnn1d_gap.py` | the fork's 1D search space plus a global-average-pooling head, zero to three hidden Dense layers and a searched dropout rate (used by the `*_v2` configs); `FaithfulGapCnn1DSearchSpace` also builds the resource graph with the Keras model's shapes (used by the `*_v4` configs) |
 | `safe_saver.py` | `configs/safe_saver.py` | model saver with unique file names and a JSON sidecar per model (validation error, resources); keeps every candidate within the resource bounds and never uses test error (used by the `*_v2` configs) |
 
 `run_chunked_highd.sh` copies the highD files into the fork and registers the configs.
@@ -70,6 +70,18 @@ same file names into one folder, so saved `.h5` files overwrite each other and
 `test_error`; evaluate the saved files (`harvest_fronts.py`, `harvest_highd.py`) and
 fix the saver before the next search.
 
+**Known issue in the fork's resource model (found 2026-09-24).** The 1-D port builds
+each candidate's Keras model with `padding="same"` but its resource graph with
+`padding="valid"` (`uNAS/cnn1d/cnn1d_architecture.py`), and its optional pre-pooling
+rounds the sequence length up where Keras rounds it down. The graph therefore
+shortens the sequence after every wide kernel and under-counts the MACs, weights and
+activations of the network that is actually trained, most on short windows: over all
+evaluated candidates the true MACs are a median 1.25-1.52 times the counted ones on
+LCIR and 1.18-2.41 times on highD, up to 11.5 times. Budgets and cost objectives of
+every search before v4 were applied to these counts; measured board numbers are not
+affected. `resource_bias.py` recomputes the gap for every search from its state file;
+the `*_v4` configs search with the faithful graph.
+
 ## Seed studies
 
 | script | what it does | output |
@@ -79,6 +91,7 @@ fix the saver before the next search.
 | `seed_variance.py exid_*` | trains the architectures found by the highD searches on exiD (both recipes) | `datasets/exid/results/seeds/seed_variance*.jsonl` |
 | `transfer_eval.py` | applies the deployed highD searched models to exiD with the highD input scaling | `datasets/exid/results/transfer_searched.jsonl` |
 | `select_by_seeds.py <search>` | v2 searches: shortlists the 12 candidates with the best single-run validation metric, retrains each with five seeds, picks the best mean validation metric and the smallest model within one standard error of it; test data never enter the choice | `datasets/highd/results/seeds/select_<search>.jsonl`, `datasets/highd/results/nas-v2/<search>/` |
+| `resource_bias.py [search ...]` | for every evaluated candidate of a search: the fork's stored peak memory, size and MACs against the Keras model's weights and MACs and the faithful graph (CPU, from the fork's state files) | `datasets/highd/results/resource_bias.json` |
 
 ## Hand-designed CNNs on the boards
 

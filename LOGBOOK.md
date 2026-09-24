@@ -922,3 +922,38 @@ windows shuffled once, 150 candidates in chunks, then the five-seed validation c
 Paper (local): MicroNAS cited as its journal version (Sci. Rep. 15, 2025); the published
 board numbers in the comparison section; the limitation says why energy is missing. 8 pages,
 9 TODO markers. Story and author list are left for the final pass.
+
+## 2026-09-24 20:24 — TTLC v2 result; the fork's resource model counts a different network; v4 searches
+
+TTLC v2 search on the fixed pipeline (highd_ttlc_v2_p, training windows shuffled): 150
+candidates, 94 saved within the bounds. Five-seed validation choice (12 shortlisted, 11
+distinct: one architecture was saved twice by the two workers): 25,883 parameters, validation
+RMSE 0.2255 +/- 0.0071 s, test RMSE 0.2751 +/- 0.0063 s (search recipe), about the
+hand-designed CNN's 0.276 +/- 0.009 s (hand recipe) with three times the parameters.
+
+The fork's resource model. The chosen TTLC network counted 10,023 B and 14,381 MACs in the
+search, but the Keras model it trains has 25,395 weights and 36,723 MACs. The ELIOS fork's
+1-D port builds the Keras model with "same" padding and the resource graph with "valid"
+padding (uNAS/cnn1d/cnn1d_architecture.py; the 2-D code uses "valid" in both), and its
+optional pre-pooling rounds the length up where Keras rounds it down. On the 10-step highD
+windows each 5-wide kernel removes 4 steps from the graph's sequence, so later layers look
+almost free. unas/resource_bias.py recomputes every evaluated point of the twelve searches
+(1,825 candidates): true over counted MACs has a median of 1.25-1.52 on LCIR (up to 6.3) and
+1.18-2.41 on highD (up to 11.5); model size is up to 7.9 times and peak memory up to 5 times
+the counted value. The v3 choice counted 2,891 B and 2,963 MACs, inside its 8 KiB /
+14,000-MAC budget, and has 7,499 weights and 19,579 MACs (19,800 MACC on the board): the
+budgets did not bound the real cost. The v2 choice: 66,755 counted, 150,697 true, 153,280 on
+the board. Every board number in the paper was measured and stands; the error was in the cost
+signal the searches optimized.
+
+Fix: FaithfulGapCnn1DArchitecture (unas/cnn1d_gap.py) builds the resource graph with the
+Keras model's shapes. Its MACs and weights equal the Keras count on all 1,825 points, and
+its MACs are within 3.2% of the board MACC for the v2, v3 and hand-designed networks. The
+hand-designed layer sequence: 8,051 B and 13,648 MACs in the fork, 8,211 B and 26,240 MACs
+faithful (board MACC 27,091).
+
+v4 (queued tonight): the v3 setup with the faithful graph, budgets at the hand-designed
+CNNs' faithful cost (classifier 8,211 B and 26,240 MACs; TTLC 8,081 B and 26,112 MACs),
+error bounds 0.06 and 0.16 s, 150 candidates per task, five-seed choice, then the hand-recipe
+and exiD controls; before them, the same controls for the TTLC v2 choice. Smoke test: five
+candidates, stored cost equal to the Keras count for each. Pipeline check passed.
