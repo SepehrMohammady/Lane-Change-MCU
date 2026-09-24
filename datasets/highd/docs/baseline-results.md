@@ -425,3 +425,20 @@ in 2.891 ms (float32) and 1.447 ms (int8 I/O) on the H7B3I-DK, 4.3 times the
 hand-designed CNN, at the same accuracy under the same recipe. Loose budgets and an
 error bound no candidate reaches left cost little weight in the fitness; a v3 search
 with budgets at the hand-designed CNN's cost is running.
+
+### v3: budgets at the hand-designed CNN's cost (2026-09-24)
+
+Same space, saver and five-seed validation choice as v2, training windows shuffled, with
+model size bounded at 8 KiB and MACs at 14,000 (the fork's count for the hand-designed
+layer sequence is 8,051 B and 13,648 MACs) and error bound 0.06. About 154 candidates over
+three chunks, 85 saved (6.6k-11.6k params); 75 have no hidden layer, 38 the pooling head.
+
+| model | search recipe | hand recipe | exiD (search / hand) | H7B3I-DK FP32 / int8 I/O | F401RE FP32 / int8 I/O | flash FP32 / int8 I/O |
+|---|--:|--:|--:|--:|--:|--:|
+| choice, 7,919 params | 91.00 ± 2.31% | 88.56 ± 3.32% | 87.75 / 87.72% | 0.366 / 0.298 ms | 1.797 / 1.490 ms | 36,342 / 25,088 B |
+| smallest within one SE, 6,647 params | 89.64 ± 1.23% | 90.43 ± 2.47% | – | 0.339 / 0.270 ms | 1.697 / 1.389 ms | 31,496 / 19,714 B |
+
+Against the hand-designed CNN (92.11 ± 0.71%, 0.669 / 0.350 ms): 1.8 times faster in
+float32 and 1.2 times in int8, 1.1 points less accurate on average under the search
+recipe, with single runs down to 83.88% under the hand recipe. The 5.3 k model of the
+first searches (90.83 ± 1.57%, 0.155 / 0.106 ms) remains the better cost trade-off.
