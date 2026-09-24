@@ -105,27 +105,35 @@ both. Five seeds each, test sets:
 |---|--:|--:|--:|--:|
 | published (Mozaffari et al.) | 83% | 0.629 s | – | – |
 | hand-designed CNN (8.4 k, TTLC 8.2 k), trained on that dataset | 92.11 ± 0.71% | 0.276 ± 0.009 s | 89.93 ± 0.24% | 0.406 ± 0.008 s |
-| best searched classifier of 17 (80 k), highD | 91.28 ± 0.90% | – | – | – |
-| searched on highD, 5.3 k and 7.9 k, trained on exiD¹ | – | – | 76.7–78.6% | – |
+| searched classifier, 7.9 k¹ | 92.16 ± 0.71% | – | 89.50 ± 0.31% | – |
+| searched classifier, 5.3 k¹ | 90.83 ± 1.57% | – | 87.40 ± 0.14% | – |
+| searched TTLC regressor, 28 k¹ | – | 0.282 ± 0.016 s | – | 0.394 ± 0.008 s |
+| v2 search (global-pooling space), 24 k² | 91.09 ± 0.66% | – | 89.31 ± 0.08% | – |
 | hand-designed CNN trained on highD, applied as is | – | – | 61.24 ± 2.32% | 0.867 ± 0.062 s |
 | the same, fine-tuned on exiD | – | – | 90.13 ± 0.22% | 0.393 ± 0.002 s |
 
-- On highD every retrained model beats the published figures, and the deployed
-  5.3 k int8 classifier predicts in 0.106 ms on the Cortex-M7.
+- On highD every retrained model beats the published figures on average, and the
+  deployed 5.3 k int8 classifier predicts in 0.106 ms on the Cortex-M7.
 - A highD model at motorway junctions gets exits right in 33% of the windows and
   lane keeping in 45%; trained on exiD, 94% and 85%.
 - Starting from highD weights adds 1.3 points with 10% of the exiD training data,
   and nothing measurable with all of it.
-- ¹ Being re-measured. These Keras runs trained on the stored scenario order with a
-  2,048-window shuffle buffer; shuffled once, the hand-designed CNN's own layers in
-  Keras gain 12 points on exiD (`unas/shuffle_check.py`). The earlier claim that the
-  architectures found on highD fall 11 points behind does not hold until the re-runs
-  are in.
+- ¹ Architectures found by the first highD searches, retrained with five seeds under
+  the search recipe (the table in `datasets/highd/docs/baseline-results.md` has the
+  hand recipe too). These Keras runs permute the training windows once: the prepared
+  splits are stored scenario by scenario and the search tool shuffles with a
+  2,048-window buffer, which cost one architecture 12.7 points on exiD
+  (`unas/shuffle_check.py`). Runs before 2026-09-23 used the stored order and made
+  the searched architectures look 11 points worse on exiD.
+- ² The v2 search adds a global-average-pooling head, zero hidden layers and dropout
+  to the space (`unas/cnn1d_gap.py`) and chooses on the five-seed validation mean
+  (`unas/select_by_seeds.py`); under the hand-designed CNN's recipe its choice
+  reaches 92.51 ± 0.41%.
 - On the boards the hand-designed highD CNN takes 0.669 ms (float32) and 0.350 ms
-  (int8) on the Cortex-M7: more accurate and faster than the 7.9 k searched
-  classifier, 4.3 times slower than the 5.3 k one, which is about 3 points less
-  accurate over five seeds. For time to lane change it matches the searched 28 k
-  regressor's RMSE at 0.667 against 1.038 ms.
+  (int8) on the Cortex-M7: as accurate as the 7.9 k searched classifier and 12%
+  faster, 4.3 times slower than the 5.3 k one, which is 1.3 points less accurate
+  over five seeds. The v2 choice needs 2.891 ms. For time to lane change the
+  hand-designed CNN matches the searched 28 k regressor at 0.667 against 1.038 ms.
 - exiD models have the board cost of the highD builds: same graphs, other weights.
 
 Details: `datasets/highd/README.md`, `datasets/exid/README.md`,

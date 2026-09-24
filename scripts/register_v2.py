@@ -32,7 +32,9 @@ def main() -> None:
     indent = len(second) - len(second.lstrip())
     reg = json.loads(text)
     for search, mid, label, task in SEARCHES:
-        sel_path = H / "nas-v2" / search / "selection.json"
+        sel_path = H / "nas-v2" / search / "selection_permuted.json"      # shuffled-order re-selection
+        if not sel_path.exists():
+            sel_path = H / "nas-v2" / search / "selection.json"
         if not sel_path.exists():
             continue
         sel = json.loads(sel_path.read_text())

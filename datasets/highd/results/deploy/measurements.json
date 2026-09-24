@@ -313,56 +313,56 @@
       "label": "Searched classifier (v2 search)",
       "role": "searched",
       "task": "highd_cls",
-      "params": 21476,
-      "note": "Chosen by its five-seed validation mean among the 12 best of 88 saved candidates of the v2 search (unas/select_by_seeds.py); file model_1790187214617755015_765300.h5.",
+      "params": 24191,
+      "note": "Chosen by its five-seed validation mean among the 12 best of 88 saved candidates of the v2 search (unas/select_by_seeds.py); file model_1790183017553837263_429034.h5.",
       "variants": [
         {
           "precision": "fp32",
           "io": "float32",
           "metric": {
-            "acc": 0.9046
+            "acc": 0.89316
           },
           "boards": {
             "STM32H7B3I-DK": {
-              "api": "highd_cls_model_1790187214617755015_765300_f32.tflite"
+              "api": "highd_cls_model_1790183017553837263_429034_f32.tflite"
             },
             "NUCLEO-F401RE": {
-              "api": "highd_cls_model_1790187214617755015_765300_f32.tflite"
+              "api": "highd_cls_model_1790183017553837263_429034_f32.tflite"
             }
           },
-          "source": "datasets/highd/results/deploy/highd_cls_model_1790187214617755015_765300_deploy.json; benchmarks_api.jsonl"
+          "source": "datasets/highd/results/deploy/highd_cls_model_1790183017553837263_429034_deploy.json; benchmarks_api.jsonl"
         },
         {
           "precision": "int8 PTQ",
           "io": "float32",
           "metric": {
-            "acc": 0.9062
+            "acc": 0.89927
           },
           "boards": {
             "STM32H7B3I-DK": {
-              "api": "highd_cls_model_1790187214617755015_765300_int8.tflite"
+              "api": "highd_cls_model_1790183017553837263_429034_int8.tflite"
             },
             "NUCLEO-F401RE": {
-              "api": "highd_cls_model_1790187214617755015_765300_int8.tflite"
+              "api": "highd_cls_model_1790183017553837263_429034_int8.tflite"
             }
           },
-          "source": "datasets/highd/results/deploy/highd_cls_model_1790187214617755015_765300_deploy.json; benchmarks_api.jsonl"
+          "source": "datasets/highd/results/deploy/highd_cls_model_1790183017553837263_429034_deploy.json; benchmarks_api.jsonl"
         },
         {
           "precision": "int8 PTQ",
           "io": "int8",
           "metric": {
-            "acc": 0.90626
+            "acc": 0.89938
           },
           "boards": {
             "STM32H7B3I-DK": {
-              "api": "highd_cls_model_1790187214617755015_765300_int8_io.tflite"
+              "api": "highd_cls_model_1790183017553837263_429034_int8_io.tflite"
             },
             "NUCLEO-F401RE": {
-              "api": "highd_cls_model_1790187214617755015_765300_int8_io.tflite"
+              "api": "highd_cls_model_1790183017553837263_429034_int8_io.tflite"
             }
           },
-          "source": "datasets/highd/results/deploy/highd_cls_model_1790187214617755015_765300_deploy.json; benchmarks_api.jsonl"
+          "source": "datasets/highd/results/deploy/highd_cls_model_1790183017553837263_429034_deploy.json; benchmarks_api.jsonl"
         }
       ]
     }

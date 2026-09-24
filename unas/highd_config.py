@@ -122,9 +122,10 @@ def get_highd_ttlc_v2_setup(**_):
 
 
 # v3 (2026-09-23): the v2 space and saver with budgets at the hand-designed CNN's cost. The
-# v2 classifier search ran with an error bound (0.045) that no candidate reaches, so the
-# error term always dominated the fitness and cost never counted: its chosen model matches
-# the hand-designed CNN's accuracy but runs 4.2 times slower. Here model size and MACs are
+# v2 classifier search ran with loose budgets and an error bound (0.045) that no candidate
+# reaches, so the fitness gave cost little weight (each objective is divided by a random
+# weight, so cost can still decide a draw): its chosen model matches the hand-designed CNN's
+# accuracy but runs 4.3 times slower. Here model size and MACs are
 # bounded at what the fork's resource model gives for the hand-designed CNN's layer sequence
 # (unas/build_hand_like.py: 8,051 B, 13,648 MACs), rounded up to 8 KiB and 14,000 MACs, and
 # the error bound is the hand-designed CNN's validation level (0.06). Question: can the search
