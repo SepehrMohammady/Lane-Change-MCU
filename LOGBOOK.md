@@ -957,3 +957,42 @@ CNNs' faithful cost (classifier 8,211 B and 26,240 MACs; TTLC 8,081 B and 26,112
 error bounds 0.06 and 0.16 s, 150 candidates per task, five-seed choice, then the hand-recipe
 and exiD controls; before them, the same controls for the TTLC v2 choice. Smoke test: five
 candidates, stored cost equal to the Keras count for each. Pipeline check passed.
+
+## 2026-09-25 03:28 — v4 searches: with a faithful cost count the search finds a highD classifier as accurate at half the size
+
+v4 (faithful resource graph, budgets at the hand-designed CNNs' cost under it, five-seed
+validation choice), 150 candidates per task, overnight 2026-09-24/25:
+
+| | v4 classifier | v4 TTLC | hand-designed CNN |
+|---|--:|--:|--:|
+| parameters | 3,968 | 4,940 | 8,371 / 8,241 |
+| MACs, padded count | 14,007 | 21,342 | 26,240 / 26,112 |
+| weights (B, one per element) | 3,812 | 4,716 | 8,211 / 8,081 |
+| search recipe, 5 seeds | 92.83 +/- 0.36% | 0.2881 +/- 0.0099 s | - |
+| hand recipe, 5 seeds | 92.88 +/- 0.29% | 0.2873 +/- 0.0266 s | 92.11 +/- 0.71% / 0.2763 +/- 0.0093 s |
+| exiD, search / hand recipe | 85.87 / 85.71% | 0.416 / 0.437 s | 89.93% / 0.406 s |
+| deployed file, FP32 / int8 | 93.03 / 92.15% | 0.264 / 0.377 s | 91.09 / 90.88% (board builds) |
+
+Welch tests against the hand-designed CNN: classifier p = 0.09 (search recipe) and 0.07 (hand
+recipe), so as accurate, not more; TTLC p = 0.09 and 0.42. All 12 classifiers the v4 search
+shortlisted average 92.0-92.8% over five seeds. 77 classifiers and 30 regressors were saved
+within the budgets. resource_bias.py on both v4 searches: stored cost equals the Keras count
+for all 300 candidates.
+
+So the classifier the v4 search picked is as accurate as the hand-designed CNN with half the
+parameters, 1.9 times fewer MACs and 2.2 times fewer weights; board latency and flash still
+to measure (the ST Developer Cloud needs the new password; the local ST Edge AI Core 4.0.0
+is blocked by Smart App Control). On exiD this small classifier loses about 4 points
+against the hand-designed CNN, so it is specific to highD. For TTLC the v4 choice needs 1.2
+times fewer MACs for about 0.01 s more RMSE, and its int8 build loses much more than the
+hand-designed one (0.264 to 0.377 s).
+
+Controls for the TTLC v2 choice (25,883 params): hand recipe 0.2924 +/- 0.0201 s on highD;
+on exiD 0.3974 +/- 0.0107 (search) and 0.3969 +/- 0.0084 s (hand).
+
+Paper (local): cost-count finding and v4 in method, Table I, results, exiD table, cost
+section, discussion ("three pitfalls"), limitations, abstract and conclusion; Fig. 3b and
+Fig. 4b/4d show the v4 choices. To stay at 8 pages the v2/v3 text was condensed, three
+figures were made slightly shorter and the exiD figure became one column (the accuracy by
+kind of lane change stays in the text). Number audit: all new numbers traced; 19 known
+leftovers. Red TODO: board runs of the v4 builds.
