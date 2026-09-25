@@ -1,4 +1,4 @@
-"""Add the board runs of the v2 searches' chosen models to the highD measurement registry.
+"""Add the board runs of the v2-v4 searches' chosen models to the highD measurement registry.
 
 The chosen model of each v2 search is named in datasets/highd/results/nas-v2/<search>/
 selection.json (rule "best": best five-seed validation mean). Its builds come from
@@ -17,8 +17,10 @@ H = ROOT / "datasets/highd/results"
 BOARDS = ("STM32H7B3I-DK", "NUCLEO-F401RE")
 VARIANTS = (("fp32", "float32", "f32"), ("int8 PTQ", "float32", "int8"), ("int8 PTQ", "int8", "int8_io"))
 SEARCHES = (("highd_cls_v2", "cls_v2", "Searched classifier (v2 search)", "highd_cls"),
-            ("highd_ttlc_v2", "ttlc_v2", "Searched regressor (v2 search)", "highd_ttlc"),
-            ("highd_cls_v3", "cls_v3", "Searched classifier (v3 search, budgets at the hand-designed cost)", "highd_cls"))
+            ("highd_ttlc_v2_p", "ttlc_v2", "Searched regressor (v2 search)", "highd_ttlc"),
+            ("highd_cls_v3", "cls_v3", "Searched classifier (v3 search, budgets at the hand-designed cost)", "highd_cls"),
+            ("highd_cls_v4", "cls_v4", "Searched classifier (v4 search, faithful cost count)", "highd_cls"),
+            ("highd_ttlc_v4", "ttlc_v4", "Searched regressor (v4 search, faithful cost count)", "highd_ttlc"))
 
 
 def main() -> None:
@@ -54,7 +56,7 @@ def main() -> None:
                                  "source": f"datasets/highd/results/deploy/{stem}_deploy.json; benchmarks_api.jsonl"})
         entry = {"id": mid, "label": label, "role": "searched", "task": task, "params": dj["params"],
                  "note": (f"Chosen by its five-seed validation mean among the 12 best of {sel['saved_candidates']} saved "
-                          f"candidates of the v2 search (unas/select_by_seeds.py); file {sel['best']}.h5."),
+                          f"candidates of the {search} search (unas/select_by_seeds.py); file {sel['best']}.h5."),
                  "variants": variants}
         ids = [m["id"] for m in reg["models"]]
         reg["models"] = [entry if m["id"] == mid else m for m in reg["models"]] + ([entry] if mid not in ids else [])

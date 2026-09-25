@@ -56,6 +56,7 @@ SEARCHES = {
     "highd_cls_v2": ((10, 18), 3), "highd_cls_v3": ((10, 18), 3),
     "highd_ttlc": ((10, 18), 1), "highd_ttlc_v2_p": ((10, 18), 1),
     "highd_cls_v4": ((10, 18), 3), "highd_ttlc_v4": ((10, 18), 1),
+    "dmir_cls_v4": ((50, 31), 3), "dmir_lcr_v4": ((50, 31), 1), "dmir_lcl_v4": ((50, 31), 1),
 }
 FAILED = 10 ** 12
 
@@ -137,13 +138,15 @@ def hand_like_costs():
     hand = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(hand)
     out = {}
-    for task, n_out in (("highd_cls", 3), ("highd_ttlc", 1)):
-        g = gap.GapCnn1DArchitecture(hand.hand_like()).to_resource_graph((10, 18), n_out)
+    for task, shape, n_out in (("highd_cls", (10, 18), 3), ("highd_ttlc", (10, 18), 1),
+                               ("dmir_cls", (50, 31), 3), ("dmir_ttlc", (50, 31), 1)):
+        g = gap.GapCnn1DArchitecture(hand.hand_like()).to_resource_graph(shape, n_out)
         with contextlib.redirect_stdout(io.StringIO()):
-            model = gap.GapCnn1DArchitecture(hand.hand_like()).to_keras_model((10, 18), n_out)
+            model = gap.GapCnn1DArchitecture(hand.hand_like()).to_keras_model(shape, n_out)
         n_w, n_macs = keras_features(model)
-        out[task] = {"fork": [int(peak_memory_usage(g)), int(model_size(g)), int(macs(g))],
-                     "faithful": faithful_features(hand.hand_like(), (10, 18), n_out),
+        out[task] = {"input_shape": list(shape),
+                     "fork": [int(peak_memory_usage(g)), int(model_size(g)), int(macs(g))],
+                     "faithful": faithful_features(hand.hand_like(), shape, n_out),
                      "keras": {"weights": n_w, "macs": n_macs}}
         print(f"hand-designed layer sequence, {task}: {out[task]}")
     return out

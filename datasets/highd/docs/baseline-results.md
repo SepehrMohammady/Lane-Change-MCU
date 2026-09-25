@@ -484,4 +484,18 @@ The v4 classifier is as accurate as the hand-designed CNN (Welch p = 0.09 and 0.
 the parameters and 1.9 times fewer MACs, and all 12 shortlisted classifiers average
 92.0-92.8%. It is specific to highD: trained on exiD it stays about 4 points below the
 hand-designed CNN. The v4 TTLC choice needs 1.2 times fewer MACs for about 0.01 s more RMSE
-(p = 0.09 and 0.42), and its int8 build loses more. Board runs of both are pending.
+(p = 0.09 and 0.42), and its int8 build loses more.
+
+On the boards (ST Edge AI Core 4.0.1, balanced; float32 / int8 with int8 I/O):
+
+| model | H7B3I-DK | F401RE | flash (B) | RAM (B) | MACC |
+|---|--:|--:|--:|--:|--:|
+| v4 classifier | 0.263 / 0.195 ms | 1.342 / 0.980 ms | 19,980 / 15,180 | 1,708 / 5,972 | 14,151 / 14,066 |
+| hand-designed CNN | 0.669 / 0.350 ms | 3.647 / 1.713 ms | 43,050 / 27,979 | 3,204 / 7,084 | 27,091 / 26,659 |
+| v4 TTLC | 0.396 / 0.252 ms | 2.075 / 1.255 ms | 24,366 / 26,668 | 2,236 / 5,988 | 21,730 / 21,426 |
+| hand-designed TTLC | 0.667 / 0.348 ms | 3.658 / 1.709 ms | 42,526 / 28,783 | 3,204 / 6,664 | 26,961 / 26,529 |
+| TTLC v2 choice | 0.968 / 0.549 ms | 4.795 / 2.253 ms | 108,174 / 43,585 | 2,376 / 3,100 | 38,266 / 37,023 |
+
+The v4 classifier is 2.5 times faster in float32 and 1.8 times in int8 on the M7 (2.7 and
+1.7 on the M4), at equal accuracy; the v4 regressor 1.7 and 1.4 times. The padded count
+of every chosen network is within 1.0-4.0% of the board MACC.
