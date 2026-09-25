@@ -1,0 +1,30 @@
+{
+ "task": "regression_lcl",
+ "source_h5": "model_1790369280638942414_3937863.h5",
+ "params": 3652,
+ "input_shape": [
+  50,
+  31
+ ],
+ "keras_float": {
+  "rmse": 0.46101,
+  "mae": 0.33633
+ },
+ "variants": {
+  "float32": {
+   "bytes": 20392,
+   "rmse": 0.46101,
+   "mae": 0.33633
+  },
+  "int8": {
+   "bytes": 12536,
+   "rmse": 0.4967,
+   "mae": 0.36929
+  },
+  "int8_io": {
+   "bytes": 12184,
+   "rmse": 0.4967,
+   "mae": 0.36929
+  }
+ }
+}

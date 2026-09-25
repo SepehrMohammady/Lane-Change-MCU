@@ -454,6 +454,186 @@
           "source": "datasets/dmir/results/deploy/lcir_dscnn_regression_lcl_deploy.json; benchmarks_api.jsonl"
         }
       ]
+    },
+    {
+      "id": "cls_v4",
+      "label": "Searched, v4 search (faithful cost count)",
+      "role": "searched",
+      "task": "classification",
+      "params": 6528,
+      "note": "Chosen by its five-seed validation mean among the 12 best of 86 saved candidates of the dmir_cls_v4 search (unas/select_by_seeds.py); file model_1790355881847038030_1029276.h5.",
+      "variants": [
+        {
+          "precision": "fp32",
+          "io": "float32",
+          "metric": {
+            "acc": 0.90716
+          },
+          "boards": {
+            "STM32H7B3I-DK": {
+              "api": "lcir_v4_classification_float32.tflite"
+            },
+            "NUCLEO-F401RE": {
+              "api": "lcir_v4_classification_float32.tflite"
+            }
+          },
+          "source": "datasets/dmir/results/deploy/lcir_v4_classification_deploy.json; benchmarks_api.jsonl"
+        },
+        {
+          "precision": "int8 PTQ",
+          "io": "float32",
+          "metric": {
+            "acc": 0.83049
+          },
+          "boards": {
+            "STM32H7B3I-DK": {
+              "api": "lcir_v4_classification_int8.tflite"
+            },
+            "NUCLEO-F401RE": {
+              "api": "lcir_v4_classification_int8.tflite"
+            }
+          },
+          "source": "datasets/dmir/results/deploy/lcir_v4_classification_deploy.json; benchmarks_api.jsonl"
+        },
+        {
+          "precision": "int8 PTQ",
+          "io": "int8",
+          "metric": {
+            "acc": 0.83049
+          },
+          "boards": {
+            "STM32H7B3I-DK": {
+              "api": "lcir_v4_classification_int8_io.tflite"
+            },
+            "NUCLEO-F401RE": {
+              "api": "lcir_v4_classification_int8_io.tflite"
+            }
+          },
+          "source": "datasets/dmir/results/deploy/lcir_v4_classification_deploy.json; benchmarks_api.jsonl"
+        }
+      ]
+    },
+    {
+      "id": "lcr_v4",
+      "label": "Searched, v4 search, time to right lane change",
+      "role": "searched",
+      "task": "regression_lcr",
+      "params": 4663,
+      "note": "Chosen by its five-seed validation mean among the 12 best of 81 saved candidates of the dmir_lcr_v4 search (unas/select_by_seeds.py); file model_1790362828203729595_2308448.h5.",
+      "variants": [
+        {
+          "precision": "fp32",
+          "io": "float32",
+          "metric": {
+            "mae": 0.32675,
+            "rmse": 0.46288
+          },
+          "boards": {
+            "STM32H7B3I-DK": {
+              "api": "lcir_v4_regression_lcr_float32.tflite"
+            },
+            "NUCLEO-F401RE": {
+              "api": "lcir_v4_regression_lcr_float32.tflite"
+            }
+          },
+          "source": "datasets/dmir/results/deploy/lcir_v4_regression_lcr_deploy.json; benchmarks_api.jsonl"
+        },
+        {
+          "precision": "int8 PTQ",
+          "io": "float32",
+          "metric": {
+            "mae": 0.61052,
+            "rmse": 0.78478
+          },
+          "boards": {
+            "STM32H7B3I-DK": {
+              "api": "lcir_v4_regression_lcr_int8.tflite"
+            },
+            "NUCLEO-F401RE": {
+              "api": "lcir_v4_regression_lcr_int8.tflite"
+            }
+          },
+          "source": "datasets/dmir/results/deploy/lcir_v4_regression_lcr_deploy.json; benchmarks_api.jsonl"
+        },
+        {
+          "precision": "int8 PTQ",
+          "io": "int8",
+          "metric": {
+            "mae": 0.61052,
+            "rmse": 0.78478
+          },
+          "boards": {
+            "STM32H7B3I-DK": {
+              "api": "lcir_v4_regression_lcr_int8_io.tflite"
+            },
+            "NUCLEO-F401RE": {
+              "api": "lcir_v4_regression_lcr_int8_io.tflite"
+            }
+          },
+          "source": "datasets/dmir/results/deploy/lcir_v4_regression_lcr_deploy.json; benchmarks_api.jsonl"
+        }
+      ]
+    },
+    {
+      "id": "lcl_v4",
+      "label": "Searched, v4 search, time to left lane change",
+      "role": "searched",
+      "task": "regression_lcl",
+      "params": 3652,
+      "note": "Chosen by its five-seed validation mean among the 12 best of 69 saved candidates of the dmir_lcl_v4 search (unas/select_by_seeds.py); file model_1790369280638942414_3937863.h5.",
+      "variants": [
+        {
+          "precision": "fp32",
+          "io": "float32",
+          "metric": {
+            "mae": 0.33633,
+            "rmse": 0.46101
+          },
+          "boards": {
+            "STM32H7B3I-DK": {
+              "api": "lcir_v4_regression_lcl_float32.tflite"
+            },
+            "NUCLEO-F401RE": {
+              "api": "lcir_v4_regression_lcl_float32.tflite"
+            }
+          },
+          "source": "datasets/dmir/results/deploy/lcir_v4_regression_lcl_deploy.json; benchmarks_api.jsonl"
+        },
+        {
+          "precision": "int8 PTQ",
+          "io": "float32",
+          "metric": {
+            "mae": 0.36929,
+            "rmse": 0.4967
+          },
+          "boards": {
+            "STM32H7B3I-DK": {
+              "api": "lcir_v4_regression_lcl_int8.tflite"
+            },
+            "NUCLEO-F401RE": {
+              "api": "lcir_v4_regression_lcl_int8.tflite"
+            }
+          },
+          "source": "datasets/dmir/results/deploy/lcir_v4_regression_lcl_deploy.json; benchmarks_api.jsonl"
+        },
+        {
+          "precision": "int8 PTQ",
+          "io": "int8",
+          "metric": {
+            "mae": 0.36929,
+            "rmse": 0.4967
+          },
+          "boards": {
+            "STM32H7B3I-DK": {
+              "api": "lcir_v4_regression_lcl_int8_io.tflite"
+            },
+            "NUCLEO-F401RE": {
+              "api": "lcir_v4_regression_lcl_int8_io.tflite"
+            }
+          },
+          "source": "datasets/dmir/results/deploy/lcir_v4_regression_lcl_deploy.json; benchmarks_api.jsonl"
+        }
+      ]
     }
   ],
   "references": {

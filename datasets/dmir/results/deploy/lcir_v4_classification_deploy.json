@@ -1,0 +1,26 @@
+{
+ "task": "classification",
+ "source_h5": "model_1790355881847038030_1029276.h5",
+ "params": 6528,
+ "input_shape": [
+  50,
+  31
+ ],
+ "keras_float": {
+  "acc": 0.90716
+ },
+ "variants": {
+  "float32": {
+   "bytes": 31708,
+   "acc": 0.90716
+  },
+  "int8": {
+   "bytes": 17848,
+   "acc": 0.83049
+  },
+  "int8_io": {
+   "bytes": 17504,
+   "acc": 0.83049
+  }
+ }
+}

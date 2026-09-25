@@ -192,3 +192,29 @@ What this changes (Welch's t-test on the five runs, two-sided):
 
 Deployment measurements (latency, flash, RAM) depend on the graph, not the weights,
 and are unaffected. The hand-built DSCNN has not been measured on the boards yet.
+
+## v4 searches with the faithful cost count (2026-09-25)
+
+The first searches optimized the fork's resource count, which leaves out convolution
+padding (unas/README.md; on LCIR the true MACs were a median 1.25-1.52 times the counted
+ones, up to 6.3). The v4 searches (`dmir_cls_v4`, `dmir_lcr_v4`, `dmir_lcl_v4` in
+`unas/dmir_config.py`) use the global-average-pooling space with the faithful count, budgets at
+the DSCNN layer sequence's cost under that count (10,387 B and 169,872 MACs for intention,
+10,257 B and 169,744 MACs for TTLC), error bounds at the DSCNN's validation level (0.06, and
+0.44 / 0.48 s RMSE with an RMSE objective), 150 candidates each (86, 81 and 69 saved), and the
+five-seed validation choice (`unas/select_by_seeds.py`). Test results over five seeds:
+
+| task | v4 choice | search recipe | DSCNN recipe | DSCNN (10 k) | first searched model |
+|---|---|--:|--:|--:|--:|
+| intention | 6,528 params | 91.43 ± 0.32% | 91.21 ± 0.24% | 91.50 ± 0.47% | 8 k: 91.19 ± 0.32% |
+| LCR | 4,663 params | RMSE 0.476 ± 0.012 s | 0.462 ± 0.005 s | 0.454 ± 0.008 s | 117 k: 0.483 ± 0.021 s |
+| LCL | 3,652 params | RMSE 0.463 ± 0.007 s | 0.479 ± 0.020 s | 0.469 ± 0.010 s | 106 k: 0.496 ± 0.012 s |
+
+Welch tests against the DSCNN: intention p = 0.79; LCL p = 0.30 (as accurate); LCR p = 0.013
+under the search recipe and 0.10 under the DSCNN recipe. Against the first searched models:
+LCL better (p = 0.002, search recipe), LCR better under the DSCNN recipe (p = 0.022). The
+chosen regressors are one or two layers: LCR a stride-2 convolution (42 filters) and average
+pooling; LCL a stride-2 depthwise convolution, a stride-2 convolution (33 filters) and average
+pooling. The intention model starts with a 1x1 convolution of 87 filters over all 50 steps,
+which holds most of its 146 k MACs. Board results are in deployment.md.
+
