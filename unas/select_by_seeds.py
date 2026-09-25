@@ -1,4 +1,4 @@
-"""Choose the final model of a v2 search by its five-seed mean on validation data.
+"""Choose the final model of a v2-v4 search by its five-seed mean on validation data.
 
 The search scores each candidate with a single training run, and the fork's own saver
 kept candidates by their test error, so the earlier deployed models were chosen on
@@ -21,9 +21,14 @@ Run in the WSL dmir_nas venv, from the fork:
   HIGHD_DATA_ROOT=/mnt/c/Projects/PhD/DIMIR/datasets/highd/data/prepared \
     ~/dmir_nas/bin/python /mnt/c/Projects/PhD/DIMIR/unas/select_by_seeds.py highd_cls_v2 [K]
 
-Output: datasets/highd/results/seeds/select_<search>.jsonl (one line per candidate and
-seed; resumable) and datasets/highd/results/nas-v2/<search>/ (the shortlisted .h5 files
-with their sidecars, and selection.json).
+LCIR searches (names starting with dmir_, e.g. dmir_lcr_v4) retrain with the LCIR search
+recipe (Adam, the callbacks of unas/dmir_config.py, 80 epochs for intention and 100 for
+TTLC, MSE loss for TTLC as in the RMSE-objective searches) and need DMIR_DATA_ROOT.
+EPOCH_CAP (smoke tests only) caps the epochs.
+
+Output: datasets/<highd|dmir>/results/seeds/select_<search>.jsonl (one line per candidate
+and seed; resumable) and datasets/<highd|dmir>/results/nas-v2/<search>/ (the shortlisted
+.h5 files with their sidecars, and selection.json).
 """
 from __future__ import annotations
 
@@ -59,16 +64,17 @@ def load_candidates(search: str) -> list[dict]:
     return rows
 
 
-def train_one(h5: str, ds, task: str, seed: int) -> dict:
+def train_one(h5: str, ds, task: str, seed: int, ds_name: str = "highd") -> dict:
     keras.utils.set_random_seed(seed)
     net = keras.models.clone_model(keras.models.load_model(h5, compile=False))
-    loss_kind = "logits" if task == "cls" else "mae"
+    loss_kind = "logits" if task == "cls" else ("mse" if ds_name == "dmir" else "mae")
     loss, metrics = sv.compile_args(loss_kind)
     net.compile(optimizer="adam", loss=loss, metrics=metrics)
     train = ds.train_dataset().shuffle(sv.BATCH * 8, seed=seed).batch(sv.BATCH).prefetch(tf.data.AUTOTUNE)
     val = ds.validation_dataset().batch(sv.BATCH).prefetch(tf.data.AUTOTUNE)
+    epochs = sv.EPOCH_CAP or (50 if ds_name == "highd" else 80 if task == "cls" else 100)
     t0 = time.perf_counter()
-    hist = net.fit(train, validation_data=val, epochs=50, verbose=0, callbacks=sv.callbacks("highd", loss_kind))
+    hist = net.fit(train, validation_data=val, epochs=epochs, verbose=0, callbacks=sv.callbacks(ds_name, loss_kind))
     out = {"epochs_run": len(hist.history["loss"]), "wall_s": round(time.perf_counter() - t0, 1)}
     for split in ("val", "test"):
         x, y = ds._data[split]
@@ -94,22 +100,28 @@ def summarize(rows: list[dict], key: str, split: str) -> dict:
 
 
 def main(search: str, k: int = 12) -> None:
+    ds_name = "dmir" if search.startswith("dmir") else "highd"
     task = "cls" if "_cls" in search else "ttlc"
     key, sign = ("acc", -1) if task == "cls" else ("rmse", 1)     # sort ascending on sign * metric
-    ds = sv.HighD_Dataset(task="highd_cls" if task == "cls" else "highd_ttlc")
+    if ds_name == "dmir":
+        ds = sv.DMIR_Dataset(task="classification" if task == "cls"
+                             else "regression_lcr" if "_lcr" in search else "regression_lcl")
+    else:
+        ds = sv.HighD_Dataset(task="highd_cls" if task == "cls" else "highd_ttlc")
+    results = REPO / "datasets" / ds_name / "results"
     cands = load_candidates(search)
     if not cands:
         sys.exit(f"no sidecars under ~/uNAS/artifacts/{search}/models")
     # single-run validation metric as the search saw it: val_error = 1 - acc, or val MAE
     cands.sort(key=lambda r: (r["val_error"], r["params"]))
     short = cands[:k]
-    dest = REPO / "datasets/highd/results/nas-v2" / search
+    dest = results / "nas-v2" / search
     dest.mkdir(parents=True, exist_ok=True)
     for r in short:
         for suffix in (".h5", ".json"):
             src = Path(r["h5"]).with_suffix(suffix)
             shutil.copy2(src, dest / src.name)
-    out = REPO / "datasets/highd/results/seeds" / f"select_{search}{TAG}.jsonl"
+    out = results / "seeds" / f"select_{search}{TAG}.jsonl"
     done = {}
     if out.exists():
         for line in out.read_text().splitlines():
@@ -121,7 +133,7 @@ def main(search: str, k: int = 12) -> None:
         for seed in SEEDS:
             if (name, seed) in done:
                 continue
-            res = train_one(r["h5"], ds, task, seed)
+            res = train_one(r["h5"], ds, task, seed, ds_name)
             rec = {"search": search, "model": name, "params": r["params"], "seed": seed,
                    "search_val_error": r["val_error"], "pmu": r["pmu"], "ms": r["ms"], "macs": r["macs"],
                    "recipe": "search recipe", "train_order": getattr(ds, "train_order", "as stored"),

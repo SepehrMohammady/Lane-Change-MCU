@@ -146,7 +146,10 @@ both. Five seeds each, test sets:
   `unas/cnn1d_gap.py`) with budgets at the hand-designed CNNs' cost under that count.
   The v4 classifier is as accurate as the hand-designed CNN (92.88 ± 0.29% under its
   recipe) with half the parameters and 1.9 times fewer MACs (14,007 against 26,240);
-  it is specific to highD, about 4 points below on exiD. Board runs pending.
+  it is specific to highD, about 4 points below on exiD. On the Cortex-M7 it runs in
+  0.263 ms (float32) and 0.195 ms (int8), 2.5 and 1.8 times faster than the
+  hand-designed CNN (0.669 and 0.350 ms). The v4 TTLC regressor runs in 0.396 and
+  0.252 ms, 1.7 and 1.4 times faster, for about 0.01 s more RMSE.
 - On the boards the hand-designed highD CNN takes 0.669 ms (float32) and 0.350 ms
   (int8) on the Cortex-M7: as accurate as the 7.9 k searched classifier and 12%
   faster, 4.3 times slower than the 5.3 k one, which is 1.3 points less accurate

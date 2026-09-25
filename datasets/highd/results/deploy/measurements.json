@@ -314,7 +314,7 @@
       "role": "searched",
       "task": "highd_cls",
       "params": 24191,
-      "note": "Chosen by its five-seed validation mean among the 12 best of 88 saved candidates of the v2 search (unas/select_by_seeds.py); file model_1790183017553837263_429034.h5.",
+      "note": "Chosen by its five-seed validation mean among the 12 best of 88 saved candidates of the highd_cls_v2 search (unas/select_by_seeds.py); file model_1790183017553837263_429034.h5.",
       "variants": [
         {
           "precision": "fp32",
@@ -372,7 +372,7 @@
       "role": "searched",
       "task": "highd_cls",
       "params": 7919,
-      "note": "Chosen by its five-seed validation mean among the 12 best of 85 saved candidates of the v2 search (unas/select_by_seeds.py); file model_1790221233744985059_1202276.h5.",
+      "note": "Chosen by its five-seed validation mean among the 12 best of 85 saved candidates of the highd_cls_v3 search (unas/select_by_seeds.py); file model_1790221233744985059_1202276.h5.",
       "variants": [
         {
           "precision": "fp32",
@@ -421,6 +421,186 @@
             }
           },
           "source": "datasets/highd/results/deploy/highd_cls_model_1790221233744985059_1202276_deploy.json; benchmarks_api.jsonl"
+        }
+      ]
+    },
+    {
+      "id": "ttlc_v2",
+      "label": "Searched regressor (v2 search)",
+      "role": "searched",
+      "task": "highd_ttlc",
+      "params": 25883,
+      "note": "Chosen by its five-seed validation mean among the 12 best of 94 saved candidates of the highd_ttlc_v2_p search (unas/select_by_seeds.py); file model_1790269068387535952_496250.h5.",
+      "variants": [
+        {
+          "precision": "fp32",
+          "io": "float32",
+          "metric": {
+            "mae": 0.16283,
+            "rmse": 0.25604
+          },
+          "boards": {
+            "STM32H7B3I-DK": {
+              "api": "highd_ttlc_model_1790269068387535952_496250_f32.tflite"
+            },
+            "NUCLEO-F401RE": {
+              "api": "highd_ttlc_model_1790269068387535952_496250_f32.tflite"
+            }
+          },
+          "source": "datasets/highd/results/deploy/highd_ttlc_model_1790269068387535952_496250_deploy.json; benchmarks_api.jsonl"
+        },
+        {
+          "precision": "int8 PTQ",
+          "io": "float32",
+          "metric": {
+            "mae": 0.20752,
+            "rmse": 0.3034
+          },
+          "boards": {
+            "STM32H7B3I-DK": {
+              "api": "highd_ttlc_model_1790269068387535952_496250_int8.tflite"
+            },
+            "NUCLEO-F401RE": {
+              "api": "highd_ttlc_model_1790269068387535952_496250_int8.tflite"
+            }
+          },
+          "source": "datasets/highd/results/deploy/highd_ttlc_model_1790269068387535952_496250_deploy.json; benchmarks_api.jsonl"
+        },
+        {
+          "precision": "int8 PTQ",
+          "io": "int8",
+          "metric": {
+            "mae": 0.20752,
+            "rmse": 0.3034
+          },
+          "boards": {
+            "STM32H7B3I-DK": {
+              "api": "highd_ttlc_model_1790269068387535952_496250_int8_io.tflite"
+            },
+            "NUCLEO-F401RE": {
+              "api": "highd_ttlc_model_1790269068387535952_496250_int8_io.tflite"
+            }
+          },
+          "source": "datasets/highd/results/deploy/highd_ttlc_model_1790269068387535952_496250_deploy.json; benchmarks_api.jsonl"
+        }
+      ]
+    },
+    {
+      "id": "cls_v4",
+      "label": "Searched classifier (v4 search, faithful cost count)",
+      "role": "searched",
+      "task": "highd_cls",
+      "params": 3968,
+      "note": "Chosen by its five-seed validation mean among the 12 best of 77 saved candidates of the highd_cls_v4 search (unas/select_by_seeds.py); file model_1790282740507531593_621856.h5.",
+      "variants": [
+        {
+          "precision": "fp32",
+          "io": "float32",
+          "metric": {
+            "acc": 0.93029
+          },
+          "boards": {
+            "STM32H7B3I-DK": {
+              "api": "highd_cls_model_1790282740507531593_621856_f32.tflite"
+            },
+            "NUCLEO-F401RE": {
+              "api": "highd_cls_model_1790282740507531593_621856_f32.tflite"
+            }
+          },
+          "source": "datasets/highd/results/deploy/highd_cls_model_1790282740507531593_621856_deploy.json; benchmarks_api.jsonl"
+        },
+        {
+          "precision": "int8 PTQ",
+          "io": "float32",
+          "metric": {
+            "acc": 0.92147
+          },
+          "boards": {
+            "STM32H7B3I-DK": {
+              "api": "highd_cls_model_1790282740507531593_621856_int8.tflite"
+            },
+            "NUCLEO-F401RE": {
+              "api": "highd_cls_model_1790282740507531593_621856_int8.tflite"
+            }
+          },
+          "source": "datasets/highd/results/deploy/highd_cls_model_1790282740507531593_621856_deploy.json; benchmarks_api.jsonl"
+        },
+        {
+          "precision": "int8 PTQ",
+          "io": "int8",
+          "metric": {
+            "acc": 0.92147
+          },
+          "boards": {
+            "STM32H7B3I-DK": {
+              "api": "highd_cls_model_1790282740507531593_621856_int8_io.tflite"
+            },
+            "NUCLEO-F401RE": {
+              "api": "highd_cls_model_1790282740507531593_621856_int8_io.tflite"
+            }
+          },
+          "source": "datasets/highd/results/deploy/highd_cls_model_1790282740507531593_621856_deploy.json; benchmarks_api.jsonl"
+        }
+      ]
+    },
+    {
+      "id": "ttlc_v4",
+      "label": "Searched regressor (v4 search, faithful cost count)",
+      "role": "searched",
+      "task": "highd_ttlc",
+      "params": 4940,
+      "note": "Chosen by its five-seed validation mean among the 12 best of 30 saved candidates of the highd_ttlc_v4 search (unas/select_by_seeds.py); file model_1790292529977535709_1680748.h5.",
+      "variants": [
+        {
+          "precision": "fp32",
+          "io": "float32",
+          "metric": {
+            "mae": 0.16592,
+            "rmse": 0.2642
+          },
+          "boards": {
+            "STM32H7B3I-DK": {
+              "api": "highd_ttlc_model_1790292529977535709_1680748_f32.tflite"
+            },
+            "NUCLEO-F401RE": {
+              "api": "highd_ttlc_model_1790292529977535709_1680748_f32.tflite"
+            }
+          },
+          "source": "datasets/highd/results/deploy/highd_ttlc_model_1790292529977535709_1680748_deploy.json; benchmarks_api.jsonl"
+        },
+        {
+          "precision": "int8 PTQ",
+          "io": "float32",
+          "metric": {
+            "mae": 0.24388,
+            "rmse": 0.37705
+          },
+          "boards": {
+            "STM32H7B3I-DK": {
+              "api": "highd_ttlc_model_1790292529977535709_1680748_int8.tflite"
+            },
+            "NUCLEO-F401RE": {
+              "api": "highd_ttlc_model_1790292529977535709_1680748_int8.tflite"
+            }
+          },
+          "source": "datasets/highd/results/deploy/highd_ttlc_model_1790292529977535709_1680748_deploy.json; benchmarks_api.jsonl"
+        },
+        {
+          "precision": "int8 PTQ",
+          "io": "int8",
+          "metric": {
+            "mae": 0.24388,
+            "rmse": 0.37705
+          },
+          "boards": {
+            "STM32H7B3I-DK": {
+              "api": "highd_ttlc_model_1790292529977535709_1680748_int8_io.tflite"
+            },
+            "NUCLEO-F401RE": {
+              "api": "highd_ttlc_model_1790292529977535709_1680748_int8_io.tflite"
+            }
+          },
+          "source": "datasets/highd/results/deploy/highd_ttlc_model_1790292529977535709_1680748_deploy.json; benchmarks_api.jsonl"
         }
       ]
     }

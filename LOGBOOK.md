@@ -996,3 +996,38 @@ Fig. 4b/4d show the v4 choices. To stay at 8 pages the v2/v3 text was condensed,
 figures were made slightly shorter and the exiD figure became one column (the accuracy by
 kind of lane change stays in the text). Number audit: all new numbers traced; 19 known
 leftovers. Red TODO: board runs of the v4 builds.
+
+## 2026-09-25 10:52 — v4 builds on the boards; LCIR v4 searches prepared
+
+Board runs (ST Edge AI Developer Cloud, Core 4.0.1, balanced), float32 / int8 with int8 I/O:
+
+| model | H7B3I-DK (M7) | F401RE (M4) | flash, float32 | MACC |
+|---|--:|--:|--:|--:|
+| v4 classifier, 3,968 params | 0.263 / 0.195 ms | 1.342 / 0.980 ms | 19,980 B | 14,151 |
+| hand-designed CNN, 8,371 | 0.669 / 0.350 ms | 3.647 / 1.713 ms | 43,050 B | 27,091 |
+| v4 TTLC, 4,940 | 0.396 / 0.252 ms | 2.075 / 1.255 ms | 24,366 B | 21,730 |
+| hand-designed TTLC, 8,241 | 0.667 / 0.348 ms | 3.658 / 1.709 ms | 42,526 B | 26,961 |
+| TTLC v2 choice, 25,883 | 0.968 / 0.549 ms | 4.795 / 2.253 ms | 108,174 B | 38,266 |
+
+The v4 classifier, as accurate as the hand-designed CNN over five seeds, runs 2.5 times
+faster in float32 and 1.8 times in int8 on the M7 (2.7 and 1.7 on the M4) with 2.2 times less
+float32 flash. The v4 regressor is 1.7 and 1.4 times faster for about 0.01 s more RMSE. The
+padded count is within 1.0-4.0% of the board MACC for all chosen networks and the
+hand-designed CNN. Registered in measurements.json (scripts/register_v2.py, which also fixes
+the label of the v3 entry); explorer rebuilt.
+
+LCIR v4 searches prepared: dmir_cls_v4, dmir_lcr_v4, dmir_lcl_v4 in unas/dmir_config.py
+(faithful space, safe saver, budgets at the DSCNN layer sequence's faithful cost on the 50x31
+input: 10,387 B and 169,872 MACs for intention, 10,257 B and 169,744 MACs for TTLC, board
+MACC of the DSCNN 171,971 and 171,841; the fork's own count gives 141,360; error bounds 0.06,
+0.44 s and 0.48 s RMSE from the DSCNN's five-seed validation level, TTLC searches with the
+RMSE objective). run_chunked.sh copies the space and saver, registers the configs and logs
+GPU use; select_by_seeds.py handles LCIR. Smoke tests: both searches ran, stored cost equal to
+the Keras count; the selection path trained an LCIR model end to end. The queue (three
+searches, five-seed choices, DSCNN-recipe controls) starts at 16:07 on 2026-09-25, when the
+user leaves the lab.
+
+Paper (local): Table IV rows for the v4 and TTLC v2 builds, TTLC v2 seeds in Table I, the
+measured speed-up in abstract, contributions, results, discussion and conclusion; the
+two-panel exiD figure is back (the user allows 9 pages while drafting). 9 pages, 9 TODO
+markers; number audit: 27 known leftovers (int8 builds with float I/O, one rounding).

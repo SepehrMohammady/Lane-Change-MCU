@@ -42879,6 +42879,10 @@
  },
  "hand_like_in_v2_space": {
   "highd_cls": {
+   "input_shape": [
+    10,
+    18
+   ],
    "fork": [
     128,
     8051,
@@ -42895,6 +42899,10 @@
    }
   },
   "highd_ttlc": {
+   "input_shape": [
+    10,
+    18
+   ],
    "fork": [
     128,
     7921,
@@ -42908,6 +42916,46 @@
    "keras": {
     "weights": 8081,
     "macs": 26112
+   }
+  },
+  "dmir_cls": {
+   "input_shape": [
+    50,
+    31
+   ],
+   "fork": [
+    1056,
+    10387,
+    141360
+   ],
+   "faithful": [
+    1216,
+    10387,
+    169872
+   ],
+   "keras": {
+    "weights": 10387,
+    "macs": 169872
+   }
+  },
+  "dmir_ttlc": {
+   "input_shape": [
+    50,
+    31
+   ],
+   "fork": [
+    1056,
+    10257,
+    141232
+   ],
+   "faithful": [
+    1216,
+    10257,
+    169744
+   ],
+   "keras": {
+    "weights": 10257,
+    "macs": 169744
    }
   }
  }
