@@ -59,6 +59,10 @@ The architectures found by the highD searches are retrained on exiD with
 | searched on highD, 7.9 k | exiD (search / hand recipe) | 89.50 ± 0.31 / 89.47 ± 0.13% | – |
 | searched on highD, 28 k | exiD (search / hand recipe) | – | 0.394 ± 0.008 / 0.396 ± 0.010 s |
 | v2 search choice, 24 k | exiD (search / hand recipe) | 89.31 ± 0.08 / 89.64 ± 0.42% | – |
+| v3 search choice, 7.9 k | exiD (search / hand recipe) | 87.75 ± 1.07 / 87.72 ± 0.56% | – |
+| v4 search choice, 4.0 k | exiD (search / hand recipe) | 85.87 ± 1.09 / 85.71 ± 0.55% | – |
+| TTLC v2 search choice, 26 k | exiD (search / hand recipe) | – | 0.397 ± 0.011 / 0.397 ± 0.008 s |
+| TTLC v4 search choice, 4.9 k | exiD (search / hand recipe) | – | 0.416 ± 0.003 / 0.437 ± 0.016 s |
 
 The searched rows are Keras runs with the training windows permuted once
 (`results/seeds/seed_variance*_permuted.jsonl`). The prepared splits are stored

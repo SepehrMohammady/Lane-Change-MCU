@@ -110,6 +110,8 @@ both. Five seeds each, test sets:
 | searched TTLC regressor, 28 k¹ | – | 0.282 ± 0.016 s | – | 0.394 ± 0.008 s |
 | v2 search (global-pooling space), 24 k² | 91.09 ± 0.66% | – | 89.31 ± 0.08% | – |
 | v3 search (budgets at the hand-designed cost), 7.9 k³ | 91.00 ± 2.31% | – | 87.75 ± 1.07% | – |
+| v4 search (faithful cost count), classifier 4.0 k⁴ | 92.83 ± 0.36% | – | 85.87 ± 1.09% | – |
+| v4 search, TTLC regressor 4.9 k⁴ | – | 0.288 ± 0.010 s | – | 0.416 ± 0.003 s |
 | hand-designed CNN trained on highD, applied as is | – | – | 61.24 ± 2.32% | 0.867 ± 0.062 s |
 | the same, fine-tuned on exiD | – | – | 90.13 ± 0.22% | 0.393 ± 0.002 s |
 
@@ -136,6 +138,15 @@ both. Five seeds each, test sets:
   hand-designed CNN, but is 1.1 points less accurate on average and less stable over
   seeds (88.56 ± 3.32% under the hand-designed recipe); the 5.3 k model of the first
   searches remains the better trade-off.
+- ⁴ The search tool counted each candidate's cost on a graph without convolution
+  padding, while the network it trains pads every convolution: the searches saw a
+  median 1.2-2.4 times too few MACs on highD (up to 11.5) and 1.3-1.5 times on LCIR
+  (`unas/resource_bias.py`), so the v3 budgets did not bound the real cost. The v4
+  searches count the trained network (`FaithfulGapCnn1DSearchSpace` in
+  `unas/cnn1d_gap.py`) with budgets at the hand-designed CNNs' cost under that count.
+  The v4 classifier is as accurate as the hand-designed CNN (92.88 ± 0.29% under its
+  recipe) with half the parameters and 1.9 times fewer MACs (14,007 against 26,240);
+  it is specific to highD, about 4 points below on exiD. Board runs pending.
 - On the boards the hand-designed highD CNN takes 0.669 ms (float32) and 0.350 ms
   (int8) on the Cortex-M7: as accurate as the 7.9 k searched classifier and 12%
   faster, 4.3 times slower than the 5.3 k one, which is 1.3 points less accurate

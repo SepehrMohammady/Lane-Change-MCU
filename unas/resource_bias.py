@@ -21,7 +21,8 @@ their features) are listed but left out of the ratios.
     cd ~/uNAS && CUDA_VISIBLE_DEVICES= ~/dmir_nas/bin/python <repo>/unas/resource_bias.py [search ...]
 
 Writes datasets/highd/results/resource_bias.json (per search: n, median and range of the
-true/stored ratios, and every point's numbers).
+true/stored ratios, and every point's numbers; under "hand_like_in_v2_space" the three counts
+of the hand-designed layer sequence, which set the v4 budgets). --hand-only refreshes only those.
 """
 import contextlib
 import importlib.util
@@ -129,9 +130,33 @@ def run(search):
     return out
 
 
+def hand_like_costs():
+    """The hand-designed layer sequence in the v2 space (unas/build_hand_like.py): the fork's
+    count, the faithful count and the Keras count; the v4 budgets are its faithful count."""
+    spec = importlib.util.spec_from_file_location("build_hand_like_repo", REPO / "unas" / "build_hand_like.py")
+    hand = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(hand)
+    out = {}
+    for task, n_out in (("highd_cls", 3), ("highd_ttlc", 1)):
+        g = gap.GapCnn1DArchitecture(hand.hand_like()).to_resource_graph((10, 18), n_out)
+        with contextlib.redirect_stdout(io.StringIO()):
+            model = gap.GapCnn1DArchitecture(hand.hand_like()).to_keras_model((10, 18), n_out)
+        n_w, n_macs = keras_features(model)
+        out[task] = {"fork": [int(peak_memory_usage(g)), int(model_size(g)), int(macs(g))],
+                     "faithful": faithful_features(hand.hand_like(), (10, 18), n_out),
+                     "keras": {"weights": n_w, "macs": n_macs}}
+        print(f"hand-designed layer sequence, {task}: {out[task]}")
+    return out
+
+
 if __name__ == "__main__":
-    names = sys.argv[1:] or list(SEARCHES)
-    results = {}
+    # --hand-only: refresh only the hand-designed layer sequence's counts
+    names = [a for a in sys.argv[1:] if a != "--hand-only"]
+    results = {"hand_like_in_v2_space": hand_like_costs()}
+    if "--hand-only" in sys.argv:
+        names = []
+    elif not names:
+        names = list(SEARCHES)
     for name in names:
         if not (ART / name / f"{name}_agingevosearch_state.pickle").exists():
             print(f"{name}: no search state, skipped")

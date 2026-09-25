@@ -448,7 +448,8 @@ first searches (90.83 ± 1.57%, 0.155 / 0.106 ms) remains the better cost trade-
 TTLC v2 search on the fixed pipeline (`highd_ttlc_v2_p`, training windows shuffled): 150
 candidates, 94 saved. Five-seed validation choice: 25,883 parameters, test RMSE
 0.2751 ± 0.0063 s under the search recipe, about the hand-designed CNN's 0.276 ± 0.009 s with
-three times the parameters. Hand-recipe and exiD controls are queued.
+three times the parameters. Under the hand recipe it reaches 0.2924 ± 0.0201 s; trained on
+exiD, 0.3974 ± 0.0107 s (search recipe) and 0.3969 ± 0.0084 s (hand recipe).
 
 The fork's resource graph pads no convolution while the Keras model it trains pads every
 one (see `unas/README.md`), so on these 10-step windows the searches saw a fraction of the
@@ -463,4 +464,24 @@ real cost (`unas/resource_bias.py`, `datasets/highd/results/resource_bias.json`)
 
 The v3 budget of 14,000 MACs therefore did not bound the real cost of its choice. The v4
 configs (`highd_cls_v4`, `highd_ttlc_v4`) search with a graph that has the Keras shapes, with
-budgets at the hand-designed CNNs' cost under that graph; results follow.
+budgets at the hand-designed CNNs' cost under that graph.
+
+### v4: the search with a faithful cost count (2026-09-25)
+
+Budgets: the hand-designed layer sequence under the faithful graph (classifier 8,211 B and
+26,240 MACs, TTLC 8,081 B and 26,112 MACs); error bounds 0.06 and 0.16 s; 150 candidates per
+task, 77 and 30 saved; five-seed validation choice; stored cost equal to the Keras count for
+all 300 candidates.
+
+| model | params | MACs (padded count) | search recipe | hand recipe | exiD (search / hand) | deployed FP32 / int8 |
+|---|--:|--:|--:|--:|--:|--:|
+| v4 classifier | 3,968 | 14,007 | 92.83 ± 0.36% | 92.88 ± 0.29% | 85.87 / 85.71% | 93.03 / 92.15% |
+| hand-designed CNN | 8,371 | 26,240 | – | 92.11 ± 0.71% | 89.93% | 91.09 / 90.88% |
+| v4 TTLC | 4,940 | 21,342 | 0.2881 ± 0.0099 s | 0.2873 ± 0.0266 s | 0.416 / 0.437 s | 0.264 / 0.377 s |
+| hand-designed CNN | 8,241 | 26,112 | – | 0.276 ± 0.009 s | 0.406 s | 0.276 / 0.298 s |
+
+The v4 classifier is as accurate as the hand-designed CNN (Welch p = 0.09 and 0.07) with half
+the parameters and 1.9 times fewer MACs, and all 12 shortlisted classifiers average
+92.0-92.8%. It is specific to highD: trained on exiD it stays about 4 points below the
+hand-designed CNN. The v4 TTLC choice needs 1.2 times fewer MACs for about 0.01 s more RMSE
+(p = 0.09 and 0.42), and its int8 build loses more. Board runs of both are pending.
