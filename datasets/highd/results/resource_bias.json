@@ -42958,5 +42958,9086 @@
     "macs": 169744
    }
   }
+ },
+ "dmir_cls_v4": {
+  "search": "dmir_cls_v4",
+  "input_shape": [
+   50,
+   31
+  ],
+  "n": 150,
+  "failed": 0,
+  "macs_ratio": {
+   "median": 1.0,
+   "min": 1.0,
+   "max": 1.0
+  },
+  "size_ratio": {
+   "median": 1.0,
+   "min": 1.0,
+   "max": 1.0
+  },
+  "pmu_ratio": {
+   "median": 1.0,
+   "min": 1.0,
+   "max": 1.0
+  },
+  "faithful_equals_keras": 150,
+  "points": [
+   {
+    "i": 0,
+    "val_error": 0.12071853876113892,
+    "stored": [
+     235,
+     16513,
+     17825
+    ],
+    "keras": {
+     "weights": 16513,
+     "macs": 17825
+    },
+    "faithful": [
+     235,
+     16513,
+     17825
+    ],
+    "prepool": false,
+    "branch": false
+   },
+   {
+    "i": 1,
+    "val_error": 0.02262943983078003,
+    "stored": [
+     3959,
+     62206,
+     392148
+    ],
+    "keras": {
+     "weights": 62206,
+     "macs": 392148
+    },
+    "faithful": [
+     3959,
+     62206,
+     392148
+    ],
+    "prepool": true,
+    "branch": true
+   },
+   {
+    "i": 2,
+    "val_error": 0.03746598958969116,
+    "stored": [
+     3100,
+     134787,
+     145123
+    ],
+    "keras": {
+     "weights": 134787,
+     "macs": 145123
+    },
+    "faithful": [
+     3100,
+     134787,
+     145123
+    ],
+    "prepool": false,
+    "branch": false
+   },
+   {
+    "i": 3,
+    "val_error": 0.03328174352645874,
+    "stored": [
+     3448,
+     93550,
+     684165
+    ],
+    "keras": {
+     "weights": 93550,
+     "macs": 684165
+    },
+    "faithful": [
+     3448,
+     93550,
+     684165
+    ],
+    "prepool": true,
+    "branch": false
+   },
+   {
+    "i": 4,
+    "val_error": 0.14181792736053467,
+    "stored": [
+     1147,
+     20445,
+     26052
+    ],
+    "keras": {
+     "weights": 20445,
+     "macs": 26052
+    },
+    "faithful": [
+     1147,
+     20445,
+     26052
+    ],
+    "prepool": true,
+    "branch": false
+   },
+   {
+    "i": 5,
+    "val_error": 0.03314173221588135,
+    "stored": [
+     4350,
+     37652,
+     538645
+    ],
+    "keras": {
+     "weights": 37652,
+     "macs": 538645
+    },
+    "faithful": [
+     4350,
+     37652,
+     538645
+    ],
+    "prepool": false,
+    "branch": true
+   },
+   {
+    "i": 6,
+    "val_error": 0.09323239326477051,
+    "stored": [
+     1178,
+     107247,
+     158516
+    ],
+    "keras": {
+     "weights": 107247,
+     "macs": 158516
+    },
+    "faithful": [
+     1178,
+     107247,
+     158516
+    ],
+    "prepool": true,
+    "branch": false
+   },
+   {
+    "i": 7,
+    "val_error": 0.028850555419921875,
+    "stored": [
+     3762,
+     190853,
+     371004
+    ],
+    "keras": {
+     "weights": 190853,
+     "macs": 371004
+    },
+    "faithful": [
+     3762,
+     190853,
+     371004
+    ],
+    "prepool": false,
+    "branch": false
+   },
+   {
+    "i": 8,
+    "val_error": 0.025643348693847656,
+    "stored": [
+     6625,
+     64459,
+     740331
+    ],
+    "keras": {
+     "weights": 64459,
+     "macs": 740331
+    },
+    "faithful": [
+     6625,
+     64459,
+     740331
+    ],
+    "prepool": true,
+    "branch": true
+   },
+   {
+    "i": 9,
+    "val_error": 0.13163697719573975,
+    "stored": [
+     778,
+     2328,
+     3875
+    ],
+    "keras": {
+     "weights": 2328,
+     "macs": 3875
+    },
+    "faithful": [
+     778,
+     2328,
+     3875
+    ],
+    "prepool": false,
+    "branch": false
+   },
+   {
+    "i": 10,
+    "val_error": 0.01860111951828003,
+    "stored": [
+     4712,
+     218543,
+     1261390
+    ],
+    "keras": {
+     "weights": 218543,
+     "macs": 1261390
+    },
+    "faithful": [
+     4712,
+     218543,
+     1261390
+    ],
+    "prepool": true,
+    "branch": true
+   },
+   {
+    "i": 11,
+    "val_error": 0.030041396617889404,
+    "stored": [
+     5671,
+     27151,
+     371841
+    ],
+    "keras": {
+     "weights": 27151,
+     "macs": 371841
+    },
+    "faithful": [
+     5671,
+     27151,
+     371841
+    ],
+    "prepool": true,
+    "branch": true
+   },
+   {
+    "i": 12,
+    "val_error": 0.03656262159347534,
+    "stored": [
+     2812,
+     53694,
+     174663
+    ],
+    "keras": {
+     "weights": 53694,
+     "macs": 174663
+    },
+    "faithful": [
+     2812,
+     53694,
+     174663
+    ],
+    "prepool": true,
+    "branch": true
+   },
+   {
+    "i": 13,
+    "val_error": 0.0813976526260376,
+    "stored": [
+     313,
+     30325,
+     31559
+    ],
+    "keras": {
+     "weights": 30325,
+     "macs": 31559
+    },
+    "faithful": [
+     313,
+     30325,
+     31559
+    ],
+    "prepool": false,
+    "branch": false
+   },
+   {
+    "i": 14,
+    "val_error": 0.05822122097015381,
+    "stored": [
+     8475,
+     104311,
+     1210181
+    ],
+    "keras": {
+     "weights": 104311,
+     "macs": 1210181
+    },
+    "faithful": [
+     8475,
+     104311,
+     1210181
+    ],
+    "prepool": true,
+    "branch": false
+   },
+   {
+    "i": 15,
+    "val_error": 0.12012088298797607,
+    "stored": [
+     235,
+     16513,
+     17825
+    ],
+    "keras": {
+     "weights": 16513,
+     "macs": 17825
+    },
+    "faithful": [
+     235,
+     16513,
+     17825
+    ],
+    "prepool": false,
+    "branch": false
+   },
+   {
+    "i": 16,
+    "val_error": 0.02299875020980835,
+    "stored": [
+     3959,
+     62206,
+     392148
+    ],
+    "keras": {
+     "weights": 62206,
+     "macs": 392148
+    },
+    "faithful": [
+     3959,
+     62206,
+     392148
+    ],
+    "prepool": true,
+    "branch": true
+   },
+   {
+    "i": 17,
+    "val_error": 0.04505479335784912,
+    "stored": [
+     3100,
+     134787,
+     145123
+    ],
+    "keras": {
+     "weights": 134787,
+     "macs": 145123
+    },
+    "faithful": [
+     3100,
+     134787,
+     145123
+    ],
+    "prepool": false,
+    "branch": false
+   },
+   {
+    "i": 18,
+    "val_error": 0.026106536388397217,
+    "stored": [
+     3448,
+     93550,
+     684165
+    ],
+    "keras": {
+     "weights": 93550,
+     "macs": 684165
+    },
+    "faithful": [
+     3448,
+     93550,
+     684165
+    ],
+    "prepool": true,
+    "branch": false
+   },
+   {
+    "i": 19,
+    "val_error": 0.23174887895584106,
+    "stored": [
+     1147,
+     20445,
+     26052
+    ],
+    "keras": {
+     "weights": 20445,
+     "macs": 26052
+    },
+    "faithful": [
+     1147,
+     20445,
+     26052
+    ],
+    "prepool": true,
+    "branch": false
+   },
+   {
+    "i": 20,
+    "val_error": 0.03295332193374634,
+    "stored": [
+     4350,
+     37652,
+     538645
+    ],
+    "keras": {
+     "weights": 37652,
+     "macs": 538645
+    },
+    "faithful": [
+     4350,
+     37652,
+     538645
+    ],
+    "prepool": false,
+    "branch": true
+   },
+   {
+    "i": 21,
+    "val_error": 0.08725762367248535,
+    "stored": [
+     1178,
+     107247,
+     158516
+    ],
+    "keras": {
+     "weights": 107247,
+     "macs": 158516
+    },
+    "faithful": [
+     1178,
+     107247,
+     158516
+    ],
+    "prepool": true,
+    "branch": false
+   },
+   {
+    "i": 22,
+    "val_error": 0.02878391742706299,
+    "stored": [
+     3762,
+     190853,
+     371004
+    ],
+    "keras": {
+     "weights": 190853,
+     "macs": 371004
+    },
+    "faithful": [
+     3762,
+     190853,
+     371004
+    ],
+    "prepool": false,
+    "branch": false
+   },
+   {
+    "i": 23,
+    "val_error": 0.026228666305541992,
+    "stored": [
+     6625,
+     64459,
+     740331
+    ],
+    "keras": {
+     "weights": 64459,
+     "macs": 740331
+    },
+    "faithful": [
+     6625,
+     64459,
+     740331
+    ],
+    "prepool": true,
+    "branch": true
+   },
+   {
+    "i": 24,
+    "val_error": 0.13144630193710327,
+    "stored": [
+     778,
+     2328,
+     3875
+    ],
+    "keras": {
+     "weights": 2328,
+     "macs": 3875
+    },
+    "faithful": [
+     778,
+     2328,
+     3875
+    ],
+    "prepool": false,
+    "branch": false
+   },
+   {
+    "i": 25,
+    "val_error": 0.01758420467376709,
+    "stored": [
+     4712,
+     218543,
+     1261390
+    ],
+    "keras": {
+     "weights": 218543,
+     "macs": 1261390
+    },
+    "faithful": [
+     4712,
+     218543,
+     1261390
+    ],
+    "prepool": true,
+    "branch": true
+   },
+   {
+    "i": 26,
+    "val_error": 0.030457735061645508,
+    "stored": [
+     5671,
+     27151,
+     371841
+    ],
+    "keras": {
+     "weights": 27151,
+     "macs": 371841
+    },
+    "faithful": [
+     5671,
+     27151,
+     371841
+    ],
+    "prepool": true,
+    "branch": true
+   },
+   {
+    "i": 27,
+    "val_error": 0.035276830196380615,
+    "stored": [
+     2812,
+     53694,
+     174663
+    ],
+    "keras": {
+     "weights": 53694,
+     "macs": 174663
+    },
+    "faithful": [
+     2812,
+     53694,
+     174663
+    ],
+    "prepool": true,
+    "branch": true
+   },
+   {
+    "i": 28,
+    "val_error": 0.08149123191833496,
+    "stored": [
+     313,
+     30325,
+     31559
+    ],
+    "keras": {
+     "weights": 30325,
+     "macs": 31559
+    },
+    "faithful": [
+     313,
+     30325,
+     31559
+    ],
+    "prepool": false,
+    "branch": false
+   },
+   {
+    "i": 29,
+    "val_error": 0.04512059688568115,
+    "stored": [
+     8475,
+     104311,
+     1210181
+    ],
+    "keras": {
+     "weights": 104311,
+     "macs": 1210181
+    },
+    "faithful": [
+     8475,
+     104311,
+     1210181
+    ],
+    "prepool": true,
+    "branch": false
+   },
+   {
+    "i": 30,
+    "val_error": 0.11964166164398193,
+    "stored": [
+     235,
+     16513,
+     17825
+    ],
+    "keras": {
+     "weights": 16513,
+     "macs": 17825
+    },
+    "faithful": [
+     235,
+     16513,
+     17825
+    ],
+    "prepool": false,
+    "branch": false
+   },
+   {
+    "i": 31,
+    "val_error": 0.022247374057769775,
+    "stored": [
+     3959,
+     62206,
+     392148
+    ],
+    "keras": {
+     "weights": 62206,
+     "macs": 392148
+    },
+    "faithful": [
+     3959,
+     62206,
+     392148
+    ],
+    "prepool": true,
+    "branch": true
+   },
+   {
+    "i": 32,
+    "val_error": 0.040578484535217285,
+    "stored": [
+     3100,
+     134787,
+     145123
+    ],
+    "keras": {
+     "weights": 134787,
+     "macs": 145123
+    },
+    "faithful": [
+     3100,
+     134787,
+     145123
+    ],
+    "prepool": false,
+    "branch": false
+   },
+   {
+    "i": 33,
+    "val_error": 0.03005009889602661,
+    "stored": [
+     3448,
+     93550,
+     684165
+    ],
+    "keras": {
+     "weights": 93550,
+     "macs": 684165
+    },
+    "faithful": [
+     3448,
+     93550,
+     684165
+    ],
+    "prepool": true,
+    "branch": false
+   },
+   {
+    "i": 34,
+    "val_error": 0.16974085569381714,
+    "stored": [
+     1147,
+     20445,
+     26052
+    ],
+    "keras": {
+     "weights": 20445,
+     "macs": 26052
+    },
+    "faithful": [
+     1147,
+     20445,
+     26052
+    ],
+    "prepool": true,
+    "branch": false
+   },
+   {
+    "i": 35,
+    "val_error": 0.033784449100494385,
+    "stored": [
+     4350,
+     37652,
+     538645
+    ],
+    "keras": {
+     "weights": 37652,
+     "macs": 538645
+    },
+    "faithful": [
+     4350,
+     37652,
+     538645
+    ],
+    "prepool": false,
+    "branch": true
+   },
+   {
+    "i": 36,
+    "val_error": 0.09082835912704468,
+    "stored": [
+     1178,
+     107247,
+     158516
+    ],
+    "keras": {
+     "weights": 107247,
+     "macs": 158516
+    },
+    "faithful": [
+     1178,
+     107247,
+     158516
+    ],
+    "prepool": true,
+    "branch": false
+   },
+   {
+    "i": 37,
+    "val_error": 0.029256820678710938,
+    "stored": [
+     3762,
+     190853,
+     371004
+    ],
+    "keras": {
+     "weights": 190853,
+     "macs": 371004
+    },
+    "faithful": [
+     3762,
+     190853,
+     371004
+    ],
+    "prepool": false,
+    "branch": false
+   },
+   {
+    "i": 38,
+    "val_error": 0.027228176593780518,
+    "stored": [
+     6625,
+     64459,
+     740331
+    ],
+    "keras": {
+     "weights": 64459,
+     "macs": 740331
+    },
+    "faithful": [
+     6625,
+     64459,
+     740331
+    ],
+    "prepool": true,
+    "branch": true
+   },
+   {
+    "i": 39,
+    "val_error": 0.13144266605377197,
+    "stored": [
+     778,
+     2328,
+     3875
+    ],
+    "keras": {
+     "weights": 2328,
+     "macs": 3875
+    },
+    "faithful": [
+     778,
+     2328,
+     3875
+    ],
+    "prepool": false,
+    "branch": false
+   },
+   {
+    "i": 40,
+    "val_error": 0.01754218339920044,
+    "stored": [
+     4712,
+     218543,
+     1261390
+    ],
+    "keras": {
+     "weights": 218543,
+     "macs": 1261390
+    },
+    "faithful": [
+     4712,
+     218543,
+     1261390
+    ],
+    "prepool": true,
+    "branch": true
+   },
+   {
+    "i": 41,
+    "val_error": 0.03183460235595703,
+    "stored": [
+     5671,
+     27151,
+     371841
+    ],
+    "keras": {
+     "weights": 27151,
+     "macs": 371841
+    },
+    "faithful": [
+     5671,
+     27151,
+     371841
+    ],
+    "prepool": true,
+    "branch": true
+   },
+   {
+    "i": 42,
+    "val_error": 0.03578907251358032,
+    "stored": [
+     2812,
+     53694,
+     174663
+    ],
+    "keras": {
+     "weights": 53694,
+     "macs": 174663
+    },
+    "faithful": [
+     2812,
+     53694,
+     174663
+    ],
+    "prepool": true,
+    "branch": true
+   },
+   {
+    "i": 43,
+    "val_error": 0.08167362213134766,
+    "stored": [
+     313,
+     30325,
+     31559
+    ],
+    "keras": {
+     "weights": 30325,
+     "macs": 31559
+    },
+    "faithful": [
+     313,
+     30325,
+     31559
+    ],
+    "prepool": false,
+    "branch": false
+   },
+   {
+    "i": 44,
+    "val_error": 0.06363189220428467,
+    "stored": [
+     8475,
+     104311,
+     1210181
+    ],
+    "keras": {
+     "weights": 104311,
+     "macs": 1210181
+    },
+    "faithful": [
+     8475,
+     104311,
+     1210181
+    ],
+    "prepool": true,
+    "branch": false
+   },
+   {
+    "i": 45,
+    "val_error": 0.12000435590744019,
+    "stored": [
+     235,
+     16513,
+     17825
+    ],
+    "keras": {
+     "weights": 16513,
+     "macs": 17825
+    },
+    "faithful": [
+     235,
+     16513,
+     17825
+    ],
+    "prepool": false,
+    "branch": false
+   },
+   {
+    "i": 46,
+    "val_error": 0.02241116762161255,
+    "stored": [
+     3959,
+     62206,
+     392148
+    ],
+    "keras": {
+     "weights": 62206,
+     "macs": 392148
+    },
+    "faithful": [
+     3959,
+     62206,
+     392148
+    ],
+    "prepool": true,
+    "branch": true
+   },
+   {
+    "i": 47,
+    "val_error": 0.038291752338409424,
+    "stored": [
+     3100,
+     134787,
+     145123
+    ],
+    "keras": {
+     "weights": 134787,
+     "macs": 145123
+    },
+    "faithful": [
+     3100,
+     134787,
+     145123
+    ],
+    "prepool": false,
+    "branch": false
+   },
+   {
+    "i": 48,
+    "val_error": 0.028236806392669678,
+    "stored": [
+     3448,
+     93550,
+     684165
+    ],
+    "keras": {
+     "weights": 93550,
+     "macs": 684165
+    },
+    "faithful": [
+     3448,
+     93550,
+     684165
+    ],
+    "prepool": true,
+    "branch": false
+   },
+   {
+    "i": 49,
+    "val_error": 0.12424421310424805,
+    "stored": [
+     1147,
+     20445,
+     26052
+    ],
+    "keras": {
+     "weights": 20445,
+     "macs": 26052
+    },
+    "faithful": [
+     1147,
+     20445,
+     26052
+    ],
+    "prepool": true,
+    "branch": false
+   },
+   {
+    "i": 50,
+    "val_error": 0.12749654054641724,
+    "stored": [
+     778,
+     2328,
+     3875
+    ],
+    "keras": {
+     "weights": 2328,
+     "macs": 3875
+    },
+    "faithful": [
+     778,
+     2328,
+     3875
+    ],
+    "prepool": false,
+    "branch": false
+   },
+   {
+    "i": 51,
+    "val_error": 0.03266322612762451,
+    "stored": [
+     4350,
+     37652,
+     534770
+    ],
+    "keras": {
+     "weights": 37652,
+     "macs": 534770
+    },
+    "faithful": [
+     4350,
+     37652,
+     534770
+    ],
+    "prepool": true,
+    "branch": true
+   },
+   {
+    "i": 52,
+    "val_error": 0.11853384971618652,
+    "stored": [
+     240,
+     17398,
+     18705
+    ],
+    "keras": {
+     "weights": 17398,
+     "macs": 18705
+    },
+    "faithful": [
+     240,
+     17398,
+     18705
+    ],
+    "prepool": false,
+    "branch": false
+   },
+   {
+    "i": 53,
+    "val_error": 0.06104922294616699,
+    "stored": [
+     860,
+     66218,
+     67680
+    ],
+    "keras": {
+     "weights": 66218,
+     "macs": 67680
+    },
+    "faithful": [
+     860,
+     66218,
+     67680
+    ],
+    "prepool": false,
+    "branch": false
+   },
+   {
+    "i": 54,
+    "val_error": 0.05498015880584717,
+    "stored": [
+     931,
+     121527,
+     122918
+    ],
+    "keras": {
+     "weights": 121527,
+     "macs": 122918
+    },
+    "faithful": [
+     931,
+     121527,
+     122918
+    ],
+    "prepool": false,
+    "branch": false
+   },
+   {
+    "i": 55,
+    "val_error": 0.11963486671447754,
+    "stored": [
+     237,
+     17101,
+     18411
+    ],
+    "keras": {
+     "weights": 17101,
+     "macs": 18411
+    },
+    "faithful": [
+     237,
+     17101,
+     18411
+    ],
+    "prepool": false,
+    "branch": false
+   },
+   {
+    "i": 56,
+    "val_error": 0.12036007642745972,
+    "stored": [
+     232,
+     16231,
+     17546
+    ],
+    "keras": {
+     "weights": 16231,
+     "macs": 17546
+    },
+    "faithful": [
+     232,
+     16231,
+     17546
+    ],
+    "prepool": false,
+    "branch": false
+   },
+   {
+    "i": 57,
+    "val_error": 0.14228004217147827,
+    "stored": [
+     121,
+     3153,
+     4610
+    ],
+    "keras": {
+     "weights": 3153,
+     "macs": 4610
+    },
+    "faithful": [
+     121,
+     3153,
+     4610
+    ],
+    "prepool": false,
+    "branch": false
+   },
+   {
+    "i": 58,
+    "val_error": 0.029883205890655518,
+    "stored": [
+     5406,
+     25551,
+     342651
+    ],
+    "keras": {
+     "weights": 25551,
+     "macs": 342651
+    },
+    "faithful": [
+     5406,
+     25551,
+     342651
+    ],
+    "prepool": true,
+    "branch": true
+   },
+   {
+    "i": 59,
+    "val_error": 0.053801119327545166,
+    "stored": [
+     957,
+     141781,
+     143146
+    ],
+    "keras": {
+     "weights": 141781,
+     "macs": 143146
+    },
+    "faithful": [
+     957,
+     141781,
+     143146
+    ],
+    "prepool": false,
+    "branch": false
+   },
+   {
+    "i": 60,
+    "val_error": 0.13070416450500488,
+    "stored": [
+     3,
+     4653,
+     4650
+    ],
+    "keras": {
+     "weights": 4653,
+     "macs": 4650
+    },
+    "faithful": [
+     3,
+     4653,
+     4650
+    ],
+    "prepool": false,
+    "branch": false
+   },
+   {
+    "i": 61,
+    "val_error": 0.13041865825653076,
+    "stored": [
+     778,
+     2328,
+     3875
+    ],
+    "keras": {
+     "weights": 2328,
+     "macs": 3875
+    },
+    "faithful": [
+     778,
+     2328,
+     3875
+    ],
+    "prepool": false,
+    "branch": false
+   },
+   {
+    "i": 62,
+    "val_error": 0.1415002942085266,
+    "stored": [
+     120,
+     3118,
+     4576
+    ],
+    "keras": {
+     "weights": 3118,
+     "macs": 4576
+    },
+    "faithful": [
+     120,
+     3118,
+     4576
+    ],
+    "prepool": false,
+    "branch": false
+   },
+   {
+    "i": 63,
+    "val_error": 0.05515044927597046,
+    "stored": [
+     3825,
+     5460,
+     85425
+    ],
+    "keras": {
+     "weights": 5460,
+     "macs": 85425
+    },
+    "faithful": [
+     3825,
+     5460,
+     85425
+    ],
+    "prepool": false,
+    "branch": false
+   },
+   {
+    "i": 64,
+    "val_error": 0.1198800802230835,
+    "stored": [
+     232,
+     16231,
+     17546
+    ],
+    "keras": {
+     "weights": 16231,
+     "macs": 17546
+    },
+    "faithful": [
+     232,
+     16231,
+     17546
+    ],
+    "prepool": false,
+    "branch": false
+   },
+   {
+    "i": 65,
+    "val_error": 0.14251017570495605,
+    "stored": [
+     118,
+     3048,
+     4508
+    ],
+    "keras": {
+     "weights": 3048,
+     "macs": 4508
+    },
+    "faithful": [
+     118,
+     3048,
+     4508
+    ],
+    "prepool": false,
+    "branch": false
+   },
+   {
+    "i": 66,
+    "val_error": 0.14154255390167236,
+    "stored": [
+     123,
+     3223,
+     4678
+    ],
+    "keras": {
+     "weights": 3223,
+     "macs": 4678
+    },
+    "faithful": [
+     123,
+     3223,
+     4678
+    ],
+    "prepool": false,
+    "branch": false
+   },
+   {
+    "i": 67,
+    "val_error": 0.04922968149185181,
+    "stored": [
+     865,
+     83191,
+     84506
+    ],
+    "keras": {
+     "weights": 83191,
+     "macs": 84506
+    },
+    "faithful": [
+     865,
+     83191,
+     84506
+    ],
+    "prepool": false,
+    "branch": false
+   },
+   {
+    "i": 68,
+    "val_error": 0.05371713638305664,
+    "stored": [
+     2553,
+     9285,
+     86700
+    ],
+    "keras": {
+     "weights": 9285,
+     "macs": 86700
+    },
+    "faithful": [
+     2553,
+     9285,
+     86700
+    ],
+    "prepool": false,
+    "branch": false
+   },
+   {
+    "i": 69,
+    "val_error": 0.03785836696624756,
+    "stored": [
+     2812,
+     53694,
+     174663
+    ],
+    "keras": {
+     "weights": 53694,
+     "macs": 174663
+    },
+    "faithful": [
+     2812,
+     53694,
+     174663
+    ],
+    "prepool": true,
+    "branch": true
+   },
+   {
+    "i": 70,
+    "val_error": 0.13077396154403687,
+    "stored": [
+     3,
+     4653,
+     4650
+    ],
+    "keras": {
+     "weights": 4653,
+     "macs": 4650
+    },
+    "faithful": [
+     3,
+     4653,
+     4650
+    ],
+    "prepool": false,
+    "branch": false
+   },
+   {
+    "i": 71,
+    "val_error": 0.11911958456039429,
+    "stored": [
+     234,
+     16804,
+     18117
+    ],
+    "keras": {
+     "weights": 16804,
+     "macs": 18117
+    },
+    "faithful": [
+     234,
+     16804,
+     18117
+    ],
+    "prepool": false,
+    "branch": false
+   },
+   {
+    "i": 72,
+    "val_error": 0.054698824882507324,
+    "stored": [
+     2050,
+     5460,
+     44900
+    ],
+    "keras": {
+     "weights": 5460,
+     "macs": 44900
+    },
+    "faithful": [
+     2050,
+     5460,
+     44900
+    ],
+    "prepool": true,
+    "branch": false
+   },
+   {
+    "i": 73,
+    "val_error": 0.02942711114883423,
+    "stored": [
+     8100,
+     46701,
+     1510950
+    ],
+    "keras": {
+     "weights": 46701,
+     "macs": 1510950
+    },
+    "faithful": [
+     8100,
+     46701,
+     1510950
+    ],
+    "prepool": false,
+    "branch": false
+   },
+   {
+    "i": 74,
+    "val_error": 0.1345643401145935,
+    "stored": [
+     778,
+     2328,
+     3875
+    ],
+    "keras": {
+     "weights": 2328,
+     "macs": 3875
+    },
+    "faithful": [
+     778,
+     2328,
+     3875
+    ],
+    "prepool": false,
+    "branch": false
+   },
+   {
+    "i": 75,
+    "val_error": 0.12198066711425781,
+    "stored": [
+     1178,
+     1336,
+     4340
+    ],
+    "keras": {
+     "weights": 1336,
+     "macs": 4340
+    },
+    "faithful": [
+     1178,
+     1336,
+     4340
+    ],
+    "prepool": false,
+    "branch": false
+   },
+   {
+    "i": 76,
+    "val_error": 0.11703866720199585,
+    "stored": [
+     1178,
+     1398,
+     5890
+    ],
+    "keras": {
+     "weights": 1398,
+     "macs": 5890
+    },
+    "faithful": [
+     1178,
+     1398,
+     5890
+    ],
+    "prepool": false,
+    "branch": false
+   },
+   {
+    "i": 77,
+    "val_error": 0.05068105459213257,
+    "stored": [
+     2050,
+     5460,
+     44900
+    ],
+    "keras": {
+     "weights": 5460,
+     "macs": 44900
+    },
+    "faithful": [
+     2050,
+     5460,
+     44900
+    ],
+    "prepool": true,
+    "branch": false
+   },
+   {
+    "i": 78,
+    "val_error": 0.08770400285720825,
+    "stored": [
+     2050,
+     1788,
+     42503
+    ],
+    "keras": {
+     "weights": 1788,
+     "macs": 42503
+    },
+    "faithful": [
+     2050,
+     1788,
+     42503
+    ],
+    "prepool": true,
+    "branch": false
+   },
+   {
+    "i": 79,
+    "val_error": 0.05488079786300659,
+    "stored": [
+     2025,
+     5353,
+     44050
+    ],
+    "keras": {
+     "weights": 5353,
+     "macs": 44050
+    },
+    "faithful": [
+     2025,
+     5353,
+     44050
+    ],
+    "prepool": true,
+    "branch": false
+   },
+   {
+    "i": 80,
+    "val_error": 0.056903183460235596,
+    "stored": [
+     2050,
+     3624,
+     44390
+    ],
+    "keras": {
+     "weights": 3624,
+     "macs": 44390
+    },
+    "faithful": [
+     2050,
+     3624,
+     44390
+    ],
+    "prepool": true,
+    "branch": false
+   },
+   {
+    "i": 81,
+    "val_error": 0.09373080730438232,
+    "stored": [
+     2325,
+     2452,
+     8525
+    ],
+    "keras": {
+     "weights": 2452,
+     "macs": 8525
+    },
+    "faithful": [
+     2325,
+     2452,
+     8525
+    ],
+    "prepool": false,
+    "branch": false
+   },
+   {
+    "i": 82,
+    "val_error": 0.0959014892578125,
+    "stored": [
+     1553,
+     4777,
+     9300
+    ],
+    "keras": {
+     "weights": 4777,
+     "macs": 9300
+    },
+    "faithful": [
+     1553,
+     4777,
+     9300
+    ],
+    "prepool": false,
+    "branch": false
+   },
+   {
+    "i": 83,
+    "val_error": 0.05568671226501465,
+    "stored": [
+     2553,
+     9285,
+     86700
+    ],
+    "keras": {
+     "weights": 9285,
+     "macs": 86700
+    },
+    "faithful": [
+     2553,
+     9285,
+     86700
+    ],
+    "prepool": false,
+    "branch": false
+   },
+   {
+    "i": 84,
+    "val_error": 0.09185481071472168,
+    "stored": [
+     1178,
+     1336,
+     3968
+    ],
+    "keras": {
+     "weights": 1336,
+     "macs": 3968
+    },
+    "faithful": [
+     1178,
+     1336,
+     3968
+    ],
+    "prepool": true,
+    "branch": false
+   },
+   {
+    "i": 85,
+    "val_error": 0.055894553661346436,
+    "stored": [
+     2050,
+     3624,
+     44390
+    ],
+    "keras": {
+     "weights": 3624,
+     "macs": 44390
+    },
+    "faithful": [
+     2050,
+     3624,
+     44390
+    ],
+    "prepool": true,
+    "branch": false
+   },
+   {
+    "i": 86,
+    "val_error": 0.08759438991546631,
+    "stored": [
+     2075,
+     1823,
+     43306
+    ],
+    "keras": {
+     "weights": 1823,
+     "macs": 43306
+    },
+    "faithful": [
+     2075,
+     1823,
+     43306
+    ],
+    "prepool": true,
+    "branch": false
+   },
+   {
+    "i": 87,
+    "val_error": 0.10608875751495361,
+    "stored": [
+     1553,
+     4777,
+     9300
+    ],
+    "keras": {
+     "weights": 4777,
+     "macs": 9300
+    },
+    "faithful": [
+     1553,
+     4777,
+     9300
+    ],
+    "prepool": false,
+    "branch": false
+   },
+   {
+    "i": 88,
+    "val_error": 0.1241409182548523,
+    "stored": [
+     2325,
+     2452,
+     8525
+    ],
+    "keras": {
+     "weights": 2452,
+     "macs": 8525
+    },
+    "faithful": [
+     2325,
+     2452,
+     8525
+    ],
+    "prepool": false,
+    "branch": false
+   },
+   {
+    "i": 89,
+    "val_error": 0.05612605810165405,
+    "stored": [
+     3900,
+     5567,
+     87100
+    ],
+    "keras": {
+     "weights": 5567,
+     "macs": 87100
+    },
+    "faithful": [
+     3900,
+     5567,
+     87100
+    ],
+    "prepool": false,
+    "branch": false
+   },
+   {
+    "i": 90,
+    "val_error": 0.12723308801651,
+    "stored": [
+     3,
+     4653,
+     4650
+    ],
+    "keras": {
+     "weights": 4653,
+     "macs": 4650
+    },
+    "faithful": [
+     3,
+     4653,
+     4650
+    ],
+    "prepool": false,
+    "branch": false
+   },
+   {
+    "i": 91,
+    "val_error": 0.028699636459350586,
+    "stored": [
+     5671,
+     27151,
+     371841
+    ],
+    "keras": {
+     "weights": 27151,
+     "macs": 371841
+    },
+    "faithful": [
+     5671,
+     27151,
+     371841
+    ],
+    "prepool": true,
+    "branch": true
+   },
+   {
+    "i": 92,
+    "val_error": 0.056291401386260986,
+    "stored": [
+     2403,
+     8739,
+     81600
+    ],
+    "keras": {
+     "weights": 8739,
+     "macs": 81600
+    },
+    "faithful": [
+     2403,
+     8739,
+     81600
+    ],
+    "prepool": false,
+    "branch": false
+   },
+   {
+    "i": 93,
+    "val_error": 0.1654624342918396,
+    "stored": [
+     2050,
+     1788,
+     42503
+    ],
+    "keras": {
+     "weights": 1788,
+     "macs": 42503
+    },
+    "faithful": [
+     2050,
+     1788,
+     42503
+    ],
+    "prepool": true,
+    "branch": false
+   },
+   {
+    "i": 94,
+    "val_error": 0.04381293058395386,
+    "stored": [
+     2050,
+     5460,
+     44900
+    ],
+    "keras": {
+     "weights": 5460,
+     "macs": 44900
+    },
+    "faithful": [
+     2050,
+     5460,
+     44900
+    ],
+    "prepool": true,
+    "branch": false
+   },
+   {
+    "i": 95,
+    "val_error": 0.05066323280334473,
+    "stored": [
+     2175,
+     5995,
+     49150
+    ],
+    "keras": {
+     "weights": 5995,
+     "macs": 49150
+    },
+    "faithful": [
+     2175,
+     5995,
+     49150
+    ],
+    "prepool": true,
+    "branch": false
+   },
+   {
+    "i": 96,
+    "val_error": 0.21343570947647095,
+    "stored": [
+     806,
+     220,
+     3193
+    ],
+    "keras": {
+     "weights": 220,
+     "macs": 3193
+    },
+    "faithful": [
+     806,
+     220,
+     3193
+    ],
+    "prepool": false,
+    "branch": false
+   },
+   {
+    "i": 97,
+    "val_error": 0.03612786531448364,
+    "stored": [
+     2812,
+     53694,
+     174663
+    ],
+    "keras": {
+     "weights": 53694,
+     "macs": 174663
+    },
+    "faithful": [
+     2812,
+     53694,
+     174663
+    ],
+    "prepool": true,
+    "branch": true
+   },
+   {
+    "i": 98,
+    "val_error": 0.10827893018722534,
+    "stored": [
+     1178,
+     1398,
+     5890
+    ],
+    "keras": {
+     "weights": 1398,
+     "macs": 5890
+    },
+    "faithful": [
+     1178,
+     1398,
+     5890
+    ],
+    "prepool": false,
+    "branch": false
+   },
+   {
+    "i": 99,
+    "val_error": 0.054843902587890625,
+    "stored": [
+     2050,
+     5460,
+     44900
+    ],
+    "keras": {
+     "weights": 5460,
+     "macs": 44900
+    },
+    "faithful": [
+     2050,
+     5460,
+     44900
+    ],
+    "prepool": true,
+    "branch": false
+   },
+   {
+    "i": 100,
+    "val_error": 0.12731128931045532,
+    "stored": [
+     3,
+     4653,
+     4650
+    ],
+    "keras": {
+     "weights": 4653,
+     "macs": 4650
+    },
+    "faithful": [
+     3,
+     4653,
+     4650
+    ],
+    "prepool": false,
+    "branch": false
+   },
+   {
+    "i": 101,
+    "val_error": 0.04770159721374512,
+    "stored": [
+     6525,
+     6528,
+     145986
+    ],
+    "keras": {
+     "weights": 6528,
+     "macs": 145986
+    },
+    "faithful": [
+     6525,
+     6528,
+     145986
+    ],
+    "prepool": true,
+    "branch": false
+   },
+   {
+    "i": 102,
+    "val_error": 0.05620682239532471,
+    "stored": [
+     2075,
+     3695,
+     45230
+    ],
+    "keras": {
+     "weights": 3695,
+     "macs": 45230
+    },
+    "faithful": [
+     2075,
+     3695,
+     45230
+    ],
+    "prepool": true,
+    "branch": false
+   },
+   {
+    "i": 103,
+    "val_error": 0.08009302616119385,
+    "stored": [
+     814,
+     1385,
+     7013
+    ],
+    "keras": {
+     "weights": 1385,
+     "macs": 7013
+    },
+    "faithful": [
+     814,
+     1385,
+     7013
+    ],
+    "prepool": true,
+    "branch": false
+   },
+   {
+    "i": 104,
+    "val_error": 0.0889539122581482,
+    "stored": [
+     520,
+     1943,
+     47060
+    ],
+    "keras": {
+     "weights": 1943,
+     "macs": 47060
+    },
+    "faithful": [
+     520,
+     1943,
+     47060
+    ],
+    "prepool": false,
+    "branch": false
+   },
+   {
+    "i": 105,
+    "val_error": 0.0430072546005249,
+    "stored": [
+     4453,
+     27237,
+     703100
+    ],
+    "keras": {
+     "weights": 27237,
+     "macs": 703100
+    },
+    "faithful": [
+     4453,
+     27237,
+     703100
+    ],
+    "prepool": false,
+    "branch": false
+   },
+   {
+    "i": 106,
+    "val_error": 0.051159679889678955,
+    "stored": [
+     2050,
+     5460,
+     44900
+    ],
+    "keras": {
+     "weights": 5460,
+     "macs": 44900
+    },
+    "faithful": [
+     2050,
+     5460,
+     44900
+    ],
+    "prepool": true,
+    "branch": false
+   },
+   {
+    "i": 107,
+    "val_error": 0.1273443102836609,
+    "stored": [
+     3,
+     4653,
+     4650
+    ],
+    "keras": {
+     "weights": 4653,
+     "macs": 4650
+    },
+    "faithful": [
+     3,
+     4653,
+     4650
+    ],
+    "prepool": false,
+    "branch": false
+   },
+   {
+    "i": 108,
+    "val_error": 0.04451298713684082,
+    "stored": [
+     6525,
+     6528,
+     145986
+    ],
+    "keras": {
+     "weights": 6528,
+     "macs": 145986
+    },
+    "faithful": [
+     6525,
+     6528,
+     145986
+    ],
+    "prepool": true,
+    "branch": false
+   },
+   {
+    "i": 109,
+    "val_error": 0.044380247592926025,
+    "stored": [
+     2075,
+     5567,
+     45750
+    ],
+    "keras": {
+     "weights": 5567,
+     "macs": 45750
+    },
+    "faithful": [
+     2075,
+     5567,
+     45750
+    ],
+    "prepool": true,
+    "branch": false
+   },
+   {
+    "i": 110,
+    "val_error": 0.05547553300857544,
+    "stored": [
+     2000,
+     5246,
+     43200
+    ],
+    "keras": {
+     "weights": 5246,
+     "macs": 43200
+    },
+    "faithful": [
+     2000,
+     5246,
+     43200
+    ],
+    "prepool": true,
+    "branch": false
+   },
+   {
+    "i": 111,
+    "val_error": 0.0435100793838501,
+    "stored": [
+     2125,
+     5781,
+     47450
+    ],
+    "keras": {
+     "weights": 5781,
+     "macs": 47450
+    },
+    "faithful": [
+     2125,
+     5781,
+     47450
+    ],
+    "prepool": true,
+    "branch": false
+   },
+   {
+    "i": 112,
+    "val_error": 0.05567115545272827,
+    "stored": [
+     1925,
+     4925,
+     40650
+    ],
+    "keras": {
+     "weights": 4925,
+     "macs": 40650
+    },
+    "faithful": [
+     1925,
+     4925,
+     40650
+    ],
+    "prepool": true,
+    "branch": false
+   },
+   {
+    "i": 113,
+    "val_error": 0.04936933517456055,
+    "stored": [
+     2125,
+     25429,
+     179012
+    ],
+    "keras": {
+     "weights": 25429,
+     "macs": 179012
+    },
+    "faithful": [
+     2125,
+     25429,
+     179012
+    ],
+    "prepool": true,
+    "branch": false
+   },
+   {
+    "i": 114,
+    "val_error": 0.038651466369628906,
+    "stored": [
+     3475,
+     24951,
+     428150
+    ],
+    "keras": {
+     "weights": 24951,
+     "macs": 428150
+    },
+    "faithful": [
+     3475,
+     24951,
+     428150
+    ],
+    "prepool": true,
+    "branch": false
+   },
+   {
+    "i": 115,
+    "val_error": 0.04422199726104736,
+    "stored": [
+     6525,
+     9660,
+     152250
+    ],
+    "keras": {
+     "weights": 9660,
+     "macs": 152250
+    },
+    "faithful": [
+     6525,
+     9660,
+     152250
+    ],
+    "prepool": true,
+    "branch": false
+   },
+   {
+    "i": 116,
+    "val_error": 0.04483121633529663,
+    "stored": [
+     2050,
+     5460,
+     44900
+    ],
+    "keras": {
+     "weights": 5460,
+     "macs": 44900
+    },
+    "faithful": [
+     2050,
+     5460,
+     44900
+    ],
+    "prepool": true,
+    "branch": false
+   },
+   {
+    "i": 117,
+    "val_error": 0.1612558364868164,
+    "stored": [
+     1178,
+     220,
+     3255
+    ],
+    "keras": {
+     "weights": 220,
+     "macs": 3255
+    },
+    "faithful": [
+     1178,
+     220,
+     3255
+    ],
+    "prepool": true,
+    "branch": false
+   },
+   {
+    "i": 118,
+    "val_error": 0.05585747957229614,
+    "stored": [
+     2050,
+     3624,
+     44390
+    ],
+    "keras": {
+     "weights": 3624,
+     "macs": 44390
+    },
+    "faithful": [
+     2050,
+     3624,
+     44390
+    ],
+    "prepool": true,
+    "branch": false
+   },
+   {
+    "i": 119,
+    "val_error": 0.05649524927139282,
+    "stored": [
+     2050,
+     5460,
+     44900
+    ],
+    "keras": {
+     "weights": 5460,
+     "macs": 44900
+    },
+    "faithful": [
+     2050,
+     5460,
+     44900
+    ],
+    "prepool": true,
+    "branch": false
+   },
+   {
+    "i": 120,
+    "val_error": 0.12086176872253418,
+    "stored": [
+     3,
+     4653,
+     4650
+    ],
+    "keras": {
+     "weights": 4653,
+     "macs": 4650
+    },
+    "faithful": [
+     3,
+     4653,
+     4650
+    ],
+    "prepool": false,
+    "branch": false
+   },
+   {
+    "i": 121,
+    "val_error": 0.05462855100631714,
+    "stored": [
+     2025,
+     5353,
+     44050
+    ],
+    "keras": {
+     "weights": 5353,
+     "macs": 44050
+    },
+    "faithful": [
+     2025,
+     5353,
+     44050
+    ],
+    "prepool": true,
+    "branch": false
+   },
+   {
+    "i": 122,
+    "val_error": 0.04542112350463867,
+    "stored": [
+     2050,
+     5460,
+     44900
+    ],
+    "keras": {
+     "weights": 5460,
+     "macs": 44900
+    },
+    "faithful": [
+     2050,
+     5460,
+     44900
+    ],
+    "prepool": true,
+    "branch": false
+   },
+   {
+    "i": 123,
+    "val_error": 0.11757093667984009,
+    "stored": [
+     2050,
+     5460,
+     44900
+    ],
+    "keras": {
+     "weights": 5460,
+     "macs": 44900
+    },
+    "faithful": [
+     2050,
+     5460,
+     44900
+    ],
+    "prepool": true,
+    "branch": false
+   },
+   {
+    "i": 124,
+    "val_error": 0.067421555519104,
+    "stored": [
+     2050,
+     1788,
+     42503
+    ],
+    "keras": {
+     "weights": 1788,
+     "macs": 42503
+    },
+    "faithful": [
+     2050,
+     1788,
+     42503
+    ],
+    "prepool": true,
+    "branch": false
+   },
+   {
+    "i": 125,
+    "val_error": 0.0959363579750061,
+    "stored": [
+     1178,
+     1336,
+     4340
+    ],
+    "keras": {
+     "weights": 1336,
+     "macs": 4340
+    },
+    "faithful": [
+     1178,
+     1336,
+     4340
+    ],
+    "prepool": false,
+    "branch": false
+   },
+   {
+    "i": 126,
+    "val_error": 0.16878634691238403,
+    "stored": [
+     34,
+     96,
+     1643
+    ],
+    "keras": {
+     "weights": 96,
+     "macs": 1643
+    },
+    "faithful": [
+     34,
+     96,
+     1643
+    ],
+    "prepool": false,
+    "branch": false
+   },
+   {
+    "i": 127,
+    "val_error": 0.1273595094680786,
+    "stored": [
+     3,
+     4653,
+     4650
+    ],
+    "keras": {
+     "weights": 4653,
+     "macs": 4650
+    },
+    "faithful": [
+     3,
+     4653,
+     4650
+    ],
+    "prepool": false,
+    "branch": false
+   },
+   {
+    "i": 128,
+    "val_error": 0.056014180183410645,
+    "stored": [
+     2050,
+     5460,
+     44900
+    ],
+    "keras": {
+     "weights": 5460,
+     "macs": 44900
+    },
+    "faithful": [
+     2050,
+     5460,
+     44900
+    ],
+    "prepool": true,
+    "branch": false
+   },
+   {
+    "i": 129,
+    "val_error": 0.05567532777786255,
+    "stored": [
+     2000,
+     5246,
+     43200
+    ],
+    "keras": {
+     "weights": 5246,
+     "macs": 43200
+    },
+    "faithful": [
+     2000,
+     5246,
+     43200
+    ],
+    "prepool": true,
+    "branch": false
+   },
+   {
+    "i": 130,
+    "val_error": 0.12726277112960815,
+    "stored": [
+     3,
+     4653,
+     4650
+    ],
+    "keras": {
+     "weights": 4653,
+     "macs": 4650
+    },
+    "faithful": [
+     3,
+     4653,
+     4650
+    ],
+    "prepool": false,
+    "branch": false
+   },
+   {
+    "i": 131,
+    "val_error": 0.04600965976715088,
+    "stored": [
+     2000,
+     5246,
+     43200
+    ],
+    "keras": {
+     "weights": 5246,
+     "macs": 43200
+    },
+    "faithful": [
+     2000,
+     5246,
+     43200
+    ],
+    "prepool": true,
+    "branch": false
+   },
+   {
+    "i": 132,
+    "val_error": 0.056894540786743164,
+    "stored": [
+     1950,
+     5032,
+     41500
+    ],
+    "keras": {
+     "weights": 5032,
+     "macs": 41500
+    },
+    "faithful": [
+     1950,
+     5032,
+     41500
+    ],
+    "prepool": true,
+    "branch": false
+   },
+   {
+    "i": 133,
+    "val_error": 0.1253853440284729,
+    "stored": [
+     1178,
+     1336,
+     3968
+    ],
+    "keras": {
+     "weights": 1336,
+     "macs": 3968
+    },
+    "faithful": [
+     1178,
+     1336,
+     3968
+    ],
+    "prepool": true,
+    "branch": false
+   },
+   {
+    "i": 134,
+    "val_error": 0.03990262746810913,
+    "stored": [
+     3475,
+     18255,
+     260750
+    ],
+    "keras": {
+     "weights": 18255,
+     "macs": 260750
+    },
+    "faithful": [
+     3475,
+     18255,
+     260750
+    ],
+    "prepool": true,
+    "branch": false
+   },
+   {
+    "i": 135,
+    "val_error": 0.046519696712493896,
+    "stored": [
+     1925,
+     4925,
+     40650
+    ],
+    "keras": {
+     "weights": 4925,
+     "macs": 40650
+    },
+    "faithful": [
+     1925,
+     4925,
+     40650
+    ],
+    "prepool": true,
+    "branch": false
+   },
+   {
+    "i": 136,
+    "val_error": 0.04200410842895508,
+    "stored": [
+     6525,
+     6528,
+     145986
+    ],
+    "keras": {
+     "weights": 6528,
+     "macs": 145986
+    },
+    "faithful": [
+     6525,
+     6528,
+     145986
+    ],
+    "prepool": true,
+    "branch": false
+   },
+   {
+    "i": 137,
+    "val_error": 0.12101060152053833,
+    "stored": [
+     3,
+     4653,
+     4650
+    ],
+    "keras": {
+     "weights": 4653,
+     "macs": 4650
+    },
+    "faithful": [
+     3,
+     4653,
+     4650
+    ],
+    "prepool": false,
+    "branch": false
+   },
+   {
+    "i": 138,
+    "val_error": 0.04461544752120972,
+    "stored": [
+     2075,
+     5567,
+     45750
+    ],
+    "keras": {
+     "weights": 5567,
+     "macs": 45750
+    },
+    "faithful": [
+     2075,
+     5567,
+     45750
+    ],
+    "prepool": true,
+    "branch": false
+   },
+   {
+    "i": 139,
+    "val_error": 0.026575863361358643,
+    "stored": [
+     3575,
+     22703,
+     399875
+    ],
+    "keras": {
+     "weights": 22703,
+     "macs": 399875
+    },
+    "faithful": [
+     3575,
+     22703,
+     399875
+    ],
+    "prepool": true,
+    "branch": false
+   },
+   {
+    "i": 140,
+    "val_error": 0.08475130796432495,
+    "stored": [
+     2050,
+     1788,
+     42503
+    ],
+    "keras": {
+     "weights": 1788,
+     "macs": 42503
+    },
+    "faithful": [
+     2050,
+     1788,
+     42503
+    ],
+    "prepool": true,
+    "branch": false
+   },
+   {
+    "i": 141,
+    "val_error": 0.04623067378997803,
+    "stored": [
+     2100,
+     5674,
+     46600
+    ],
+    "keras": {
+     "weights": 5674,
+     "macs": 46600
+    },
+    "faithful": [
+     2100,
+     5674,
+     46600
+    ],
+    "prepool": true,
+    "branch": false
+   },
+   {
+    "i": 142,
+    "val_error": 0.023048579692840576,
+    "stored": [
+     9550,
+     27539,
+     602850
+    ],
+    "keras": {
+     "weights": 27539,
+     "macs": 602850
+    },
+    "faithful": [
+     9550,
+     27539,
+     602850
+    ],
+    "prepool": false,
+    "branch": false
+   },
+   {
+    "i": 143,
+    "val_error": 0.04580056667327881,
+    "stored": [
+     2050,
+     3624,
+     44390
+    ],
+    "keras": {
+     "weights": 3624,
+     "macs": 44390
+    },
+    "faithful": [
+     2050,
+     3624,
+     44390
+    ],
+    "prepool": true,
+    "branch": false
+   },
+   {
+    "i": 144,
+    "val_error": 0.026368021965026855,
+    "stored": [
+     6525,
+     12533,
+     229173
+    ],
+    "keras": {
+     "weights": 12533,
+     "macs": 229173
+    },
+    "faithful": [
+     6525,
+     12533,
+     229173
+    ],
+    "prepool": true,
+    "branch": false
+   },
+   {
+    "i": 145,
+    "val_error": 0.11727410554885864,
+    "stored": [
+     2075,
+     5567,
+     45750
+    ],
+    "keras": {
+     "weights": 5567,
+     "macs": 45750
+    },
+    "faithful": [
+     2075,
+     5567,
+     45750
+    ],
+    "prepool": true,
+    "branch": false
+   },
+   {
+    "i": 146,
+    "val_error": 0.04507416486740112,
+    "stored": [
+     2100,
+     5674,
+     46600
+    ],
+    "keras": {
+     "weights": 5674,
+     "macs": 46600
+    },
+    "faithful": [
+     2100,
+     5674,
+     46600
+    ],
+    "prepool": true,
+    "branch": false
+   },
+   {
+    "i": 147,
+    "val_error": 0.05618339776992798,
+    "stored": [
+     2050,
+     3624,
+     44390
+    ],
+    "keras": {
+     "weights": 3624,
+     "macs": 44390
+    },
+    "faithful": [
+     2050,
+     3624,
+     44390
+    ],
+    "prepool": true,
+    "branch": false
+   },
+   {
+    "i": 148,
+    "val_error": 0.04562455415725708,
+    "stored": [
+     1950,
+     5032,
+     41500
+    ],
+    "keras": {
+     "weights": 5032,
+     "macs": 41500
+    },
+    "faithful": [
+     1950,
+     5032,
+     41500
+    ],
+    "prepool": true,
+    "branch": false
+   },
+   {
+    "i": 149,
+    "val_error": 0.05085092782974243,
+    "stored": [
+     2125,
+     5781,
+     47450
+    ],
+    "keras": {
+     "weights": 5781,
+     "macs": 47450
+    },
+    "faithful": [
+     2125,
+     5781,
+     47450
+    ],
+    "prepool": true,
+    "branch": false
+   }
+  ]
+ },
+ "dmir_lcr_v4": {
+  "search": "dmir_lcr_v4",
+  "input_shape": [
+   50,
+   31
+  ],
+  "n": 150,
+  "failed": 0,
+  "macs_ratio": {
+   "median": 1.0,
+   "min": 1.0,
+   "max": 1.0
+  },
+  "size_ratio": {
+   "median": 1.0,
+   "min": 1.0,
+   "max": 1.0
+  },
+  "pmu_ratio": {
+   "median": 1.0,
+   "min": 1.0,
+   "max": 1.0
+  },
+  "faithful_equals_keras": 150,
+  "points": [
+   {
+    "i": 0,
+    "val_error": 0.7030866146087646,
+    "stored": [
+     235,
+     16221,
+     17535
+    ],
+    "keras": {
+     "weights": 16221,
+     "macs": 17535
+    },
+    "faithful": [
+     235,
+     16221,
+     17535
+    ],
+    "prepool": false,
+    "branch": false
+   },
+   {
+    "i": 1,
+    "val_error": 0.2945212721824646,
+    "stored": [
+     3959,
+     62030,
+     391974
+    ],
+    "keras": {
+     "weights": 62030,
+     "macs": 391974
+    },
+    "faithful": [
+     3959,
+     62030,
+     391974
+    ],
+    "prepool": true,
+    "branch": true
+   },
+   {
+    "i": 2,
+    "val_error": 0.4244655966758728,
+    "stored": [
+     3100,
+     134561,
+     144899
+    ],
+    "keras": {
+     "weights": 134561,
+     "macs": 144899
+    },
+    "faithful": [
+     3100,
+     134561,
+     144899
+    ],
+    "prepool": false,
+    "branch": false
+   },
+   {
+    "i": 3,
+    "val_error": 0.6327386498451233,
+    "stored": [
+     1147,
+     20185,
+     25794
+    ],
+    "keras": {
+     "weights": 20185,
+     "macs": 25794
+    },
+    "faithful": [
+     1147,
+     20185,
+     25794
+    ],
+    "prepool": true,
+    "branch": false
+   },
+   {
+    "i": 4,
+    "val_error": 0.4092461168766022,
+    "stored": [
+     3448,
+     93156,
+     683773
+    ],
+    "keras": {
+     "weights": 93156,
+     "macs": 683773
+    },
+    "faithful": [
+     3448,
+     93156,
+     683773
+    ],
+    "prepool": true,
+    "branch": false
+   },
+   {
+    "i": 5,
+    "val_error": 0.8791136741638184,
+    "stored": [
+     1178,
+     106943,
+     158214
+    ],
+    "keras": {
+     "weights": 106943,
+     "macs": 158214
+    },
+    "faithful": [
+     1178,
+     106943,
+     158214
+    ],
+    "prepool": true,
+    "branch": false
+   },
+   {
+    "i": 6,
+    "val_error": 0.38737669587135315,
+    "stored": [
+     4350,
+     37606,
+     538601
+    ],
+    "keras": {
+     "weights": 37606,
+     "macs": 538601
+    },
+    "faithful": [
+     4350,
+     37606,
+     538601
+    ],
+    "prepool": false,
+    "branch": true
+   },
+   {
+    "i": 7,
+    "val_error": 0.36888670921325684,
+    "stored": [
+     3762,
+     190567,
+     370720
+    ],
+    "keras": {
+     "weights": 190567,
+     "macs": 370720
+    },
+    "faithful": [
+     3762,
+     190567,
+     370720
+    ],
+    "prepool": false,
+    "branch": false
+   },
+   {
+    "i": 8,
+    "val_error": 0.4146745800971985,
+    "stored": [
+     6625,
+     64399,
+     740273
+    ],
+    "keras": {
+     "weights": 64399,
+     "macs": 740273
+    },
+    "faithful": [
+     6625,
+     64399,
+     740273
+    ],
+    "prepool": true,
+    "branch": true
+   },
+   {
+    "i": 9,
+    "val_error": 0.7527074217796326,
+    "stored": [
+     776,
+     776,
+     2325
+    ],
+    "keras": {
+     "weights": 776,
+     "macs": 2325
+    },
+    "faithful": [
+     776,
+     776,
+     2325
+    ],
+    "prepool": false,
+    "branch": false
+   },
+   {
+    "i": 10,
+    "val_error": 0.24476654827594757,
+    "stored": [
+     4712,
+     218429,
+     1261278
+    ],
+    "keras": {
+     "weights": 218429,
+     "macs": 1261278
+    },
+    "faithful": [
+     4712,
+     218429,
+     1261278
+    ],
+    "prepool": true,
+    "branch": true
+   },
+   {
+    "i": 11,
+    "val_error": 0.3555369973182678,
+    "stored": [
+     5671,
+     27079,
+     371771
+    ],
+    "keras": {
+     "weights": 27079,
+     "macs": 371771
+    },
+    "faithful": [
+     5671,
+     27079,
+     371771
+    ],
+    "prepool": true,
+    "branch": true
+   },
+   {
+    "i": 12,
+    "val_error": 0.3406199514865875,
+    "stored": [
+     2812,
+     53570,
+     174541
+    ],
+    "keras": {
+     "weights": 53570,
+     "macs": 174541
+    },
+    "faithful": [
+     2812,
+     53570,
+     174541
+    ],
+    "prepool": true,
+    "branch": true
+   },
+   {
+    "i": 13,
+    "val_error": 0.5820507407188416,
+    "stored": [
+     313,
+     30037,
+     31273
+    ],
+    "keras": {
+     "weights": 30037,
+     "macs": 31273
+    },
+    "faithful": [
+     313,
+     30037,
+     31273
+    ],
+    "prepool": false,
+    "branch": false
+   },
+   {
+    "i": 14,
+    "val_error": 0.46321722865104675,
+    "stored": [
+     8475,
+     104151,
+     1210023
+    ],
+    "keras": {
+     "weights": 104151,
+     "macs": 1210023
+    },
+    "faithful": [
+     8475,
+     104151,
+     1210023
+    ],
+    "prepool": true,
+    "branch": false
+   },
+   {
+    "i": 15,
+    "val_error": 0.2977588176727295,
+    "stored": [
+     1371,
+     117688,
+     477830
+    ],
+    "keras": {
+     "weights": 117688,
+     "macs": 477830
+    },
+    "faithful": [
+     1371,
+     117688,
+     477830
+    ],
+    "prepool": true,
+    "branch": true
+   },
+   {
+    "i": 16,
+    "val_error": 0.4096210300922394,
+    "stored": [
+     2500,
+     8788,
+     413305
+    ],
+    "keras": {
+     "weights": 8788,
+     "macs": 413305
+    },
+    "faithful": [
+     2500,
+     8788,
+     413305
+    ],
+    "prepool": false,
+    "branch": false
+   },
+   {
+    "i": 17,
+    "val_error": 0.5181297063827515,
+    "stored": [
+     8250,
+     23541,
+     216535
+    ],
+    "keras": {
+     "weights": 23541,
+     "macs": 216535
+    },
+    "faithful": [
+     8250,
+     23541,
+     216535
+    ],
+    "prepool": false,
+    "branch": false
+   },
+   {
+    "i": 18,
+    "val_error": 0.3748994767665863,
+    "stored": [
+     1550,
+     30287,
+     91514
+    ],
+    "keras": {
+     "weights": 30287,
+     "macs": 91514
+    },
+    "faithful": [
+     1550,
+     30287,
+     91514
+    ],
+    "prepool": true,
+    "branch": false
+   },
+   {
+    "i": 19,
+    "val_error": 0.582648515701294,
+    "stored": [
+     2500,
+     2830,
+     70807
+    ],
+    "keras": {
+     "weights": 2830,
+     "macs": 70807
+    },
+    "faithful": [
+     2500,
+     2830,
+     70807
+    ],
+    "prepool": false,
+    "branch": true
+   },
+   {
+    "i": 20,
+    "val_error": 0.40204915404319763,
+    "stored": [
+     8625,
+     74717,
+     1379764
+    ],
+    "keras": {
+     "weights": 74717,
+     "macs": 1379764
+    },
+    "faithful": [
+     8625,
+     74717,
+     1379764
+    ],
+    "prepool": true,
+    "branch": true
+   },
+   {
+    "i": 21,
+    "val_error": 0.7765246033668518,
+    "stored": [
+     149,
+     3895,
+     5326
+    ],
+    "keras": {
+     "weights": 3895,
+     "macs": 5326
+    },
+    "faithful": [
+     149,
+     3895,
+     5326
+    ],
+    "prepool": false,
+    "branch": false
+   },
+   {
+    "i": 22,
+    "val_error": 0.5533679127693176,
+    "stored": [
+     3366,
+     18297,
+     121546
+    ],
+    "keras": {
+     "weights": 18297,
+     "macs": 121546
+    },
+    "faithful": [
+     3366,
+     18297,
+     121546
+    ],
+    "prepool": false,
+    "branch": false
+   },
+   {
+    "i": 23,
+    "val_error": 0.43111374974250793,
+    "stored": [
+     5750,
+     9911,
+     445339
+    ],
+    "keras": {
+     "weights": 9911,
+     "macs": 445339
+    },
+    "faithful": [
+     5750,
+     9911,
+     445339
+    ],
+    "prepool": true,
+    "branch": false
+   },
+   {
+    "i": 24,
+    "val_error": 0.29564011096954346,
+    "stored": [
+     10675,
+     237896,
+     5958869
+    ],
+    "keras": {
+     "weights": 237896,
+     "macs": 5958869
+    },
+    "faithful": [
+     10675,
+     237896,
+     5958869
+    ],
+    "prepool": true,
+    "branch": true
+   },
+   {
+    "i": 25,
+    "val_error": 0.4192596971988678,
+    "stored": [
+     6402,
+     47003,
+     139217
+    ],
+    "keras": {
+     "weights": 47003,
+     "macs": 139217
+    },
+    "faithful": [
+     6402,
+     47003,
+     139217
+    ],
+    "prepool": true,
+    "branch": true
+   },
+   {
+    "i": 26,
+    "val_error": 0.3358871042728424,
+    "stored": [
+     1550,
+     39275,
+     147493
+    ],
+    "keras": {
+     "weights": 39275,
+     "macs": 147493
+    },
+    "faithful": [
+     1550,
+     39275,
+     147493
+    ],
+    "prepool": true,
+    "branch": true
+   },
+   {
+    "i": 27,
+    "val_error": 0.298796683549881,
+    "stored": [
+     8550,
+     81968,
+     1817338
+    ],
+    "keras": {
+     "weights": 81968,
+     "macs": 1817338
+    },
+    "faithful": [
+     8550,
+     81968,
+     1817338
+    ],
+    "prepool": true,
+    "branch": true
+   },
+   {
+    "i": 28,
+    "val_error": 0.45021897554397583,
+    "stored": [
+     1216,
+     3839,
+     89680
+    ],
+    "keras": {
+     "weights": 3839,
+     "macs": 89680
+    },
+    "faithful": [
+     1216,
+     3839,
+     89680
+    ],
+    "prepool": false,
+    "branch": false
+   },
+   {
+    "i": 29,
+    "val_error": 0.35621175169944763,
+    "stored": [
+     9200,
+     72252,
+     427264
+    ],
+    "keras": {
+     "weights": 72252,
+     "macs": 427264
+    },
+    "faithful": [
+     9200,
+     72252,
+     427264
+    ],
+    "prepool": true,
+    "branch": true
+   },
+   {
+    "i": 30,
+    "val_error": 0.34196552634239197,
+    "stored": [
+     3950,
+     38139,
+     325973
+    ],
+    "keras": {
+     "weights": 38139,
+     "macs": 325973
+    },
+    "faithful": [
+     3950,
+     38139,
+     325973
+    ],
+    "prepool": true,
+    "branch": false
+   },
+   {
+    "i": 31,
+    "val_error": 0.41605326533317566,
+    "stored": [
+     3853,
+     61293,
+     513787
+    ],
+    "keras": {
+     "weights": 61293,
+     "macs": 513787
+    },
+    "faithful": [
+     3853,
+     61293,
+     513787
+    ],
+    "prepool": true,
+    "branch": true
+   },
+   {
+    "i": 32,
+    "val_error": 0.4457113444805145,
+    "stored": [
+     3366,
+     56714,
+     510940
+    ],
+    "keras": {
+     "weights": 56714,
+     "macs": 510940
+    },
+    "faithful": [
+     3366,
+     56714,
+     510940
+    ],
+    "prepool": true,
+    "branch": true
+   },
+   {
+    "i": 33,
+    "val_error": 0.7141368985176086,
+    "stored": [
+     776,
+     776,
+     2325
+    ],
+    "keras": {
+     "weights": 776,
+     "macs": 2325
+    },
+    "faithful": [
+     776,
+     776,
+     2325
+    ],
+    "prepool": false,
+    "branch": false
+   },
+   {
+    "i": 34,
+    "val_error": 0.4727655351161957,
+    "stored": [
+     978,
+     157732,
+     159078
+    ],
+    "keras": {
+     "weights": 157732,
+     "macs": 159078
+    },
+    "faithful": [
+     978,
+     157732,
+     159078
+    ],
+    "prepool": false,
+    "branch": false
+   },
+   {
+    "i": 35,
+    "val_error": 0.4630737006664276,
+    "stored": [
+     1607,
+     10491,
+     136241
+    ],
+    "keras": {
+     "weights": 10491,
+     "macs": 136241
+    },
+    "faithful": [
+     1607,
+     10491,
+     136241
+    ],
+    "prepool": true,
+    "branch": false
+   },
+   {
+    "i": 36,
+    "val_error": 0.430156409740448,
+    "stored": [
+     4700,
+     40534,
+     833841
+    ],
+    "keras": {
+     "weights": 40534,
+     "macs": 833841
+    },
+    "faithful": [
+     4700,
+     40534,
+     833841
+    ],
+    "prepool": true,
+    "branch": false
+   },
+   {
+    "i": 37,
+    "val_error": 0.3992481231689453,
+    "stored": [
+     7275,
+     29099,
+     716513
+    ],
+    "keras": {
+     "weights": 29099,
+     "macs": 716513
+    },
+    "faithful": [
+     7275,
+     29099,
+     716513
+    ],
+    "prepool": false,
+    "branch": true
+   },
+   {
+    "i": 38,
+    "val_error": 0.3876062333583832,
+    "stored": [
+     2325,
+     89859,
+     283490
+    ],
+    "keras": {
+     "weights": 89859,
+     "macs": 283490
+    },
+    "faithful": [
+     2325,
+     89859,
+     283490
+    ],
+    "prepool": true,
+    "branch": false
+   },
+   {
+    "i": 39,
+    "val_error": 0.30870622396469116,
+    "stored": [
+     1818,
+     108737,
+     202618
+    ],
+    "keras": {
+     "weights": 108737,
+     "macs": 202618
+    },
+    "faithful": [
+     1818,
+     108737,
+     202618
+    ],
+    "prepool": true,
+    "branch": true
+   },
+   {
+    "i": 40,
+    "val_error": 0.34371352195739746,
+    "stored": [
+     9200,
+     78845,
+     2421051
+    ],
+    "keras": {
+     "weights": 78845,
+     "macs": 2421051
+    },
+    "faithful": [
+     9200,
+     78845,
+     2421051
+    ],
+    "prepool": true,
+    "branch": true
+   },
+   {
+    "i": 41,
+    "val_error": 0.4196300506591797,
+    "stored": [
+     3552,
+     12345,
+     228963
+    ],
+    "keras": {
+     "weights": 12345,
+     "macs": 228963
+    },
+    "faithful": [
+     3552,
+     12345,
+     228963
+    ],
+    "prepool": true,
+    "branch": true
+   },
+   {
+    "i": 42,
+    "val_error": 0.32422852516174316,
+    "stored": [
+     2400,
+     92089,
+     167628
+    ],
+    "keras": {
+     "weights": 92089,
+     "macs": 167628
+    },
+    "faithful": [
+     2400,
+     92089,
+     167628
+    ],
+    "prepool": false,
+    "branch": false
+   },
+   {
+    "i": 43,
+    "val_error": 0.4986369013786316,
+    "stored": [
+     9100,
+     125843,
+     1796015
+    ],
+    "keras": {
+     "weights": 125843,
+     "macs": 1796015
+    },
+    "faithful": [
+     9100,
+     125843,
+     1796015
+    ],
+    "prepool": true,
+    "branch": true
+   },
+   {
+    "i": 44,
+    "val_error": 0.46094802021980286,
+    "stored": [
+     4550,
+     42896,
+     287048
+    ],
+    "keras": {
+     "weights": 42896,
+     "macs": 287048
+    },
+    "faithful": [
+     4550,
+     42896,
+     287048
+    ],
+    "prepool": true,
+    "branch": false
+   },
+   {
+    "i": 45,
+    "val_error": 0.2892771363258362,
+    "stored": [
+     1944,
+     79835,
+     659396
+    ],
+    "keras": {
+     "weights": 79835,
+     "macs": 659396
+    },
+    "faithful": [
+     1944,
+     79835,
+     659396
+    ],
+    "prepool": true,
+    "branch": true
+   },
+   {
+    "i": 46,
+    "val_error": 0.4355941712856293,
+    "stored": [
+     2587,
+     43406,
+     379195
+    ],
+    "keras": {
+     "weights": 43406,
+     "macs": 379195
+    },
+    "faithful": [
+     2587,
+     43406,
+     379195
+    ],
+    "prepool": false,
+    "branch": false
+   },
+   {
+    "i": 47,
+    "val_error": 0.3801335394382477,
+    "stored": [
+     7575,
+     22434,
+     882297
+    ],
+    "keras": {
+     "weights": 22434,
+     "macs": 882297
+    },
+    "faithful": [
+     7575,
+     22434,
+     882297
+    ],
+    "prepool": true,
+    "branch": true
+   },
+   {
+    "i": 48,
+    "val_error": 0.33001765608787537,
+    "stored": [
+     3525,
+     51289,
+     370232
+    ],
+    "keras": {
+     "weights": 51289,
+     "macs": 370232
+    },
+    "faithful": [
+     3525,
+     51289,
+     370232
+    ],
+    "prepool": true,
+    "branch": true
+   },
+   {
+    "i": 49,
+    "val_error": 0.3148241341114044,
+    "stored": [
+     2325,
+     81995,
+     299408
+    ],
+    "keras": {
+     "weights": 81995,
+     "macs": 299408
+    },
+    "faithful": [
+     2325,
+     81995,
+     299408
+    ],
+    "prepool": true,
+    "branch": false
+   },
+   {
+    "i": 50,
+    "val_error": 0.7361946105957031,
+    "stored": [
+     776,
+     776,
+     2325
+    ],
+    "keras": {
+     "weights": 776,
+     "macs": 2325
+    },
+    "faithful": [
+     776,
+     776,
+     2325
+    ],
+    "prepool": false,
+    "branch": false
+   },
+   {
+    "i": 51,
+    "val_error": 0.6910310983657837,
+    "stored": [
+     404,
+     404,
+     2015
+    ],
+    "keras": {
+     "weights": 404,
+     "macs": 2015
+    },
+    "faithful": [
+     404,
+     404,
+     2015
+    ],
+    "prepool": false,
+    "branch": false
+   },
+   {
+    "i": 52,
+    "val_error": 0.33522722125053406,
+    "stored": [
+     3525,
+     51108,
+     370052
+    ],
+    "keras": {
+     "weights": 51108,
+     "macs": 370052
+    },
+    "faithful": [
+     3525,
+     51108,
+     370052
+    ],
+    "prepool": true,
+    "branch": true
+   },
+   {
+    "i": 53,
+    "val_error": 0.3875081539154053,
+    "stored": [
+     5575,
+     47345,
+     816107
+    ],
+    "keras": {
+     "weights": 47345,
+     "macs": 816107
+    },
+    "faithful": [
+     5575,
+     47345,
+     816107
+    ],
+    "prepool": true,
+    "branch": true
+   },
+   {
+    "i": 54,
+    "val_error": 0.4508570432662964,
+    "stored": [
+     429,
+     10531,
+     12116
+    ],
+    "keras": {
+     "weights": 10531,
+     "macs": 12116
+    },
+    "faithful": [
+     429,
+     10531,
+     12116
+    ],
+    "prepool": false,
+    "branch": false
+   },
+   {
+    "i": 55,
+    "val_error": 0.39761069416999817,
+    "stored": [
+     2500,
+     9750,
+     461405
+    ],
+    "keras": {
+     "weights": 9750,
+     "macs": 461405
+    },
+    "faithful": [
+     2500,
+     9750,
+     461405
+    ],
+    "prepool": false,
+    "branch": false
+   },
+   {
+    "i": 56,
+    "val_error": 0.7827830910682678,
+    "stored": [
+     148,
+     3862,
+     5294
+    ],
+    "keras": {
+     "weights": 3862,
+     "macs": 5294
+    },
+    "faithful": [
+     148,
+     3862,
+     5294
+    ],
+    "prepool": false,
+    "branch": false
+   },
+   {
+    "i": 57,
+    "val_error": 0.4477776288986206,
+    "stored": [
+     1376,
+     4344,
+     101480
+    ],
+    "keras": {
+     "weights": 4344,
+     "macs": 101480
+    },
+    "faithful": [
+     1376,
+     4344,
+     101480
+    ],
+    "prepool": false,
+    "branch": false
+   },
+   {
+    "i": 58,
+    "val_error": 0.5108931064605713,
+    "stored": [
+     5750,
+     8169,
+     402667
+    ],
+    "keras": {
+     "weights": 8169,
+     "macs": 402667
+    },
+    "faithful": [
+     5750,
+     8169,
+     402667
+    ],
+    "prepool": false,
+    "branch": false
+   },
+   {
+    "i": 59,
+    "val_error": 0.4492492377758026,
+    "stored": [
+     1216,
+     3839,
+     89680
+    ],
+    "keras": {
+     "weights": 3839,
+     "macs": 89680
+    },
+    "faithful": [
+     1216,
+     3839,
+     89680
+    ],
+    "prepool": false,
+    "branch": false
+   },
+   {
+    "i": 60,
+    "val_error": 0.43996894359588623,
+    "stored": [
+     1444,
+     4067,
+     89832
+    ],
+    "keras": {
+     "weights": 4067,
+     "macs": 89832
+    },
+    "faithful": [
+     1444,
+     4067,
+     89832
+    ],
+    "prepool": false,
+    "branch": false
+   },
+   {
+    "i": 61,
+    "val_error": 0.3410780429840088,
+    "stored": [
+     1550,
+     39275,
+     147493
+    ],
+    "keras": {
+     "weights": 39275,
+     "macs": 147493
+    },
+    "faithful": [
+     1550,
+     39275,
+     147493
+    ],
+    "prepool": true,
+    "branch": true
+   },
+   {
+    "i": 62,
+    "val_error": 0.5226184725761414,
+    "stored": [
+     988,
+     3611,
+     89338
+    ],
+    "keras": {
+     "weights": 3611,
+     "macs": 89338
+    },
+    "faithful": [
+     988,
+     3611,
+     89338
+    ],
+    "prepool": false,
+    "branch": false
+   },
+   {
+    "i": 63,
+    "val_error": 0.44186362624168396,
+    "stored": [
+     951,
+     4523,
+     89300
+    ],
+    "keras": {
+     "weights": 4523,
+     "macs": 89300
+    },
+    "faithful": [
+     951,
+     4523,
+     89300
+    ],
+    "prepool": false,
+    "branch": false
+   },
+   {
+    "i": 64,
+    "val_error": 0.2869994640350342,
+    "stored": [
+     8550,
+     81930,
+     1816889
+    ],
+    "keras": {
+     "weights": 81930,
+     "macs": 1816889
+    },
+    "faithful": [
+     8550,
+     81930,
+     1816889
+    ],
+    "prepool": true,
+    "branch": true
+   },
+   {
+    "i": 65,
+    "val_error": 0.48736804723739624,
+    "stored": [
+     1376,
+     4344,
+     101480
+    ],
+    "keras": {
+     "weights": 4344,
+     "macs": 101480
+    },
+    "faithful": [
+     1376,
+     4344,
+     101480
+    ],
+    "prepool": false,
+    "branch": false
+   },
+   {
+    "i": 66,
+    "val_error": 0.4888927936553955,
+    "stored": [
+     1216,
+     3839,
+     89680
+    ],
+    "keras": {
+     "weights": 3839,
+     "macs": 89680
+    },
+    "faithful": [
+     1216,
+     3839,
+     89680
+    ],
+    "prepool": false,
+    "branch": false
+   },
+   {
+    "i": 67,
+    "val_error": 0.7193245887756348,
+    "stored": [
+     404,
+     404,
+     2015
+    ],
+    "keras": {
+     "weights": 404,
+     "macs": 2015
+    },
+    "faithful": [
+     404,
+     404,
+     2015
+    ],
+    "prepool": false,
+    "branch": false
+   },
+   {
+    "i": 68,
+    "val_error": 0.554164707660675,
+    "stored": [
+     951,
+     4523,
+     89300
+    ],
+    "keras": {
+     "weights": 4523,
+     "macs": 89300
+    },
+    "faithful": [
+     951,
+     4523,
+     89300
+    ],
+    "prepool": false,
+    "branch": false
+   },
+   {
+    "i": 69,
+    "val_error": 0.438448041677475,
+    "stored": [
+     951,
+     4523,
+     89300
+    ],
+    "keras": {
+     "weights": 4523,
+     "macs": 89300
+    },
+    "faithful": [
+     951,
+     4523,
+     89300
+    ],
+    "prepool": false,
+    "branch": false
+   },
+   {
+    "i": 70,
+    "val_error": 0.4365040361881256,
+    "stored": [
+     5750,
+     9816,
+     443084
+    ],
+    "keras": {
+     "weights": 9816,
+     "macs": 443084
+    },
+    "faithful": [
+     5750,
+     9816,
+     443084
+    ],
+    "prepool": true,
+    "branch": false
+   },
+   {
+    "i": 71,
+    "val_error": 0.7817838191986084,
+    "stored": [
+     1,
+     1551,
+     1550
+    ],
+    "keras": {
+     "weights": 1551,
+     "macs": 1550
+    },
+    "faithful": [
+     1,
+     1551,
+     1550
+    ],
+    "prepool": false,
+    "branch": false
+   },
+   {
+    "i": 72,
+    "val_error": 0.4327170252799988,
+    "stored": [
+     1558,
+     4388,
+     96924
+    ],
+    "keras": {
+     "weights": 4388,
+     "macs": 96924
+    },
+    "faithful": [
+     1558,
+     4388,
+     96924
+    ],
+    "prepool": false,
+    "branch": false
+   },
+   {
+    "i": 73,
+    "val_error": 0.43425488471984863,
+    "stored": [
+     3525,
+     50876,
+     353615
+    ],
+    "keras": {
+     "weights": 50876,
+     "macs": 353615
+    },
+    "faithful": [
+     3525,
+     50876,
+     353615
+    ],
+    "prepool": true,
+    "branch": true
+   },
+   {
+    "i": 74,
+    "val_error": 0.48223939538002014,
+    "stored": [
+     1860,
+     27324,
+     357426
+    ],
+    "keras": {
+     "weights": 27324,
+     "macs": 357426
+    },
+    "faithful": [
+     1860,
+     27324,
+     357426
+    ],
+    "prepool": true,
+    "branch": false
+   },
+   {
+    "i": 75,
+    "val_error": 0.3477855920791626,
+    "stored": [
+     609,
+     83431,
+     84836
+    ],
+    "keras": {
+     "weights": 83431,
+     "macs": 84836
+    },
+    "faithful": [
+     609,
+     83431,
+     84836
+    ],
+    "prepool": false,
+    "branch": false
+   },
+   {
+    "i": 76,
+    "val_error": 0.78315669298172,
+    "stored": [
+     1,
+     1551,
+     1550
+    ],
+    "keras": {
+     "weights": 1551,
+     "macs": 1550
+    },
+    "faithful": [
+     1,
+     1551,
+     1550
+    ],
+    "prepool": false,
+    "branch": false
+   },
+   {
+    "i": 77,
+    "val_error": 0.7927572131156921,
+    "stored": [
+     1,
+     1551,
+     1550
+    ],
+    "keras": {
+     "weights": 1551,
+     "macs": 1550
+    },
+    "faithful": [
+     1,
+     1551,
+     1550
+    ],
+    "prepool": false,
+    "branch": false
+   },
+   {
+    "i": 78,
+    "val_error": 0.476605087518692,
+    "stored": [
+     1558,
+     4388,
+     96924
+    ],
+    "keras": {
+     "weights": 4388,
+     "macs": 96924
+    },
+    "faithful": [
+     1558,
+     4388,
+     96924
+    ],
+    "prepool": false,
+    "branch": false
+   },
+   {
+    "i": 79,
+    "val_error": 0.7059732675552368,
+    "stored": [
+     776,
+     776,
+     2325
+    ],
+    "keras": {
+     "weights": 776,
+     "macs": 2325
+    },
+    "faithful": [
+     776,
+     776,
+     2325
+    ],
+    "prepool": false,
+    "branch": false
+   },
+   {
+    "i": 80,
+    "val_error": 0.4389755129814148,
+    "stored": [
+     1596,
+     4495,
+     99288
+    ],
+    "keras": {
+     "weights": 4495,
+     "macs": 99288
+    },
+    "faithful": [
+     1596,
+     4495,
+     99288
+    ],
+    "prepool": false,
+    "branch": false
+   },
+   {
+    "i": 81,
+    "val_error": 0.7897234559059143,
+    "stored": [
+     1,
+     1551,
+     1550
+    ],
+    "keras": {
+     "weights": 1551,
+     "macs": 1550
+    },
+    "faithful": [
+     1,
+     1551,
+     1550
+    ],
+    "prepool": false,
+    "branch": false
+   },
+   {
+    "i": 82,
+    "val_error": 0.3903971016407013,
+    "stored": [
+     1250,
+     9528,
+     230795
+    ],
+    "keras": {
+     "weights": 9528,
+     "macs": 230795
+    },
+    "faithful": [
+     1250,
+     9528,
+     230795
+    ],
+    "prepool": false,
+    "branch": false
+   },
+   {
+    "i": 83,
+    "val_error": 0.34199216961860657,
+    "stored": [
+     1550,
+     46972,
+     155094
+    ],
+    "keras": {
+     "weights": 46972,
+     "macs": 155094
+    },
+    "faithful": [
+     1550,
+     46972,
+     155094
+    ],
+    "prepool": true,
+    "branch": true
+   },
+   {
+    "i": 84,
+    "val_error": 0.4359796643257141,
+    "stored": [
+     1330,
+     3746,
+     82740
+    ],
+    "keras": {
+     "weights": 3746,
+     "macs": 82740
+    },
+    "faithful": [
+     1330,
+     3746,
+     82740
+    ],
+    "prepool": false,
+    "branch": false
+   },
+   {
+    "i": 85,
+    "val_error": 0.5231969952583313,
+    "stored": [
+     1066,
+     3896,
+     96391
+    ],
+    "keras": {
+     "weights": 3896,
+     "macs": 96391
+    },
+    "faithful": [
+     1066,
+     3896,
+     96391
+    ],
+    "prepool": false,
+    "branch": false
+   },
+   {
+    "i": 86,
+    "val_error": 0.45066529512405396,
+    "stored": [
+     876,
+     4166,
+     82250
+    ],
+    "keras": {
+     "weights": 4166,
+     "macs": 82250
+    },
+    "faithful": [
+     876,
+     4166,
+     82250
+    ],
+    "prepool": false,
+    "branch": false
+   },
+   {
+    "i": 87,
+    "val_error": 0.37113022804260254,
+    "stored": [
+     1250,
+     9528,
+     230795
+    ],
+    "keras": {
+     "weights": 9528,
+     "macs": 230795
+    },
+    "faithful": [
+     1250,
+     9528,
+     230795
+    ],
+    "prepool": false,
+    "branch": false
+   },
+   {
+    "i": 88,
+    "val_error": 0.548616886138916,
+    "stored": [
+     1330,
+     3746,
+     82740
+    ],
+    "keras": {
+     "weights": 3746,
+     "macs": 82740
+    },
+    "faithful": [
+     1330,
+     3746,
+     82740
+    ],
+    "prepool": false,
+    "branch": false
+   },
+   {
+    "i": 89,
+    "val_error": 0.36506977677345276,
+    "stored": [
+     1216,
+     62265,
+     147887
+    ],
+    "keras": {
+     "weights": 62265,
+     "macs": 147887
+    },
+    "faithful": [
+     1216,
+     62265,
+     147887
+    ],
+    "prepool": false,
+    "branch": false
+   },
+   {
+    "i": 90,
+    "val_error": 0.5047653913497925,
+    "stored": [
+     1066,
+     6438,
+     159941
+    ],
+    "keras": {
+     "weights": 6438,
+     "macs": 159941
+    },
+    "faithful": [
+     1066,
+     6438,
+     159941
+    ],
+    "prepool": false,
+    "branch": false
+   },
+   {
+    "i": 91,
+    "val_error": 0.4732264280319214,
+    "stored": [
+     951,
+     4523,
+     89300
+    ],
+    "keras": {
+     "weights": 4523,
+     "macs": 89300
+    },
+    "faithful": [
+     951,
+     4523,
+     89300
+    ],
+    "prepool": false,
+    "branch": false
+   },
+   {
+    "i": 92,
+    "val_error": 0.7146263122558594,
+    "stored": [
+     776,
+     776,
+     2325
+    ],
+    "keras": {
+     "weights": 776,
+     "macs": 2325
+    },
+    "faithful": [
+     776,
+     776,
+     2325
+    ],
+    "prepool": false,
+    "branch": false
+   },
+   {
+    "i": 93,
+    "val_error": 0.5719420313835144,
+    "stored": [
+     1178,
+     342,
+     3410
+    ],
+    "keras": {
+     "weights": 342,
+     "macs": 3410
+    },
+    "faithful": [
+     1178,
+     342,
+     3410
+    ],
+    "prepool": true,
+    "branch": false
+   },
+   {
+    "i": 94,
+    "val_error": 0.4306173622608185,
+    "stored": [
+     1558,
+     6930,
+     160474
+    ],
+    "keras": {
+     "weights": 6930,
+     "macs": 160474
+    },
+    "faithful": [
+     1558,
+     6930,
+     160474
+    ],
+    "prepool": false,
+    "branch": false
+   },
+   {
+    "i": 95,
+    "val_error": 0.4393267035484314,
+    "stored": [
+     1558,
+     6930,
+     160474
+    ],
+    "keras": {
+     "weights": 6930,
+     "macs": 160474
+    },
+    "faithful": [
+     1558,
+     6930,
+     160474
+    ],
+    "prepool": false,
+    "branch": false
+   },
+   {
+    "i": 96,
+    "val_error": 0.4406926929950714,
+    "stored": [
+     1216,
+     3425,
+     75648
+    ],
+    "keras": {
+     "weights": 3425,
+     "macs": 75648
+    },
+    "faithful": [
+     1216,
+     3425,
+     75648
+    ],
+    "prepool": false,
+    "branch": false
+   },
+   {
+    "i": 97,
+    "val_error": 0.4487386643886566,
+    "stored": [
+     1120,
+     3536,
+     82600
+    ],
+    "keras": {
+     "weights": 3536,
+     "macs": 82600
+    },
+    "faithful": [
+     1120,
+     3536,
+     82600
+    ],
+    "prepool": false,
+    "branch": false
+   },
+   {
+    "i": 98,
+    "val_error": 0.32729777693748474,
+    "stored": [
+     1550,
+     47539,
+     156786
+    ],
+    "keras": {
+     "weights": 47539,
+     "macs": 156786
+    },
+    "faithful": [
+     1550,
+     47539,
+     156786
+    ],
+    "prepool": true,
+    "branch": true
+   },
+   {
+    "i": 99,
+    "val_error": 0.47606223821640015,
+    "stored": [
+     1596,
+     4495,
+     99288
+    ],
+    "keras": {
+     "weights": 4495,
+     "macs": 99288
+    },
+    "faithful": [
+     1596,
+     4495,
+     99288
+    ],
+    "prepool": false,
+    "branch": false
+   },
+   {
+    "i": 100,
+    "val_error": 0.7849578857421875,
+    "stored": [
+     1,
+     1551,
+     1550
+    ],
+    "keras": {
+     "weights": 1551,
+     "macs": 1550
+    },
+    "faithful": [
+     1,
+     1551,
+     1550
+    ],
+    "prepool": false,
+    "branch": false
+   },
+   {
+    "i": 101,
+    "val_error": 0.4379255473613739,
+    "stored": [
+     1558,
+     4388,
+     96924
+    ],
+    "keras": {
+     "weights": 4388,
+     "macs": 96924
+    },
+    "faithful": [
+     1558,
+     4388,
+     96924
+    ],
+    "prepool": false,
+    "branch": false
+   },
+   {
+    "i": 102,
+    "val_error": 0.604142963886261,
+    "stored": [
+     1066,
+     3896,
+     96391
+    ],
+    "keras": {
+     "weights": 3896,
+     "macs": 96391
+    },
+    "faithful": [
+     1066,
+     3896,
+     96391
+    ],
+    "prepool": false,
+    "branch": false
+   },
+   {
+    "i": 103,
+    "val_error": 0.7077655792236328,
+    "stored": [
+     776,
+     776,
+     2325
+    ],
+    "keras": {
+     "weights": 776,
+     "macs": 2325
+    },
+    "faithful": [
+     776,
+     776,
+     2325
+    ],
+    "prepool": false,
+    "branch": false
+   },
+   {
+    "i": 104,
+    "val_error": 0.4455292224884033,
+    "stored": [
+     1330,
+     3746,
+     82740
+    ],
+    "keras": {
+     "weights": 3746,
+     "macs": 82740
+    },
+    "faithful": [
+     1330,
+     3746,
+     82740
+    ],
+    "prepool": false,
+    "branch": false
+   },
+   {
+    "i": 105,
+    "val_error": 0.4429820477962494,
+    "stored": [
+     1280,
+     4041,
+     94400
+    ],
+    "keras": {
+     "weights": 4041,
+     "macs": 94400
+    },
+    "faithful": [
+     1280,
+     4041,
+     94400
+    ],
+    "prepool": false,
+    "branch": false
+   },
+   {
+    "i": 106,
+    "val_error": 0.4460764229297638,
+    "stored": [
+     1024,
+     3233,
+     75520
+    ],
+    "keras": {
+     "weights": 3233,
+     "macs": 75520
+    },
+    "faithful": [
+     1024,
+     3233,
+     75520
+    ],
+    "prepool": false,
+    "branch": false
+   },
+   {
+    "i": 107,
+    "val_error": 0.43856507539749146,
+    "stored": [
+     1558,
+     6930,
+     160474
+    ],
+    "keras": {
+     "weights": 6930,
+     "macs": 160474
+    },
+    "faithful": [
+     1558,
+     6930,
+     160474
+    ],
+    "prepool": false,
+    "branch": false
+   },
+   {
+    "i": 108,
+    "val_error": 0.4420718252658844,
+    "stored": [
+     1292,
+     3639,
+     80376
+    ],
+    "keras": {
+     "weights": 3639,
+     "macs": 80376
+    },
+    "faithful": [
+     1292,
+     3639,
+     80376
+    ],
+    "prepool": false,
+    "branch": false
+   },
+   {
+    "i": 109,
+    "val_error": 0.5698022246360779,
+    "stored": [
+     1178,
+     404,
+     4216
+    ],
+    "keras": {
+     "weights": 404,
+     "macs": 4216
+    },
+    "faithful": [
+     1178,
+     404,
+     4216
+    ],
+    "prepool": true,
+    "branch": false
+   },
+   {
+    "i": 110,
+    "val_error": 0.4416508376598358,
+    "stored": [
+     1292,
+     3639,
+     80376
+    ],
+    "keras": {
+     "weights": 3639,
+     "macs": 80376
+    },
+    "faithful": [
+     1292,
+     3639,
+     80376
+    ],
+    "prepool": false,
+    "branch": false
+   },
+   {
+    "i": 111,
+    "val_error": 0.4587057828903198,
+    "stored": [
+     950,
+     6970,
+     171130
+    ],
+    "keras": {
+     "weights": 6970,
+     "macs": 171130
+    },
+    "faithful": [
+     950,
+     6970,
+     171130
+    ],
+    "prepool": false,
+    "branch": true
+   },
+   {
+    "i": 112,
+    "val_error": 0.8097578883171082,
+    "stored": [
+     1,
+     1551,
+     1550
+    ],
+    "keras": {
+     "weights": 1551,
+     "macs": 1550
+    },
+    "faithful": [
+     1,
+     1551,
+     1550
+    ],
+    "prepool": false,
+    "branch": false
+   },
+   {
+    "i": 113,
+    "val_error": 0.5847644209861755,
+    "stored": [
+     1178,
+     590,
+     5084
+    ],
+    "keras": {
+     "weights": 590,
+     "macs": 5084
+    },
+    "faithful": [
+     1178,
+     590,
+     5084
+    ],
+    "prepool": false,
+    "branch": false
+   },
+   {
+    "i": 114,
+    "val_error": 0.8023287057876587,
+    "stored": [
+     1,
+     1551,
+     1550
+    ],
+    "keras": {
+     "weights": 1551,
+     "macs": 1550
+    },
+    "faithful": [
+     1,
+     1551,
+     1550
+    ],
+    "prepool": false,
+    "branch": false
+   },
+   {
+    "i": 115,
+    "val_error": 0.4399847090244293,
+    "stored": [
+     1672,
+     4709,
+     104016
+    ],
+    "keras": {
+     "weights": 4709,
+     "macs": 104016
+    },
+    "faithful": [
+     1672,
+     4709,
+     104016
+    ],
+    "prepool": false,
+    "branch": false
+   },
+   {
+    "i": 116,
+    "val_error": 0.5945442318916321,
+    "stored": [
+     1178,
+     249,
+     3379
+    ],
+    "keras": {
+     "weights": 249,
+     "macs": 3379
+    },
+    "faithful": [
+     1178,
+     249,
+     3379
+    ],
+    "prepool": true,
+    "branch": false
+   },
+   {
+    "i": 117,
+    "val_error": 0.3614291250705719,
+    "stored": [
+     2394,
+     112197,
+     287081
+    ],
+    "keras": {
+     "weights": 112197,
+     "macs": 287081
+    },
+    "faithful": [
+     2394,
+     112197,
+     287081
+    ],
+    "prepool": false,
+    "branch": false
+   },
+   {
+    "i": 118,
+    "val_error": 0.5687183141708374,
+    "stored": [
+     2325,
+     962,
+     10075
+    ],
+    "keras": {
+     "weights": 962,
+     "macs": 10075
+    },
+    "faithful": [
+     2325,
+     962,
+     10075
+    ],
+    "prepool": false,
+    "branch": false
+   },
+   {
+    "i": 119,
+    "val_error": 0.3425661027431488,
+    "stored": [
+     1550,
+     46972,
+     155094
+    ],
+    "keras": {
+     "weights": 46972,
+     "macs": 155094
+    },
+    "faithful": [
+     1550,
+     46972,
+     155094
+    ],
+    "prepool": true,
+    "branch": true
+   },
+   {
+    "i": 120,
+    "val_error": 0.4895823001861572,
+    "stored": [
+     2325,
+     7957,
+     17060
+    ],
+    "keras": {
+     "weights": 7957,
+     "macs": 17060
+    },
+    "faithful": [
+     2325,
+     7957,
+     17060
+    ],
+    "prepool": false,
+    "branch": false
+   },
+   {
+    "i": 121,
+    "val_error": 0.9009937047958374,
+    "stored": [
+     32,
+     32,
+     1581
+    ],
+    "keras": {
+     "weights": 32,
+     "macs": 1581
+    },
+    "faithful": [
+     32,
+     32,
+     1581
+    ],
+    "prepool": false,
+    "branch": false
+   },
+   {
+    "i": 122,
+    "val_error": 0.4408925473690033,
+    "stored": [
+     1308,
+     4142,
+     51980
+    ],
+    "keras": {
+     "weights": 4142,
+     "macs": 51980
+    },
+    "faithful": [
+     1308,
+     4142,
+     51980
+    ],
+    "prepool": true,
+    "branch": false
+   },
+   {
+    "i": 123,
+    "val_error": 0.4602589011192322,
+    "stored": [
+     2205,
+     3746,
+     165025
+    ],
+    "keras": {
+     "weights": 3746,
+     "macs": 165025
+    },
+    "faithful": [
+     2205,
+     3746,
+     165025
+    ],
+    "prepool": false,
+    "branch": false
+   },
+   {
+    "i": 124,
+    "val_error": 0.4249628782272339,
+    "stored": [
+     1026,
+     7422,
+     159900
+    ],
+    "keras": {
+     "weights": 7422,
+     "macs": 159900
+    },
+    "faithful": [
+     1026,
+     7422,
+     159900
+    ],
+    "prepool": false,
+    "branch": false
+   },
+   {
+    "i": 125,
+    "val_error": 0.4540274143218994,
+    "stored": [
+     1120,
+     3536,
+     82600
+    ],
+    "keras": {
+     "weights": 3536,
+     "macs": 82600
+    },
+    "faithful": [
+     1120,
+     3536,
+     82600
+    ],
+    "prepool": false,
+    "branch": false
+   },
+   {
+    "i": 126,
+    "val_error": 0.43384987115859985,
+    "stored": [
+     1558,
+     6930,
+     160474
+    ],
+    "keras": {
+     "weights": 6930,
+     "macs": 160474
+    },
+    "faithful": [
+     1558,
+     6930,
+     160474
+    ],
+    "prepool": false,
+    "branch": false
+   },
+   {
+    "i": 127,
+    "val_error": 0.47774767875671387,
+    "stored": [
+     1330,
+     3746,
+     82740
+    ],
+    "keras": {
+     "weights": 3746,
+     "macs": 82740
+    },
+    "faithful": [
+     1330,
+     3746,
+     82740
+    ],
+    "prepool": false,
+    "branch": false
+   },
+   {
+    "i": 128,
+    "val_error": 0.43976277112960815,
+    "stored": [
+     3075,
+     7422,
+     320825
+    ],
+    "keras": {
+     "weights": 7422,
+     "macs": 320825
+    },
+    "faithful": [
+     3075,
+     7422,
+     320825
+    ],
+    "prepool": false,
+    "branch": false
+   },
+   {
+    "i": 129,
+    "val_error": 0.4609921872615814,
+    "stored": [
+     1026,
+     7422,
+     159900
+    ],
+    "keras": {
+     "weights": 7422,
+     "macs": 159900
+    },
+    "faithful": [
+     1026,
+     7422,
+     159900
+    ],
+    "prepool": false,
+    "branch": false
+   },
+   {
+    "i": 130,
+    "val_error": 0.7133220434188843,
+    "stored": [
+     776,
+     776,
+     2325
+    ],
+    "keras": {
+     "weights": 776,
+     "macs": 2325
+    },
+    "faithful": [
+     776,
+     776,
+     2325
+    ],
+    "prepool": false,
+    "branch": false
+   },
+   {
+    "i": 131,
+    "val_error": 0.4873468577861786,
+    "stored": [
+     1650,
+     1255,
+     35750
+    ],
+    "keras": {
+     "weights": 1255,
+     "macs": 35750
+    },
+    "faithful": [
+     1650,
+     1255,
+     35750
+    ],
+    "prepool": false,
+    "branch": false
+   },
+   {
+    "i": 132,
+    "val_error": 0.5709150433540344,
+    "stored": [
+     1550,
+     342,
+     4960
+    ],
+    "keras": {
+     "weights": 342,
+     "macs": 4960
+    },
+    "faithful": [
+     1550,
+     342,
+     4960
+    ],
+    "prepool": true,
+    "branch": false
+   },
+   {
+    "i": 133,
+    "val_error": 0.41242751479148865,
+    "stored": [
+     2500,
+     5758,
+     263155
+    ],
+    "keras": {
+     "weights": 5758,
+     "macs": 263155
+    },
+    "faithful": [
+     2500,
+     5758,
+     263155
+    ],
+    "prepool": false,
+    "branch": false
+   },
+   {
+    "i": 134,
+    "val_error": 0.5689225792884827,
+    "stored": [
+     1178,
+     590,
+     5084
+    ],
+    "keras": {
+     "weights": 590,
+     "macs": 5084
+    },
+    "faithful": [
+     1178,
+     590,
+     5084
+    ],
+    "prepool": false,
+    "branch": false
+   },
+   {
+    "i": 135,
+    "val_error": 0.6434375047683716,
+    "stored": [
+     1581,
+     218,
+     9331
+    ],
+    "keras": {
+     "weights": 218,
+     "macs": 9331
+    },
+    "faithful": [
+     1581,
+     218,
+     9331
+    ],
+    "prepool": false,
+    "branch": false
+   },
+   {
+    "i": 136,
+    "val_error": 0.4264231026172638,
+    "stored": [
+     1308,
+     6684,
+     85026
+    ],
+    "keras": {
+     "weights": 6684,
+     "macs": 85026
+    },
+    "faithful": [
+     1308,
+     6684,
+     85026
+    ],
+    "prepool": true,
+    "branch": false
+   },
+   {
+    "i": 137,
+    "val_error": 0.4337279200553894,
+    "stored": [
+     2500,
+     5758,
+     263155
+    ],
+    "keras": {
+     "weights": 5758,
+     "macs": 263155
+    },
+    "faithful": [
+     2500,
+     5758,
+     263155
+    ],
+    "prepool": false,
+    "branch": false
+   },
+   {
+    "i": 138,
+    "val_error": 0.7918788194656372,
+    "stored": [
+     776,
+     776,
+     2325
+    ],
+    "keras": {
+     "weights": 776,
+     "macs": 2325
+    },
+    "faithful": [
+     776,
+     776,
+     2325
+    ],
+    "prepool": false,
+    "branch": false
+   },
+   {
+    "i": 139,
+    "val_error": 0.31135737895965576,
+    "stored": [
+     1308,
+     55238,
+     133411
+    ],
+    "keras": {
+     "weights": 55238,
+     "macs": 133411
+    },
+    "faithful": [
+     1308,
+     55238,
+     133411
+    ],
+    "prepool": true,
+    "branch": false
+   },
+   {
+    "i": 140,
+    "val_error": 0.4917818009853363,
+    "stored": [
+     1066,
+     6438,
+     159941
+    ],
+    "keras": {
+     "weights": 6438,
+     "macs": 159941
+    },
+    "faithful": [
+     1066,
+     6438,
+     159941
+    ],
+    "prepool": false,
+    "branch": false
+   },
+   {
+    "i": 141,
+    "val_error": 0.4445076882839203,
+    "stored": [
+     1558,
+     4388,
+     96924
+    ],
+    "keras": {
+     "weights": 4388,
+     "macs": 96924
+    },
+    "faithful": [
+     1558,
+     4388,
+     96924
+    ],
+    "prepool": false,
+    "branch": false
+   },
+   {
+    "i": 142,
+    "val_error": 0.45285433530807495,
+    "stored": [
+     1217,
+     3435,
+     43370
+    ],
+    "keras": {
+     "weights": 3435,
+     "macs": 43370
+    },
+    "faithful": [
+     1217,
+     3435,
+     43370
+    ],
+    "prepool": true,
+    "branch": false
+   },
+   {
+    "i": 143,
+    "val_error": 0.41774410009384155,
+    "stored": [
+     1558,
+     9472,
+     224024
+    ],
+    "keras": {
+     "weights": 9472,
+     "macs": 224024
+    },
+    "faithful": [
+     1558,
+     9472,
+     224024
+    ],
+    "prepool": false,
+    "branch": false
+   },
+   {
+    "i": 144,
+    "val_error": 0.6073113083839417,
+    "stored": [
+     1122,
+     727,
+     35222
+    ],
+    "keras": {
+     "weights": 727,
+     "macs": 35222
+    },
+    "faithful": [
+     1122,
+     727,
+     35222
+    ],
+    "prepool": false,
+    "branch": false
+   },
+   {
+    "i": 145,
+    "val_error": 0.4337926208972931,
+    "stored": [
+     1330,
+     3746,
+     82740
+    ],
+    "keras": {
+     "weights": 3746,
+     "macs": 82740
+    },
+    "faithful": [
+     1330,
+     3746,
+     82740
+    ],
+    "prepool": false,
+    "branch": false
+   },
+   {
+    "i": 146,
+    "val_error": 0.42429319024086,
+    "stored": [
+     1308,
+     6930,
+     84698
+    ],
+    "keras": {
+     "weights": 6930,
+     "macs": 84698
+    },
+    "faithful": [
+     1308,
+     6930,
+     84698
+    ],
+    "prepool": true,
+    "branch": false
+   },
+   {
+    "i": 147,
+    "val_error": 0.551741898059845,
+    "stored": [
+     1550,
+     900,
+     4650
+    ],
+    "keras": {
+     "weights": 900,
+     "macs": 4650
+    },
+    "faithful": [
+     1550,
+     900,
+     4650
+    ],
+    "prepool": true,
+    "branch": false
+   },
+   {
+    "i": 148,
+    "val_error": 0.540083110332489,
+    "stored": [
+     1178,
+     590,
+     5084
+    ],
+    "keras": {
+     "weights": 590,
+     "macs": 5084
+    },
+    "faithful": [
+     1178,
+     590,
+     5084
+    ],
+    "prepool": false,
+    "branch": false
+   },
+   {
+    "i": 149,
+    "val_error": 0.4533117413520813,
+    "stored": [
+     1368,
+     3853,
+     85104
+    ],
+    "keras": {
+     "weights": 3853,
+     "macs": 85104
+    },
+    "faithful": [
+     1368,
+     3853,
+     85104
+    ],
+    "prepool": false,
+    "branch": false
+   }
+  ]
+ },
+ "dmir_lcl_v4": {
+  "search": "dmir_lcl_v4",
+  "input_shape": [
+   50,
+   31
+  ],
+  "n": 150,
+  "failed": 0,
+  "macs_ratio": {
+   "median": 1.0,
+   "min": 1.0,
+   "max": 1.0
+  },
+  "size_ratio": {
+   "median": 1.0,
+   "min": 1.0,
+   "max": 1.0
+  },
+  "pmu_ratio": {
+   "median": 1.0,
+   "min": 1.0,
+   "max": 1.0
+  },
+  "faithful_equals_keras": 150,
+  "points": [
+   {
+    "i": 0,
+    "val_error": 0.7152190208435059,
+    "stored": [
+     235,
+     16221,
+     17535
+    ],
+    "keras": {
+     "weights": 16221,
+     "macs": 17535
+    },
+    "faithful": [
+     235,
+     16221,
+     17535
+    ],
+    "prepool": false,
+    "branch": false
+   },
+   {
+    "i": 1,
+    "val_error": 0.3197477161884308,
+    "stored": [
+     3959,
+     62030,
+     391974
+    ],
+    "keras": {
+     "weights": 62030,
+     "macs": 391974
+    },
+    "faithful": [
+     3959,
+     62030,
+     391974
+    ],
+    "prepool": true,
+    "branch": true
+   },
+   {
+    "i": 2,
+    "val_error": 0.433910071849823,
+    "stored": [
+     3100,
+     134561,
+     144899
+    ],
+    "keras": {
+     "weights": 134561,
+     "macs": 144899
+    },
+    "faithful": [
+     3100,
+     134561,
+     144899
+    ],
+    "prepool": false,
+    "branch": false
+   },
+   {
+    "i": 3,
+    "val_error": 0.6312816143035889,
+    "stored": [
+     1147,
+     20185,
+     25794
+    ],
+    "keras": {
+     "weights": 20185,
+     "macs": 25794
+    },
+    "faithful": [
+     1147,
+     20185,
+     25794
+    ],
+    "prepool": true,
+    "branch": false
+   },
+   {
+    "i": 4,
+    "val_error": 0.4297439157962799,
+    "stored": [
+     3448,
+     93156,
+     683773
+    ],
+    "keras": {
+     "weights": 93156,
+     "macs": 683773
+    },
+    "faithful": [
+     3448,
+     93156,
+     683773
+    ],
+    "prepool": true,
+    "branch": false
+   },
+   {
+    "i": 5,
+    "val_error": 0.9496442079544067,
+    "stored": [
+     1178,
+     106943,
+     158214
+    ],
+    "keras": {
+     "weights": 106943,
+     "macs": 158214
+    },
+    "faithful": [
+     1178,
+     106943,
+     158214
+    ],
+    "prepool": true,
+    "branch": false
+   },
+   {
+    "i": 6,
+    "val_error": 0.39144304394721985,
+    "stored": [
+     4350,
+     37606,
+     538601
+    ],
+    "keras": {
+     "weights": 37606,
+     "macs": 538601
+    },
+    "faithful": [
+     4350,
+     37606,
+     538601
+    ],
+    "prepool": false,
+    "branch": true
+   },
+   {
+    "i": 7,
+    "val_error": 0.36959531903266907,
+    "stored": [
+     3762,
+     190567,
+     370720
+    ],
+    "keras": {
+     "weights": 190567,
+     "macs": 370720
+    },
+    "faithful": [
+     3762,
+     190567,
+     370720
+    ],
+    "prepool": false,
+    "branch": false
+   },
+   {
+    "i": 8,
+    "val_error": 0.47100865840911865,
+    "stored": [
+     6625,
+     64399,
+     740273
+    ],
+    "keras": {
+     "weights": 64399,
+     "macs": 740273
+    },
+    "faithful": [
+     6625,
+     64399,
+     740273
+    ],
+    "prepool": true,
+    "branch": true
+   },
+   {
+    "i": 9,
+    "val_error": 0.7518884539604187,
+    "stored": [
+     776,
+     776,
+     2325
+    ],
+    "keras": {
+     "weights": 776,
+     "macs": 2325
+    },
+    "faithful": [
+     776,
+     776,
+     2325
+    ],
+    "prepool": false,
+    "branch": false
+   },
+   {
+    "i": 10,
+    "val_error": 0.25507858395576477,
+    "stored": [
+     4712,
+     218429,
+     1261278
+    ],
+    "keras": {
+     "weights": 218429,
+     "macs": 1261278
+    },
+    "faithful": [
+     4712,
+     218429,
+     1261278
+    ],
+    "prepool": true,
+    "branch": true
+   },
+   {
+    "i": 11,
+    "val_error": 0.33879414200782776,
+    "stored": [
+     5671,
+     27079,
+     371771
+    ],
+    "keras": {
+     "weights": 27079,
+     "macs": 371771
+    },
+    "faithful": [
+     5671,
+     27079,
+     371771
+    ],
+    "prepool": true,
+    "branch": true
+   },
+   {
+    "i": 12,
+    "val_error": 0.35661742091178894,
+    "stored": [
+     2812,
+     53570,
+     174541
+    ],
+    "keras": {
+     "weights": 53570,
+     "macs": 174541
+    },
+    "faithful": [
+     2812,
+     53570,
+     174541
+    ],
+    "prepool": true,
+    "branch": true
+   },
+   {
+    "i": 13,
+    "val_error": 0.6002745628356934,
+    "stored": [
+     313,
+     30037,
+     31273
+    ],
+    "keras": {
+     "weights": 30037,
+     "macs": 31273
+    },
+    "faithful": [
+     313,
+     30037,
+     31273
+    ],
+    "prepool": false,
+    "branch": false
+   },
+   {
+    "i": 14,
+    "val_error": 0.4188062250614166,
+    "stored": [
+     8475,
+     104151,
+     1210023
+    ],
+    "keras": {
+     "weights": 104151,
+     "macs": 1210023
+    },
+    "faithful": [
+     8475,
+     104151,
+     1210023
+    ],
+    "prepool": true,
+    "branch": false
+   },
+   {
+    "i": 15,
+    "val_error": 0.3997885286808014,
+    "stored": [
+     2500,
+     8788,
+     413305
+    ],
+    "keras": {
+     "weights": 8788,
+     "macs": 413305
+    },
+    "faithful": [
+     2500,
+     8788,
+     413305
+    ],
+    "prepool": false,
+    "branch": false
+   },
+   {
+    "i": 16,
+    "val_error": 0.32293564081192017,
+    "stored": [
+     1371,
+     117688,
+     477830
+    ],
+    "keras": {
+     "weights": 117688,
+     "macs": 477830
+    },
+    "faithful": [
+     1371,
+     117688,
+     477830
+    ],
+    "prepool": true,
+    "branch": true
+   },
+   {
+    "i": 17,
+    "val_error": 0.7227475643157959,
+    "stored": [
+     8250,
+     23541,
+     216535
+    ],
+    "keras": {
+     "weights": 23541,
+     "macs": 216535
+    },
+    "faithful": [
+     8250,
+     23541,
+     216535
+    ],
+    "prepool": false,
+    "branch": false
+   },
+   {
+    "i": 18,
+    "val_error": 0.3751567304134369,
+    "stored": [
+     1550,
+     30287,
+     91514
+    ],
+    "keras": {
+     "weights": 30287,
+     "macs": 91514
+    },
+    "faithful": [
+     1550,
+     30287,
+     91514
+    ],
+    "prepool": true,
+    "branch": false
+   },
+   {
+    "i": 19,
+    "val_error": 0.5709496736526489,
+    "stored": [
+     2500,
+     2830,
+     70807
+    ],
+    "keras": {
+     "weights": 2830,
+     "macs": 70807
+    },
+    "faithful": [
+     2500,
+     2830,
+     70807
+    ],
+    "prepool": false,
+    "branch": true
+   },
+   {
+    "i": 20,
+    "val_error": 0.39748257398605347,
+    "stored": [
+     8625,
+     74717,
+     1379764
+    ],
+    "keras": {
+     "weights": 74717,
+     "macs": 1379764
+    },
+    "faithful": [
+     8625,
+     74717,
+     1379764
+    ],
+    "prepool": true,
+    "branch": true
+   },
+   {
+    "i": 21,
+    "val_error": 0.7840648889541626,
+    "stored": [
+     149,
+     3895,
+     5326
+    ],
+    "keras": {
+     "weights": 3895,
+     "macs": 5326
+    },
+    "faithful": [
+     149,
+     3895,
+     5326
+    ],
+    "prepool": false,
+    "branch": false
+   },
+   {
+    "i": 22,
+    "val_error": 0.561033308506012,
+    "stored": [
+     3366,
+     18297,
+     121546
+    ],
+    "keras": {
+     "weights": 18297,
+     "macs": 121546
+    },
+    "faithful": [
+     3366,
+     18297,
+     121546
+    ],
+    "prepool": false,
+    "branch": false
+   },
+   {
+    "i": 23,
+    "val_error": 0.42308709025382996,
+    "stored": [
+     5750,
+     9911,
+     445339
+    ],
+    "keras": {
+     "weights": 9911,
+     "macs": 445339
+    },
+    "faithful": [
+     5750,
+     9911,
+     445339
+    ],
+    "prepool": true,
+    "branch": false
+   },
+   {
+    "i": 24,
+    "val_error": 0.3085884749889374,
+    "stored": [
+     10675,
+     237896,
+     5958869
+    ],
+    "keras": {
+     "weights": 237896,
+     "macs": 5958869
+    },
+    "faithful": [
+     10675,
+     237896,
+     5958869
+    ],
+    "prepool": true,
+    "branch": true
+   },
+   {
+    "i": 25,
+    "val_error": 0.3932236135005951,
+    "stored": [
+     6402,
+     47003,
+     139217
+    ],
+    "keras": {
+     "weights": 47003,
+     "macs": 139217
+    },
+    "faithful": [
+     6402,
+     47003,
+     139217
+    ],
+    "prepool": true,
+    "branch": true
+   },
+   {
+    "i": 26,
+    "val_error": 0.3091573715209961,
+    "stored": [
+     8550,
+     81968,
+     1817338
+    ],
+    "keras": {
+     "weights": 81968,
+     "macs": 1817338
+    },
+    "faithful": [
+     8550,
+     81968,
+     1817338
+    ],
+    "prepool": true,
+    "branch": true
+   },
+   {
+    "i": 27,
+    "val_error": 0.35348668694496155,
+    "stored": [
+     1550,
+     39275,
+     147493
+    ],
+    "keras": {
+     "weights": 39275,
+     "macs": 147493
+    },
+    "faithful": [
+     1550,
+     39275,
+     147493
+    ],
+    "prepool": true,
+    "branch": true
+   },
+   {
+    "i": 28,
+    "val_error": 0.45213496685028076,
+    "stored": [
+     1216,
+     3839,
+     89680
+    ],
+    "keras": {
+     "weights": 3839,
+     "macs": 89680
+    },
+    "faithful": [
+     1216,
+     3839,
+     89680
+    ],
+    "prepool": false,
+    "branch": false
+   },
+   {
+    "i": 29,
+    "val_error": 0.35744914412498474,
+    "stored": [
+     3950,
+     38139,
+     325973
+    ],
+    "keras": {
+     "weights": 38139,
+     "macs": 325973
+    },
+    "faithful": [
+     3950,
+     38139,
+     325973
+    ],
+    "prepool": true,
+    "branch": false
+   },
+   {
+    "i": 30,
+    "val_error": 0.35848456621170044,
+    "stored": [
+     9200,
+     72252,
+     427264
+    ],
+    "keras": {
+     "weights": 72252,
+     "macs": 427264
+    },
+    "faithful": [
+     9200,
+     72252,
+     427264
+    ],
+    "prepool": true,
+    "branch": true
+   },
+   {
+    "i": 31,
+    "val_error": 0.41590169072151184,
+    "stored": [
+     3853,
+     61293,
+     513787
+    ],
+    "keras": {
+     "weights": 61293,
+     "macs": 513787
+    },
+    "faithful": [
+     3853,
+     61293,
+     513787
+    ],
+    "prepool": true,
+    "branch": true
+   },
+   {
+    "i": 32,
+    "val_error": 0.4895288944244385,
+    "stored": [
+     3366,
+     56714,
+     510940
+    ],
+    "keras": {
+     "weights": 56714,
+     "macs": 510940
+    },
+    "faithful": [
+     3366,
+     56714,
+     510940
+    ],
+    "prepool": true,
+    "branch": true
+   },
+   {
+    "i": 33,
+    "val_error": 0.6972984671592712,
+    "stored": [
+     776,
+     776,
+     2325
+    ],
+    "keras": {
+     "weights": 776,
+     "macs": 2325
+    },
+    "faithful": [
+     776,
+     776,
+     2325
+    ],
+    "prepool": false,
+    "branch": false
+   },
+   {
+    "i": 34,
+    "val_error": 0.4467633068561554,
+    "stored": [
+     978,
+     157732,
+     159078
+    ],
+    "keras": {
+     "weights": 157732,
+     "macs": 159078
+    },
+    "faithful": [
+     978,
+     157732,
+     159078
+    ],
+    "prepool": false,
+    "branch": false
+   },
+   {
+    "i": 35,
+    "val_error": 0.4557701349258423,
+    "stored": [
+     1607,
+     10491,
+     136241
+    ],
+    "keras": {
+     "weights": 10491,
+     "macs": 136241
+    },
+    "faithful": [
+     1607,
+     10491,
+     136241
+    ],
+    "prepool": true,
+    "branch": false
+   },
+   {
+    "i": 36,
+    "val_error": 0.45751291513442993,
+    "stored": [
+     4700,
+     40534,
+     833841
+    ],
+    "keras": {
+     "weights": 40534,
+     "macs": 833841
+    },
+    "faithful": [
+     4700,
+     40534,
+     833841
+    ],
+    "prepool": true,
+    "branch": false
+   },
+   {
+    "i": 37,
+    "val_error": 0.41929295659065247,
+    "stored": [
+     7275,
+     29099,
+     716513
+    ],
+    "keras": {
+     "weights": 29099,
+     "macs": 716513
+    },
+    "faithful": [
+     7275,
+     29099,
+     716513
+    ],
+    "prepool": false,
+    "branch": true
+   },
+   {
+    "i": 38,
+    "val_error": 0.3895682096481323,
+    "stored": [
+     2325,
+     89859,
+     283490
+    ],
+    "keras": {
+     "weights": 89859,
+     "macs": 283490
+    },
+    "faithful": [
+     2325,
+     89859,
+     283490
+    ],
+    "prepool": true,
+    "branch": false
+   },
+   {
+    "i": 39,
+    "val_error": 0.32237887382507324,
+    "stored": [
+     1818,
+     108737,
+     202618
+    ],
+    "keras": {
+     "weights": 108737,
+     "macs": 202618
+    },
+    "faithful": [
+     1818,
+     108737,
+     202618
+    ],
+    "prepool": true,
+    "branch": true
+   },
+   {
+    "i": 40,
+    "val_error": 0.3502461910247803,
+    "stored": [
+     9200,
+     78845,
+     2421051
+    ],
+    "keras": {
+     "weights": 78845,
+     "macs": 2421051
+    },
+    "faithful": [
+     9200,
+     78845,
+     2421051
+    ],
+    "prepool": true,
+    "branch": true
+   },
+   {
+    "i": 41,
+    "val_error": 0.8071169257164001,
+    "stored": [
+     9100,
+     125843,
+     1796015
+    ],
+    "keras": {
+     "weights": 125843,
+     "macs": 1796015
+    },
+    "faithful": [
+     9100,
+     125843,
+     1796015
+    ],
+    "prepool": true,
+    "branch": true
+   },
+   {
+    "i": 42,
+    "val_error": 0.4097978174686432,
+    "stored": [
+     3552,
+     12345,
+     228963
+    ],
+    "keras": {
+     "weights": 12345,
+     "macs": 228963
+    },
+    "faithful": [
+     3552,
+     12345,
+     228963
+    ],
+    "prepool": true,
+    "branch": true
+   },
+   {
+    "i": 43,
+    "val_error": 0.3332582712173462,
+    "stored": [
+     2400,
+     92089,
+     167628
+    ],
+    "keras": {
+     "weights": 92089,
+     "macs": 167628
+    },
+    "faithful": [
+     2400,
+     92089,
+     167628
+    ],
+    "prepool": false,
+    "branch": false
+   },
+   {
+    "i": 44,
+    "val_error": 0.29611828923225403,
+    "stored": [
+     1944,
+     79835,
+     659396
+    ],
+    "keras": {
+     "weights": 79835,
+     "macs": 659396
+    },
+    "faithful": [
+     1944,
+     79835,
+     659396
+    ],
+    "prepool": true,
+    "branch": true
+   },
+   {
+    "i": 45,
+    "val_error": 0.46983635425567627,
+    "stored": [
+     4550,
+     42896,
+     287048
+    ],
+    "keras": {
+     "weights": 42896,
+     "macs": 287048
+    },
+    "faithful": [
+     4550,
+     42896,
+     287048
+    ],
+    "prepool": true,
+    "branch": false
+   },
+   {
+    "i": 46,
+    "val_error": 0.43318456411361694,
+    "stored": [
+     2587,
+     43406,
+     379195
+    ],
+    "keras": {
+     "weights": 43406,
+     "macs": 379195
+    },
+    "faithful": [
+     2587,
+     43406,
+     379195
+    ],
+    "prepool": false,
+    "branch": false
+   },
+   {
+    "i": 47,
+    "val_error": 0.3924696147441864,
+    "stored": [
+     7575,
+     22434,
+     882297
+    ],
+    "keras": {
+     "weights": 22434,
+     "macs": 882297
+    },
+    "faithful": [
+     7575,
+     22434,
+     882297
+    ],
+    "prepool": true,
+    "branch": true
+   },
+   {
+    "i": 48,
+    "val_error": 0.34913885593414307,
+    "stored": [
+     3525,
+     51289,
+     370232
+    ],
+    "keras": {
+     "weights": 51289,
+     "macs": 370232
+    },
+    "faithful": [
+     3525,
+     51289,
+     370232
+    ],
+    "prepool": true,
+    "branch": true
+   },
+   {
+    "i": 49,
+    "val_error": 0.32435959577560425,
+    "stored": [
+     2325,
+     81995,
+     299408
+    ],
+    "keras": {
+     "weights": 81995,
+     "macs": 299408
+    },
+    "faithful": [
+     2325,
+     81995,
+     299408
+    ],
+    "prepool": true,
+    "branch": false
+   },
+   {
+    "i": 50,
+    "val_error": 0.4853970408439636,
+    "stored": [
+     1216,
+     3839,
+     89680
+    ],
+    "keras": {
+     "weights": 3839,
+     "macs": 89680
+    },
+    "faithful": [
+     1216,
+     3839,
+     89680
+    ],
+    "prepool": false,
+    "branch": false
+   },
+   {
+    "i": 51,
+    "val_error": 0.46028077602386475,
+    "stored": [
+     1672,
+     11296,
+     146461
+    ],
+    "keras": {
+     "weights": 11296,
+     "macs": 146461
+    },
+    "faithful": [
+     1672,
+     11296,
+     146461
+    ],
+    "prepool": true,
+    "branch": false
+   },
+   {
+    "i": 52,
+    "val_error": 0.5869029760360718,
+    "stored": [
+     988,
+     3611,
+     89338
+    ],
+    "keras": {
+     "weights": 3611,
+     "macs": 89338
+    },
+    "faithful": [
+     988,
+     3611,
+     89338
+    ],
+    "prepool": false,
+    "branch": false
+   },
+   {
+    "i": 53,
+    "val_error": 0.41720524430274963,
+    "stored": [
+     3552,
+     13058,
+     237332
+    ],
+    "keras": {
+     "weights": 13058,
+     "macs": 237332
+    },
+    "faithful": [
+     3552,
+     13058,
+     237332
+    ],
+    "prepool": true,
+    "branch": true
+   },
+   {
+    "i": 54,
+    "val_error": 0.4462728202342987,
+    "stored": [
+     1056,
+     3334,
+     77880
+    ],
+    "keras": {
+     "weights": 3334,
+     "macs": 77880
+    },
+    "faithful": [
+     1056,
+     3334,
+     77880
+    ],
+    "prepool": false,
+    "branch": false
+   },
+   {
+    "i": 55,
+    "val_error": 0.3358120024204254,
+    "stored": [
+     1550,
+     81995,
+     176118
+    ],
+    "keras": {
+     "weights": 81995,
+     "macs": 176118
+    },
+    "faithful": [
+     1550,
+     81995,
+     176118
+    ],
+    "prepool": true,
+    "branch": false
+   },
+   {
+    "i": 56,
+    "val_error": 0.7118453979492188,
+    "stored": [
+     404,
+     404,
+     2015
+    ],
+    "keras": {
+     "weights": 404,
+     "macs": 2015
+    },
+    "faithful": [
+     404,
+     404,
+     2015
+    ],
+    "prepool": false,
+    "branch": false
+   },
+   {
+    "i": 57,
+    "val_error": 0.44147592782974243,
+    "stored": [
+     1152,
+     3637,
+     84960
+    ],
+    "keras": {
+     "weights": 3637,
+     "macs": 84960
+    },
+    "faithful": [
+     1152,
+     3637,
+     84960
+    ],
+    "prepool": false,
+    "branch": false
+   },
+   {
+    "i": 58,
+    "val_error": 0.4050059914588928,
+    "stored": [
+     1607,
+     10875,
+     136177
+    ],
+    "keras": {
+     "weights": 10875,
+     "macs": 136177
+    },
+    "faithful": [
+     1607,
+     10875,
+     136177
+    ],
+    "prepool": true,
+    "branch": false
+   },
+   {
+    "i": 59,
+    "val_error": 0.4221324324607849,
+    "stored": [
+     6000,
+     11851,
+     530964
+    ],
+    "keras": {
+     "weights": 11851,
+     "macs": 530964
+    },
+    "faithful": [
+     6000,
+     11851,
+     530964
+    ],
+    "prepool": true,
+    "branch": false
+   },
+   {
+    "i": 60,
+    "val_error": 0.406910240650177,
+    "stored": [
+     1607,
+     10875,
+     136177
+    ],
+    "keras": {
+     "weights": 10875,
+     "macs": 136177
+    },
+    "faithful": [
+     1607,
+     10875,
+     136177
+    ],
+    "prepool": true,
+    "branch": false
+   },
+   {
+    "i": 61,
+    "val_error": 0.4286128580570221,
+    "stored": [
+     2450,
+     3761,
+     89610
+    ],
+    "keras": {
+     "weights": 3761,
+     "macs": 89610
+    },
+    "faithful": [
+     2450,
+     3761,
+     89610
+    ],
+    "prepool": false,
+    "branch": false
+   },
+   {
+    "i": 62,
+    "val_error": 0.7093576192855835,
+    "stored": [
+     404,
+     404,
+     2015
+    ],
+    "keras": {
+     "weights": 404,
+     "macs": 2015
+    },
+    "faithful": [
+     404,
+     404,
+     2015
+    ],
+    "prepool": false,
+    "branch": false
+   },
+   {
+    "i": 63,
+    "val_error": 0.4356435239315033,
+    "stored": [
+     1368,
+     3853,
+     85104
+    ],
+    "keras": {
+     "weights": 3853,
+     "macs": 85104
+    },
+    "faithful": [
+     1368,
+     3853,
+     85104
+    ],
+    "prepool": false,
+    "branch": false
+   },
+   {
+    "i": 64,
+    "val_error": 0.6145011186599731,
+    "stored": [
+     2500,
+     2830,
+     70807
+    ],
+    "keras": {
+     "weights": 2830,
+     "macs": 70807
+    },
+    "faithful": [
+     2500,
+     2830,
+     70807
+    ],
+    "prepool": false,
+    "branch": true
+   },
+   {
+    "i": 65,
+    "val_error": 0.3643411695957184,
+    "stored": [
+     2450,
+     10585,
+     255185
+    ],
+    "keras": {
+     "weights": 10585,
+     "macs": 255185
+    },
+    "faithful": [
+     2450,
+     10585,
+     255185
+    ],
+    "prepool": false,
+    "branch": false
+   },
+   {
+    "i": 66,
+    "val_error": 0.3517199456691742,
+    "stored": [
+     1550,
+     38835,
+     146348
+    ],
+    "keras": {
+     "weights": 38835,
+     "macs": 146348
+    },
+    "faithful": [
+     1550,
+     38835,
+     146348
+    ],
+    "prepool": true,
+    "branch": true
+   },
+   {
+    "i": 67,
+    "val_error": 0.4364440441131592,
+    "stored": [
+     1254,
+     3532,
+     78012
+    ],
+    "keras": {
+     "weights": 3532,
+     "macs": 78012
+    },
+    "faithful": [
+     1254,
+     3532,
+     78012
+    ],
+    "prepool": false,
+    "branch": false
+   },
+   {
+    "i": 68,
+    "val_error": 0.6122191548347473,
+    "stored": [
+     988,
+     3611,
+     89338
+    ],
+    "keras": {
+     "weights": 3611,
+     "macs": 89338
+    },
+    "faithful": [
+     988,
+     3611,
+     89338
+    ],
+    "prepool": false,
+    "branch": false
+   },
+   {
+    "i": 69,
+    "val_error": 0.42290717363357544,
+    "stored": [
+     2450,
+     4039,
+     92854
+    ],
+    "keras": {
+     "weights": 4039,
+     "macs": 92854
+    },
+    "faithful": [
+     2450,
+     4039,
+     92854
+    ],
+    "prepool": false,
+    "branch": false
+   },
+   {
+    "i": 70,
+    "val_error": 0.39914026856422424,
+    "stored": [
+     1550,
+     36972,
+     145190
+    ],
+    "keras": {
+     "weights": 36972,
+     "macs": 145190
+    },
+    "faithful": [
+     1550,
+     36972,
+     145190
+    ],
+    "prepool": true,
+    "branch": true
+   },
+   {
+    "i": 71,
+    "val_error": 0.43209367990493774,
+    "stored": [
+     2450,
+     10219,
+     254636
+    ],
+    "keras": {
+     "weights": 10219,
+     "macs": 254636
+    },
+    "faithful": [
+     2450,
+     10219,
+     254636
+    ],
+    "prepool": false,
+    "branch": false
+   },
+   {
+    "i": 72,
+    "val_error": 0.4769043028354645,
+    "stored": [
+     1368,
+     3853,
+     85104
+    ],
+    "keras": {
+     "weights": 3853,
+     "macs": 85104
+    },
+    "faithful": [
+     1368,
+     3853,
+     85104
+    ],
+    "prepool": false,
+    "branch": false
+   },
+   {
+    "i": 73,
+    "val_error": 0.5704479217529297,
+    "stored": [
+     2500,
+     3264,
+     92507
+    ],
+    "keras": {
+     "weights": 3264,
+     "macs": 92507
+    },
+    "faithful": [
+     2500,
+     3264,
+     92507
+    ],
+    "prepool": false,
+    "branch": true
+   },
+   {
+    "i": 74,
+    "val_error": 0.5317320227622986,
+    "stored": [
+     936,
+     3421,
+     84636
+    ],
+    "keras": {
+     "weights": 3421,
+     "macs": 84636
+    },
+    "faithful": [
+     936,
+     3421,
+     84636
+    ],
+    "prepool": false,
+    "branch": false
+   },
+   {
+    "i": 75,
+    "val_error": 0.4228915870189667,
+    "stored": [
+     1550,
+     10619,
+     66457
+    ],
+    "keras": {
+     "weights": 10619,
+     "macs": 66457
+    },
+    "faithful": [
+     1550,
+     10619,
+     66457
+    ],
+    "prepool": true,
+    "branch": false
+   },
+   {
+    "i": 76,
+    "val_error": 0.43808048963546753,
+    "stored": [
+     1368,
+     3853,
+     85104
+    ],
+    "keras": {
+     "weights": 3853,
+     "macs": 85104
+    },
+    "faithful": [
+     1368,
+     3853,
+     85104
+    ],
+    "prepool": false,
+    "branch": false
+   },
+   {
+    "i": 77,
+    "val_error": 0.5486561059951782,
+    "stored": [
+     2500,
+     3264,
+     55732
+    ],
+    "keras": {
+     "weights": 3264,
+     "macs": 55732
+    },
+    "faithful": [
+     2500,
+     3264,
+     55732
+    ],
+    "prepool": true,
+    "branch": true
+   },
+   {
+    "i": 78,
+    "val_error": 0.4138697385787964,
+    "stored": [
+     3350,
+     3977,
+     174390
+    ],
+    "keras": {
+     "weights": 3977,
+     "macs": 174390
+    },
+    "faithful": [
+     3350,
+     3977,
+     174390
+    ],
+    "prepool": false,
+    "branch": false
+   },
+   {
+    "i": 79,
+    "val_error": 0.39361101388931274,
+    "stored": [
+     1607,
+     10875,
+     136177
+    ],
+    "keras": {
+     "weights": 10875,
+     "macs": 136177
+    },
+    "faithful": [
+     1607,
+     10875,
+     136177
+    ],
+    "prepool": true,
+    "branch": false
+   },
+   {
+    "i": 80,
+    "val_error": 0.7101644277572632,
+    "stored": [
+     404,
+     404,
+     2015
+    ],
+    "keras": {
+     "weights": 404,
+     "macs": 2015
+    },
+    "faithful": [
+     404,
+     404,
+     2015
+    ],
+    "prepool": false,
+    "branch": false
+   },
+   {
+    "i": 81,
+    "val_error": 0.38528311252593994,
+    "stored": [
+     1607,
+     10875,
+     136177
+    ],
+    "keras": {
+     "weights": 10875,
+     "macs": 136177
+    },
+    "faithful": [
+     1607,
+     10875,
+     136177
+    ],
+    "prepool": true,
+    "branch": false
+   },
+   {
+    "i": 82,
+    "val_error": 0.45950624346733093,
+    "stored": [
+     1064,
+     2997,
+     66192
+    ],
+    "keras": {
+     "weights": 2997,
+     "macs": 66192
+    },
+    "faithful": [
+     1064,
+     2997,
+     66192
+    ],
+    "prepool": false,
+    "branch": false
+   },
+   {
+    "i": 83,
+    "val_error": 0.557216227054596,
+    "stored": [
+     2500,
+     3326,
+     57282
+    ],
+    "keras": {
+     "weights": 3326,
+     "macs": 57282
+    },
+    "faithful": [
+     2500,
+     3326,
+     57282
+    ],
+    "prepool": true,
+    "branch": true
+   },
+   {
+    "i": 84,
+    "val_error": 0.6222454309463501,
+    "stored": [
+     936,
+     3421,
+     84636
+    ],
+    "keras": {
+     "weights": 3421,
+     "macs": 84636
+    },
+    "faithful": [
+     936,
+     3421,
+     84636
+    ],
+    "prepool": false,
+    "branch": false
+   },
+   {
+    "i": 85,
+    "val_error": 0.4449733793735504,
+    "stored": [
+     826,
+     3928,
+     77550
+    ],
+    "keras": {
+     "weights": 3928,
+     "macs": 77550
+    },
+    "faithful": [
+     826,
+     3928,
+     77550
+    ],
+    "prepool": false,
+    "branch": false
+   },
+   {
+    "i": 86,
+    "val_error": 0.5494186282157898,
+    "stored": [
+     2500,
+     3326,
+     57282
+    ],
+    "keras": {
+     "weights": 3326,
+     "macs": 57282
+    },
+    "faithful": [
+     2500,
+     3326,
+     57282
+    ],
+    "prepool": true,
+    "branch": true
+   },
+   {
+    "i": 87,
+    "val_error": 0.3666572570800781,
+    "stored": [
+     2450,
+     10585,
+     255185
+    ],
+    "keras": {
+     "weights": 10585,
+     "macs": 255185
+    },
+    "faithful": [
+     2450,
+     10585,
+     255185
+    ],
+    "prepool": false,
+    "branch": false
+   },
+   {
+    "i": 88,
+    "val_error": 0.43352195620536804,
+    "stored": [
+     2450,
+     3823,
+     92710
+    ],
+    "keras": {
+     "weights": 3823,
+     "macs": 92710
+    },
+    "faithful": [
+     2450,
+     3823,
+     92710
+    ],
+    "prepool": false,
+    "branch": false
+   },
+   {
+    "i": 89,
+    "val_error": 0.436445951461792,
+    "stored": [
+     1064,
+     2997,
+     67508
+    ],
+    "keras": {
+     "weights": 2997,
+     "macs": 67508
+    },
+    "faithful": [
+     1064,
+     2997,
+     67508
+    ],
+    "prepool": false,
+    "branch": false
+   },
+   {
+    "i": 90,
+    "val_error": 0.4886224865913391,
+    "stored": [
+     3550,
+     8238,
+     282382
+    ],
+    "keras": {
+     "weights": 8238,
+     "macs": 282382
+    },
+    "faithful": [
+     3550,
+     8238,
+     282382
+    ],
+    "prepool": true,
+    "branch": true
+   },
+   {
+    "i": 91,
+    "val_error": 0.538282573223114,
+    "stored": [
+     858,
+     3136,
+     77583
+    ],
+    "keras": {
+     "weights": 3136,
+     "macs": 77583
+    },
+    "faithful": [
+     858,
+     3136,
+     77583
+    ],
+    "prepool": false,
+    "branch": false
+   },
+   {
+    "i": 92,
+    "val_error": 0.4414548873901367,
+    "stored": [
+     1064,
+     2997,
+     66192
+    ],
+    "keras": {
+     "weights": 2997,
+     "macs": 66192
+    },
+    "faithful": [
+     1064,
+     2997,
+     66192
+    ],
+    "prepool": false,
+    "branch": false
+   },
+   {
+    "i": 93,
+    "val_error": 0.45186957716941833,
+    "stored": [
+     1550,
+     10491,
+     66521
+    ],
+    "keras": {
+     "weights": 10491,
+     "macs": 66521
+    },
+    "faithful": [
+     1550,
+     10491,
+     66521
+    ],
+    "prepool": true,
+    "branch": false
+   },
+   {
+    "i": 94,
+    "val_error": 0.40941882133483887,
+    "stored": [
+     1607,
+     10875,
+     136177
+    ],
+    "keras": {
+     "weights": 10875,
+     "macs": 136177
+    },
+    "faithful": [
+     1607,
+     10875,
+     136177
+    ],
+    "prepool": true,
+    "branch": false
+   },
+   {
+    "i": 95,
+    "val_error": 0.7284696698188782,
+    "stored": [
+     280,
+     280,
+     1953
+    ],
+    "keras": {
+     "weights": 280,
+     "macs": 1953
+    },
+    "faithful": [
+     280,
+     280,
+     1953
+    ],
+    "prepool": false,
+    "branch": false
+   },
+   {
+    "i": 96,
+    "val_error": 0.6608408689498901,
+    "stored": [
+     404,
+     404,
+     2015
+    ],
+    "keras": {
+     "weights": 404,
+     "macs": 2015
+    },
+    "faithful": [
+     404,
+     404,
+     2015
+    ],
+    "prepool": false,
+    "branch": false
+   },
+   {
+    "i": 97,
+    "val_error": 0.5571199059486389,
+    "stored": [
+     1550,
+     714,
+     7037
+    ],
+    "keras": {
+     "weights": 714,
+     "macs": 7037
+    },
+    "faithful": [
+     1550,
+     714,
+     7037
+    ],
+    "prepool": true,
+    "branch": false
+   },
+   {
+    "i": 98,
+    "val_error": 0.6583737134933472,
+    "stored": [
+     404,
+     404,
+     2015
+    ],
+    "keras": {
+     "weights": 404,
+     "macs": 2015
+    },
+    "faithful": [
+     404,
+     404,
+     2015
+    ],
+    "prepool": false,
+    "branch": false
+   },
+   {
+    "i": 99,
+    "val_error": 0.37242406606674194,
+    "stored": [
+     2450,
+     10951,
+     255429
+    ],
+    "keras": {
+     "weights": 10951,
+     "macs": 255429
+    },
+    "faithful": [
+     2450,
+     10951,
+     255429
+    ],
+    "prepool": false,
+    "branch": false
+   },
+   {
+    "i": 100,
+    "val_error": 0.4378761053085327,
+    "stored": [
+     1607,
+     10491,
+     136241
+    ],
+    "keras": {
+     "weights": 10491,
+     "macs": 136241
+    },
+    "faithful": [
+     1607,
+     10491,
+     136241
+    ],
+    "prepool": true,
+    "branch": false
+   },
+   {
+    "i": 101,
+    "val_error": 0.4280778467655182,
+    "stored": [
+     1243,
+     3823,
+     48155
+    ],
+    "keras": {
+     "weights": 3823,
+     "macs": 48155
+    },
+    "faithful": [
+     1243,
+     3823,
+     48155
+    ],
+    "prepool": false,
+    "branch": false
+   },
+   {
+    "i": 102,
+    "val_error": 0.34520280361175537,
+    "stored": [
+     6750,
+     37409,
+     986978
+    ],
+    "keras": {
+     "weights": 37409,
+     "macs": 986978
+    },
+    "faithful": [
+     6750,
+     37409,
+     986978
+    ],
+    "prepool": false,
+    "branch": false
+   },
+   {
+    "i": 103,
+    "val_error": 0.45381659269332886,
+    "stored": [
+     2100,
+     3333,
+     132300
+    ],
+    "keras": {
+     "weights": 3333,
+     "macs": 132300
+    },
+    "faithful": [
+     2100,
+     3333,
+     132300
+    ],
+    "prepool": false,
+    "branch": false
+   },
+   {
+    "i": 104,
+    "val_error": 0.47703197598457336,
+    "stored": [
+     2325,
+     1672,
+     36162
+    ],
+    "keras": {
+     "weights": 1672,
+     "macs": 36162
+    },
+    "faithful": [
+     2325,
+     1672,
+     36162
+    ],
+    "prepool": true,
+    "branch": false
+   },
+   {
+    "i": 105,
+    "val_error": 0.3474324345588684,
+    "stored": [
+     2450,
+     10647,
+     258285
+    ],
+    "keras": {
+     "weights": 10647,
+     "macs": 258285
+    },
+    "faithful": [
+     2450,
+     10647,
+     258285
+    ],
+    "prepool": false,
+    "branch": false
+   },
+   {
+    "i": 106,
+    "val_error": 0.35035133361816406,
+    "stored": [
+     639,
+     95581,
+     96956
+    ],
+    "keras": {
+     "weights": 95581,
+     "macs": 96956
+    },
+    "faithful": [
+     639,
+     95581,
+     96956
+    ],
+    "prepool": false,
+    "branch": false
+   },
+   {
+    "i": 107,
+    "val_error": 0.4518575668334961,
+    "stored": [
+     1064,
+     2997,
+     66192
+    ],
+    "keras": {
+     "weights": 2997,
+     "macs": 66192
+    },
+    "faithful": [
+     1064,
+     2997,
+     66192
+    ],
+    "prepool": false,
+    "branch": false
+   },
+   {
+    "i": 108,
+    "val_error": 0.35833099484443665,
+    "stored": [
+     2450,
+     10647,
+     258285
+    ],
+    "keras": {
+     "weights": 10647,
+     "macs": 258285
+    },
+    "faithful": [
+     2450,
+     10647,
+     258285
+    ],
+    "prepool": false,
+    "branch": false
+   },
+   {
+    "i": 109,
+    "val_error": 0.4557720124721527,
+    "stored": [
+     1056,
+     3334,
+     77880
+    ],
+    "keras": {
+     "weights": 3334,
+     "macs": 77880
+    },
+    "faithful": [
+     1056,
+     3334,
+     77880
+    ],
+    "prepool": false,
+    "branch": false
+   },
+   {
+    "i": 110,
+    "val_error": 0.409616082906723,
+    "stored": [
+     1550,
+     10619,
+     66457
+    ],
+    "keras": {
+     "weights": 10619,
+     "macs": 66457
+    },
+    "faithful": [
+     1550,
+     10619,
+     66457
+    ],
+    "prepool": true,
+    "branch": false
+   },
+   {
+    "i": 111,
+    "val_error": 0.6952767968177795,
+    "stored": [
+     776,
+     776,
+     2325
+    ],
+    "keras": {
+     "weights": 776,
+     "macs": 2325
+    },
+    "faithful": [
+     776,
+     776,
+     2325
+    ],
+    "prepool": false,
+    "branch": false
+   },
+   {
+    "i": 112,
+    "val_error": 0.3228364884853363,
+    "stored": [
+     3150,
+     20230,
+     295419
+    ],
+    "keras": {
+     "weights": 20230,
+     "macs": 295419
+    },
+    "faithful": [
+     3150,
+     20230,
+     295419
+    ],
+    "prepool": true,
+    "branch": false
+   },
+   {
+    "i": 113,
+    "val_error": 0.44232431054115295,
+    "stored": [
+     2100,
+     3333,
+     132300
+    ],
+    "keras": {
+     "weights": 3333,
+     "macs": 132300
+    },
+    "faithful": [
+     2100,
+     3333,
+     132300
+    ],
+    "prepool": false,
+    "branch": false
+   },
+   {
+    "i": 114,
+    "val_error": 0.9380273222923279,
+    "stored": [
+     32,
+     32,
+     1581
+    ],
+    "keras": {
+     "weights": 32,
+     "macs": 1581
+    },
+    "faithful": [
+     32,
+     32,
+     1581
+    ],
+    "prepool": false,
+    "branch": false
+   },
+   {
+    "i": 115,
+    "val_error": 0.6588711142539978,
+    "stored": [
+     280,
+     280,
+     1953
+    ],
+    "keras": {
+     "weights": 280,
+     "macs": 1953
+    },
+    "faithful": [
+     280,
+     280,
+     1953
+    ],
+    "prepool": false,
+    "branch": false
+   },
+   {
+    "i": 116,
+    "val_error": 0.556991457939148,
+    "stored": [
+     1953,
+     590,
+     9765
+    ],
+    "keras": {
+     "weights": 590,
+     "macs": 9765
+    },
+    "faithful": [
+     1953,
+     590,
+     9765
+    ],
+    "prepool": false,
+    "branch": false
+   },
+   {
+    "i": 117,
+    "val_error": 0.43055686354637146,
+    "stored": [
+     2575,
+     4328,
+     104510
+    ],
+    "keras": {
+     "weights": 4328,
+     "macs": 104510
+    },
+    "faithful": [
+     2575,
+     4328,
+     104510
+    ],
+    "prepool": false,
+    "branch": false
+   },
+   {
+    "i": 118,
+    "val_error": 0.7186912298202515,
+    "stored": [
+     280,
+     280,
+     1953
+    ],
+    "keras": {
+     "weights": 280,
+     "macs": 1953
+    },
+    "faithful": [
+     280,
+     280,
+     1953
+    ],
+    "prepool": false,
+    "branch": false
+   },
+   {
+    "i": 119,
+    "val_error": 0.3562910556793213,
+    "stored": [
+     1550,
+     29866,
+     105059
+    ],
+    "keras": {
+     "weights": 29866,
+     "macs": 105059
+    },
+    "faithful": [
+     1550,
+     29866,
+     105059
+    ],
+    "prepool": true,
+    "branch": false
+   },
+   {
+    "i": 120,
+    "val_error": 0.4511476457118988,
+    "stored": [
+     874,
+     2462,
+     54372
+    ],
+    "keras": {
+     "weights": 2462,
+     "macs": 54372
+    },
+    "faithful": [
+     874,
+     2462,
+     54372
+    ],
+    "prepool": false,
+    "branch": false
+   },
+   {
+    "i": 121,
+    "val_error": 0.43954750895500183,
+    "stored": [
+     1204,
+     3520,
+     44465
+    ],
+    "keras": {
+     "weights": 3520,
+     "macs": 44465
+    },
+    "faithful": [
+     1204,
+     3520,
+     44465
+    ],
+    "prepool": false,
+    "branch": false
+   },
+   {
+    "i": 122,
+    "val_error": 0.451112300157547,
+    "stored": [
+     1204,
+     3532,
+     41876
+    ],
+    "keras": {
+     "weights": 3532,
+     "macs": 41876
+    },
+    "faithful": [
+     1204,
+     3532,
+     41876
+    ],
+    "prepool": true,
+    "branch": false
+   },
+   {
+    "i": 123,
+    "val_error": 0.5346682071685791,
+    "stored": [
+     858,
+     3136,
+     77583
+    ],
+    "keras": {
+     "weights": 3136,
+     "macs": 77583
+    },
+    "faithful": [
+     858,
+     3136,
+     77583
+    ],
+    "prepool": false,
+    "branch": false
+   },
+   {
+    "i": 124,
+    "val_error": 0.44399183988571167,
+    "stored": [
+     1200,
+     5713,
+     135880
+    ],
+    "keras": {
+     "weights": 5713,
+     "macs": 135880
+    },
+    "faithful": [
+     1200,
+     5713,
+     135880
+    ],
+    "prepool": false,
+    "branch": false
+   },
+   {
+    "i": 125,
+    "val_error": 0.433006227016449,
+    "stored": [
+     1204,
+     3520,
+     44465
+    ],
+    "keras": {
+     "weights": 3520,
+     "macs": 44465
+    },
+    "faithful": [
+     1204,
+     3520,
+     44465
+    ],
+    "prepool": false,
+    "branch": false
+   },
+   {
+    "i": 126,
+    "val_error": 0.3773348033428192,
+    "stored": [
+     1607,
+     14843,
+     187761
+    ],
+    "keras": {
+     "weights": 14843,
+     "macs": 187761
+    },
+    "faithful": [
+     1607,
+     14843,
+     187761
+    ],
+    "prepool": true,
+    "branch": false
+   },
+   {
+    "i": 127,
+    "val_error": 0.5713617205619812,
+    "stored": [
+     2450,
+     3823,
+     92710
+    ],
+    "keras": {
+     "weights": 3823,
+     "macs": 92710
+    },
+    "faithful": [
+     2450,
+     3823,
+     92710
+    ],
+    "prepool": false,
+    "branch": false
+   },
+   {
+    "i": 128,
+    "val_error": 0.3568914532661438,
+    "stored": [
+     1261,
+     10464,
+     134263
+    ],
+    "keras": {
+     "weights": 10464,
+     "macs": 134263
+    },
+    "faithful": [
+     1261,
+     10464,
+     134263
+    ],
+    "prepool": false,
+    "branch": false
+   },
+   {
+    "i": 129,
+    "val_error": 0.44431716203689575,
+    "stored": [
+     3350,
+     4039,
+     177490
+    ],
+    "keras": {
+     "weights": 4039,
+     "macs": 177490
+    },
+    "faithful": [
+     3350,
+     4039,
+     177490
+    ],
+    "prepool": false,
+    "branch": false
+   },
+   {
+    "i": 130,
+    "val_error": 0.3542800843715668,
+    "stored": [
+     2450,
+     10709,
+     261385
+    ],
+    "keras": {
+     "weights": 10709,
+     "macs": 261385
+    },
+    "faithful": [
+     2450,
+     10709,
+     261385
+    ],
+    "prepool": false,
+    "branch": false
+   },
+   {
+    "i": 131,
+    "val_error": 0.3412089943885803,
+    "stored": [
+     1550,
+     49375,
+     182212
+    ],
+    "keras": {
+     "weights": 49375,
+     "macs": 182212
+    },
+    "faithful": [
+     1550,
+     49375,
+     182212
+    ],
+    "prepool": true,
+    "branch": false
+   },
+   {
+    "i": 132,
+    "val_error": 0.34730976819992065,
+    "stored": [
+     1875,
+     24522,
+     174507
+    ],
+    "keras": {
+     "weights": 24522,
+     "macs": 174507
+    },
+    "faithful": [
+     1875,
+     24522,
+     174507
+    ],
+    "prepool": true,
+    "branch": false
+   },
+   {
+    "i": 133,
+    "val_error": 0.6079763174057007,
+    "stored": [
+     1178,
+     590,
+     5084
+    ],
+    "keras": {
+     "weights": 590,
+     "macs": 5084
+    },
+    "faithful": [
+     1178,
+     590,
+     5084
+    ],
+    "prepool": false,
+    "branch": false
+   },
+   {
+    "i": 134,
+    "val_error": 0.4813081622123718,
+    "stored": [
+     1350,
+     1222,
+     22597
+    ],
+    "keras": {
+     "weights": 1222,
+     "macs": 22597
+    },
+    "faithful": [
+     1350,
+     1222,
+     22597
+    ],
+    "prepool": false,
+    "branch": false
+   },
+   {
+    "i": 135,
+    "val_error": 0.7061448097229004,
+    "stored": [
+     404,
+     404,
+     2015
+    ],
+    "keras": {
+     "weights": 404,
+     "macs": 2015
+    },
+    "faithful": [
+     404,
+     404,
+     2015
+    ],
+    "prepool": false,
+    "branch": false
+   },
+   {
+    "i": 136,
+    "val_error": 0.6906850934028625,
+    "stored": [
+     776,
+     776,
+     2325
+    ],
+    "keras": {
+     "weights": 776,
+     "macs": 2325
+    },
+    "faithful": [
+     776,
+     776,
+     2325
+    ],
+    "prepool": false,
+    "branch": false
+   },
+   {
+    "i": 137,
+    "val_error": 0.5638423562049866,
+    "stored": [
+     1550,
+     1717,
+     14110
+    ],
+    "keras": {
+     "weights": 1717,
+     "macs": 14110
+    },
+    "faithful": [
+     1550,
+     1717,
+     14110
+    ],
+    "prepool": true,
+    "branch": false
+   },
+   {
+    "i": 138,
+    "val_error": 0.4092521369457245,
+    "stored": [
+     3400,
+     13825,
+     347128
+    ],
+    "keras": {
+     "weights": 13825,
+     "macs": 347128
+    },
+    "faithful": [
+     3400,
+     13825,
+     347128
+    ],
+    "prepool": false,
+    "branch": false
+   },
+   {
+    "i": 139,
+    "val_error": 0.4607335329055786,
+    "stored": [
+     1550,
+     3425,
+     23231
+    ],
+    "keras": {
+     "weights": 3425,
+     "macs": 23231
+    },
+    "faithful": [
+     1550,
+     3425,
+     23231
+    ],
+    "prepool": true,
+    "branch": false
+   },
+   {
+    "i": 140,
+    "val_error": 0.5567687749862671,
+    "stored": [
+     1036,
+     2738,
+     66834
+    ],
+    "keras": {
+     "weights": 2738,
+     "macs": 66834
+    },
+    "faithful": [
+     1036,
+     2738,
+     66834
+    ],
+    "prepool": true,
+    "branch": false
+   },
+   {
+    "i": 141,
+    "val_error": 0.4225505590438843,
+    "stored": [
+     1243,
+     3823,
+     48155
+    ],
+    "keras": {
+     "weights": 3823,
+     "macs": 48155
+    },
+    "faithful": [
+     1243,
+     3823,
+     48155
+    ],
+    "prepool": false,
+    "branch": false
+   },
+   {
+    "i": 142,
+    "val_error": 0.5406373739242554,
+    "stored": [
+     1550,
+     528,
+     5084
+    ],
+    "keras": {
+     "weights": 528,
+     "macs": 5084
+    },
+    "faithful": [
+     1550,
+     528,
+     5084
+    ],
+    "prepool": true,
+    "branch": false
+   },
+   {
+    "i": 143,
+    "val_error": 0.4551616609096527,
+    "stored": [
+     2025,
+     3214,
+     127575
+    ],
+    "keras": {
+     "weights": 3214,
+     "macs": 127575
+    },
+    "faithful": [
+     2025,
+     3214,
+     127575
+    ],
+    "prepool": false,
+    "branch": false
+   },
+   {
+    "i": 144,
+    "val_error": 0.456673264503479,
+    "stored": [
+     1764,
+     2997,
+     132020
+    ],
+    "keras": {
+     "weights": 2997,
+     "macs": 132020
+    },
+    "faithful": [
+     1764,
+     2997,
+     132020
+    ],
+    "prepool": false,
+    "branch": false
+   },
+   {
+    "i": 145,
+    "val_error": 0.42519456148147583,
+    "stored": [
+     1243,
+     3823,
+     48155
+    ],
+    "keras": {
+     "weights": 3823,
+     "macs": 48155
+    },
+    "faithful": [
+     1243,
+     3823,
+     48155
+    ],
+    "prepool": false,
+    "branch": false
+   },
+   {
+    "i": 146,
+    "val_error": 0.39037248492240906,
+    "stored": [
+     1261,
+     10464,
+     134263
+    ],
+    "keras": {
+     "weights": 10464,
+     "macs": 134263
+    },
+    "faithful": [
+     1261,
+     10464,
+     134263
+    ],
+    "prepool": false,
+    "branch": false
+   },
+   {
+    "i": 147,
+    "val_error": 0.44151729345321655,
+    "stored": [
+     1243,
+     3823,
+     48155
+    ],
+    "keras": {
+     "weights": 3823,
+     "macs": 48155
+    },
+    "faithful": [
+     1243,
+     3823,
+     48155
+    ],
+    "prepool": false,
+    "branch": false
+   },
+   {
+    "i": 148,
+    "val_error": 0.32992538809776306,
+    "stored": [
+     1204,
+     53961,
+     92187
+    ],
+    "keras": {
+     "weights": 53961,
+     "macs": 92187
+    },
+    "faithful": [
+     1204,
+     53961,
+     92187
+    ],
+    "prepool": true,
+    "branch": false
+   },
+   {
+    "i": 149,
+    "val_error": 0.5645450949668884,
+    "stored": [
+     2325,
+     900,
+     6975
+    ],
+    "keras": {
+     "weights": 900,
+     "macs": 6975
+    },
+    "faithful": [
+     2325,
+     900,
+     6975
+    ],
+    "prepool": false,
+    "branch": false
+   }
+  ]
  }
 }

@@ -36,6 +36,8 @@ results (test-set evaluation of the searched models; details in
 | Time-to-LC regression, LCL | RMSE / MAE (s) | 0.510 / 0.298¹ | 0.44 / — | 0.466 / 0.317 | 0.496 ± 0.012 / 0.351 ± 0.013 |
 | Hand-designed DSCNN (10 k), intention | accuracy | — | — | 91.51% | 91.50 ± 0.47% |
 | Hand-designed DSCNN (10 k), LCR / LCL | RMSE (s) | 0.510 | 0.42 / 0.44 | 0.439 / 0.459 | 0.454 ± 0.008 / 0.469 ± 0.010 |
+| v4 search⁴, intention (6.5 k) | accuracy | — | — | 90.72% | 91.43 ± 0.32% |
+| v4 search⁴, LCR (4.7 k) / LCL (3.7 k) | RMSE (s) | 0.510 | 0.42 / 0.44 | 0.463 / 0.461 | 0.476 ± 0.012 / 0.463 ± 0.007 |
 
 ¹ Published SOTA (Forneris et al., SPL 2026, Transformer) reports a *single*
 combined TTLC, not per-direction, so the comparison is directional rather than
@@ -53,6 +55,9 @@ matches them on intention and has lower mean RMSE on both regression tasks, also
 when the searched models are trained with the DSCNN's recipe (details and tests in
 `datasets/dmir/docs/nas-results.md`). Latency, flash and RAM below depend only on
 the graph and are unaffected.
+⁴ Searched again (2026-09-25) with a cost count that describes the trained network and
+budgets at the DSCNN's cost (see note ⁴ of the highD section); final model chosen on the
+five-seed validation mean (`unas/select_by_seeds.py`).
 
 ## Measured on-device (ST Edge AI Developer Cloud, Core 4.0.1)
 
@@ -68,11 +73,20 @@ Float32, optimization *balanced*, board **STM32H7B3I-DK** (Cortex-M7 @
 | lcr_best (117 k) | MAE 0.326 s | 14.06 ms | 474,522 B | 20,772 B |
 | lcl_best (106 k) | MAE 0.351 s | 28.77 ms | 423,494 B | 28,264 B |
 | hand-designed DSCNN, LCR and LCL (10.3 k) | MAE 0.324 / 0.338 s | 3.265 ms | 50,862 B | 11,632 B |
+| v4 intention (6.5 k) | 91.43% | 3.716 ms | 31,924 B | 24,012 B |
+| v4 LCR (4.7 k) | MAE 0.334 s | 1.812 ms | 22,600 B | 11,060 B |
+| v4 LCL (3.7 k) | MAE 0.335 s | 0.936 ms | 19,960 B | 9,960 B |
 
 At the same five-seed accuracy on intention, the searched 8 k model runs 4.1 times
 faster than the hand-designed DSCNN, whose strided first convolution over all 31
 channels needs most of its 171,971 MACs. For time to lane change the hand-designed
-network is both more accurate and faster than the searched regressors.
+network is both more accurate and faster than the first searched regressors. The v4
+search, which counts the network it trains, found regressors of 3.7 and 4.7 k
+parameters that run 3.5 and 1.8 times faster than the DSCNN: as accurate for left lane
+changes (RMSE 0.463 ± 0.007 against 0.469 ± 0.010 s) and slightly behind for right ones
+(0.476 ± 0.012 against 0.454 ± 0.008 s). Its intention model is as accurate
+(91.43 ± 0.32%) but slower (3.716 ms) despite 12% fewer MACC: its first layer keeps all
+50 steps, so a MAC budget does not bound latency.
 
 On the low-end **NUCLEO-F401RE** (STM32F401RE, Cortex-M4 @ 84 MHz, 512 KB flash)
 the reference CNN needs 3.38× the board's entire flash and cannot run at all,

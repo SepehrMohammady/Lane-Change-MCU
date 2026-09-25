@@ -1031,3 +1031,35 @@ Paper (local): Table IV rows for the v4 and TTLC v2 builds, TTLC v2 seeds in Tab
 measured speed-up in abstract, contributions, results, discussion and conclusion; the
 two-panel exiD figure is back (the user allows 9 pages while drafting). 9 pages, 9 TODO
 markers; number audit: 27 known leftovers (int8 builds with float I/O, one rounding).
+
+## 2026-09-25 23:49 — LCIR v4 searches: regressors as fast as 3.5 times the DSCNN; a MAC budget is not a latency budget
+
+The LCIR queue (unas/run_dmir_v4.sh) ran 17:01-23:28 (started by hand after the session-bound
+16:07 timer was lost with a session restart): dmir_cls_v4, dmir_lcr_v4, dmir_lcl_v4 with the
+faithful cost count and budgets at the DSCNN's cost, 150 candidates each (86, 81 and 69 saved),
+five-seed validation choice, DSCNN-recipe controls; stored cost equal to the Keras count for all
+450 candidates.
+
+| task | v4 choice | search recipe | DSCNN recipe | M7 float32 / int8 | DSCNN |
+|---|---|--:|--:|--:|--:|
+| intention | 6,528 params, 151,644 MACC | 91.43 +/- 0.32% | 91.21 +/- 0.24% | 3.716 / 1.355 ms | 91.50 +/- 0.47%, 3.272 / 1.132 ms |
+| LCR | 4,663 params, 100,381 MACC | 0.476 +/- 0.012 s | 0.462 +/- 0.005 s | 1.812 / 0.677 ms | 0.454 +/- 0.008 s, 3.265 / 1.128 ms |
+| LCL | 3,652 params, 44,959 MACC | 0.463 +/- 0.007 s | 0.479 +/- 0.020 s | 0.936 / 0.473 ms | 0.469 +/- 0.010 s, 3.265 / 1.128 ms |
+
+Welch against the DSCNN: intention p = 0.79, LCL p = 0.30, LCR p = 0.013 (search recipe) and
+0.10 (DSCNN recipe). Against the first searched regressors (117 k and 106 k): LCL better
+(p = 0.002), LCR better under the DSCNN recipe (p = 0.022), and 7.8 and 31 times faster.
+
+So on LCIR the corrected search reverses the TTLC finding of the seed study: its left-lane
+regressor matches the DSCNN at 3.5 times its speed, its right-lane one is 1.8 times faster and
+slightly behind. The intention model is as accurate but 14% slower than the DSCNN despite 12%
+fewer MACC, and needs twice the RAM: its first layer is a 1x1 convolution of 87 filters over
+all 50 steps. MACs do not bound latency; the first searches' 8 k intention model (0.793 ms)
+stays the fastest at equal accuracy. int8 PTQ costs these LCIR models accuracy as before
+(intention 90.72 to 83.05%, LCR RMSE 0.463 to 0.785 s).
+
+New: unas/prepare_deploy_lcir.py (float32 / int8 / int8-I/O files with test metrics),
+select_by_seeds.py and register_v2.py for LCIR, unas/run_dmir_v4.sh. Paper (local): LCIR v4 in
+method, Table I (the lowest LCL mean is now the v4 regressor's), results, Table IV, cost,
+discussion, abstract, contributions, conclusion and limitations; Fig. 3a and 4a/4c. 9 pages,
+number audit clean (30 known leftovers), style scan clean.

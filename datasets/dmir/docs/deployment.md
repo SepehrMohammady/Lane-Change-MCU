@@ -781,3 +781,24 @@ What this settles:
 - **int8:** PTQ costs the DSCNN 3.8 points on intention and raises the LCR RMSE from
   0.439 to 0.652 s, the same wide-range-input problem as the searched models; QAT was
   not run for the DSCNN.
+
+## v4 builds on the boards (2026-09-25)
+
+Files from `unas/prepare_deploy_lcir.py` (`lcir_v4_<task>_*.tflite`, test metrics in
+`lcir_v4_<task>_deploy.json`), measured with `unas/st_benchmark.py` (Core 4.0.1, balanced);
+float32 / int8 with int8 I/O:
+
+| model | H7B3I-DK | F401RE | flash (float32) | RAM (float32) | MACC (float32) | deployed file |
+|---|--:|--:|--:|--:|--:|--:|
+| v4 intention, 6,528 | 3.716 / 1.355 ms | 21.99 / 6.831 ms | 31,924 B | 24,012 B | 151,644 | 90.72% / 83.05% |
+| DSCNN intention, 10,451 | 3.272 / 1.132 ms | 18.70 / 5.607 ms | 51,382 B | 11,632 B | 171,971 | 90.96% / 87.14% |
+| v4 LCR, 4,663 | 1.812 / 0.677 ms | 10.35 / 3.310 ms | 22,600 B | 11,060 B | 100,381 | RMSE 0.463 / 0.785 s |
+| v4 LCL, 3,652 | 0.936 / 0.473 ms | 5.365 / 2.391 ms | 19,960 B | 9,960 B | 44,959 | RMSE 0.461 / 0.497 s |
+| DSCNN LCR / LCL, 10,321 | 3.265 / 1.128 ms | 18.83 / 5.611 ms | 50,862 B | 11,632 B | 171,841 | RMSE 0.439 / 0.652 s (LCR) |
+
+The v4 regressors run 1.8 (LCR) and 3.5 (LCL) times faster than the DSCNN in float32 and 7.8
+and 31 times faster than the first searched regressors (14.06 and 28.77 ms). The v4 intention
+model has 12% fewer MACC than the DSCNN but takes 14% longer and twice the RAM: its first
+1x1 convolution keeps all 50 steps with 87 channels. A MAC budget does not bound latency. As
+before on LCIR, int8 PTQ costs accuracy (intention 90.72 to 83.05%, LCR RMSE 0.463 to 0.785 s).
+
