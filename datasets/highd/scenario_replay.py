@@ -11,11 +11,13 @@ measurements (added by the renderer).
 Step 1  python  scenario_replay.py select   scenario selection (pandas)
 Step 2  .venv   scenario_replay.py hand     hand-CNN (torch) predictions
 Step 3  WSL     scenario_replay.py keras    searched-model (keras) predictions
+Step 4  WSL     scenario_replay.py keras-v4 v4 search's classifier (keras) predictions
 
 Outputs (local, gitignored: derived from highD data):
   datasets/highd/data/replay/scenario.json       trajectory + lanes + neighbours
   datasets/highd/data/replay/pred_hand_cnn.json  26 window predictions
-  datasets/highd/data/replay/pred_searched.json  26 window predictions (step 2)
+  datasets/highd/data/replay/pred_searched.json  26 window predictions (step 3)
+  datasets/highd/data/replay/pred_v4.json        26 window predictions (step 4)
 """
 from __future__ import annotations
 
@@ -258,22 +260,28 @@ def main_hand_cnn():
     (OUT / "pred_hand_cnn.json").write_text(json.dumps(rec))
 
 
-def main_keras():
+def main_keras(h5=HERE / "results" / "models" / "highd_cls_tight_model_aaaaap.h5",
+               name="searched, 5,347 params (results/models/highd_cls_tight_model_aaaaap.h5)",
+               out="pred_searched.json"):
     import keras
     scen = json.loads((OUT / "scenario.json").read_text())
     feats = np.load(OUT / "scenario_feats.npy")
-    m = keras.models.load_model(HERE / "results" / "models" / "highd_cls_tight_model_aaaaap.h5",
-                                compile=False)
+    m = keras.models.load_model(h5, compile=False)
 
     def predict(xn):
         logits = m.predict(xn, batch_size=64, verbose=0)
         e = np.exp(logits - logits.max(1, keepdims=True))
         return e / e.sum(1, keepdims=True)
     rec = window_predictions(feats, predict)
-    rec["model"] = "searched, 5,347 params (results/models/highd_cls_tight_model_aaaaap.h5)"
+    rec["model"] = name
     rec["label"] = scen["label"]
     summarize(rec)
-    (OUT / "pred_searched.json").write_text(json.dumps(rec))
+    (OUT / out).write_text(json.dumps(rec))
+
+
+# The v4 search's chosen classifier (faithful cost count, five-seed validation choice);
+# the scenario itself stays the one picked with the 5.3k model above.
+V4_H5 = HERE / "results" / "nas-v2" / "highd_cls_v4" / "model_1790282740507531593_621856.h5"
 
 
 def summarize(rec, quiet=False):
@@ -302,3 +310,6 @@ if __name__ == "__main__":
         main_hand_cnn()
     elif mode == "keras":         # WSL dmir_nas venv (keras)
         main_keras()
+    elif mode == "keras-v4":      # WSL dmir_nas venv (keras): the v4 search's classifier
+        main_keras(V4_H5, f"searched v4, 3,968 params (results/nas-v2/highd_cls_v4/{V4_H5.name})",
+                   "pred_v4.json")

@@ -1,0 +1,15 @@
+{
+ "model": "model_1790282740507531593_621856",
+ "source_h5": "model_1790282740507531593_621856.h5",
+ "protocol": "EarlyLCPred utils.py, exact formulas",
+ "test_scenarios": 693,
+ "accuracy": 0.9303,
+ "recall": 0.9306,
+ "precision": 0.9614,
+ "f1": 0.9457,
+ "auc": 0.9741,
+ "tau_f_s": 4.89,
+ "tau_c_s": 4.77,
+ "ttlc_source_h5": "model_1790292529977535709_1680748.h5",
+ "ttlc_rmse_s": 0.2642
+}

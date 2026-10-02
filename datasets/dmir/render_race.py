@@ -1,4 +1,4 @@
-"""Render the DMIR "race": five cars on one real lane change, one per model.
+"""Render the LCIR (DMIR) "race": five cars on one real lane change, one per model.
 
 Every row replays the same recorded manoeuvre of a held-out test driver (raw
 positions from the H5 session, see scenario_race.py). What differs per row is
@@ -25,19 +25,20 @@ shows: at 0.75 s and at 1.0 s the Transformer-size row is the only one too
 late, at 1.25 s only the searched float model still stops, at 1.5 s none do.
 
 Also not measurements, and labelled: row 5 is a Transformer of the reference
-size, since no classifier Transformer exists for DMIR, so its latency is the
-DMIR regression reference Transformer on the same board and it is assumed to
+size, since no classifier Transformer exists for LCIR, so its latency is the
+LCIR regression reference Transformer on the same board and it is assumed to
 flag with the reference CNN. The model outputs come from the recorded run; the
 counterfactual changes what the driver does after the warning, not the inputs
 the models saw.
 
 Run in .venv:  python datasets/dmir/render_race.py
-Outputs: Materials/T4.5/race/{race.gif, race_whatif.gif, race_still*.png, race.html}
+Outputs: $RACE_OUT (default Materials/T4.5/race)/{race.gif, race_whatif.gif, race_still*.png, race.html}
 """
 from __future__ import annotations
 
 import json
 import math
+import os
 from pathlib import Path
 
 import matplotlib
@@ -49,7 +50,7 @@ from PIL import Image
 HERE = Path(__file__).resolve().parent
 ROOT = HERE.parent.parent
 RACE = HERE / "data" / "race"
-OUT = ROOT / "Materials" / "T4.5" / "race"
+OUT = Path(os.environ.get("RACE_OUT", ROOT / "Materials" / "T4.5" / "race"))
 OUT.mkdir(parents=True, exist_ok=True)
 
 BLUE, ORANGE, NEUTRAL = "#4A66AC", "#C27C2E", "#9AA0A6"
@@ -225,7 +226,7 @@ def status_lines(row, t, whatif=False, tau=TAU):
             lines.append((f"assumed to flag with the reference CNN at {g['t_flag']:+.1f} s", INK2, 8, False))
             lines.append((f"answer {lat_ms/1000:.3f} s later = {fmt(g['dist'])} of road", ORANGE, 8.5, True))
         if not whatif:
-            lines.append(("latency: DMIR regression reference, same board;", INK2, 7, False))
+            lines.append(("latency: LCIR regression reference, same board;", INK2, 7, False))
             lines.append(("no classifier Transformer exists for this task", INK2, 7, False))
     else:
         o = output_at(key, t)
@@ -269,12 +270,12 @@ def frame_figure(t, whatif, tau=TAU):
     fig.patch.set_facecolor("white")
     v_flag = GEO["best"]["v"] * 3.6
     if whatif:
-        head = f"DMIR, test driver 2: the same recorded lane change   |   what-if: a driver who does not check the mirror"
+        head = f"LCIR, test driver 2: the same recorded lane change   |   what-if: a driver who does not check the mirror"
         sub = (f"Recorded: he signalled at {IND_ON:+.1f} s, waited for the car in the target lane and only steered at "
                f"{STEER:+.1f} s, after it had passed. No conflict happened.   Below: a driver who does not wait, and what "
                "each model's warning buys him.")
     else:
-        head = (f"DMIR, test driver 2: one real {S['label_name']}, five cars on the same inputs")
+        head = (f"LCIR, test driver 2: one real {S['label_name']}, five cars on the same inputs")
         sub = (f"Same recorded vehicle in every row ({v_flag:.0f} km/h at the moment the models flag, {S['speed_at_cross_mps']*3.6:.0f} km/h "
                "at the crossing); only the model reading the windows changes.")
     fig.text(0.012, 0.975, head, fontsize=12, color=INK, fontweight="bold", va="center")
@@ -322,12 +323,12 @@ def frame_figure(t, whatif, tau=TAU):
                 f"car at {T_CONFLICT:+.1f} s; he stops if his warning arrives more than {tau:.2f} s before that. Model outputs are from the "
                 f"recorded run.\nThe reaction time is an assumption and the outcome turns on it (Green 2000: {BAND[0]:.2f} s expected signal, "
                 f"{BAND[1]:.2f} s unexpected, 1.5 s surprise): {late[0.75]} of 5 rows are too late at 0.75 s, {late[1.25]} at 1.25 s, "
-                f"{late[1.5]} at 1.5 s.\nRow 5 latency: DMIR regression reference Transformer, assumed to flag with the reference CNN. "
+                f"{late[1.5]} at 1.5 s.\nRow 5 latency: LCIR regression reference Transformer, assumed to flag with the reference CNN. "
                 "*QAT F401RE figure is the float-I/O build of the same weights.")
     else:
         foot = ("Every row: same recorded vehicle, same windows, real model outputs; latencies measured on the board (ST Edge AI 4.0.1, "
-                "STM32H7B3I-DK and NUCLEO-F401RE).\nRow 5 latency: DMIR regression reference Transformer, assumed to flag with the reference "
-                "CNN, since no classifier Transformer exists for DMIR.\n*QAT F401RE figure is the float-I/O build of the same weights.")
+                "STM32H7B3I-DK and NUCLEO-F401RE).\nRow 5 latency: LCIR regression reference Transformer, assumed to flag with the reference "
+                "CNN, since no classifier Transformer exists for LCIR.\n*QAT F401RE figure is the float-I/O build of the same weights.")
     fig.text(0.012, 0.004, foot, fontsize=6.4, color=INK2, va="bottom", linespacing=1.4)
     return fig
 
@@ -353,13 +354,13 @@ def render_html(path):
          "ind_on": IND_ON, "label": S["label_name"], "kmh": round(S["speed_at_cross_mps"] * 3.6),
          "class": CLASS, "hz_slot": HZ["slot"], "tau": TAU, "band": BAND, "steer": STEER,
          "commit": T_COMMIT, "rate": LAT_RATE, "yCommit": Y_COMMIT, "yTarget": Y_TARGET, "conflict": T_CONFLICT}
-    html = r"""<!doctype html><html><head><meta charset="utf-8"><title>DMIR race: one lane change, five models</title>
+    html = r"""<!doctype html><html><head><meta charset="utf-8"><title>LCIR race: one lane change, five models</title>
 <style>body{font-family:Raleway,Calibri,Arial,sans-serif;color:#242852;margin:16px;background:#fff}
 h1{font-size:18px;margin:0 0 4px} p.sub{font-size:13px;color:#5A5F73;margin:0 0 8px}
 .ctl{margin:8px 0;font-size:13px} .ctl label{margin-right:14px}
 canvas{border:1px solid #E1E0D9} input[type=range]{vertical-align:middle} #sl{width:460px} #tau{width:150px} button{font-size:13px;padding:3px 10px}
 p.note{font-size:12px;color:#5A5F73;max-width:1140px}</style></head><body>
-<h1>DMIR, test driver 2: one real __LABEL__, five cars on the same inputs</h1>
+<h1>LCIR, test driver 2: one real __LABEL__, five cars on the same inputs</h1>
 <p class="sub">Recorded: the driver signalled at __IND__ s, waited for the car coming up in the target lane and only steered at __STEER__ s,
 after it had passed. No conflict happened in the recording.</p>
 <div class="ctl"><button id="play">&#9654; Play</button> <input type="range" id="sl" min="0" max="__NF__" value="0">
@@ -369,7 +370,7 @@ driver reaction <input type="range" id="tau" min="0.5" max="2.0" step="0.05" val
 <canvas id="c" width="1140" height="700"></canvas>
 <p class="note">Every row replays the same recorded vehicle on the same 5-s windows; the "says" line is the model's real output for the
 last complete window. The bar on the road is latency (STM32H7B3I-DK, ST Edge AI 4.0.1) times the recorded speed. Row 5: no classifier
-Transformer exists for DMIR, so its latency is the regression reference Transformer measured on the same board, and it is assumed to
+Transformer exists for LCIR, so its latency is the regression reference Transformer measured on the same board, and it is assumed to
 flag at the same window as the reference CNN. The QAT row's F401RE figure is the float-I/O build of the same weights.
 <br>What-if: one counterfactual driver, the same in every row, who commits when the indicator goes on and crosses at the recording's own
 top lateral rate, reaching the recorded car at the conflict tick; each row stops him if its warning arrives more than the chosen
@@ -423,7 +424,7 @@ function draw(idx){
     if(r.key==="tr"){
       if(t<r.t_flag)rline("no output yet",INK2,false,12);
       else{rline(`assumed to flag with the reference CNN at ${r.t_flag.toFixed(1)} s`,INK2,false,11);rline(`answer ${(r.lat/1000).toFixed(3)} s later = ${fmt(r.dist)} of road`,ORANGE,true,12);}
-      if(!whatif){rline("latency: DMIR regression reference, same board;",INK2,false,10);rline("no classifier Transformer exists for this task",INK2,false,10);}
+      if(!whatif){rline("latency: LCIR regression reference, same board;",INK2,false,10);rline("no classifier Transformer exists for this task",INK2,false,10);}
     } else {
       const o=outAt(r.key,t);
       if(t>=0)rline("crossing done",INK2,false,12);

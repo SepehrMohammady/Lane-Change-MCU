@@ -233,6 +233,32 @@ Same F1 by a different route: the searched model trades recall for precision
 prediction horizon is 0.26 s shorter than the baseline's. Both remain well
 above the published 3.96 s.
 
+### The v4 classifier under the same formulas (2026-10-02)
+
+`eval_their_protocol_keras.py` scores any Keras classifier with the transcribed
+formulas: `probs` mode runs the model in the WSL Keras environment (min-max from
+the training windows) and saves the class probabilities, `score` mode applies
+`early_metrics` in the venv. It reproduces the 5.3k record above exactly. The v4
+choice (`results/nas-v2/highd_cls_v4/model_1790282740507531593_621856.h5`, 3,968
+params) with the v4 TTLC regressor (`highd_ttlc_v4/model_1790292529977535709_1680748.h5`,
+4.9k); record in `results/their_protocol_eval_model_1790282740507531593_621856.json`:
+
+| metric | hand CNN 8.4k | searched 5.3k | searched v4 4.0k | their proposed |
+|---|--:|--:|--:|--:|
+| accuracy | 0.911 | 0.912 | 0.930 | 0.83 |
+| precision | 0.923 | 0.966 | 0.961 | 0.85 |
+| recall | 0.938 | 0.896 | 0.931 | 0.85 |
+| F1 | 0.930 | 0.930 | 0.946 | 0.85 |
+| AUC | 0.959 | 0.962 | 0.974 | 0.88 |
+| τ_f (first correct) | 4.93 s | 4.73 s | 4.89 s | 4.75 s |
+| τ_c (robust) | 4.79 s | 4.53 s | 4.77 s | 3.96 s |
+| TTLC RMSE | 0.276 s | 0.261 s | 0.264 s | 0.629 s |
+
+Single runs of the deployed weights. The v4 classifier exceeds every published value
+and has the highest accuracy, F1 and AUC of the three; its robust horizon equals the
+hand CNN's (0.02 s shorter). Five-seed accuracy is in the seed study below
+(v4: 92.83 ± 0.36%). In the paper as Table II's fourth column.
+
 ## Seed study: the searched classifier does not beat the hand-built CNN (2026-09-16)
 
 Every number above comes from one training run. The final models were retrained
