@@ -88,7 +88,7 @@ dist_tr = v * LAT_TRANSFORMER_MS / 1000
 # the model whose flag opens the road band and whose latency it shows: v4 when present
 LEAD_FLAG = flag_v4 if p_v4 else flag_srch
 LEAD_DIST = dist_v4 if p_v4 else dist_srch
-LEAD_NAME = "searched v4, int8" if p_v4 else "searched model"
+LEAD_NAME = "our searched 4.0k, int8" if p_v4 else "our searched model"
 ttlc_axis = [-t for t in p_srch["ttlc_s"]]           # window end times, -5.2 .. -0.2
 
 
@@ -158,18 +158,18 @@ def draw(frame, ax_road, ax_band, ax_tl, ax_txt):
     # traces are revealed as the replay advances: a window's answer exists only once its last frame has passed
     n_vis = sum(1 for te in ttlc_axis if te <= t)
     if p_v4:
-        ax_tl.plot(ttlc_axis[:n_vis], p_v4["p_lc"][:n_vis], color=BLUE, lw=2.2, label="searched v4, 4.0k (this scenario)")
-        ax_tl.plot(ttlc_axis[:n_vis], p_srch["p_lc"][:n_vis], color=LIGHT, lw=1.4, label="searched 5.3k (this scenario)")
+        ax_tl.plot(ttlc_axis[:n_vis], p_v4["p_lc"][:n_vis], color=BLUE, lw=2.2, label="ours, searched 4.0k")
+        ax_tl.plot(ttlc_axis[:n_vis], p_srch["p_lc"][:n_vis], color=LIGHT, lw=1.4, label="ours, searched 5.3k")
     else:
-        ax_tl.plot(ttlc_axis[:n_vis], p_srch["p_lc"][:n_vis], color=BLUE, lw=2, label="searched CNN, 5.3k (this scenario)")
+        ax_tl.plot(ttlc_axis[:n_vis], p_srch["p_lc"][:n_vis], color=BLUE, lw=2, label="ours, searched 5.3k")
     ax_tl.plot(ttlc_axis[:n_vis], p_hand["p_lc"][:n_vis], color=GREEN if p_v4 else BLUE, lw=1.4, ls=(0, (4, 3)),
-               label="hand CNN, 8.4k (this scenario)")
+               label="ours, hand-designed 8.4k")
     ax_tl.axhline(0.5, color=GRID, lw=0.8)
     ax_tl.axvline(0, color=INK, lw=1)
     ax_tl.text(0.05, 1.04, "lane crossing", fontsize=8.5, color=INK)
     if LEAD_FLAG is not None and t >= LEAD_FLAG:
         ax_tl.axvline(LEAD_FLAG, color=BLUE, lw=1.4)
-        ax_tl.text(LEAD_FLAG + 0.05, 0.08, f"{'searched v4' if p_v4 else 'searched model'}: lane change\n"
+        ax_tl.text(LEAD_FLAG + 0.05, 0.08, f"{'searched 4.0k' if p_v4 else 'searched model'}: lane change\n"
                    f"predicted from {LEAD_FLAG:+.1f} s", fontsize=8.5, color=BLUE)
     ax_tl.axvline(-TIV_ROBUST_AVG_S, color=ORANGE, lw=1.4)
     ax_tl.text(-TIV_ROBUST_AVG_S + 0.05, 0.62, f"published T-IV model:\n{-TIV_ROBUST_AVG_S:+.2f} s (test-set average)",
@@ -181,7 +181,8 @@ def draw(frame, ax_road, ax_band, ax_tl, ax_txt):
     ax_tl.grid(True, axis="y", color=GRID, lw=0.6); ax_tl.set_axisbelow(True)
     for s in ("top", "right"):
         ax_tl.spines[s].set_visible(False)
-    ax_tl.legend(loc="lower right", fontsize=8, frameon=False)
+    ax_tl.legend(loc="lower left", bbox_to_anchor=(0.0, 1.0), ncol=3, fontsize=8, frameon=False,  # one row above
+                 borderaxespad=0.2, handlelength=2.2, columnspacing=1.4)                     # the plot, clear of the traces
     # ---- status text
     ax_txt.clear(); ax_txt.axis("off")
     k = max(j for j, te in enumerate(ttlc_axis) if te <= t) if t >= ttlc_axis[0] else None
@@ -195,14 +196,14 @@ def draw(frame, ax_road, ax_band, ax_tl, ax_txt):
     lines = [] if not p_v4 else [
         ("Same scenario, different methods", INK, 11, True),
         ("", INK, 4, False),
-        ("searched v4, 4.0k, int8 on STM32H7B3I-DK", BLUE, 9.5, True),
+        ("ours, searched 4.0k, int8 on STM32H7B3I-DK", BLUE, 9.5, True),
         (f"   says: {says(p_v4)}", INK, 9.5, False),
         (f"   inference {LAT_V4_MS:.3f} ms  =  {fmt_dist(dist_v4)} of road", INK2, 9, False),
         ("", INK, 4, False),
-        ("searched 5.3k (first searches), int8", "#5F75B5", 9.5, True),
+        ("ours, searched 5.3k, int8", "#5F75B5", 9.5, True),
         (f"   says: {srch_txt}   ({LAT_SEARCHED_MS:.3f} ms)", INK, 9, False),
         ("", INK, 4, False),
-        ("hand-designed CNN, 8.4k, int8", GREEN, 9.5, True),
+        ("ours, hand-designed CNN, 8.4k, int8", GREEN, 9.5, True),
         (f"   says: {hand_txt}   ({LAT_HAND_MS:.3f} ms)", INK, 9, False),
         ("", INK, 4, False),
         ("published T-IV model (Mozaffari 2022)", ORANGE, 9.5, True),
@@ -255,7 +256,8 @@ imgs = [render_frame(f) for f in frames]
 hold = [imgs[-1]] * 12                                  # pause on the last frame
 imgs[0].save(OUT / "replay.gif", save_all=True, append_images=imgs[1:] + hold, duration=80, loop=0, optimize=True)
 # a still at the searched model's prediction moment, for static use
-key = min(frames, key=lambda f: abs(t_rel(f) - (LEAD_FLAG if LEAD_FLAG is not None else 0)))
+lead = LEAD_FLAG if LEAD_FLAG is not None else 0      # first frame at or after the flag, so its window is complete
+key = min((f for f in frames if t_rel(f) >= lead - 1e-9), key=lambda f: t_rel(f) - lead)
 render_frame(key).convert("RGB").save(OUT / "replay_still.png")
 print(f"gif: {len(imgs)} frames -> {OUT/'replay.gif'} ({(OUT/'replay.gif').stat().st_size/1024:.0f} KB)")
 print(f"still at t={t_rel(key):+.1f} s -> {OUT/'replay_still.png'}")
@@ -286,9 +288,9 @@ button{font:inherit;padding:5px 12px;border:1px solid #C9CDD6;border-radius:8px;
 <label><input type="checkbox" id="showTr" checked> Transformer latency</label>
 <label><input type="checkbox" id="showTiv" checked> published T-IV horizon</label>
 <label><input type="checkbox" id="showHand" checked> hand CNN</label></div>
-<div class="legend" style="font-size:13px"><span style="background:#4A66AC"></span>searched v4 (4.0k, int8)
-<span style="background:#8EA0CF"></span>searched (5.3k, int8)
-<span style="background:#3C7A4E"></span>hand CNN (8.4k, dashed)
+<div class="legend" style="font-size:13px"><span style="background:#4A66AC"></span>ours, searched (4.0k, int8)
+<span style="background:#8EA0CF"></span>ours, searched (5.3k, int8)
+<span style="background:#3C7A4E"></span>ours, hand-designed CNN (8.4k, dashed)
 <span style="background:#C27C2E"></span>published T-IV model (average)
 <span style="background:#9AA0A6"></span>reference Transformer (latency)</div>
 <p class="note">Positions are the raw 25 Hz highD track of this vehicle and its neighbours; the prediction traces are our trained models
@@ -305,7 +307,7 @@ const ttlc=D.srch.ttlc_s.map(t=>-t);
 const robust=r=>r&&r.robust_from_ttlc_s?-r.robust_from_ttlc_s:null;
 const flagH=robust(D.hand), flagS=D.v4?robust(D.v4):robust(D.srch);
 const distS=v*(D.v4?D.const.lat_v4_ms:D.const.lat_srch_ms)/1000, distT=v*D.const.lat_tr_ms/1000;
-const leadName=D.v4?"searched v4, int8":"searched model";
+const leadName=D.v4?"our searched 4.0k, int8":"our searched model";
 const frames=[];for(let f=f0;f<=f1;f++)if(TV.frame.includes(f))frames.push(f);
 const sl=document.getElementById("t");sl.max=frames.length-1;
 const cv=document.getElementById("c"),g=cv.getContext("2d");
@@ -344,7 +346,7 @@ function draw(idx){
   if(D.v4){trace(D.v4.p_lc,false,BLUE,2.4);trace(D.srch.p_lc,false,"#8EA0CF",1.5);}else trace(D.srch.p_lc,false,BLUE,2.2);
   if(document.getElementById("showHand").checked)trace(D.hand.p_lc,true,D.v4?"#3C7A4E":BLUE,1.5);
   g.strokeStyle=INK;g.lineWidth=1.2;g.beginPath();g.moveTo(tx(0),tp.y);g.lineTo(tx(0),tp.y+tp.h);g.stroke();g.fillStyle=INK;g.fillText("lane crossing",tx(0)+4,tp.y+12);
-  if(flagS!==null&&t>=flagS){g.strokeStyle=BLUE;g.beginPath();g.moveTo(tx(flagS),tp.y);g.lineTo(tx(flagS),tp.y+tp.h);g.stroke();g.fillStyle=BLUE;g.fillText(`${D.v4?"searched v4":"searched"}: predicted from ${flagS.toFixed(1)} s`,tx(flagS)+4,tp.y+tp.h-8);}
+  if(flagS!==null&&t>=flagS){g.strokeStyle=BLUE;g.beginPath();g.moveTo(tx(flagS),tp.y);g.lineTo(tx(flagS),tp.y+tp.h);g.stroke();g.fillStyle=BLUE;g.fillText(`${D.v4?"searched 4.0k":"searched"}: predicted from ${flagS.toFixed(1)} s`,tx(flagS)+4,tp.y+tp.h-8);}
   if(document.getElementById("showTiv").checked){g.strokeStyle=ORANGE;g.beginPath();g.moveTo(tx(-D.const.tiv_robust),tp.y);g.lineTo(tx(-D.const.tiv_robust),tp.y+tp.h);g.stroke();g.fillStyle=ORANGE;g.fillText(`published T-IV: ${(-D.const.tiv_robust).toFixed(2)} s (avg)`,tx(-D.const.tiv_robust)+4,tp.y+tp.h/2);}
   g.strokeStyle=INK;g.setLineDash([2,3]);g.beginPath();g.moveTo(tx(t),tp.y);g.lineTo(tx(t),tp.y+tp.h);g.stroke();g.setLineDash([]);
   g.fillStyle=INK;g.font="12px Calibri";g.fillText("P(lane change) vs seconds to crossing",tp.x,tp.y-8);
@@ -353,11 +355,11 @@ function draw(idx){
   const say=r=>k<0?"no complete 2-s window yet":(t>0?"crossing done":`${r.pred[k]?"LANE CHANGE":"lane keep"} (p = ${r.p_lc[k].toFixed(2)})`);
   let yy=350;const sx2=W-330;const line=(txt,col,bold,size)=>{g.fillStyle=col;g.font=`${bold?"bold ":""}${size||13}px Calibri`;g.fillText(txt,sx2,yy);yy+=size?size+8:21;};
   line("Same scenario, different methods",INK,true,15);
-  if(D.v4){line("searched v4, 4.0k, int8 on STM32H7B3I-DK",BLUE,true);line("   says: "+say(D.v4),INK,false);line(`   inference ${D.const.lat_v4_ms.toFixed(3)} ms = ${fd(distS)} of road`,INK2,false,12);
-    line("searched 5.3k (first searches), int8","#8EA0CF",true);line("   says: "+say(D.srch),INK,false);}
+  if(D.v4){line("ours, searched 4.0k, int8 on STM32H7B3I-DK",BLUE,true);line("   says: "+say(D.v4),INK,false);line(`   inference ${D.const.lat_v4_ms.toFixed(3)} ms = ${fd(distS)} of road`,INK2,false,12);
+    line("ours, searched 5.3k, int8","#8EA0CF",true);line("   says: "+say(D.srch),INK,false);}
   else{line("searched CNN, 5.3k, int8 on STM32H7B3I-DK",BLUE,true);line("   says: "+say(D.srch),INK,false);line(`   inference ${D.const.lat_srch_ms.toFixed(3)} ms = ${fd(distS)} of road`,INK2,false,12);}
-  if(document.getElementById("showHand").checked){line("hand-designed CNN, 8.4k",D.v4?"#3C7A4E":BLUE,true);line("   says: "+say(D.hand),INK,false);}
-  if(document.getElementById("showTiv").checked){line("published T-IV model (Mozaffari 2022)",ORANGE,true);line(`   robust from ${D.const.tiv_robust.toFixed(2)} s before crossing (test-set avg)`,INK,false,12);}
+  if(document.getElementById("showHand").checked){line("ours, hand-designed CNN, 8.4k",D.v4?"#3C7A4E":BLUE,true);line("   says: "+say(D.hand),INK,false);}
+  if(document.getElementById("showTiv").checked){line("published T-IV model (Mozaffari 2022)",ORANGE,true);line(`   correct from ${D.const.tiv_robust.toFixed(2)} s before crossing (test-set avg)`,INK,false,12);}
   if(document.getElementById("showTr").checked){line("reference Transformer, same board",INK2,true);line(`   inference ${D.const.lat_tr_ms.toFixed(0)} ms = ${fd(distT)} of road at ${(v*3.6).toFixed(0)} km/h`,INK,false,12);}
   document.getElementById("tlab").textContent=`t = ${t>=0?"+":""}${t.toFixed(2)} s`;
 }
