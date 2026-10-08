@@ -821,7 +821,7 @@
         h("section", { class: "card" }, h("h2", {}, "Read before comparing"), B.notes.map(n => h("p", { class: "note" }, "• " + n)))));
     } else {
       out.push(h("div", { class: "grid g3" }, B.metrics.map(m => chartCard(m.name, m.better === "high" ? "higher is better" : "lower is better",
-        barsH(m.rows.map(r => [r[0], r[1], r[0] === "searched" ? "ours" : r[0] === "hand-designed" ? "ours2" : "ref"]), m.fmt, m.better, 340)))));
+        barsH(m.rows.map(r => [r[0], r[1], r[0].startsWith("searched") ? "ours" : r[0] === "hand-designed" ? "ours2" : "ref"]), m.fmt, m.better, 340)))));
       out.push(h("div", { style: "height:16px" }));
       const sp = B.splits;
       out.push(h("div", { class: "grid g2" },

@@ -28,6 +28,13 @@ DMIR = ROOT / "datasets" / "dmir"
 HIGHD = ROOT / "datasets" / "highd"
 EXID = ROOT / "datasets" / "exid"
 MEDIA = ROOT / "Materials" / "T4.5"
+MEDIA_NEW = MEDIA / "2026-10-09"          # renders for the 9 October talk (labels: ours, sizes)
+
+
+def media_file(rel: str) -> Path:
+    """Newest render of a replay when it exists, else the September one."""
+    p = MEDIA_NEW / rel
+    return p if p.exists() else MEDIA / rel
 
 
 # ------------------------------------------------------------------ readers
@@ -300,18 +307,18 @@ def build_dmir(share: bool):
         noind["original"] = {"acc": next(q["steps"][0][1] for q in quant if q["model"] == "Searched, no turn signal")}
 
     media = []
-    if (MEDIA / "race/race.gif").exists():
+    if media_file("race/race.gif").exists():
         media.append({"id": "race", "label": "Five models, one lane change",
                       "caption": "A held-out test driver's recorded left lane change, replayed for every model on the same "
                                  "5-second windows. The bar under each road is the distance driven while the model computes "
                                  "one answer, from latency measured on the board.",
-                      "src": data_uri(MEDIA / "race/race.gif", "image/gif")})
-    if (MEDIA / "race/race_whatif.gif").exists():
+                      "src": data_uri(media_file("race/race.gif"), "image/gif")})
+    if media_file("race/race_whatif.gif").exists():
         media.append({"id": "whatif", "label": "What a late warning costs",
                       "caption": "Same recording. The recorded driver waited for the car in the target lane; nothing happened. "
                                  "The overlay adds one driver who does not check the mirror and asks whose warning reaches "
                                  "him in time. The reaction time (1.0 s) is an assumption, and the outcome depends on it.",
-                      "src": data_uri(MEDIA / "race/race_whatif.gif", "image/gif")})
+                      "src": data_uri(media_file("race/race_whatif.gif"), "image/gif")})
 
     return {
         "id": "dmir", "name": "LCIR", "title": "Lane Change Intention Recognition", "status": "complete", "accent": 1,
@@ -410,27 +417,39 @@ def build_highd(share: bool):
     ]
 
     pub, hb, sr = refs["published"], refs["baseline_their_metrics"], refs["searched_their_metrics"]
+    # the 4.0 k classifier of the searches with the faithful cost count, scored 2026-10-02
+    # (datasets/highd/eval_their_protocol_keras.py; TTLC from its 4.9 k regressor)
+    s4 = read_json(HIGHD / "results/their_protocol_eval_model_1790282740507531593_621856.json", None)
+    def rows(p, h, s53, key4):
+        r = [["published", p], ["hand-designed", h], ["searched 5.3 k", s53]]
+        return r + [["searched 4.0 k", s4[key4]]] if s4 else r
     bench = {
         "metrics": [
-            {"name": "Accuracy", "fmt": "f3", "better": "high", "rows": [["published", pub["acc"]], ["hand-designed", hb["acc"]], ["searched", 0.91153]]},
-            {"name": "F1", "fmt": "f3", "better": "high", "rows": [["published", pub["f1"]], ["hand-designed", hb["f1"]], ["searched", sr["f1"]]]},
-            {"name": "AUC", "fmt": "f3", "better": "high", "rows": [["published", pub["auc"]], ["hand-designed", hb["auc"]], ["searched", sr["auc"]]]},
-            {"name": "Robust horizon (s)", "fmt": "s2", "better": "high", "rows": [["published", pub["tau_c_s"]], ["hand-designed", hb["tau_c_s"]], ["searched", sr["tau_c_s"]]]},
-            {"name": "Time-to-change RMSE (s)", "fmt": "s3", "better": "low", "rows": [["published", pub["ttlc_rmse"]], ["hand-designed", hb["ttlc_rmse"]], ["searched", 0.2608]]},
+            {"name": "Accuracy", "fmt": "f3", "better": "high", "rows": rows(pub["acc"], hb["acc"], 0.91153, "accuracy")},
+            {"name": "F1", "fmt": "f3", "better": "high", "rows": rows(pub["f1"], hb["f1"], sr["f1"], "f1")},
+            {"name": "AUC", "fmt": "f3", "better": "high", "rows": rows(pub["auc"], hb["auc"], sr["auc"], "auc")},
+            {"name": "Robust horizon (s)", "fmt": "s2", "better": "high", "rows": rows(pub["tau_c_s"], hb["tau_c_s"], sr["tau_c_s"], "tau_c_s")},
+            {"name": "Time-to-change RMSE (s)", "fmt": "s3", "better": "low", "rows": rows(pub["ttlc_rmse"], hb["ttlc_rmse"], 0.2608, "ttlc_rmse_s")},
         ],
         "splits": refs["splits"],
-        "notes": ["Our accuracy moves by one to three points between training seeds (Seeds tab); every seed stays above the published figure.",
+        "notes": ["Single runs of the deployed weights. Our accuracy moves by one to three points between training seeds (Seeds tab); "
+                  "the means stay above the published figure, and one hand-recipe run of the 5.3 k model falls to 81.4%.",
                   "Scored with the metric functions transcribed from the published code.",
                   "Our reimplementation of their protocol, not a run of their own code.",
-                  "Their model is not public, so its cost cannot be measured on a board."],
+                  "Their trained weights are not public, so their accuracy cannot be re-run in our pipeline; the cost of "
+                  "their architecture was measured with random weights (cost does not depend on the weights)."],
     }
 
     media = []
-    if not share and (MEDIA / "replay/replay.gif").exists():
+    if not share and media_file("replay/replay.gif").exists():
+        newest = media_file("replay/replay.gif").parent.parent == MEDIA_NEW
         media.append({"id": "replay", "label": "One real lane change",
-                      "caption": "A real vehicle from the highD test recordings changing lane at 119 km/h. The trace is what the "
-                                 "searched 5.3 k model says at every window. Bars on the road: distance driven during one inference.",
-                      "src": data_uri(MEDIA / "replay/replay.gif", "image/gif")})
+                      "caption": ("A real vehicle from the highD test recordings changing lane at 119 km/h. The traces are what "
+                                  "our searched 4.0 k and 5.3 k models and our hand-designed 8.4 k CNN say at every window. "
+                                  "Bars on the road: distance driven during one inference.") if newest else
+                                 ("A real vehicle from the highD test recordings changing lane at 119 km/h. The trace is what the "
+                                  "searched 5.3 k model says at every window. Bars on the road: distance driven during one inference."),
+                      "src": data_uri(media_file("replay/replay.gif"), "image/gif")})
     elif share:
         media.append({"id": "replay", "label": "One real lane change", "withheld":
                       "Not included in this copy: the replay is drawn from raw highD trajectories, which the dataset licence does not let us pass on."})
@@ -453,7 +472,7 @@ def build_highd(share: bool):
              "sub": "hand-designed 8.4 k CNN · published 83%",
              "seed": (f"best searched model: {rerank['best_mean']['stats']['mean'] * 100:.1f}% at "
                       f"{rerank['best_mean']['params'] / 1000:.0f} k") if rerank else None},
-            {"label": "Robust horizon", "value": "4.53 s", "sub": "deployed 5.3 k model · published 3.96 s"},
+            {"label": "Robust horizon", "value": "4.53 s", "sub": "deployed 5.3 k model · 4.77 s for the 4.0 k model · published 3.96 s"},
             {"label": "Time-to-change RMSE", "value": mean_only(stat(seeds, "highd_ttlc_aaaaaw", "rmse"), False),
              "sub": "five seeds, searched and hand-designed alike · published 0.629 s",
              "seed": f"one search run: {seeds['highd_ttlc_aaaaaw']['original']['rmse']:.3f} s" if "highd_ttlc_aaaaaw" in seeds else None},
@@ -564,9 +583,19 @@ def build_exid(share: bool):
     total = sum(meta["stats"][s]["scenarios"] for s in meta["stats"])
     lc_total = sum(meta["stats"][s]["RLC"] + meta["stats"][s]["LLC"] for s in meta["stats"])
     by_kind_total = {k: sum(meta["stats"][s]["by_kind"][k] for s in meta["stats"]) for k in kinds}
+    exid_media = []
+    if not share and media_file("exid/exid_exit.gif").exists():
+        exid_media.append({"id": "exit", "label": "One real exit",
+                           "caption": "A real exit to the off-ramp from the exiD test recordings (Cologne, 58 km/h). Green: our "
+                                      "hand-designed CNN trained on exiD; orange: the same network trained on highD (seed 0).",
+                           "src": data_uri(media_file("exid/exid_exit.gif"), "image/gif")})
+    elif share:
+        exid_media.append({"id": "exit", "label": "One real exit", "withheld":
+                           "Not included in this copy: the replay is drawn from raw exiD trajectories, which the dataset licence does not let us pass on."})
+
     return {
         "id": "exid", "name": "exiD", "title": "Motorway entries and exits", "status": "complete", "accent": 3,
-        "views": ["overview", "transfer", "robust"],
+        "views": ["overview", "transfer", "robust", "scenario"],
         "shortcuts": [["transfer", "Transfer", "highD models on exiD: as they are, fine-tuned, and against training on exiD."],
                       ["robust", "Seeds", "Every exiD model trained five times."]],
         "facts": [
@@ -596,6 +625,7 @@ def build_exid(share: bool):
                      ["Merges and exits", f"{by_kind_total['merge from on-ramp'] + by_kind_total['exit to off-ramp']:,}"]],
         "tasks": seed_tasks, "seeds": seeds, "seeds_final": seeds_final, "final_label": "hand-designed recipe",
         "transfer": {"tasks": tasks, "kinds": kinds, "searched_zero": searched_zero},
+        "media": exid_media,
     }
 
 
