@@ -49,3 +49,7 @@ CLAUDE.md
 # results explorer: built pages and the local status file stay out of the repo
 dashboard/dist/
 dashboard/*.local.json
+
+# Local board firmware: ST downloads and generated code/builds (fetched or generated, not versioned)
+firmware/third_party/
+firmware/build/
