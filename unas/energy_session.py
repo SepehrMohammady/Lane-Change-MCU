@@ -29,6 +29,22 @@ import local_bench as lb  # noqa: E402
 
 METER = "JT-UM120 USB meter, P-BUS at the board's USB input (laptop -> meter -> board)"
 DEFAULT = {
+    "h7b3axi": [
+        "datasets/dmir/results/deploy/REF_cnn_multi_float32.tflite",
+        "datasets/dmir/results/deploy/cls_best_float32.tflite",
+        "datasets/dmir/results/qat/cls_best_qat_int8_io.tflite",
+        "datasets/dmir/results/deploy/cls_tiny_float32.tflite",
+        "datasets/dmir/results/deploy/lcir_dscnn_classification_float32.tflite",
+        "datasets/dmir/results/deploy/lcir_dscnn_classification_int8_io.tflite",
+        "datasets/dmir/results/deploy/lcir_v4_regression_lcl_float32.tflite",
+        "datasets/dmir/results/deploy/transformer_lcl_fp32.tflite",
+        "datasets/dmir/results/deploy/transformer_lcr_fp32.tflite",
+        "datasets/highd/results/deploy/highd_cls_model_1790282740507531593_621856_f32.tflite",
+        "datasets/highd/results/deploy/highd_cls_model_1790282740507531593_621856_int8_io.tflite",
+        "datasets/highd/results/deploy/highd_cls_model_aaaaap_int8_io.tflite",
+        "datasets/highd/results/deploy/highd_dscnn_cls_f32.tflite",
+        "datasets/highd/results/deploy/highd_dscnn_cls_int8_io.tflite",
+    ],
     "f401": [
         "datasets/dmir/results/deploy/cls_best_float32.tflite",
         "datasets/dmir/results/qat/cls_best_qat_int8_io.tflite",
@@ -67,7 +83,7 @@ def ask_power(label: str) -> list[float]:
 
 def flash_idle(board: str, sn: str, mode: int) -> None:
     folder = lb.BOARDS[board][1]
-    lb.run([lb.MAKE, f"IDLE={mode}"], cwd=lb.FW / folder)
+    lb.run([lb.MAKE, f"IDLE={mode}"], cwd=lb.FW / folder)  # (H7: idle builds via the same Makefile option)
     elf = lb.FW / "build" / folder / f"idle{mode}" / "fw.elf"
     lb.run([lb.CLI, "-c", "port=SWD", f"sn={sn}", "mode=UR", "-w", elf, "-v", "-rst"])
     if mode == 1:

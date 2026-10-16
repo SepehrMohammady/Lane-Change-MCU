@@ -6,7 +6,7 @@ firmware/<board> against it, flash it over SWD, and read the result block g_resu
 SWD (works while another program holds the virtual COM port). One JSON line per file is
 appended to datasets/<dataset>/results/deploy/local_bench.jsonl.
 
-    python unas/local_bench.py [--board f401|h7b3] datasets/highd/results/deploy/a.tflite [b.tflite ...]
+    python unas/local_bench.py [--board f401|h7b3|h7b3axi] datasets/highd/results/deploy/a.tflite [b.tflite ...]
 
 The ST-LINK is chosen by the board name it reports, so the right board is flashed when both
 are connected. Timing: DWT cycle counter around ai_network_run, 5 warm-up runs and 200 timed
@@ -31,9 +31,10 @@ IDE_PLUGINS = Path(r"C:\ST\STM32CubeIDE_2.1.1\STM32CubeIDE\plugins")
 MAKE = next(IDE_PLUGINS.glob("com.st.stm32cube.ide.mcu.externaltools.make.*")) / "tools" / "bin" / "make.exe"
 GCC_BIN = next(IDE_PLUGINS.glob("com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.*")) / "tools" / "bin"
 MAGIC = 0x42454E43
-BOARDS = {  # option -> (board name reported by the ST-LINK, firmware folder, runtime library)
-    "f401": ("NUCLEO-F401RE", "f401", "NetworkRuntime1200_CM4_GCC"),
-    "h7b3": ("STM32H7B3I-DK", "h7b3", "NetworkRuntime1200_CM7_GCC"),
+BOARDS = {  # option -> (board name, firmware folder, runtime library, make arguments, build folder, placement)
+    "f401": ("NUCLEO-F401RE", "f401", "NetworkRuntime1200_CM4_GCC", [], "f401", "SRAM"),
+    "h7b3": ("STM32H7B3I-DK", "h7b3", "NetworkRuntime1200_CM7_GCC", [], "h7b3", "DTCM"),
+    "h7b3axi": ("STM32H7B3I-DK", "h7b3", "NetworkRuntime1200_CM7_GCC", ["AXI=1"], "h7b3axi", "AXI SRAM"),
 }
 
 
@@ -80,15 +81,15 @@ def elf_size(elf: Path) -> dict:
 
 
 def measure(tfl: Path, board: str, sn: str) -> dict:
-    name, folder, runtime = BOARDS[board]
+    name, folder, runtime, make_args, build_dir, placement = BOARDS[board]
     tag = tfl.stem
     gen = FW / "build" / "gen" / tag
     gen.mkdir(parents=True, exist_ok=True)
     run([STEDGEAI, "generate", "--model", tfl, "--target", "stm32", "--name", "network", "--c-api", "legacy",
          "--output", gen, "--workspace", FW / "build" / "ws" / tag])
     info = json.loads((gen / "network_c_info.json").read_text(encoding="utf-8"))
-    run([MAKE, f"GEN=../build/gen/{tag}"], cwd=FW / folder)
-    elf = FW / "build" / folder / tag / "fw.elf"
+    run([MAKE, f"GEN=../build/gen/{tag}", *make_args], cwd=FW / folder)
+    elf = FW / "build" / build_dir / tag / "fw.elf"
     run([CLI, "-c", "port=SWD", f"sn={sn}", "mode=UR", "-w", elf, "-v", "-rst"])
     magic, hz, runs, cmin, cmean, cmax, status, loops = read_result(elf, sn)
     if status != 0:
@@ -100,7 +101,7 @@ def measure(tfl: Path, board: str, sn: str) -> dict:
             "duration_ms": round(cmean / hz * 1e3, 5), "cycles_mean": cmean, "cycles_min": cmin,
             "cycles_max": cmax, "runs": runs, "core_hz": hz,
             "macc": sum(n.get("macc", 0) for n in nodes), "weights_B": mem.get("weights"),
-            "activations_B": mem.get("activations"),
+            "activations_B": mem.get("activations"), "activations_in": placement,
             "stedgeai": tools[0].get("version") if isinstance(tools, list) and tools else None,
             "compiler": f"arm-none-eabi-gcc 14.3.1 -O2, nano specs, {runtime}",
             **elf_size(elf), "utc": datetime.now(timezone.utc).isoformat(timespec="seconds")}

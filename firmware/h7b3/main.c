@@ -27,8 +27,14 @@
 #define RESULT_MAGIC 0x42454E43u /* "BENC" */
 volatile uint32_t g_result[8] __attribute__((used));
 
+#ifdef ACT_AXI
+/* Activation buffer at the start of AXI SRAM (D-cached, 1 MiB, unused by the template linker
+   script, which keeps all data in DTCM). Selected with make AXI=1. */
+static ai_handle activations[] = {(ai_handle)0x24000000u};
+#else
 AI_ALIGNED(32) static ai_u8 pool0[AI_NETWORK_DATA_ACTIVATION_1_SIZE];
 static ai_handle activations[] = {pool0};
+#endif
 static ai_handle network = AI_HANDLE_NULL;
 
 void SysTick_Handler(void) { HAL_IncTick(); }
@@ -113,6 +119,18 @@ int main(void)
 
     g_result[0] = 0;
     g_result[1] = SystemCoreClock;
+#ifdef IDLE_MODE
+    /* Baselines for power readings, same clock, caches and peripherals, no network:
+       1 = core asleep (WFI, no interrupt enabled), 2 = core spinning on a RAM counter. */
+    g_result[6] = 0x300u | IDLE_MODE;
+    g_result[0] = RESULT_MAGIC;
+    for (uint32_t k = 0;; k++) {
+        if (IDLE_MODE == 1)
+            __WFI();
+        else
+            g_result[7] = k;
+    }
+#endif
     ai_error err = ai_network_create_and_init(&network, activations, NULL);
     if (err.type != AI_ERROR_NONE) {
         g_result[6] = 0x100u | (uint32_t)err.type;
