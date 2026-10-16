@@ -113,6 +113,19 @@ int main(void)
 
     g_result[0] = 0;
     g_result[1] = SystemCoreClock;
+#ifdef IDLE_MODE
+    /* Baselines for power readings, same clock and peripherals, no network:
+       1 = core asleep (WFI, no interrupt enabled), 2 = core spinning on a RAM counter. */
+    g_result[6] = 0x300u | IDLE_MODE;
+    g_result[0] = RESULT_MAGIC;
+    printf("\nIDLE mode=%d core_hz=%lu\n", IDLE_MODE, (unsigned long)SystemCoreClock);
+    for (uint32_t k = 0;; k++) {
+        if (IDLE_MODE == 1)
+            __WFI();
+        else
+            g_result[7] = k;
+    }
+#endif
     printf("\nBOOT core_hz=%lu model=%s\n", (unsigned long)SystemCoreClock, AI_NETWORK_ORIGIN_MODEL_NAME);
     ai_error err = ai_network_create_and_init(&network, activations, NULL);
     if (err.type != AI_ERROR_NONE) {
@@ -155,12 +168,10 @@ int main(void)
            AI_NETWORK_ORIGIN_MODEL_NAME, (unsigned long)SystemCoreClock, N_RUNS, (unsigned long)mn,
            (unsigned long)mean, (unsigned long)mx,
            (unsigned long)((uint64_t)mean * 100000000ull / SystemCoreClock));
-    printf("LOOP continuous inference; LD2 toggles every 1000 runs\n");
+    printf("LOOP continuous inference (LD2 off, for power readings)\n");
     for (uint32_t k = 0;; k++) {
         fill_input(in);
         ai_network_run(network, in, out);
         g_result[7] = k;
-        if (k % 1000u == 0u)
-            GPIOA->ODR ^= (1u << 5);
     }
 }
