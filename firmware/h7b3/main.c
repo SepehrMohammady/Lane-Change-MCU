@@ -27,6 +27,17 @@
 #define RESULT_MAGIC 0x42454E43u /* "BENC" */
 volatile uint32_t g_result[8] __attribute__((used));
 
+#ifdef CHECK_IO
+/* Optional input/output check (make CHECK=1): check_io.h, generated outside the repository, holds
+   CHECK_N input tensors (check_in, in the network's input format). After the timed runs each one is
+   run once and the raw output bytes are kept in g_check_out for an SWD read; g_check_done then holds
+   RESULT_MAGIC. Used to compare the board's outputs with the host build of the same C code. */
+#include <string.h>
+#include "check_io.h"
+volatile uint8_t g_check_out[CHECK_N][AI_NETWORK_OUT_1_SIZE_BYTES] __attribute__((used));
+volatile uint32_t g_check_done __attribute__((used));
+#endif
+
 #ifdef ACT_AXI
 /* Activation buffer at the start of AXI SRAM (D-cached, 1 MiB, unused by the template linker
    script, which keeps all data in DTCM). Selected with make AXI=1. */
@@ -165,6 +176,15 @@ int main(void)
     g_result[5] = mx;
     g_result[6] = 0;
     g_result[0] = RESULT_MAGIC;
+
+#ifdef CHECK_IO
+    for (int k = 0; k < CHECK_N; k++) {
+        memcpy(in[0].data, check_in[k], AI_NETWORK_IN_1_SIZE_BYTES);
+        ai_network_run(network, in, out);
+        memcpy((void *)g_check_out[k], out[0].data, AI_NETWORK_OUT_1_SIZE_BYTES);
+    }
+    g_check_done = RESULT_MAGIC;
+#endif
 
     for (uint32_t k = 0;; k++) {
         fill_input(in);

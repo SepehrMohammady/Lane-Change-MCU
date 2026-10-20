@@ -24,6 +24,12 @@ open in another program. One JSON line per file goes to
 `datasets/<dataset>/results/deploy/local_bench.jsonl`. After the timed runs the board keeps
 running inferences in a loop, for current measurements (NUCLEO: IDD jumper JP6).
 
+`h7b3/` also builds with `make CHECK=1 GEN=../build/gen/<tag>` (activations in AXI SRAM): after the
+timed runs it runs the input tensors of `build/check/check_io.h` (`CHECK_N`, `check_in`) once each and
+keeps the raw output bytes in `g_check_out` for an SWD read, to compare the board's outputs with the
+host build of the same generated code. The header holds real test inputs, so it is generated into
+`build/` and never versioned.
+
 Tools (paths in the Makefiles and the script; this machine): ST Edge AI Core 4.0.0
 (`C:\ST\STEdgeAI\4.0`), STM32CubeIDE 2.1.1 (GCC 14.3.1, make), STM32CubeProgrammer 2.22,
 STM32CubeH7 1.13.0 (from STM32CubeMX). Not versioned: `third_party/` (ST's CMSIS F4 device

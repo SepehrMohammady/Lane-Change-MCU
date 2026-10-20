@@ -1,6 +1,8 @@
 # Build the latency benchmark for one generated network on the STM32H7B3I-DK.
 #   make GEN=../build/gen/<tag>        -> ../build/h7b3/<tag>/fw.elf      (activations in DTCM)
 #   make AXI=1 GEN=../build/gen/<tag>  -> ../build/h7b3axi/<tag>/fw.elf   (activations in AXI SRAM)
+#   make CHECK=1 GEN=../build/gen/<tag> -> ../build/h7b3check/<tag>/fw.elf (AXI SRAM, plus the
+#        input/output check of main.c with ../build/check/check_io.h)
 # Startup, system file, HAL configuration and linker script come from ST's STM32H7B3I-DK
 # template in STM32CubeH7 1.13.0 (installed by STM32CubeMX); nothing is copied into the repo.
 
@@ -12,9 +14,14 @@ HAL := $(CUBE)/Drivers/STM32H7xx_HAL_Driver
 GEN ?= ../build/gen/highd_cls_model_1790282740507531593_621856_int8_io
 AXI ?= 0
 IDLE ?=
+CHECK ?= 0
 ifneq ($(IDLE),)
 BUILD ?= ../build/h7b3/idle$(IDLE)
 AXIDEF := -DIDLE_MODE=$(IDLE)
+else ifeq ($(CHECK),1)
+# input/output check (see main.c); check_io.h is generated into ../build/check, outside the repository
+BUILD ?= ../build/h7b3check/$(notdir $(GEN))
+AXIDEF := -DACT_AXI -DCHECK_IO -I../build/check
 else ifeq ($(AXI),1)
 BUILD ?= ../build/h7b3axi/$(notdir $(GEN))
 AXIDEF := -DACT_AXI

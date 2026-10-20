@@ -12,13 +12,22 @@ the protocol level:
 - LK scenarios are undersampled to (RLC+LLC)/2 per recording, preferring
   tracks whose crossing happens 25 frames after the scenario (known TTLC),
   exactly their get_lk_scenarios selection
-- features: their 18-dim "state_ours" vector per frame (lat/long velocity &
-  acceleration, lateral position to left marking, PV/FV relative velocity,
-  8 surrounding-vehicle longitudinal distances with their alongside-fallback
-  rule, lane existence flags, lane width). Deviation, documented: we compute
-  lateral features in metres where their code mixes image-scaled units; the
-  difference is a per-feature affine map, which min-max normalization (their
-  own normalization) removes exactly.
+- features: the 18-dim "state_ours" vector of their render_scenarios.py per
+  frame (lat/long velocity & acceleration, lateral position to left marking,
+  PV/FV relative velocity, 8 surrounding-vehicle longitudinal distances with
+  an alongside-fallback rule, lane existence flags, lane width).
+  Checked on 2026-10-19 against their own data_prep run on the same
+  recordings: all 9,112 scenarios and their frames match, and 11 of the 18
+  features are identical. Deviations: (1) lateral position and lane width are
+  in metres here; their code measures them against lane markings scaled to
+  image pixels (4 px per metre plus a 20 px margin), which adds a
+  lane-dependent offset to the lateral position (so min-max scaling does not
+  remove it) and gives the lane width in whole pixels; (2) in a side lane
+  without an alongside vehicle we keep one neighbour of the nearer candidate,
+  their code keeps both its preceding and following vehicle; (3) in frames
+  without any right-side vehicle the two implementations also differ on the
+  left side (unset there, set here). Side-vehicle distances differ in 16-28%
+  of frames, lane flags in under 0.1%.
 - split by recording id, theirs: train 1-50, val 51-55, test 56-60
 
 Output: datasets/highd/data/prepared/{train,val,test}.npz
