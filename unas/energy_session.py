@@ -108,7 +108,7 @@ def plan(files: list[Path]) -> list[dict]:
 def model_record(name: str, sn: str, f: Path, rec: dict, vals: list[float], base: dict) -> dict:
     p_run = st.mean(vals)
     t_s = rec["duration_ms"] / 1e3
-    return {"model": f.name, "board": name, "board_sn": sn, "meter": METER, "readings_W": vals,
+    return {"model": f.name, "board": name, "meter": METER, "readings_W": vals,
             "p_run_W": round(p_run, 6), "p_sleep_W": round(base["idle-sleep"], 6),
             "p_busy_W": round(base["idle-busy"], 6), "latency_ms": rec["duration_ms"],
             "cycles_mean": rec["cycles_mean"], "core_hz": rec["core_hz"],
@@ -153,7 +153,7 @@ def stepwise(board: str, cmd: str, rest: list[str]) -> None:
         sys.exit(f"step {i} is not the flashed step ({cur and cur['step']})")
     if s["kind"] == "idle":
         label = s["label"]
-        rec = {"model": "idle-sleep" if label == "idle-sleep-end" else label, "board": name, "board_sn": sn,
+        rec = {"model": "idle-sleep" if label == "idle-sleep-end" else label, "board": name,
                "meter": METER, "readings_W": vals, "p_W": round(st.mean(vals), 6), "utc": now()}
         if label == "idle-sleep-end":
             rec["drift_W"] = round(st.mean(vals) - state["base"]["idle-sleep"], 6)
@@ -198,7 +198,7 @@ def main():
         vals = ask_power(f"Baseline {label}: the core is {'asleep' if mode == 1 else 'spinning'}, no network")
         base[label] = st.mean(vals)
         for ds in datasets:
-            append(ds, {"model": label, "board": name, "board_sn": sn, "meter": METER, "readings_W": vals,
+            append(ds, {"model": label, "board": name, "meter": METER, "readings_W": vals,
                         "p_W": round(base[label], 6), "utc": now()})
 
     for f in files:
@@ -209,7 +209,7 @@ def main():
         vals = ask_power(f"{f.name} runs back to back ({rec['duration_ms']:.3f} ms per inference)")
         p_run = st.mean(vals)
         t_s = rec["duration_ms"] / 1e3
-        out = {"model": f.name, "board": name, "board_sn": sn, "meter": METER, "readings_W": vals,
+        out = {"model": f.name, "board": name, "meter": METER, "readings_W": vals,
                "p_run_W": round(p_run, 6), "p_sleep_W": round(base["idle-sleep"], 6),
                "p_busy_W": round(base["idle-busy"], 6), "latency_ms": rec["duration_ms"],
                "cycles_mean": rec["cycles_mean"], "core_hz": rec["core_hz"],
@@ -225,7 +225,7 @@ def main():
     time.sleep(2)
     vals = ask_power("Baseline idle-sleep again")
     for ds in datasets:
-        append(ds, {"model": "idle-sleep", "board": name, "board_sn": sn, "meter": METER, "readings_W": vals,
+        append(ds, {"model": "idle-sleep", "board": name, "meter": METER, "readings_W": vals,
                     "p_W": round(st.mean(vals), 6), "drift_W": round(st.mean(vals) - base["idle-sleep"], 6),
                     "utc": now()})
     print(f"\nDone. Drift of the asleep baseline: {st.mean(vals) - base['idle-sleep']:+.5f} W. "

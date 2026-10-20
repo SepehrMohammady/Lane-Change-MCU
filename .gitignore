@@ -1,8 +1,6 @@
-# Data (large, not versioned — see README for how to obtain)
+# Data (large, not versioned; see README for how to obtain)
 datasets/*/data/
 Materials/
-# External µNAS fork checkout (unlicensed upstream; kept out of our MIT tree)
-Materials/uNAS-elios/
 
 # Python
 .venv/
@@ -17,38 +15,13 @@ checkpoints/
 *.onnx
 !models/best/*.onnx
 
-# LaTeX build (main.pdf IS committed — rebuilt after every .tex change)
-paper/*.aux
-paper/*.bbl
-paper/*.blg
-paper/*.log
-paper/*.out
-paper/*.synctex.gz
-paper/*.fdb_latexmk
-paper/*.fls
-
 # OS / IDE
 .DS_Store
 Thumbs.db
 .vscode/
 
-# Kept local, not published to GitHub (user decision 2026-07-28)
-course/
-paper/
-
-# Personal working file, not published
-checklist.html
-
-
-# Local course entry point (course/ itself is local-only)
-/index.html
-
-# Agent working notes, kept local
-CLAUDE.md
-
-# results explorer: built pages and the local status file stay out of the repo
+# Results explorer: built pages
 dashboard/dist/
-dashboard/*.local.json
 
 # Local board firmware: ST downloads and generated code/builds (fetched or generated, not versioned)
 firmware/third_party/

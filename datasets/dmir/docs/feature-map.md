@@ -92,7 +92,7 @@ The regression tasks are NOT leaky (`indicator_leak_regression.py`):
 indicator-only test RMSE 0.72 (LCR) / 0.90 (LCL), far above our DSCNN
 (0.439/0.459) and the SOTA (0.42/0.44). The leak is specific to classification.
 
-Consequences for the paper (see paper/NOTES.md):
+Consequences for the paper:
 - keep indicators for a like-for-like comparison with the baseline, **but**
   add a with/without-indicators ablation to show genuine anticipation;
 - lead the contribution with the **time-to-lane-change regression** (no

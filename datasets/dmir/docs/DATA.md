@@ -72,8 +72,7 @@ regression) and is heavily label-leaky — see below.
 Blinker-active-in-window rate — no-intent 6.5%, LCR 91.7%, LCL 70.7%. The
 3-class headline is largely "read the blinker." Plan: keep indicators for a
 like-for-like baseline comparison, add a with/without ablation, and lead the
-paper with the regression + deployment story. Details in feature-map.md and
-paper/NOTES.md.
+paper with the regression + deployment story. Details in feature-map.md.
 
 ## Verified answers (2026-07-07, scripts/analysis/ — no colleague needed)
 

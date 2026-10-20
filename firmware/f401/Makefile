@@ -5,7 +5,7 @@
 
 TOOLS ?= C:/ST/STM32CubeIDE_2.1.1/STM32CubeIDE/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.14.3.rel1.win32_1.0.100.202602081740/tools/bin
 STAI ?= C:/ST/STEdgeAI/4.0/Middlewares/ST/AI
-CMSIS_CORE ?= C:/Users/<user>/STM32Cube/Repository/STM32Cube_FW_H7_V1.13.0/Drivers/CMSIS/Include
+CMSIS_CORE ?= $(subst \,/,$(USERPROFILE))/STM32Cube/Repository/STM32Cube_FW_H7_V1.13.0/Drivers/CMSIS/Include
 DEV ?= ../third_party/cmsis-device-f4
 GEN ?= ../build/gen/highd_cls4k_int8_io
 N_RUNS ?= 200

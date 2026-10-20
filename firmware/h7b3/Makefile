@@ -8,7 +8,7 @@
 
 TOOLS ?= C:/ST/STM32CubeIDE_2.1.1/STM32CubeIDE/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.14.3.rel1.win32_1.0.100.202602081740/tools/bin
 STAI ?= C:/ST/STEdgeAI/4.0/Middlewares/ST/AI
-CUBE ?= C:/Users/<user>/STM32Cube/Repository/STM32Cube_FW_H7_V1.13.0
+CUBE ?= $(subst \,/,$(USERPROFILE))/STM32Cube/Repository/STM32Cube_FW_H7_V1.13.0
 TPL := $(CUBE)/Projects/STM32H7B3I-DK/Templates
 HAL := $(CUBE)/Drivers/STM32H7xx_HAL_Driver
 GEN ?= ../build/gen/highd_cls_model_1790282740507531593_621856_int8_io

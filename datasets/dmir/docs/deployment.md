@@ -520,7 +520,7 @@ Three of these are Pareto-optimal and none dominates the others:
 
 The QAT rows carry ~22 KiB more library than the PTQ rows because of the width-1
 2D re-expression, which is a cost of the tooling and not of quantisation; a
-native-1D QAT would remove it (`paper/NOTES.md`).
+native-1D QAT would remove it.
 
 **What the `STAI_FORMAT_*` badge actually means.** This run resolves an
 earlier open puzzle. We once cited `STAI_FORMAT_FLOAT` as evidence that the

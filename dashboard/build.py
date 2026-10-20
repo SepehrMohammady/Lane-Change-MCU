@@ -54,7 +54,7 @@ def permuted(p: Path) -> Path:
     """The re-run with the training windows shuffled (2026-09-23) when it exists.
 
     Keras runs on highD and exiD made before that date trained on the stored scenario
-    order (see LOGBOOK 2026-09-23); their re-runs live next to them with "_permuted"
+    order (found 2026-09-23); their re-runs live next to them with "_permuted"
     in the name and replace them here."""
     q = p.with_name(p.stem + "_permuted" + p.suffix)
     return q if q.exists() else p

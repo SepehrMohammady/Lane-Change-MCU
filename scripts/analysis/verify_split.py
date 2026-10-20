@@ -6,7 +6,7 @@ correlation against every pickle window. Correlation is invariant to the
 (unknown) per-channel affine normalization, so r > 0.9999 on a high-entropy
 channel (YawRate, LatAcceleration) identifies the same underlying window.
 
-Result (2026-07-07, see LOGBOOK): official test users (13, 2) match ONLY the
+Result (2026-07-07): official test users (13, 2) match ONLY the
 pickle test split; official val users (10, 5) ONLY val; train user (22) ONLY
 train. SteeringAngle shows spurious cross-hits (quantized, low-entropy
 windows) — do not use it as evidence.

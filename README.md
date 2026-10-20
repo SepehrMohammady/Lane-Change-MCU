@@ -14,10 +14,6 @@ platform, which makes the on-device comparison like-for-like, and because the
 board is available in the ELIOS lab. The repository was called LC-Intention-NAS
 until September 2026; GitHub redirects the old address.
 
-A trilingual course website (Farsi/English/Italian) documenting this project
-A-to-Z, and the LaTeX manuscript, are kept **local only** and are not published
-in this repository.
-
 ## Tasks and targets
 
 Input: windows of 50 timesteps × 31 features (prepared and normalised by the
@@ -182,9 +178,8 @@ unas/                            µNAS fork adapters, search launchers, export/q
 notebooks/dmir_pipeline.ipynb    main LCIR pipeline; all knobs in its Config cell
 scripts/run_baseline.py          train the baseline on one LCIR task and log the run
 scripts/check_pipeline.py        3-task smoke test on real data; run after every change
-docs/research/                   shared literature and toolchain notes (µNAS, ST Edge AI, venue)
+firmware/                        bare-metal benchmark firmware for our own boards (latency, energy)
 dashboard/                       results explorer: one interactive page for every dataset (build.py)
-LOGBOOK.md                       dated journal of decisions and results (all datasets)
 
 datasets/dmir/                   everything specific to LCIR (codename dmir)
   ├── data/                      prepared pickles (gitignored)
@@ -207,10 +202,6 @@ it writes (standard library only, opens offline):
 python dashboard/build.py            # dashboard/dist/results-explorer.html
 python dashboard/build.py --share    # copy for outside the lab (no raw-trajectory media)
 ```
-
-Kept locally and not published here: `paper/` (the LaTeX manuscript, built with
-`scripts/build_paper.ps1`), `course/` (the trilingual course website), and
-`CLAUDE.md` (working notes for the coding agent).
 
 ## Setup (Windows, Python 3.13)
 
@@ -255,5 +246,3 @@ when you use the data.
 2. After any change to `src/`: `python scripts/check_pipeline.py` must pass.
 3. Paper numbers only from logged runs or cited sources; no placeholder data
    anywhere in the pipeline.
-4. `LOGBOOK.md` records decisions; the local `course/` and `paper/` are updated
-   as milestones land, but are not published in this repository.

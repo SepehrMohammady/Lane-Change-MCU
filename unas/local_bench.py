@@ -97,7 +97,7 @@ def measure(tfl: Path, board: str, sn: str) -> dict:
     nodes = info["graphs"][0]["nodes"]
     mem = info.get("memory_footprint", {})
     tools = info.get("environment", {}).get("tools")
-    return {"model": tfl.name, "board": name, "board_sn": sn, "source": "local",
+    return {"model": tfl.name, "board": name, "source": "local",
             "duration_ms": round(cmean / hz * 1e3, 5), "cycles_mean": cmean, "cycles_min": cmin,
             "cycles_max": cmax, "runs": runs, "core_hz": hz,
             "macc": sum(n.get("macc", 0) for n in nodes), "weights_B": mem.get("weights"),

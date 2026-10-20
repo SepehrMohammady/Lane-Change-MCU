@@ -18,8 +18,8 @@ params): LCR MAE 0.318 / RMSE 0.439; LCL MAE 0.333 / RMSE 0.459; acc 91.5%.
 ## Search cost
 
 All four 150-round searches ran as a single overnight queue on one RTX 5070
-laptop GPU (launched 2026-07-08, completed via chunked resume on 2026-07-09 —
-see `LOGBOOK.md`): **about one GPU-night for all four searches in total**. No
+laptop GPU (launched 2026-07-08, completed via chunked resume on 2026-07-09):
+**about one GPU-night for all four searches in total**. No
 finer per-search wall-clock was logged, so no per-task figure is quoted.
 
 Literature context (different tasks, datasets, and hardware — cite as context
