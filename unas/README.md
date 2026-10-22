@@ -1,5 +1,8 @@
 # LCIR (DMIR) × µNAS integration
 
+> **Search names.** The searches ran in four versions: v1, the first searches (the tool's own space, saver and cost count); v2, a global-average-pooling head and a five-seed choice on validation data; v3, budgets at the hand-designed CNN's cost as the tool counts it; v4, the final searches, which count the cost on the network that is trained. Configs and result folders carry these names (`*_v2` to `*_v4`, `results/nas-v2/`). The paper and the results explorer call them the first, second, third and final searches.
+
+
 We run the constrained architecture search with the **ELIOS lab µNAS fork**
 (https://github.com/Elios-Lab/uNAS) rather than reimplementing it: the colleague's
 directive ("take µNAS code"), and the fork already provides what we need:

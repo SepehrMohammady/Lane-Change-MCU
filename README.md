@@ -32,8 +32,8 @@ results (test-set evaluation of the searched models; details in
 | Time-to-LC regression, LCL | RMSE / MAE (s) | 0.510 / 0.298¹ | 0.44 / — | 0.466 / 0.317 | 0.496 ± 0.012 / 0.351 ± 0.013 |
 | Hand-designed DSCNN (10 k), intention | accuracy | — | — | 91.51% | 91.50 ± 0.47% |
 | Hand-designed DSCNN (10 k), LCR / LCL | RMSE (s) | 0.510 | 0.42 / 0.44 | 0.439 / 0.459 | 0.454 ± 0.008 / 0.469 ± 0.010 |
-| v4 search⁴, intention (6.5 k) | accuracy | — | — | 90.72% | 91.43 ± 0.32% |
-| v4 search⁴, LCR (4.7 k) / LCL (3.7 k) | RMSE (s) | 0.510 | 0.42 / 0.44 | 0.463 / 0.461 | 0.476 ± 0.012 / 0.463 ± 0.007 |
+| Final search⁴, intention (6.5 k) | accuracy | — | — | 90.72% | 91.43 ± 0.32% |
+| Final search⁴, LCR (4.7 k) / LCL (3.7 k) | RMSE (s) | 0.510 | 0.42 / 0.44 | 0.463 / 0.461 | 0.476 ± 0.012 / 0.463 ± 0.007 |
 
 ¹ Published SOTA (Forneris et al., SPL 2026, Transformer) reports a *single*
 combined TTLC, not per-direction, so the comparison is directional rather than
@@ -69,15 +69,14 @@ Float32, optimization *balanced*, board **STM32H7B3I-DK** (Cortex-M7 @
 | lcr_best (117 k) | MAE 0.326 s | 14.06 ms | 474,522 B | 20,772 B |
 | lcl_best (106 k) | MAE 0.351 s | 28.77 ms | 423,494 B | 28,264 B |
 | hand-designed DSCNN, LCR and LCL (10.3 k) | MAE 0.324 / 0.338 s | 3.265 ms | 50,862 B | 11,632 B |
-| v4 intention (6.5 k) | 91.43% | 3.716 ms | 31,924 B | 24,012 B |
-| v4 LCR (4.7 k) | MAE 0.334 s | 1.812 ms | 22,600 B | 11,060 B |
-| v4 LCL (3.7 k) | MAE 0.335 s | 0.936 ms | 19,960 B | 9,960 B |
+| final search, intention (6.5 k) | 91.43% | 3.716 ms | 31,924 B | 24,012 B |
+| final search, LCR (4.7 k) | MAE 0.334 s | 1.812 ms | 22,600 B | 11,060 B |
+| final search, LCL (3.7 k) | MAE 0.335 s | 0.936 ms | 19,960 B | 9,960 B |
 
 At the same five-seed accuracy on intention, the searched 8 k model runs 4.1 times
 faster than the hand-designed DSCNN, whose strided first convolution over all 31
 channels needs most of its 171,971 MACs. For time to lane change the hand-designed
-network is both more accurate and faster than the first searched regressors. The v4
-search, which counts the network it trains, found regressors of 3.7 and 4.7 k
+network is both more accurate and faster than the first searched regressors. The final search, which counts the network it trains, found regressors of 3.7 and 4.7 k
 parameters that run 3.5 and 1.8 times faster than the DSCNN: as accurate for left lane
 changes (RMSE 0.463 ± 0.007 against 0.469 ± 0.010 s) and slightly behind for right ones
 (0.476 ± 0.012 against 0.454 ± 0.008 s). Its intention model is as accurate
@@ -118,10 +117,10 @@ both. Five seeds each, test sets:
 | searched classifier, 7.9 k¹ | 92.16 ± 0.71% | – | 89.50 ± 0.31% | – |
 | searched classifier, 5.3 k¹ | 90.83 ± 1.57% | – | 87.40 ± 0.14% | – |
 | searched TTLC regressor, 28 k¹ | – | 0.282 ± 0.016 s | – | 0.394 ± 0.008 s |
-| v2 search (global-pooling space), 24 k² | 91.09 ± 0.66% | – | 89.31 ± 0.08% | – |
-| v3 search (budgets at the hand-designed cost), 7.9 k³ | 91.00 ± 2.31% | – | 87.75 ± 1.07% | – |
-| v4 search (faithful cost count), classifier 4.0 k⁴ | 92.83 ± 0.36% | – | 85.87 ± 1.09% | – |
-| v4 search, TTLC regressor 4.9 k⁴ | – | 0.288 ± 0.010 s | – | 0.416 ± 0.003 s |
+| second search (global-pooling space), 24 k² | 91.09 ± 0.66% | – | 89.31 ± 0.08% | – |
+| third search (budgets at the hand-designed cost), 7.9 k³ | 91.00 ± 2.31% | – | 87.75 ± 1.07% | – |
+| final search (faithful cost count), classifier 4.0 k⁴ | 92.83 ± 0.36% | – | 85.87 ± 1.09% | – |
+| final search, TTLC regressor 4.9 k⁴ | – | 0.288 ± 0.010 s | – | 0.416 ± 0.003 s |
 | hand-designed CNN trained on highD, applied as is | – | – | 61.24 ± 2.32% | 0.867 ± 0.062 s |
 | the same, fine-tuned on exiD | – | – | 90.13 ± 0.22% | 0.393 ± 0.002 s |
 
@@ -138,11 +137,11 @@ both. Five seeds each, test sets:
   2,048-window buffer, which cost one architecture 12.7 points on exiD
   (`unas/shuffle_check.py`). Runs before 2026-09-23 used the stored order and made
   the searched architectures look 11 points worse on exiD.
-- ² The v2 search adds a global-average-pooling head, zero hidden layers and dropout
+- ² The second search adds a global-average-pooling head, zero hidden layers and dropout
   to the space (`unas/cnn1d_gap.py`) and chooses on the five-seed validation mean
   (`unas/select_by_seeds.py`); under the hand-designed CNN's recipe its choice
   reaches 92.51 ± 0.41%.
-- ³ The v3 search keeps that space with budgets at the hand-designed CNN's cost
+- ³ The third search keeps that space with budgets at the hand-designed CNN's cost
   (8 KiB int8 size, 14,000 MACs as the tool counts them). Its choice runs in 0.366 ms
   (float32) and 0.298 ms (int8) on the Cortex-M7, 1.8 and 1.2 times faster than the
   hand-designed CNN, but is 1.1 points less accurate on average and less stable over
@@ -151,19 +150,18 @@ both. Five seeds each, test sets:
 - ⁴ The search tool counted each candidate's cost on a graph without convolution
   padding, while the network it trains pads every convolution: the searches saw a
   median 1.2-2.4 times too few MACs on highD (up to 11.5) and 1.3-1.5 times on LCIR
-  (`unas/resource_bias.py`), so the v3 budgets did not bound the real cost. The v4
-  searches count the trained network (`FaithfulGapCnn1DSearchSpace` in
+  (`unas/resource_bias.py`), so the budgets of the third search did not bound the real cost. The final searches count the trained network (`FaithfulGapCnn1DSearchSpace` in
   `unas/cnn1d_gap.py`) with budgets at the hand-designed CNNs' cost under that count.
-  The v4 classifier is as accurate as the hand-designed CNN (92.88 ± 0.29% under its
+  The final classifier is as accurate as the hand-designed CNN (92.88 ± 0.29% under its
   recipe) with half the parameters and 1.9 times fewer MACs (14,007 against 26,240);
   it is specific to highD, about 4 points below on exiD. On the Cortex-M7 it runs in
   0.263 ms (float32) and 0.195 ms (int8), 2.5 and 1.8 times faster than the
-  hand-designed CNN (0.669 and 0.350 ms). The v4 TTLC regressor runs in 0.396 and
+  hand-designed CNN (0.669 and 0.350 ms). The final TTLC regressor runs in 0.396 and
   0.252 ms, 1.7 and 1.4 times faster, for about 0.01 s more RMSE.
 - On the boards the hand-designed highD CNN takes 0.669 ms (float32) and 0.350 ms
   (int8) on the Cortex-M7: as accurate as the 7.9 k searched classifier and 12%
   faster, 4.3 times slower than the 5.3 k one, which is 1.3 points less accurate
-  over five seeds. The v2 choice needs 2.891 ms. For time to lane change the
+  over five seeds. The choice of the second search needs 2.891 ms. For time to lane change the
   hand-designed CNN matches the searched 28 k regressor at 0.667 against 1.038 ms.
 - exiD models have the board cost of the highD builds: same graphs, other weights.
 

@@ -310,7 +310,7 @@
     },
     {
       "id": "cls_v2",
-      "label": "Searched classifier (v2 search)",
+      "label": "Searched classifier (second search)",
       "role": "searched",
       "task": "highd_cls",
       "params": 24191,
@@ -368,7 +368,7 @@
     },
     {
       "id": "cls_v3",
-      "label": "Searched classifier (v3 search, budgets at the hand-designed cost)",
+      "label": "Searched classifier (third search, budgets at the hand-designed cost)",
       "role": "searched",
       "task": "highd_cls",
       "params": 7919,
@@ -426,7 +426,7 @@
     },
     {
       "id": "ttlc_v2",
-      "label": "Searched regressor (v2 search)",
+      "label": "Searched regressor (second search)",
       "role": "searched",
       "task": "highd_ttlc",
       "params": 25883,
@@ -487,7 +487,7 @@
     },
     {
       "id": "cls_v4",
-      "label": "Searched classifier (v4 search, faithful cost count)",
+      "label": "Searched classifier (final search, faithful cost count)",
       "role": "searched",
       "task": "highd_cls",
       "params": 3968,
@@ -545,7 +545,7 @@
     },
     {
       "id": "ttlc_v4",
-      "label": "Searched regressor (v4 search, faithful cost count)",
+      "label": "Searched regressor (final search, faithful cost count)",
       "role": "searched",
       "task": "highd_ttlc",
       "params": 4940,

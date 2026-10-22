@@ -1,5 +1,8 @@
 # exiD: reproducing these results
 
+> **Search names.** The searches ran in four versions: v1, the first searches (the tool's own space, saver and cost count); v2, a global-average-pooling head and a five-seed choice on validation data; v3, budgets at the hand-designed CNN's cost as the tool counts it; v4, the final searches, which count the cost on the network that is trained. Configs and result folders carry these names (`*_v2` to `*_v4`, `results/nas-v2/`). The paper and the results explorer call them the first, second, third and final searches.
+
+
 exiD (Moers et al., "The exiD Dataset: A Real-World Trajectory Dataset of Highly
 Interactive Highway Scenarios in Germany", IEEE IV 2022) was recorded with the
 highD drone method at entries and exits of German motorways. We prepare it in the

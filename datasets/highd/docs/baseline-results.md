@@ -1,5 +1,8 @@
 # highD baseline results (2026-09-01)
 
+> **Search names.** The searches ran in four versions: v1, the first searches (the tool's own space, saver and cost count); v2, a global-average-pooling head and a five-seed choice on validation data; v3, budgets at the hand-designed CNN's cost as the tool counts it; v4, the final searches, which count the cost on the network that is trained. Configs and result folders carry these names (`*_v2` to `*_v4`, `results/nas-v2/`). The paper and the results explorer call them the first, second, third and final searches.
+
+
 Model: `src.models.baseline.BaselineDSCNN` (n_features=18), **8,371 params**,
 input 10x18 windows, AdamW 3e-3, batch 256, early stopping on val. Trained on
 RTX 5070 laptop, ~30 s per run. Runs logged in `logs/experiments.jsonl`

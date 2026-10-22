@@ -457,7 +457,7 @@
     },
     {
       "id": "cls_v4",
-      "label": "Searched, v4 search (faithful cost count)",
+      "label": "Searched, final search (faithful cost count)",
       "role": "searched",
       "task": "classification",
       "params": 6528,
@@ -515,7 +515,7 @@
     },
     {
       "id": "lcr_v4",
-      "label": "Searched, v4 search, time to right lane change",
+      "label": "Searched, final search, time to right lane change",
       "role": "searched",
       "task": "regression_lcr",
       "params": 4663,
@@ -576,7 +576,7 @@
     },
     {
       "id": "lcl_v4",
-      "label": "Searched, v4 search, time to left lane change",
+      "label": "Searched, final search, time to left lane change",
       "role": "searched",
       "task": "regression_lcl",
       "params": 3652,
