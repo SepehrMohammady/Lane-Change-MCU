@@ -4,6 +4,9 @@ Two complementary records:
   * ``datasets/dmir/logs/experiments.jsonl`` — one JSON line per run: config, metrics,
     environment, timing. Machine-readable; feeds the paper's tables.
   * ``LOGBOOK.md`` — human-readable dated journal of decisions and results.
+
+The pipeline smoke test logs to ``smoke.local.jsonl`` in the same folder instead, a local
+file that git ignores, so its test runs do not mix with real experiments.
 """
 from __future__ import annotations
 
@@ -19,10 +22,11 @@ LOGBOOK = PROJECT_ROOT / "LOGBOOK.md"
 
 
 class ExperimentLogger:
-    """Collects one run's record and appends it to experiments.jsonl."""
+    """Collects one run's record and appends it to experiments.jsonl (or ``log_name``)."""
 
-    def __init__(self, cfg: Config):
+    def __init__(self, cfg: Config, log_name: str = "experiments.jsonl"):
         self.cfg = cfg
+        self.log_name = log_name
         self.record: dict = {
             "run_name": cfg.run_name,
             "started_utc": datetime.now(timezone.utc).isoformat(timespec="seconds"),
@@ -41,7 +45,7 @@ class ExperimentLogger:
     def finish(self) -> Path:
         self.record["duration_s"] = round(time.perf_counter() - self._t0, 1)
         self.cfg.log_dir.mkdir(parents=True, exist_ok=True)
-        path = self.cfg.log_dir / "experiments.jsonl"
+        path = self.cfg.log_dir / self.log_name
         with open(path, "a", encoding="utf-8") as f:
             f.write(json.dumps(self.record, ensure_ascii=False) + "\n")
         return path

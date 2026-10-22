@@ -2,7 +2,9 @@
 
 Exercises the full chain on a small stratified subset of the REAL data
 for all three tasks: load -> sanitise -> loaders -> model -> train
-(2 epochs) -> evaluate -> log. Fails loudly on any breakage.
+(2 epochs) -> evaluate -> log. Fails loudly on any breakage. The test runs
+are logged to datasets/dmir/logs/smoke.local.jsonl (ignored by git), not to
+experiments.jsonl.
 
 Usage:  python scripts/check_pipeline.py
 """
@@ -45,7 +47,7 @@ def main() -> None:
             print(bundle.summary())
             loaders = make_loaders(cfg, bundle)
             model = BaselineDSCNN(n_outputs=cfg.n_outputs)
-            logger = ExperimentLogger(cfg)
+            logger = ExperimentLogger(cfg, log_name="smoke.local.jsonl")
             history = train_model(cfg, model, loaders, device, verbose=False)
             test = evaluate(cfg, model, loaders["test"], device)
             key = "accuracy" if cfg.is_classification else "rmse"

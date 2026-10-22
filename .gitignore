@@ -2,6 +2,9 @@
 datasets/*/data/
 Materials/
 
+# Pipeline smoke-test runs (scripts/check_pipeline.py): local log only
+datasets/*/logs/*.local.jsonl
+
 # Python
 .venv/
 __pycache__/
