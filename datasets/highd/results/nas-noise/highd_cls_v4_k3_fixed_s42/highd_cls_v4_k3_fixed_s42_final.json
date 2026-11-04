@@ -1,0 +1,188 @@
+{
+ "search": "highd_cls_v4_k3_fixed_s42",
+ "mode": "fixed",
+ "budget": 210,
+ "runs_done": 210,
+ "candidates": 70,
+ "failed": 0,
+ "feasible": 34,
+ "re_runs": 0,
+ "runs_per_candidate": {
+  "3": 70
+ },
+ "sigma": 0.025505488412807416,
+ "z": 1.0,
+ "n_max": 5,
+ "fixed_k": 3,
+ "final_share": 0.15,
+ "rule": "lowest mean validation error among feasible candidates with 3 or more runs",
+ "chosen": {
+  "candidate": 32,
+  "runs": [
+   0.05595904588699341,
+   0.05550509691238403,
+   0.05484485626220703
+  ],
+  "mean": 0.05543633302052816,
+  "resources": [
+   1650,
+   3963,
+   25850
+  ],
+  "params": 4843,
+  "h5": "highd_cls_v4_k3_fixed_s42_final.h5"
+ },
+ "top": [
+  {
+   "candidate": 32,
+   "n": 3,
+   "mean": 0.05543633302052816,
+   "resources": [
+    1650,
+    3963,
+    25850
+   ]
+  },
+  {
+   "candidate": 57,
+   "n": 3,
+   "mean": 0.05730712413787842,
+   "resources": [
+    1605,
+    3855,
+    25145
+   ]
+  },
+  {
+   "candidate": 68,
+   "n": 3,
+   "mean": 0.057788590590159096,
+   "resources": [
+    1605,
+    3855,
+    26215
+   ]
+  },
+  {
+   "candidate": 52,
+   "n": 3,
+   "mean": 0.058049956957499184,
+   "resources": [
+    1650,
+    3303,
+    23100
+   ]
+  },
+  {
+   "candidate": 51,
+   "n": 3,
+   "mean": 0.058146258195241295,
+   "resources": [
+    1650,
+    3963,
+    25850
+   ]
+  },
+  {
+   "candidate": 66,
+   "n": 3,
+   "mean": 0.0581737756729126,
+   "resources": [
+    1725,
+    3453,
+    24150
+   ]
+  },
+  {
+   "candidate": 62,
+   "n": 3,
+   "mean": 0.058325072129567467,
+   "resources": [
+    1590,
+    3819,
+    24910
+   ]
+  },
+  {
+   "candidate": 44,
+   "n": 3,
+   "mean": 0.05919170379638672,
+   "resources": [
+    1650,
+    3963,
+    25850
+   ]
+  },
+  {
+   "candidate": 69,
+   "n": 3,
+   "mean": 0.05928800503412882,
+   "resources": [
+    1770,
+    3543,
+    24780
+   ]
+  },
+  {
+   "candidate": 61,
+   "n": 3,
+   "mean": 0.05935678879419962,
+   "resources": [
+    1605,
+    3213,
+    22470
+   ]
+  },
+  {
+   "candidate": 37,
+   "n": 3,
+   "mean": 0.06143393119176229,
+   "resources": [
+    1650,
+    3963,
+    25850
+   ]
+  },
+  {
+   "candidate": 40,
+   "n": 3,
+   "mean": 0.0669775406519572,
+   "resources": [
+    880,
+    3815,
+    13360
+   ]
+  },
+  {
+   "candidate": 64,
+   "n": 3,
+   "mean": 0.06905470291773479,
+   "resources": [
+    1075,
+    2371,
+    20905
+   ]
+  },
+  {
+   "candidate": 49,
+   "n": 3,
+   "mean": 0.07103554407755534,
+   "resources": [
+    880,
+    3815,
+    13360
+   ]
+  },
+  {
+   "candidate": 36,
+   "n": 3,
+   "mean": 0.07358040412267049,
+   "resources": [
+    880,
+    3815,
+    13360
+   ]
+  }
+ ],
+ "utc": "2026-11-03T20:42:58+00:00"
+}
