@@ -1,0 +1,13 @@
+[
+ {
+  "search": "dmir_cls_v4_k3_single_s42",
+  "tied": 10,
+  "spearman_macs_latency": 0.9807370556736849,
+  "headroom": 1.0,
+  "by_params_over_fastest": 1.0,
+  "best_over_fastest": 1.0826984721701844,
+  "fastest": "model_1793742468306373740_3303354",
+  "by_macs": "model_1793742468306373740_3303354",
+  "best": "model_1793742305537376579_3303354"
+ }
+]

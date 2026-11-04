@@ -1,0 +1,24 @@
+[
+ {
+  "search": "highd_cls_v4_k3_single_s42",
+  "tied": 4,
+  "spearman_macs_latency": 0.9790209790209792,
+  "headroom": 1.0,
+  "by_params_over_fastest": 1.0,
+  "best_over_fastest": 1.6158241758241756,
+  "fastest": "model_1793711181971910924_758",
+  "by_macs": "model_1793711181971910924_758",
+  "best": "model_1793711684616882545_453917"
+ },
+ {
+  "search": "highd_cls_v4_k3_single_s43",
+  "tied": 5,
+  "spearman_macs_latency": 0.8028169014084505,
+  "headroom": 1.5419444444444446,
+  "by_params_over_fastest": 1.0,
+  "best_over_fastest": 1.0,
+  "fastest": "model_1793750426028907472_3893009",
+  "by_macs": "model_1793749822304692339_3893014",
+  "best": "model_1793750426028907472_3893009"
+ }
+]
