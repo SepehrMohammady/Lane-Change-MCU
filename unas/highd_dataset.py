@@ -96,3 +96,43 @@ class HighD_Dataset(Dataset):
     @property
     def input_shape(self) -> Tuple[int, int]:
         return self._input_shape
+
+
+EXID_ROOT = Path(os.environ.get("EXID_DATA_ROOT", DATA_ROOT.parents[2] / "exid" / "data" / "prepared"))
+
+
+class TwoDomain_Dataset(HighD_Dataset):
+    """highD and exiD in one dataset (2026-11-04): training windows pooled and permuted once, min-max
+    scaling from the pooled training windows, validation and test pooled for the fork's trainer and
+    early stopping, and each domain's windows kept apart in self.domains[<domain>][<split>] for
+    per-domain scores. EXID_DATA_ROOT overrides the exiD folder (default: next to highD's)."""
+
+    def __init__(self, task="highd_cls", roots=None):
+        assert task in ("highd_cls", "highd_ttlc")
+        roots = roots or {"highd": DATA_ROOT, "exid": EXID_ROOT}
+        self._task = task
+        cls = task == "highd_cls"
+        self._num_classes = 3 if cls else 1
+
+        raw = {d: {s: _windows(s, r) for s in ("train", "val", "test")} for d, r in roots.items()}
+        pooled = np.concatenate([raw[d]["train"][0] for d in raw]).reshape(-1, 18)
+        lo, hi = pooled.min(0), pooled.max(0)
+        del pooled
+
+        self.domains = {}
+        for d, splits in raw.items():
+            self.domains[d] = {}
+            for s, (x, y, ttlc) in splits.items():
+                xn = ((x - lo) / (hi - lo + 1e-12)).astype(np.float32)
+                if cls:
+                    self.domains[d][s] = (xn, y.astype(np.int64))
+                else:
+                    m = y != 0
+                    self.domains[d][s] = (xn[m], ttlc[m].astype(np.float32))
+        self._data = {s: tuple(np.concatenate([self.domains[d][s][i] for d in self.domains]) for i in (0, 1))
+                      for s in ("train", "val", "test")}
+        x, y = self._data["train"]
+        perm = np.random.default_rng(0).permutation(len(y))
+        self._data["train"] = (x[perm], y[perm])
+        self.train_order = "pooled highD + exiD, permuted once (seed 0)"
+        self._input_shape = (IN_LEN, 18)

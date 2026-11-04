@@ -60,7 +60,7 @@ REPO = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(REPO / "unas"))                   # our dataset adapters
 sys.path.insert(0, os.path.expanduser("~/uNAS"))         # the fork's Dataset base class
 from dmir_dataset import DMIR_Dataset                    # noqa: E402
-from highd_dataset import HighD_Dataset                  # noqa: E402
+from highd_dataset import HighD_Dataset, TwoDomain_Dataset  # noqa: E402
 
 SEEDS = [int(s) for s in os.environ.get("SEEDS", "0,1,2,3,4").split(",")]
 EPOCH_CAP = int(os.environ.get("EPOCH_CAP", "0"))      # smoke tests only
@@ -110,6 +110,14 @@ RUNS = {
                              "highd_cls", {}, "logits", {}),
     "exid_cls_hand_in_v2":  ("exid", "datasets/highd/results/nas-v2/hand_like_in_v2_space.h5",
                              "highd_cls", {}, "logits", {}),
+    # highD and exiD pooled for training (TwoDomain_Dataset), scored on each domain's test set: the
+    # hand-like network and the choices of the corrected highD searches (2026-11-04)
+    "pooled_cls_hand_in_v2": ("highd_exid", "datasets/highd/results/nas-v2/hand_like_in_v2_space.h5",
+                              "highd_cls", {}, "logits", {}),
+    "pooled_cls_v4k3_s42":   ("highd_exid", "datasets/highd/results/nas-v2/highd_cls_v4_k3_single_s42/"
+                              "model_1793711684616882545_453917.h5", "highd_cls", {}, "logits", {}),
+    "pooled_cls_v4k3_s43":   ("highd_exid", "datasets/highd/results/nas-v2/highd_cls_v4_k3_single_s43/"
+                              "model_1793750426028907472_3893009.h5", "highd_cls", {}, "logits", {}),
 }
 # Runs chosen at run time (for example a search's chosen model): SV_EXTRA_JSON names a JSON
 # file {key: [dataset, h5, task, adapter kwargs, loss kind, reference metric]}.
@@ -173,10 +181,26 @@ def compile_args(loss_kind):
     return keras.losses.MeanAbsoluteError(), [keras.metrics.MeanAbsoluteError(name="mae")]
 
 
+def score(model, x, y, is_cls):
+    p = model.predict(x, batch_size=2048, verbose=0)
+    if is_cls:
+        pred = p.argmax(1)
+        f1 = []
+        for c in range(3):
+            tp = int(((pred == c) & (y == c)).sum())
+            fp = int(((pred == c) & (y != c)).sum())
+            fn = int(((pred != c) & (y == c)).sum())
+            f1.append(2 * tp / max(2 * tp + fp + fn, 1))
+        return {"acc": float((pred == y).mean()), "macro_f1": float(np.mean(f1))}
+    e = p.reshape(-1) - y
+    return {"mae": float(np.abs(e).mean()), "rmse": float(np.sqrt((e ** 2).mean()))}
+
+
 def main(only):
     out = {"dmir": REPO / "datasets/dmir/results/seeds" / OUT_NAME,
            "highd": REPO / "datasets/highd/results/seeds" / OUT_NAME,
-           "exid": REPO / "datasets/exid/results/seeds" / OUT_NAME}
+           "exid": REPO / "datasets/exid/results/seeds" / OUT_NAME,
+           "highd_exid": REPO / "datasets/exid/results/seeds" / OUT_NAME.replace(".jsonl", "_pooled.jsonl")}
     done = set()
     for f in out.values():
         f.parent.mkdir(parents=True, exist_ok=True)
@@ -194,6 +218,7 @@ def main(only):
         ck = (ds_name, task, tuple(sorted(kw.items())))
         if ck not in cache:
             cache[ck] = (DMIR_Dataset(task=task, **kw) if ds_name == "dmir"
+                         else TwoDomain_Dataset(task=task) if ds_name == "highd_exid"
                          else HighD_Dataset(task=task, root=EXID_ROOT if ds_name == "exid" else None))
         ds = cache[ck]
         xte, yte = ds._data["test"]
@@ -227,31 +252,21 @@ def main(only):
             t0 = time.perf_counter()
             hist = model.fit(train, validation_data=val, epochs=epochs, verbose=0, callbacks=cbs)
             wall = time.perf_counter() - t0
-            p = model.predict(xte, batch_size=2048, verbose=0)
-            if is_cls:
-                pred = p.argmax(1)
-                metrics_out = {"acc": float((pred == yte).mean())}
-                f1 = []
-                for c in range(3):
-                    tp = int(((pred == c) & (yte == c)).sum())
-                    fp = int(((pred == c) & (yte != c)).sum())
-                    fn = int(((pred != c) & (yte == c)).sum())
-                    f1.append(2 * tp / max(2 * tp + fp + fn, 1))
-                metrics_out["macro_f1"] = float(np.mean(f1))
-            else:
-                e = p.reshape(-1) - yte
-                metrics_out = {"mae": float(np.abs(e).mean()), "rmse": float(np.sqrt((e ** 2).mean()))}
+            metrics_out = score(model, xte, yte, is_cls)
             rec = {"key": key, "dataset": ds_name, "task": task, "source_h5": h5,
                    "params": int(model.count_params()), "seed": seed,
                    "recipe": (("search recipe (controlled retrain)" if key == "dmir_ref_cnn" else "search recipe")
                               if RECIPE == "search" else RECIPE_LABEL[RECIPE]),
                    "epochs_run": len(hist.history["loss"]), "wall_s": round(wall, 1),
                    "test": metrics_out, "original_run": orig,
+                   **({"test_by_domain": {d: score(model, *sp["test"], is_cls) for d, sp in ds.domains.items()}}
+                      if hasattr(ds, "domains") else {}),
                    "train_order": getattr(ds, "train_order", "as stored"),
                    "utc": datetime.now(timezone.utc).isoformat(timespec="seconds")}
             with open(out[ds_name], "a", encoding="utf-8") as f:
                 f.write(json.dumps(rec) + "\n")
-            print(f"[{key}] seed {seed}: {metrics_out}  ({rec['epochs_run']} ep, {wall:.0f} s)", flush=True)
+            print(f"[{key}] seed {seed}: {metrics_out} {rec.get('test_by_domain', '')}  "
+                  f"({rec['epochs_run']} ep, {wall:.0f} s)", flush=True)
             keras.backend.clear_session()
 
 
