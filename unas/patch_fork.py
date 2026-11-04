@@ -9,6 +9,9 @@
 3. Trainer metrics (model_trainer.py, 2026-11-03): losses and metrics from the
    model's own Keras; with tf.keras = tf_keras in the workers the reported
    validation and test scores accumulated over the whole run.
+4. Validation key (model_trainer.py, 2026-11-04): NAS_VAL_KEY names the history key the
+   classification validation error comes from (default val_accuracy, the fork's own);
+   the worst-domain arm of the two-domain pilot sets val_worst_accuracy (unas/two_domain.py).
 
 Usage:  python3 patch_fork.py /path/to/uNAS/uNAS/search_algorithms/aging_evolution.py
 """
@@ -135,12 +138,40 @@ def patch_trainer_keras(fork_root: str) -> None:
     print("model_trainer patched: loss and metric from the model's Keras")
 
 
+VALKEY_ANCHOR = (
+    "            val_error = 1.0 - log.history[\"val_accuracy\"][-1] if self.pruning "
+    "and self.pruning.finish_pruning_by_epoch >= epochs else "
+    "1.0 - max(log.history[\"val_accuracy\"][check_logs_from_epoch:])\n"
+)
+VALKEY_NEW = (
+    "            import os as _os\n"
+    "            _vk = _os.environ.get('NAS_VAL_KEY', 'val_accuracy')  # val_worst_accuracy: two-domain pilot\n"
+    "            if _vk != 'val_accuracy':\n"
+    "                self.log.info(f'validation error from {_vk}')\n"
+    "            val_error = 1.0 - log.history[_vk][-1] if self.pruning "
+    "and self.pruning.finish_pruning_by_epoch >= epochs else "
+    "1.0 - max(log.history[_vk][check_logs_from_epoch:])\n"
+)
+
+
+def patch_trainer_valkey(fork_root: str) -> None:
+    """Classification validation error from the history key NAS_VAL_KEY (model_trainer.py)."""
+    p = Path(fork_root) / "uNAS" / "model_trainer.py"
+    s = p.read_text(encoding="utf-8")
+    if "NAS_VAL_KEY" in s:
+        print("model_trainer already reads NAS_VAL_KEY"); return
+    assert VALKEY_ANCHOR in s, "classification val_error anchor not found"
+    p.write_text(s.replace(VALKEY_ANCHOR, VALKEY_NEW), encoding="utf-8")
+    print("model_trainer patched: validation key from NAS_VAL_KEY")
+
+
 def main(path: str) -> None:
     # path is .../uNAS/search_algorithms/aging_evolution.py; the fork root is
     # three levels up. Also patch the sibling model_trainer.py.
     fork_root = Path(path).resolve().parents[2]
     patch_trainer(str(fork_root))
     patch_trainer_keras(str(fork_root))
+    patch_trainer_valkey(str(fork_root))
 
     with open(path, encoding="utf-8") as f:
         s = f.read()

@@ -26,6 +26,11 @@ recipe (Adam, the callbacks of unas/dmir_config.py, 80 epochs for intention and 
 TTLC, MSE loss for TTLC as in the RMSE-objective searches) and need DMIR_DATA_ROOT.
 EPOCH_CAP (smoke tests only) caps the epochs.
 
+Two-domain searches (names starting with twod_, unas/run_twod.sh) retrain on highD and exiD pooled,
+record each domain's validation and test scores, and rank by the arm's objective: pooled validation
+accuracy, or for the worst-domain arm (_worst_ in the name) the lower domain's validation accuracy, which
+also drives early stopping there. Their files go under datasets/exid/results/.
+
 Output: datasets/<highd|dmir>/results/seeds/select_<search>.jsonl (one line per candidate
 and seed; resumable) and datasets/<highd|dmir>/results/nas-v2/<search>/ (the shortlisted
 .h5 files with their sidecars, and selection.json).
@@ -46,6 +51,7 @@ import numpy as np
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 import seed_variance as sv                                  # noqa: E402  (sets up TF, keras, adapters)
+import two_domain                                           # noqa: E402
 
 tf, keras = sv.tf, sv.keras
 REPO = sv.REPO
@@ -64,7 +70,35 @@ def load_candidates(search: str) -> list[dict]:
     return rows
 
 
-def train_one(h5: str, ds, task: str, seed: int, ds_name: str = "highd") -> dict:
+def dataset_of(search: str) -> tuple[str, str]:
+    """(dataset the search trained on, datasets/<folder> holding its results). twod_* searches ran on
+    highD and exiD pooled (unas/run_twod.sh); their results live with exiD's."""
+    if search.startswith("dmir"):
+        return "dmir", "dmir"
+    return ("highd_exid", "exid") if search.startswith("twod") else ("highd", "highd")
+
+
+def objective_of(search: str) -> str:
+    return "worst" if "_worst_" in search else "pooled"
+
+
+def scores(net, x, y, task: str) -> dict:
+    p = net.predict(x, batch_size=4096, verbose=0)
+    if task != "cls":
+        e = p.reshape(-1) - y
+        return {"rmse": float(np.sqrt((e ** 2).mean())), "mae": float(np.abs(e).mean())}
+    pred = p.argmax(1)
+    f1 = []
+    for c in range(3):
+        tp, fp = int(((pred == c) & (y == c)).sum()), int(((pred == c) & (y != c)).sum())
+        fn = int(((pred != c) & (y == c)).sum())
+        f1.append(2 * tp / max(2 * tp + fp + fn, 1))
+    return {"acc": float((pred == y).mean()), "macro_f1": float(np.mean(f1))}
+
+
+def train_one(h5: str, ds, task: str, seed: int, ds_name: str = "highd", objective: str = "pooled") -> dict:
+    """objective (pooled highD + exiD only): pooled stops on the pooled validation accuracy, as every other
+    search; worst on the lower domain accuracy (unas/two_domain.py)."""
     keras.utils.set_random_seed(seed)
     net = keras.models.clone_model(keras.models.load_model(h5, compile=False))
     loss_kind = "logits" if task == "cls" else ("mse" if ds_name == "dmir" else "mae")
@@ -72,24 +106,19 @@ def train_one(h5: str, ds, task: str, seed: int, ds_name: str = "highd") -> dict
     net.compile(optimizer="adam", loss=loss, metrics=metrics)
     train = ds.train_dataset().shuffle(sv.BATCH * 8, seed=seed).batch(sv.BATCH).prefetch(tf.data.AUTOTUNE)
     val = ds.validation_dataset().batch(sv.BATCH).prefetch(tf.data.AUTOTUNE)
-    epochs = sv.EPOCH_CAP or (50 if ds_name == "highd" else 80 if task == "cls" else 100)
+    epochs = sv.EPOCH_CAP or (50 if ds_name in ("highd", "highd_exid") else 80 if task == "cls" else 100)
+    cbs = two_domain.callbacks(ds.domains, objective) if ds_name == "highd_exid" else sv.callbacks(ds_name, loss_kind)
     t0 = time.perf_counter()
-    hist = net.fit(train, validation_data=val, epochs=epochs, verbose=0, callbacks=sv.callbacks(ds_name, loss_kind))
+    hist = net.fit(train, validation_data=val, epochs=epochs, verbose=0, callbacks=cbs)
     out = {"epochs_run": len(hist.history["loss"]), "wall_s": round(time.perf_counter() - t0, 1)}
     for split in ("val", "test"):
-        x, y = ds._data[split]
-        p = net.predict(x, batch_size=4096, verbose=0)
-        if task == "cls":
-            pred = p.argmax(1)
-            f1 = []
-            for c in range(3):
-                tp, fp = int(((pred == c) & (y == c)).sum()), int(((pred == c) & (y != c)).sum())
-                fn = int(((pred != c) & (y == c)).sum())
-                f1.append(2 * tp / max(2 * tp + fp + fn, 1))
-            out[split] = {"acc": float((pred == y).mean()), "macro_f1": float(np.mean(f1))}
-        else:
-            e = p.reshape(-1) - y
-            out[split] = {"rmse": float(np.sqrt((e ** 2).mean())), "mae": float(np.abs(e).mean())}
+        out[split] = scores(net, *ds._data[split], task)
+        if hasattr(ds, "domains"):
+            out[f"{split}_by_domain"] = {d: scores(net, *sp[split], task) for d, sp in ds.domains.items()}
+            if task == "cls":
+                out[split]["worst_acc"] = min(r["acc"] for r in out[f"{split}_by_domain"].values())
+    if hasattr(ds, "domains"):
+        out["objective"] = objective
     keras.backend.clear_session()
     return out
 
@@ -100,15 +129,19 @@ def summarize(rows: list[dict], key: str, split: str) -> dict:
 
 
 def main(search: str, k: int = 12) -> None:
-    ds_name = "dmir" if search.startswith("dmir") else "highd"
+    ds_name, folder = dataset_of(search)
     task = "cls" if "_cls" in search else "ttlc"
-    key, sign = ("acc", -1) if task == "cls" else ("rmse", 1)     # sort ascending on sign * metric
+    objective = objective_of(search)
+    # sort ascending on sign * metric; the worst-domain arm ranks by its own objective
+    key, sign = ("worst_acc" if objective == "worst" else "acc", -1) if task == "cls" else ("rmse", 1)
     if ds_name == "dmir":
         ds = sv.DMIR_Dataset(task="classification" if task == "cls"
                              else "regression_lcr" if "_lcr" in search else "regression_lcl")
+    elif ds_name == "highd_exid":
+        ds = sv.TwoDomain_Dataset(task="highd_cls" if task == "cls" else "highd_ttlc")
     else:
         ds = sv.HighD_Dataset(task="highd_cls" if task == "cls" else "highd_ttlc")
-    results = REPO / "datasets" / ds_name / "results"
+    results = REPO / "datasets" / folder / "results"
     cands = load_candidates(search)
     if not cands:
         sys.exit(f"no sidecars under ~/uNAS/artifacts/{search}/models")
@@ -133,7 +166,7 @@ def main(search: str, k: int = 12) -> None:
         for seed in SEEDS:
             if (name, seed) in done:
                 continue
-            res = train_one(r["h5"], ds, task, seed, ds_name)
+            res = train_one(r["h5"], ds, task, seed, ds_name, objective)
             rec = {"search": search, "model": name, "params": r["params"], "seed": seed,
                    "search_val_error": r["val_error"], "pmu": r["pmu"], "ms": r["ms"], "macs": r["macs"],
                    "recipe": "search recipe", "train_order": getattr(ds, "train_order", "as stored"),

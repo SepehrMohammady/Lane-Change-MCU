@@ -37,8 +37,10 @@ SAVE_CRITERIA = os.environ.get("HIGHD_SAVE_CRITERIA", "pareto")
 PARALLEL = int(os.environ.get("HIGHD_PARALLEL", "1"))
 
 
-def _training_config(dataset, classification):
-    if classification:
+def _training_config(dataset, classification, cbs=None):
+    if cbs is not None:
+        pass
+    elif classification:
         cbs = lambda: [
             keras.callbacks.EarlyStopping(monitor="val_accuracy", mode="max",
                                           patience=8, restore_best_weights=True),
@@ -57,9 +59,10 @@ def _training_config(dataset, classification):
                           epochs=EPOCHS, batch_size=256)
 
 
-def _setup(task, name, error_bound, v2=False, model_size_bound=None, mac_bound=None, faithful=False):
+def _setup(task, name, error_bound, v2=False, model_size_bound=None, mac_bound=None, faithful=False,
+           dataset=None, cbs=None):
     classification = task == "highd_cls"
-    dataset = HighD_Dataset(task=task)
+    dataset = dataset or HighD_Dataset(task=task)
     space = Cnn1DSearchSpace
     if v2:
         from configs.cnn1d_gap import FaithfulGapCnn1DSearchSpace, GapCnn1DSearchSpace
@@ -68,7 +71,7 @@ def _setup(task, name, error_bound, v2=False, model_size_bound=None, mac_bound=N
         # faithful: resource graph with the shapes of the trained Keras model
         space = FaithfulGapCnn1DSearchSpace if faithful else GapCnn1DSearchSpace
     config = {
-        "training_config": _training_config(dataset, classification),
+        "training_config": _training_config(dataset, classification, cbs),
         "bound_config": BoundConfig(
             error_bound=error_bound,
             peak_mem_bound=PEAK_MEM_BOUND,
@@ -164,6 +167,27 @@ def get_highd_cls_v4n_setup(**_):
     from configs.noise_aware_search import NoiseAwareSearch
     setup = get_highd_cls_v4_setup()
     setup["config"]["search_algorithm"] = NoiseAwareSearch
+    if os.environ.get("NAS_SMOKE_BOUNDS") == "1":     # smoke tests only: every candidate feasible
+        b = setup["config"]["bound_config"]
+        b.peak_mem_bound, b.model_size_bound, b.mac_bound = 10 ** 9, 10 ** 9, 10 ** 12
+    return setup
+
+
+# Two-domain pilot (2026-11-04): the final classifier search above (space, faithful resource graph, budgets,
+# error bound, recipe, epochs, workers) on highD and exiD pooled (TwoDomain_Dataset), with each domain's
+# validation accuracy after every epoch (configs/two_domain.py). TWOD_OBJECTIVE picks the arm: pooled keeps
+# the fork's objective on the pooled validation windows; worst takes the lower domain accuracy for early
+# stopping and as the search's validation error, which the fork's trainer reads from NAS_VAL_KEY (set with
+# TWOD_OBJECTIVE by unas/run_twod.sh before Ray starts, so the workers inherit it).
+def get_twod_cls_v4_setup(**_):
+    from configs.two_domain import OBJECTIVES, callbacks
+    from dataset.highd_dataset import TwoDomain_Dataset
+    objective = os.environ.get("TWOD_OBJECTIVE", "pooled")
+    assert os.environ.get("NAS_VAL_KEY", "val_accuracy") == OBJECTIVES[objective], "NAS_VAL_KEY must match TWOD_OBJECTIVE"
+    dataset = TwoDomain_Dataset(task="highd_cls")
+    setup = _setup("highd_cls", "twod_cls_v4" + V2_SUFFIX, float(os.environ.get("HIGHD_V3_ERROR_BOUND", "0.06")),
+                   v2=True, faithful=True, model_size_bound=8_211, mac_bound=26_240, dataset=dataset,
+                   cbs=lambda: callbacks(dataset.domains, objective))
     if os.environ.get("NAS_SMOKE_BOUNDS") == "1":     # smoke tests only: every candidate feasible
         b = setup["config"]["bound_config"]
         b.peak_mem_bound, b.model_size_bound, b.mac_bound = 10 ** 9, 10 ** 9, 10 ** 12

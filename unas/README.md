@@ -36,8 +36,10 @@ regression `min(val_mae)` (the loss is MAE, so optimise and threshold on **MAE**
 | `highd_dataset.py`, `highd_config.py` | `dataset/`, `configs/` | highD (and exiD) windows; highD search configs, including the `*_v2` ones |
 | `cnn1d_gap.py` | `configs/cnn1d_gap.py` | the fork's 1D search space plus a global-average-pooling head, zero to three hidden Dense layers and a searched dropout rate (used by the `*_v2` configs); `FaithfulGapCnn1DSearchSpace` also builds the resource graph with the Keras model's shapes (used by the `*_v4` configs) |
 | `safe_saver.py` | `configs/safe_saver.py` | model saver with unique file names and a JSON sidecar per model (validation error, resources); keeps every candidate within the resource bounds and never uses test error (used by the `*_v2` configs) |
+| `two_domain.py` | `configs/two_domain.py` | per-domain validation accuracy after every epoch for searches on highD and exiD pooled (`twod_cls_v4` config) |
 
-`run_chunked_highd.sh` copies the highD files into the fork and registers the configs.
+`run_chunked_highd.sh` copies the highD files into the fork and registers the configs (`run_twod.sh` for
+the two-domain config).
 
 Register in the fork:
 - `dataset/__init__.py`: `from .dmir_dataset import DMIR_Dataset`
@@ -136,6 +138,34 @@ Outputs: `datasets/*/results/nas-noise/<search>_runs.jsonl` (one line per traini
 with TF op determinism on, that per-epoch loss and validation accuracy stay the same (2026-11-03: identical,
 1.3x faster). A step of these networks takes about 2 ms at batch 256 or 1024, so the GPU waits on per-step
 latency; more throughput comes from trainers running side by side, and host RAM limits how many.
+
+## Searching on two road types (2026-11-04)
+
+The corrected highD classifier choices lose 1.5-2.3 points of exiD accuracy against the hand-like network
+even when all three are trained on highD and exiD pooled (`seed_variance.py pooled_cls_*`). `run_twod.sh`
+runs the final highD classifier search on the pooled data (`TwoDomain_Dataset` in `highd_dataset.py`) with
+one of two validation objectives; space, resource model, budgets, error bound, epochs and workers are those
+of the highD-only search.
+
+| arm | objective (early stopping, the search's validation error, selection ranking) |
+|---|---|
+| `pooled` | accuracy on the pooled validation windows, the fork's own |
+| `worst` | the lower of the two domains' validation accuracies |
+
+`two_domain.py` (dropped into the fork as `configs/two_domain.py`) scores each domain's validation windows
+after every epoch in both arms, so both spend the same compute; patch 4 of `patch_fork.py` lets the fork's
+trainer read the validation error from the key in `NAS_VAL_KEY`. Each run ends with `select_by_seeds.py`
+and `final_eval.py`, which trains every arm's choice on the pooled data with the same recipe and records
+each domain's scores; `FINAL_DATA=pooled final_eval.py highd_cls_v4_k3_single_s42` does the same for the
+highD-only choice.
+
+```bash
+bash /mnt/c/Projects/PhD/DIMIR/unas/run_twod.sh pooled|worst SEED
+SMOKE=1 bash .../run_twod.sh worst 42      # mechanics only, separate files
+```
+
+Outputs: `datasets/exid/results/nas-v2/twod_cls_v4_k3_<arm>_s<seed>/`, `seeds/select_twod_*.jsonl`,
+`nas-noise/final_eval_pooled.jsonl`.
 
 ## Hand-designed CNNs on the boards
 

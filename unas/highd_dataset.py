@@ -104,8 +104,10 @@ EXID_ROOT = Path(os.environ.get("EXID_DATA_ROOT", DATA_ROOT.parents[2] / "exid" 
 class TwoDomain_Dataset(HighD_Dataset):
     """highD and exiD in one dataset (2026-11-04): training windows pooled and permuted once, min-max
     scaling from the pooled training windows, validation and test pooled for the fork's trainer and
-    early stopping, and each domain's windows kept apart in self.domains[<domain>][<split>] for
-    per-domain scores. EXID_DATA_ROOT overrides the exiD folder (default: next to highD's)."""
+    early stopping, and each domain's validation and test windows in self.domains[<domain>][<split>]
+    (views of the pooled arrays) for per-domain scores. Each domain's own training windows are not
+    kept, so a process holds one copy of the training set (the search runs one per Ray worker).
+    EXID_DATA_ROOT overrides the exiD folder (default: next to highD's)."""
 
     def __init__(self, task="highd_cls", roots=None):
         assert task in ("highd_cls", "highd_ttlc")
@@ -114,25 +116,36 @@ class TwoDomain_Dataset(HighD_Dataset):
         cls = task == "highd_cls"
         self._num_classes = 3 if cls else 1
 
-        raw = {d: {s: _windows(s, r) for s in ("train", "val", "test")} for d, r in roots.items()}
-        pooled = np.concatenate([raw[d]["train"][0] for d in raw]).reshape(-1, 18)
-        lo, hi = pooled.min(0), pooled.max(0)
-        del pooled
+        train = {d: _windows("train", r) for d, r in roots.items()}
+        lo = np.min([x.reshape(-1, 18).min(0) for x, _, _ in train.values()], axis=0)
+        hi = np.max([x.reshape(-1, 18).max(0) for x, _, _ in train.values()], axis=0)
+        scale = hi - lo + 1e-12
 
-        self.domains = {}
-        for d, splits in raw.items():
-            self.domains[d] = {}
-            for s, (x, y, ttlc) in splits.items():
-                xn = ((x - lo) / (hi - lo + 1e-12)).astype(np.float32)
+        def pooled(parts):
+            xs, ys, n = [], [], {}
+            for d, (x, y, ttlc) in parts.items():
+                np.subtract(x, lo, out=x)                 # in place, the same float32 values as (x - lo) / scale
+                np.divide(x, scale, out=x)
                 if cls:
-                    self.domains[d][s] = (xn, y.astype(np.int64))
+                    xs.append(x); ys.append(y.astype(np.int64))
                 else:
-                    m = y != 0
-                    self.domains[d][s] = (xn[m], ttlc[m].astype(np.float32))
-        self._data = {s: tuple(np.concatenate([self.domains[d][s][i] for d in self.domains]) for i in (0, 1))
-                      for s in ("train", "val", "test")}
-        x, y = self._data["train"]
+                    m = y != 0                            # LC windows only
+                    xs.append(x[m]); ys.append(ttlc[m].astype(np.float32))
+                n[d] = len(ys[-1])
+            return np.concatenate(xs), np.concatenate(ys), n
+
+        x, y, _ = pooled(train)
+        del train
         perm = np.random.default_rng(0).permutation(len(y))
-        self._data["train"] = (x[perm], y[perm])
+        self._data = {"train": (x[perm], y[perm])}
+        del x, y
+        self.domains = {d: {} for d in roots}
+        for s in ("val", "test"):
+            x, y, n = pooled({d: _windows(s, r) for d, r in roots.items()})
+            self._data[s] = (x, y)
+            a = 0
+            for d in roots:
+                self.domains[d][s] = (x[a:a + n[d]], y[a:a + n[d]])
+                a += n[d]
         self.train_order = "pooled highD + exiD, permuted once (seed 0)"
         self._input_shape = (IN_LEN, 18)

@@ -13,8 +13,14 @@ Run in the WSL dmir_nas venv, from the fork (as select_by_seeds.py):
 Names without a variant suffix (highd_cls_v4, dmir_cls_v4) are the final searches of the paper,
 i.e. run 1 of the single variant with seed 42.
 
-Output: datasets/<highd|dmir>/results/nas-noise/final_eval.jsonl (one line per search and seed;
-resumable).
+Two-domain pilot (2026-11-04): the choices of the twod_* searches (unas/run_twod.sh, arms pooled and
+worst, rule "best" of select_by_seeds.py) are trained on highD and exiD pooled, and FINAL_DATA=pooled
+does the same for the choice of a highD-only search (e.g. highd_cls_v4_k3_single_s42). Every choice
+then gets the same recipe, early stopping on the pooled validation accuracy, so the arms differ only
+in the network they chose; each domain's validation and test scores are recorded.
+
+Output: datasets/<highd|dmir>/results/nas-noise/final_eval.jsonl, and for pooled training
+datasets/exid/results/nas-noise/final_eval_pooled.jsonl (one line per search and seed; resumable).
 """
 from __future__ import annotations
 
@@ -32,13 +38,14 @@ import select_by_seeds as sel                               # noqa: E402  (sets 
 keras = sel.keras
 REPO = sel.REPO
 SEEDS = [int(x) for x in os.environ.get("FINAL_SEEDS", "100,101,102,103,104").split(",")]
+MODES = "single|random|fixed|adaptive|pooled|worst"
 
 
-def chosen(search: str, ds_name: str) -> tuple[str, Path]:
-    results = REPO / "datasets" / ds_name / "results"
-    m = re.search(r"_(single|random|fixed|adaptive)_s(\d+)$", search)
+def chosen(search: str, folder: str) -> tuple[str, Path]:
+    results = REPO / "datasets" / folder / "results"
+    m = re.search(rf"_({MODES})_s(\d+)$", search)
     mode = m.group(1) if m else "single"
-    if mode in ("single", "random"):
+    if mode in ("single", "random", "pooled", "worst"):
         sel_json = json.loads((results / "nas-v2" / search / "selection.json").read_text())
         return sel_json["best"], results / "nas-v2" / search / f"{sel_json['best']}.h5"
     final = json.loads((results / "nas-noise" / search / f"{search}_final.json").read_text())
@@ -46,26 +53,34 @@ def chosen(search: str, ds_name: str) -> tuple[str, Path]:
 
 
 def main(search: str) -> None:
-    ds_name = "dmir" if search.startswith("dmir") else "highd"
+    ds_name, folder = sel.dataset_of(search)
     if "_cls" not in search:
         sys.exit("only the classification searches are set up")
-    m = re.search(r"_(single|random|fixed|adaptive)_s(\d+)$", search)
+    m = re.search(rf"_({MODES})_s(\d+)$", search)
     mode, search_seed = (m.group(1), int(m.group(2))) if m else ("single", 42)
-    ds = sel.sv.DMIR_Dataset(task="classification") if ds_name == "dmir" else sel.sv.HighD_Dataset(task="highd_cls")
-    model, h5 = chosen(search, ds_name)
+    pooled = ds_name == "highd_exid" or os.environ.get("FINAL_DATA") == "pooled"
+    if pooled and ds_name == "dmir":
+        sys.exit("pooled training is highD + exiD; LCIR searches are not part of it")
+    if pooled:
+        ds, train_ds, out_folder, out_name = sel.sv.TwoDomain_Dataset(task="highd_cls"), "highd_exid", "exid", "final_eval_pooled"
+    else:
+        ds = sel.sv.DMIR_Dataset(task="classification") if ds_name == "dmir" else sel.sv.HighD_Dataset(task="highd_cls")
+        train_ds, out_folder, out_name = ds_name, ds_name, "final_eval"
+    model, h5 = chosen(search, folder)
     params = int(keras.models.load_model(h5, compile=False).count_params())
-    out = REPO / "datasets" / ds_name / "results" / "nas-noise" / f"final_eval{os.environ.get('FINAL_TAG', '')}.jsonl"
+    out = REPO / "datasets" / out_folder / "results" / "nas-noise" / f"{out_name}{os.environ.get('FINAL_TAG', '')}.jsonl"
     out.parent.mkdir(parents=True, exist_ok=True)
     done = {}
     if out.exists():
         for line in out.read_text().splitlines():
             r = json.loads(line)
             done[(r["search"], r["seed"])] = r
-    print(f"{search}: chosen {model}, {params:,} parameters, seeds {SEEDS}", flush=True)
+    print(f"{search}: chosen {model}, {params:,} parameters, seeds {SEEDS}"
+          + (" (trained on highD + exiD)" if pooled else ""), flush=True)
     for seed in SEEDS:
         if (search, seed) in done:
             continue
-        res = sel.train_one(str(h5), ds, "cls", seed, ds_name)
+        res = sel.train_one(str(h5), ds, "cls", seed, train_ds, "pooled")
         rec = {"search": search, "mode": mode, "search_seed": search_seed, "model": model, "params": params,
                "seed": seed, "recipe": "search recipe", "train_order": getattr(ds, "train_order", "as stored"),
                **res, "utc": datetime.now(timezone.utc).isoformat(timespec="seconds")}
@@ -78,6 +93,9 @@ def main(search: str) -> None:
         v = [r[split]["acc"] for r in rows]
         print(f"{search} {split} accuracy mean {st.fmean(v):.4f} ± {st.stdev(v) if len(v) > 1 else 0:.4f} "
               f"(n={len(v)})", flush=True)
+        for d in (rows[0].get(f"{split}_by_domain") or {}):
+            v = [r[f"{split}_by_domain"][d]["acc"] for r in rows]
+            print(f"  {d} {split} accuracy mean {st.fmean(v):.4f} ± {st.stdev(v) if len(v) > 1 else 0:.4f}", flush=True)
 
 
 if __name__ == "__main__":
