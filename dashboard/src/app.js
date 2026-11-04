@@ -49,6 +49,8 @@
     params(v) { return v >= 1e5 ? Math.round(v / 1e3) + " k" : v >= 1e4 ? Math.round(v / 1e3) + " k" : (v / 1e3).toFixed(1) + " k"; },
     bytes(b) { if (b == null) return "–"; const kb = b / 1024; return kb >= 1000 ? (kb / 1024).toFixed(2) + " MB" : kb >= 100 ? Math.round(kb) + " KB" : kb.toFixed(1) + " KB"; },
     ms(v) { if (v == null) return "–"; return v < 1 ? v.toFixed(3) + " ms" : v < 10 ? v.toFixed(2) + " ms" : v < 100 ? v.toFixed(1) + " ms" : Math.round(v) + " ms"; },
+    mj(v) { if (v == null) return "–"; return v < 0.1 ? v.toFixed(3) + " mJ" : v < 10 ? v.toFixed(2) + " mJ" : v.toFixed(1) + " mJ"; },
+    mw: v => Math.round(v) + " mW",
     dist(m) { return m >= 1 ? m.toFixed(1) + " m" : m >= 0.01 ? (m * 100).toFixed(0) + " cm" : (m * 1000).toFixed(1) + " mm"; },
   };
   const fmtMetric = (key, v) => (f[key] || f.f3)(v);
@@ -112,6 +114,8 @@
   }
   const tickParams = v => v >= 1e6 ? v / 1e6 + " M" : v >= 1e3 ? v / 1e3 + " k" : String(v);
   const tickMs = v => v + " ms";
+  const tickMj = v => (v >= 1 ? v : +v.toPrecision(2)) + " mJ";
+  const frontColor = (fr, fi) => fr.final ? "var(--front-3)" : fi === 0 ? "var(--front)" : "var(--front-2)";
 
   function chartCard(title, caption, body, opts = {}) {
     const box = h("div", { class: "chart-box" }, body);
@@ -152,6 +156,7 @@
   const viewsOf = d => ALL_VIEWS.filter(([id]) => (d.views || DEFAULT_VIEWS).includes(id));
   function route() {
     const [a, b, c] = decodeURIComponent(location.hash.slice(1)).split("/");
+    if (!a || a === "study") return { page: D.study ? "study" : "ds", ds: "dmir", view: "overview" };
     if (a === "compare" || (a === "status" && D.status)) return { page: a };
     const d = ds(a) ? a : "dmir";
     const planned = ds(d).status === "planned";
@@ -163,6 +168,8 @@
   // ------------------------------------------------------------ header
   function renderHeader(r) {
     const nav = document.getElementById("ds-nav");
+    const study = D.study ? [h("button", { type: "button", "aria-current": String(r.page === "study"), onclick: () => go("study") }, "Study"),
+      h("span", { class: "ds-sep", "aria-hidden": "true" })] : [];
     const items = D.datasets.map(d => h("button", {
       type: "button", "aria-current": String(r.page === "ds" && r.ds === d.id),
       onclick: () => go(d.id + "/" + (r.page === "ds" && d.status !== "planned" ? r.view : "overview")),
@@ -171,7 +178,7 @@
     items.push(h("span", { class: "ds-sep", "aria-hidden": "true" }));
     items.push(h("button", { type: "button", "aria-current": String(r.page === "compare"), onclick: () => go("compare") }, "Compare"));
     if (D.status) items.push(h("button", { type: "button", "aria-current": String(r.page === "status"), onclick: () => go("status") }, "Status"));
-    nav.replaceChildren(...items);
+    nav.replaceChildren(...study, ...items);
 
     const tabs = document.getElementById("tab-nav");
     if (r.page === "ds" && ds(r.ds).status !== "planned") {
@@ -179,7 +186,7 @@
         type: "button", "aria-current": String(r.view === id), onclick: () => go(r.ds + "/" + id),
       }, label)));
     } else tabs.replaceChildren();
-    document.body.dataset.accent = r.page === "ds" ? ds(r.ds).accent : 1;
+    document.body.dataset.accent = r.page === "ds" ? ds(r.ds).accent : 0;
   }
 
   // ------------------------------------------------------------ overview
@@ -207,7 +214,7 @@
 
     const shortcuts = h("div", { class: "grid g3" }, (d.shortcuts || [
       ["search", "Search", "Every model the search saved, and where the picks sit."],
-      ["hardware", "Hardware", "Latency, flash and RAM measured on both boards."],
+      ["hardware", "Hardware", "Latency, energy, flash and RAM measured on both boards."],
       ["robust", "Seeds", "The final models retrained with five seeds."],
     ]).map(([id, t, c]) => h("button", { class: "card", type: "button", style: "text-align:left;cursor:pointer", onclick: () => go(d.id + "/" + id) },
       h("h2", {}, t + " →"), h("p", { class: "cap" }, c))));
@@ -275,9 +282,10 @@
       for (const r of fr.rows) {
         if (task.picks.some(p => p.front === fi && p.model === r.model)) continue;
         const g = s("g", { class: "mk" },
-          s("circle", { cx: X(r.params), cy: Y(r.value), r: 4, fill: fi === 0 ? "var(--front)" : "var(--front-2)", stroke: "var(--card)", "stroke-width": 2 }),
+          s("circle", { cx: X(r.params), cy: Y(r.value), r: 4, fill: frontColor(fr, fi), stroke: "var(--card)", "stroke-width": 2 }),
           s("circle", { class: "hit", cx: X(r.params), cy: Y(r.value), r: 12 }));
-        hover(g, () => tipRows(fr.label + " · " + r.model, fmtMetric(m.fmt, r.value), [["parameters", f.int(r.params)], ["int8 size", r.kb.toFixed(1) + " KB"]]));
+        hover(g, () => tipRows(fr.label + " · " + r.model, fmtMetric(m.fmt, r.value), [["parameters", f.int(r.params)], ["int8 size", r.kb.toFixed(1) + " KB"],
+          ...(r.runs ? [["training runs averaged", r.runs]] : [])]));
         layer.append(g);
       }
     });
@@ -363,7 +371,7 @@
 
     const legend = h("div", { class: "legend" },
       h("span", {}, h("i", { class: "sw", style: "background:var(--acc)" }), "taken to the board"),
-      task.fronts.map((fr, i) => h("span", {}, h("i", { class: "sw", style: `background:var(${i ? "--front-2" : "--front"})` }), fr.label)),
+      task.fronts.map((fr, i) => h("span", {}, h("i", { class: "sw", style: "background:" + frontColor(fr, i) }), fr.label)),
       task.refs.some(r => r.kind === "point") ? h("span", {}, h("i", { class: "sw sq", style: "background:var(--ref);transform:rotate(45deg)" }), "reference") : null,
       task.refs.some(r => r.kind === "line") ? h("span", {}, h("i", { class: "sw line", style: "background:var(--ref)" }), "published figure") : null,
       showSeeds ? h("span", {}, h("i", { class: "sw", style: "background:transparent;border:2px solid var(--ink-2)" }), "mean ± 1 std over seeds") : null);
@@ -371,7 +379,9 @@
     const table = () => simpleTable(["model", "search", "parameters", "int8 KB", task.metric.name],
       task.fronts.flatMap((fr, fi) => fr.rows.map(r => [r.model + (task.picks.some(p => p.front === fi && p.model === r.model) ? "  ★" : ""), fr.label, f.int(r.params), r.kb.toFixed(1), fmtMetric(task.metric.fmt, r.value)]))
         .sort((a, b) => +b[2].replace(/,/g, "") - +a[2].replace(/,/g, "")), [2, 3, 4]);
-    return [controls, chartCard(task.long, "Each dot is one model the search saved, re-scored on the test set. Click a blue model for its measurements.",
+    const finalNote = task.fronts.some(fr => fr.final)
+      ? " The final search kept its 12 best candidates and retrained each five times; their dots are the means." : "";
+    return [controls, chartCard(task.long, "Each dot is one model the search saved, re-scored on the test set." + finalNote + " Click a model taken to the board for its measurements.",
       scatter(d, task, showSeeds), { table, after: legend })];
   }
 
@@ -420,6 +430,8 @@
         s("line", { x1: M.l, x2: x, y1: y, y2: y, stroke: "var(--grid)", "stroke-width": 1 }),
         shape, s("rect", { class: "hit", x: 0, y: y - rowH / 2, width: W, height: rowH }));
       hover(g, () => tipRows(r.m.label + " · " + variantName(r.v), f.ms(r.b.latency_ms), [
+        ...(r.b.own_ms != null ? [["on our own board", f.ms(r.b.own_ms)]] : []),
+        ...(r.b.energy_mj != null ? [["energy per inference", f.mj(r.b.energy_mj)]] : []),
         ["accuracy / error", metricText(r.v)], ["flash", f.bytes(r.b.flash_b)], ["RAM", f.bytes(r.b.ram_b)],
         ["road at " + state.speed + " km/h", f.dist(dist)], ["", "click for details"]]));
       svg.append(g,
@@ -435,6 +447,47 @@
         s("rect", { class: "hit", x: 0, y: y - rowH / 2, width: W, height: rowH }));
       hover(g, () => tipRows(r.m.label + " · " + variantName(r.v), "does not run", [["why", r.b.why]]));
       svg.append(g);
+    });
+    return svg;
+  }
+
+  function roleMark(role, x, y) {
+    return role === "transformer"
+      ? s("path", { d: `M${x} ${y - 6} L${x + 6} ${y + 5} L${x - 6} ${y + 5} Z`, fill: "var(--ref)", stroke: "var(--card)", "stroke-width": 2 })
+      : role === "baseline"
+        ? s("circle", { cx: x, cy: y, r: 5.5, fill: "var(--card)", stroke: "var(--ink)", "stroke-width": 2.5 })
+      : role === "reference"
+        ? s("rect", { x: x - 5, y: y - 5, width: 10, height: 10, transform: `rotate(45 ${x} ${y})`, fill: "var(--ref)", stroke: "var(--card)", "stroke-width": 2 })
+        : s("circle", { cx: x, cy: y, r: 6, fill: roleColor(role), stroke: "var(--card)", "stroke-width": 2 });
+  }
+
+  function energyRows(d) {
+    return variantRows(d).filter(r => r.b && r.b.energy_mj != null).sort((a, b) => a.b.energy_mj - b.b.energy_mj);
+  }
+  function energyPlot(d) {
+    const rows = energyRows(d);
+    if (!rows.length) return h("p", { class: "empty" }, "No energy measured on this board.");
+    const W = 760, rowH = 30, M = { l: 250, r: 150, t: 10, b: 36 }, H = M.t + M.b + rowH * rows.length;
+    const lo = Math.min(...rows.map(r => r.b.energy_mj)) / 1.6, hi = Math.max(...rows.map(r => r.b.energy_mj)) * 1.6;
+    const X = logScale(lo, hi, M.l, W - M.r);
+    const svg = s("svg", { class: "chart", viewBox: `0 0 ${W} ${H}`, role: "img", "aria-label": "Energy per inference" });
+    for (const t of X.ticks()) {
+      svg.append(s("line", { class: "gridline", x1: X(t), x2: X(t), y1: M.t, y2: H - M.b }),
+        s("text", { class: "ax-tick", x: X(t), y: H - M.b + 16, "text-anchor": "middle" }, tickMj(t)));
+    }
+    svg.append(s("text", { class: "ax-title", x: (M.l + W - M.r) / 2, y: H - 4, "text-anchor": "middle" }, "one inference, millijoules above the core asleep (log scale) · less is better"));
+    rows.forEach((r, i) => {
+      const y = M.t + rowH * i + rowH / 2, x = X(r.b.energy_mj);
+      const g = s("g", { class: "mk", style: "cursor:pointer", onclick: () => openModel(d, r.m.id) },
+        s("line", { x1: M.l, x2: x, y1: y, y2: y, stroke: "var(--grid)", "stroke-width": 1 }),
+        roleMark(r.m.role, x, y), s("rect", { class: "hit", x: 0, y: y - rowH / 2, width: W, height: rowH }));
+      hover(g, () => tipRows(r.m.label + " · " + variantName(r.v), f.mj(r.b.energy_mj), [
+        ["power above the core asleep", f.mw(r.b.power_mw)], ["latency on our board", f.ms(r.b.own_ms)],
+        ["accuracy / error", metricText(r.v)], ["", "click for details"]]));
+      svg.append(g,
+        s("text", { class: "lbl", x: M.l - 12, y: y - 1, "text-anchor": "end" }, r.m.label),
+        s("text", { class: "lbl-m", x: M.l - 12, y: y + 11, "text-anchor": "end" }, variantName(r.v) + " · " + f.params(r.m.params)),
+        s("text", { class: "lbl-2", x: x + 12, y: y + 4 }, f.mj(r.b.energy_mj) + "  ·  " + f.mw(r.b.power_mw)));
     });
     return svg;
   }
@@ -474,20 +527,28 @@
       if (!Object.keys(v.boards).length) continue;
       rows.push({ m, v, b1, b2 });
     }
-    const cell = (b, key) => b.fits === false ? h("span", { class: "no" }, "✕ no") : b[key] != null ? (key === "latency_ms" ? f.ms(b[key]) : f.bytes(b[key])) : h("span", { class: "dash" }, "–");
+    const dash = () => h("span", { class: "dash" }, "–");
+    const own = b => b.own_ms != null ? h("span", { class: "own" }, "own " + f.ms(b.own_ms)) : null;
+    const cell = (b, key) => b.fits === false ? h("span", { class: "no" }, "✕ no")
+      : key === "latency_ms" ? (b.latency_ms != null ? h("span", {}, f.ms(b.latency_ms), own(b)) : own(b) || dash())
+      : key === "energy_mj" ? (b.energy_mj != null ? f.mj(b.energy_mj) : dash())
+      : b[key] != null ? f.bytes(b[key]) : dash();
     let sortKey = store.get("hwSort", "lat1"), dir = 1;
-    const val = (r, k) => k === "params" ? r.m.params : k === "lat1" ? (r.b1.latency_ms ?? 1e9) : k === "lat2" ? (r.b2.latency_ms ?? 1e9) : k === "flash" ? (r.b1.flash_b ?? r.b2.flash_b ?? 1e12) : 0;
+    const val = (r, k) => k === "params" ? r.m.params : k === "lat1" ? (r.b1.latency_ms ?? r.b1.own_ms ?? 1e9) : k === "lat2" ? (r.b2.latency_ms ?? r.b2.own_ms ?? 1e9)
+      : k === "e1" ? (r.b1.energy_mj ?? 1e9) : k === "e2" ? (r.b2.energy_mj ?? 1e9) : k === "flash" ? (r.b1.flash_b ?? r.b2.flash_b ?? 1e12) : 0;
     const wrap = h("div", { class: "tbl-wrap" });
     const draw = () => {
       const sorted = [...rows].sort((a, b) => dir * (val(a, sortKey) - val(b, sortKey)));
       const th = (label, key, num) => h("th", { class: num ? "num" : null, "data-sort": key || null, onclick: key ? () => { dir = sortKey === key ? -dir : 1; sortKey = key; store.set("hwSort", key); draw(); } : null },
         label + (key === sortKey ? (dir > 0 ? " ↑" : " ↓") : ""));
       wrap.replaceChildren(h("table", { class: "tbl" },
-        h("thead", {}, h("tr", {}, th("Model"), th("Build"), th("Accuracy / error"), th("Params", "params", true), th("M7 latency", "lat1", true), th("M4 latency", "lat2", true), th("Flash", "flash", true), th("RAM", null, true))),
+        h("thead", {}, h("tr", {}, th("Model"), th("Build"), th("Accuracy / error"), th("Params", "params", true), th("M7 latency", "lat1", true), th("M4 latency", "lat2", true),
+          th("M7 energy", "e1", true), th("M4 energy", "e2", true), th("Flash", "flash", true), th("RAM", null, true))),
         h("tbody", {}, sorted.map(r => h("tr", { class: "click", onclick: () => openModel(d, r.m.id) },
           h("td", { class: "nowrap" }, h("span", { class: "role" }, h("i", { class: "sw", style: r.m.role === "baseline" ? HAND_SW : `background:${roleColor(r.m.role)}` }), r.m.label)),
           h("td", { class: "nowrap" }, variantName(r.v)), h("td", { class: "nowrap" }, metricText(r.v)), h("td", { class: "num" }, f.params(r.m.params)),
           h("td", { class: "num" }, cell(r.b1, "latency_ms")), h("td", { class: "num" }, cell(r.b2, "latency_ms")),
+          h("td", { class: "num" }, cell(r.b1, "energy_mj")), h("td", { class: "num" }, cell(r.b2, "energy_mj")),
           h("td", { class: "num" }, r.b1.flash_b != null ? f.bytes(r.b1.flash_b) : r.b2.flash_b != null ? f.bytes(r.b2.flash_b) : h("span", { class: "dash" }, "–")),
           h("td", { class: "num" }, r.b1.ram_b != null ? f.bytes(r.b1.ram_b) : r.b2.ram_b != null ? f.bytes(r.b2.ram_b) : h("span", { class: "dash" }, "–")))))));
     };
@@ -512,14 +573,23 @@
       h("span", {}, h("i", { class: "sw sq", style: "background:var(--ref);transform:rotate(45deg)" }), "reference model"),
       d.registry.models.some(m => m.role === "baseline") ? h("span", {}, h("i", { class: "sw", style: HAND_SW }), "hand-designed") : null,
       d.registry.models.some(m => m.role === "transformer") ? h("span", {}, h("i", { class: "sw", style: "background:var(--ref);clip-path:polygon(50% 0,100% 100%,0 100%);border-radius:0" }), "reference Transformer") : null);
+    const eRows = energyRows(d);
+    const energyTable = () => simpleTable(["model", "build", "energy", "power above asleep", "latency, our board"],
+      eRows.map(r => [r.m.label, variantName(r.v), f.mj(r.b.energy_mj), f.mw(r.b.power_mw), f.ms(r.b.own_ms)]), [2, 3, 4]);
     return [controls,
       chartCard("Latency on " + BOARD_SHORT[state.board],
-        "Measured with ST Edge AI Core 4.0.1. The distance is how far the car travels while one answer is computed.",
+        "ST Edge AI Developer Cloud, Core 4.0.1. Most builds were also timed on our own boards (Core 4.0.0, 200 runs); hover a mark for both. " +
+        "The distance is how far the car travels while one answer is computed.",
         latencyPlot(d), { after: legend }),
+      h("div", { style: "height:16px" }),
+      chartCard("Energy per inference on " + BOARD_SHORT[state.board],
+        "Measured on our own board: the power drawn while the network runs, above the core asleep at the same clock (USB meter at the board input, " +
+        "three readings), times the latency. Only the builds we metered are shown.",
+        energyPlot(d), { after: legend.cloneNode(true), table: eRows.length ? energyTable : null }),
       h("div", { style: "height:16px" }),
       chartCard("Does it fit on " + BOARD_SHORT[state.board] + "?", "Footprint reported by the toolchain, against the board's memory.", fitMeters(d)),
       h("div", { style: "height:16px" }),
-      chartCard("Every measured build", "Both boards side by side. Click a row for the architecture; click a column to sort.", hardwareTable(d))];
+      chartCard("Every measured build", "Both boards side by side; under each cloud latency, the time on our own board. Click a row for the architecture; click a column to sort.", hardwareTable(d))];
   }
 
   // ------------------------------------------------------------ quantization
@@ -660,7 +730,7 @@
       if (ref && ref.stats.acc) rows.unshift({ label: "hand-designed CNN", role: "reference", recipe: ref.recipe_short, runs: ref.runs, stats: ref.stats.acc, orig: refPoint ? refPoint.value : null });
       out.push(h("div", { style: "height:16px" }));
       out.push(chartCard("Every saved classifier, retrained",
-        RR.n + " models from both searches, five seeds each, smallest at the top. The single run did not predict the average: rank correlation " +
+        RR.n + " models from the first and the tighter search, five seeds each, smallest at the top. The single run did not predict the average: rank correlation " +
         RR.rho.toFixed(2) + ", and the best single run ranks " + RR.best_single_rank + " of " + RR.n + " by average.",
         stripPlot(d, rows, "acc", "pct", "high"), { table: table(rows, true), after: legend() }));
     }
@@ -779,7 +849,7 @@
     }
     if (T.searched_zero && T.searched_zero.length) {
       out.push(h("section", { class: "card" }, h("h2", {}, "Searched highD models, applied to exiD as deployed"),
-        h("p", { class: "cap" }, "The deployed weights of the three models found by the highD searches, one run each."),
+        h("p", { class: "cap" }, "The deployed weights of the three models found by the first highD searches, one run each. The Seeds tab has every highD search retrained on exiD."),
         simpleTable(["model", "parameters", "tested on", "result"], T.searched_zero.map(r => [r.model.replace("highd_", ""), f.int(r.params), r.eval_on,
           r.task === "cls" ? f.pct(r.metrics.acc) : "RMSE " + f.s3(r.metrics.rmse)]), [1])));
     }
@@ -861,6 +931,10 @@
       return [variantName(v), metricText(v), lat(b1), lat(b2), f.bytes(b1.flash_b ?? b2.flash_b), f.bytes(b1.ram_b ?? b2.ram_b)];
     });
     const why = m.variants.flatMap(v => Object.entries(v.boards).filter(([, b]) => b.fits === false).map(([board, b]) => h("p", { class: "note" }, "✕ " + BOARD_SHORT[board] + ": " + b.why)));
+    const ownRows = m.variants.filter(v => Object.values(v.boards).some(b => b.own_ms != null || b.energy_mj != null)).map(v => {
+      const b1 = v.boards["STM32H7B3I-DK"] || {}, b2 = v.boards["NUCLEO-F401RE"] || {};
+      return [variantName(v), f.ms(b1.own_ms), f.ms(b2.own_ms), f.mj(b1.energy_mj), f.mj(b2.energy_mj)];
+    });
     const arch = m.arch_svg_markup ? (() => { const box = h("div", { class: "arch" }); box.innerHTML = m.arch_svg_markup; return box; })() : null;
     drawer.replaceChildren(...[
       h("button", { class: "icon-btn close", type: "button", "aria-label": "Close", onclick: closeDrawer }, "✕"),
@@ -871,6 +945,8 @@
       h("div", { class: "section-title" }, "Measured builds"),
       simpleTable(["build", "accuracy / error", "M7", "M4", "flash", "RAM"], rows, [2, 3, 4, 5]),
       why,
+      ownRows.length ? [h("div", { class: "section-title" }, "On our own boards"),
+        simpleTable(["build", "M7", "M4", "M7 energy", "M4 energy"], ownRows, [1, 2, 3, 4])] : null,
       h("div", { class: "section-title" }, "Sources"),
       m.variants.map(v => h("p", { class: "note" }, variantName(v) + ": " + v.source)),
       arch ? [h("div", { class: "section-title" }, "Architecture"), arch] : null].flat(Infinity).filter(Boolean));
@@ -928,6 +1004,84 @@
     chartCard("Everything measured on the boards", "Each mark is one build on the Cortex-M7. The red line is the Cortex-M4 board's total flash; a build just under it can still fail there, because the runtime needs room too. exiD models run on the highD builds (same graphs, other weights), so they add no marks.", svg, { after: legend })];
   }
 
+  // ------------------------------------------------------------ study: the problem, the idea and the method
+  function deadlinePlot(S) {
+    const rows = S.problem, per = S.period_ms;
+    const W = 560, rowH = 46, M = { l: 168, r: 118, t: 28, b: 36 }, H = M.t + M.b + rowH * rows.length;
+    const hi = Math.max(per * 1.25, ...rows.map(r => r.m7)) * 1.05;
+    const X = linScale(0, hi, M.l, W - M.r);
+    const svg = s("svg", { class: "chart", viewBox: `0 0 ${W} ${H}`, role: "img", "aria-label": "Reference models against the input period" });
+    for (const t of X.ticks(5)) svg.append(s("line", { class: "gridline", x1: X(t), x2: X(t), y1: M.t, y2: H - M.b }),
+      s("text", { class: "ax-tick", x: X(t), y: H - M.b + 16, "text-anchor": "middle" }, t + " ms"));
+    svg.append(s("text", { class: "ax-title", x: (M.l + W - M.r) / 2, y: H - 2, "text-anchor": "middle" }, "one prediction on the Cortex-M7, milliseconds"));
+    svg.append(s("line", { x1: X(per), x2: X(per), y1: M.t - 6, y2: H - M.b, stroke: "var(--ink)", "stroke-width": 1.5, "stroke-dasharray": "5 4" }),
+      s("text", { class: "lbl-2", x: X(per) + 6, y: M.t - 10 }, per + " ms between inputs"));
+    rows.forEach((r, i) => {
+      const y = M.t + rowH * i + rowH / 2, over = r.m7 > per, w = Math.max(2, X(r.m7) - M.l);
+      const g = s("g", { class: "mk" },
+        s("path", { d: `M${M.l} ${y - 8} h${w - 4} q4 0 4 4 v8 q0 4 -4 4 h${-(w - 4)} z`, fill: over ? "var(--bad)" : "var(--ref)" }),
+        s("rect", { class: "hit", x: 0, y: y - rowH / 2, width: W, height: rowH }));
+      hover(g, () => tipRows(r.label + ", " + f.params(r.params), f.ms(r.m7), [["Cortex-M4 board", r.m4 != null ? f.ms(r.m4) : "does not fit"],
+        ["share of the input period", (r.m7 / per * 100).toFixed(0) + "%"]]));
+      svg.append(g,
+        s("text", { class: "lbl", x: M.l - 12, y: y - 1, "text-anchor": "end" }, r.label),
+        s("text", { class: "lbl-m", x: M.l - 12, y: y + 12, "text-anchor": "end" }, f.params(r.params) + " · Cortex-M4: " + (r.m4 != null ? f.ms(r.m4) : "does not fit")),
+        s("text", { class: "lbl-2 halo", x: X(r.m7) + 8, y: y + 4 }, f.ms(r.m7) + (over ? " · misses the period" : "")));
+    });
+    return svg;
+  }
+  function viewStudy() {
+    const S = D.study;
+    const hero = h("section", { class: "card hero-main" },
+      h("div", { class: "eyebrow" }, "The study"),
+      h("div", { class: "hero-title" }, S.title),
+      h("p", { class: "hero-sub", style: "max-width:72ch" }, S.lead));
+    const reqs = h("div", { class: "grid g4" }, S.requirements.map(r => h("section", { class: "card tile" },
+      h("div", { class: "t-label" }, r.label), h("div", { class: "t-value" }, r.value), h("div", { class: "t-sub" }, r.sub))));
+    const context = h("div", { class: "grid g2" },
+      chartCard("Large models miss the time between inputs", S.problem_caption, deadlinePlot(S)),
+      h("section", { class: "card" }, h("h2", {}, "Where it is used"),
+        S.uses.map(([t, x]) => h("p", { class: "note" }, h("b", {}, t + ". "), x)),
+        h("h2", { style: "margin-top:16px" }, "What is missing"), h("p", { class: "note" }, S.gap)));
+    const idea = h("div", { class: "grid g3" }, S.idea.map(([t, x], i) => h("section", { class: "card" },
+      h("div", { class: "card-head", style: "margin-bottom:6px;justify-content:flex-start" }, h("span", { class: "step-num" }, String(i + 1)), h("h2", {}, t)),
+      h("p", { class: "note", style: "margin:0" }, x))));
+    const sets = h("div", { class: "grid g3" }, S.datasets.map(d => h("button", {
+      class: "card ds-card", type: "button", onclick: () => go(d.id + "/overview") },
+      h("div", { class: "eyebrow" }, h("span", { class: "sw", style: `background:var(--s${d.accent});margin-right:6px` }), d.name),
+      h("h2", { style: "margin:4px 0 6px" }, d.title),
+      h("p", { class: "note", style: "margin:0" }, d.who + ". " + d.input + "."))));
+    const flow = h("section", { class: "card" },
+      h("div", { class: "card-head" }, h("div", {}, h("h2", {}, "From data to a measured build"),
+        h("p", { class: "cap" }, "Every choice uses validation data; the test windows only score the final files."))),
+      h("div", { class: "flow" }, S.stages.map(([t, x], i) => h("div", { class: "flow-step" },
+        h("span", { class: "step-num" }, String(i + 1)), h("div", { class: "ft" }, t), h("div", { class: "fd" }, x)))),
+      h("div", { class: "datause", "aria-hidden": "true" }, S.data_use.map(([label, a, b, kind]) => [
+        h("div", { class: "du-bar du-" + kind, style: `grid-column:${a} / ${b + 1}` }),
+        h("div", { class: "du-label", style: `grid-column:${a} / 7` }, label)])),
+      h("ul", { class: "datause-list" }, S.data_use.map(([label, a, b]) =>
+        h("li", {}, label + (a === b ? ` (stage ${a})` : ` (stages ${a} to ${b})`)))));
+    const changes = h("section", { class: "card" },
+      h("div", { class: "card-head" }, h("div", {}, h("h2", {}, "What we changed in µNAS, and why"),
+        h("p", { class: "cap" }, S.changes_note))),
+      simpleTable(["Change", "Why it was needed"], S.changes));
+    const boards = h("section", { class: "card" }, h("h2", {}, "Boards and measurement"),
+      simpleTable(["Board", "Core", "Clock", "Flash", "RAM"], S.boards.map(b => [b.name, b.core, b.mhz + " MHz", b.flash, b.ram]), [2, 3, 4]),
+      h("p", { class: "note" }, S.measure_note));
+    const found = h("div", { class: "grid g4" }, S.found.map(x => h("button", { class: "card tile ds-card", type: "button", onclick: () => go(x.link) },
+      h("div", { class: "t-value" }, x.value), h("div", { class: "t-sub", style: "color:var(--ink-2)" }, x.label),
+      h("div", { class: "t-seed" }, "Open →"))));
+    const sources = h("section", { class: "card" }, h("h2", {}, "Sources for the requirements"),
+      S.sources.map(t => h("p", { class: "note" }, t)));
+    return [hero,
+      h("div", { class: "section-title" }, "The problem"), reqs, h("div", { style: "height:16px" }), context,
+      h("div", { class: "section-title" }, "Our idea"), idea, h("div", { style: "height:16px" }), sets,
+      h("div", { class: "section-title" }, "Method"), flow, h("div", { style: "height:16px" }),
+      h("div", { class: "grid g2" }, changes, boards),
+      h("div", { class: "section-title" }, "What we found"), found,
+      h("div", { style: "height:16px" }), sources];
+  }
+
   // ------------------------------------------------------------ status (local build only)
   function viewStatus() {
     const S = D.status;
@@ -946,7 +1100,8 @@
     renderHeader(r);
     hideTip();
     let nodes;
-    if (r.page === "compare") nodes = viewCompare();
+    if (r.page === "study") nodes = viewStudy();
+    else if (r.page === "compare") nodes = viewCompare();
     else if (r.page === "status") nodes = viewStatus();
     else {
       const d = ds(r.ds);
@@ -954,7 +1109,7 @@
     }
     app.replaceChildren(...[].concat(nodes).filter(Boolean));
     if (r.page === "ds" && r.model) openModel(ds(r.ds), r.model);
-    document.title = (r.page === "ds" ? ds(r.ds).name + " · " : r.page === "compare" ? "Compare · " : "Status · ") + "Lane-Change-MCU results";
+    document.title = (r.page === "ds" ? ds(r.ds).name + " · " : r.page === "compare" ? "Compare · " : r.page === "status" ? "Status · " : "") + "Lane-Change-MCU results";
   }
 
   // theme toggle
@@ -969,7 +1124,8 @@
     store.set("theme", document.documentElement.dataset.theme);
   });
   document.getElementById("foot").textContent = "Built " + D.built + " from the project's result files. " +
-    (D.share ? "Shared copy." : "Local copy.") + " Board numbers: ST Edge AI Core 4.0.1, balanced optimization.";
+    ({ share: "Shared copy.", lab: "Lab copy: it shows highD and exiD replays, so please keep it inside the lab." }[D.copy] || (D.share ? "Shared copy." : "Local copy.")) +
+    " Board numbers: ST Edge AI Developer Cloud (Core 4.0.1, balanced optimization) and our own boards (Core 4.0.0).";
   window.addEventListener("hashchange", render);
   render();
 })();
