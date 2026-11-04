@@ -85,6 +85,16 @@ every search before v4 were applied to these counts; measured board numbers are 
 affected. `resource_bias.py` recomputes the gap for every search from its state file;
 the `*_v4` configs search with the faithful graph.
 
+**Known issue in the fork's trainer (found 2026-11-03).** `uNAS/model_trainer.py` imports
+tensorflow-model-optimization, which sets `TF_USE_LEGACY_KERAS=1` when imported. In the Ray workers this
+happens before `tf.keras` is first used, so there `tf.keras` is the Keras 2 package while the search spaces
+build Keras 3 models, and Keras 3 never resets the Keras 2 metric the trainer compiles. The validation
+accuracy (or MAE) a search records is then a running value over every training and validation batch of the
+run, the test score after training is the same value, and early stopping never fires. Every search before
+the fix ran on that score; five-seed retrainings (`select_by_seeds.py`, `seed_variance.py`, `final_eval.py`
+run outside Ray) and board numbers are not affected. `patch_fork.py` (patch 3) builds the loss and metric with
+the model's own Keras; `path_check.py` compares the fork's trainer with `select_by_seeds.train_one` outside Ray.
+
 ## Seed studies
 
 | script | what it does | output |
@@ -95,6 +105,37 @@ the `*_v4` configs search with the faithful graph.
 | `transfer_eval.py` | applies the deployed highD searched models to exiD with the highD input scaling | `datasets/exid/results/transfer_searched.jsonl` |
 | `select_by_seeds.py <search>` | v2 searches: shortlists the 12 candidates with the best single-run validation metric, retrains each with five seeds, picks the best mean validation metric and the smallest model within one standard error of it; test data never enter the choice | `datasets/highd/results/seeds/select_<search>.jsonl`, `datasets/highd/results/nas-v2/<search>/` |
 | `resource_bias.py [search ...]` | for every evaluated candidate of a search: the fork's stored peak memory, size and MACs against the Keras model's weights and MACs and the faithful graph (CPU, from the fork's state files) | `datasets/highd/results/resource_bias.json` |
+
+## Spending training runs under noise (2026-11-02)
+
+One training run does not rank the candidates (Spearman 0.17 between the run the search kept and
+the five-seed mean, 17 highD candidates). `noise_aware_search.py` (dropped into the fork as
+`configs/noise_aware_search.py`) keeps the fork's space, mutations, fitness and resource model and
+changes only how training runs are spent; the budget counts training runs, 210 for every variant.
+
+| variant | training runs | final choice |
+|---|---|---|
+| `single` | the fork's aging evolution, 150 runs | `select_by_seeds.py`: 12 best single runs x 5 seeds (60) |
+| `random` | random architectures, 150 runs | the same selection (60) |
+| `fixed` | 70 candidates x 3 runs, scored by the mean | best mean among candidates within the resource bounds |
+| `adaptive` | one run per new candidate; extra runs, up to five, for candidates within the bounds whose interval still reaches the best one | best mean among those with five runs |
+
+```bash
+bash /mnt/c/Projects/PhD/DIMIR/unas/run_noise_aware.sh highd_cls|dmir_cls single|random|fixed|adaptive SEED
+SMOKE=1 bash .../run_noise_aware.sh highd_cls adaptive 42      # mechanics only, separate files
+```
+
+`NAME_TAG=_k3` names a series of runs (`highd_cls_v4_k3_<mode>_s<seed>`); the `_k3` series is the
+first one after the trainer fix above, the runs of 2026-11-02 used the accumulated score.
+The same `SEED` gives every variant the same first random architectures. Each run ends with
+`final_eval.py`, which retrains the chosen network with five seeds no variant used (100-104).
+Outputs: `datasets/*/results/nas-noise/<search>_runs.jsonl` (one line per training run),
+`nas-noise/<search>/` (choice of `fixed` and `adaptive`), `nas-noise/final_eval.jsonl`.
+
+`speed_check.py` times one network's training per epoch for several `steps_per_execution` values and checks,
+with TF op determinism on, that per-epoch loss and validation accuracy stay the same (2026-11-03: identical,
+1.3x faster). A step of these networks takes about 2 ms at batch 256 or 1024, so the GPU waits on per-step
+latency; more throughput comes from trainers running side by side, and host RAM limits how many.
 
 ## Hand-designed CNNs on the boards
 

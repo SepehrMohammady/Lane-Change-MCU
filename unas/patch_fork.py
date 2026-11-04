@@ -6,6 +6,9 @@
 2. Safe evaluate: one failing candidate (TF Graph-execution error, VRAM
    blow-up on an oversized architecture, ...) must not kill the whole search.
    Catch, clean up, and return a worst-score point so evolution discards it.
+3. Trainer metrics (model_trainer.py, 2026-11-03): losses and metrics from the
+   model's own Keras; with tf.keras = tf_keras in the workers the reported
+   validation and test scores accumulated over the whole run.
 
 Usage:  python3 patch_fork.py /path/to/uNAS/uNAS/search_algorithms/aging_evolution.py
 """
@@ -102,11 +105,42 @@ def patch_trainer(fork_root: str) -> None:
     print("model_trainer patched: RMSE-aware regression")
 
 
+KERAS_MARK = "K = _keras3 if type(model).__module__.split"
+KERAS_IMPORT_ANCHOR = "import tensorflow as tf\n"
+KERAS_IMPORT = "import tensorflow as tf\nimport keras as _keras3  # Keras 3, the Keras the search spaces build models with\n"
+KERAS_BLOCK_START = "        if dataset.num_classes < 2:#Regression\n"
+KERAS_BLOCK_END = "        model.compile(optimizer=self.config.optimizer,"
+KERAS_NOTE = (
+    "        # Losses and metrics from the model's own Keras. Importing tfmot sets TF_USE_LEGACY_KERAS=1,\n"
+    "        # so in the Ray workers tf.keras is tf_keras (Keras 2), and a Keras 3 model never resets a\n"
+    "        # Keras 2 metric: val_accuracy, val_mae and the test score then accumulate over every batch of\n"
+    "        # the run, training batches included (found 2026-11-03, unas/path_check.py).\n"
+    "        K = _keras3 if type(model).__module__.split(\".\")[0] == \"keras\" else tf.keras\n"
+)
+
+
+def patch_trainer_keras(fork_root: str) -> None:
+    """Build the trainer's loss and metric with the model's own Keras (model_trainer.py)."""
+    p = Path(fork_root) / "uNAS" / "model_trainer.py"
+    s = p.read_text(encoding="utf-8")
+    if KERAS_MARK in s:
+        print("model_trainer already uses the model's Keras for loss and metric"); return
+    assert KERAS_IMPORT_ANCHOR in s, "tensorflow import anchor not found"
+    i, j = s.find(KERAS_BLOCK_START), s.find(KERAS_BLOCK_END)
+    assert 0 <= i < j, "loss/metric block not found"
+    block = s[i:j].replace("tf.keras.losses.", "K.losses.").replace("tf.keras.metrics.", "K.metrics.")
+    s = s[:i] + KERAS_NOTE + block + s[j:]
+    s = s.replace(KERAS_IMPORT_ANCHOR, KERAS_IMPORT, 1)
+    p.write_text(s, encoding="utf-8")
+    print("model_trainer patched: loss and metric from the model's Keras")
+
+
 def main(path: str) -> None:
     # path is .../uNAS/search_algorithms/aging_evolution.py; the fork root is
     # three levels up. Also patch the sibling model_trainer.py.
     fork_root = Path(path).resolve().parents[2]
     patch_trainer(str(fork_root))
+    patch_trainer_keras(str(fork_root))
 
     with open(path, encoding="utf-8") as f:
         s = f.read()

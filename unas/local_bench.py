@@ -4,7 +4,7 @@ For each file: `stedgeai generate` (legacy C API, default options as on the Deve
 balanced, inputs and outputs in the activation buffer) into firmware/build/gen/<stem>, build
 firmware/<board> against it, flash it over SWD, and read the result block g_result from RAM over
 SWD (works while another program holds the virtual COM port). One JSON line per file is
-appended to datasets/<dataset>/results/deploy/local_bench.jsonl.
+appended to datasets/<dataset>/results/deploy/local_bench.jsonl (or to $BENCH_OUT).
 
     python unas/local_bench.py [--board f401|h7b3|h7b3axi] datasets/highd/results/deploy/a.tflite [b.tflite ...]
 
@@ -16,6 +16,7 @@ on. H7B3I-DK: ST's template (direct SMPS, VOS0, 280 MHz, I- and D-cache on, data
 from __future__ import annotations
 
 import json
+import os
 import re
 import subprocess
 import sys
@@ -120,7 +121,8 @@ def main():
     sn = find_stlink(BOARDS[board][0])
     for f in files:
         ds = f.relative_to(ROOT / "datasets").parts[0]
-        out = ROOT / "datasets" / ds / "results" / "deploy" / "local_bench.jsonl"
+        default = ROOT / "datasets" / ds / "results" / "deploy" / "local_bench.jsonl"
+        out = Path(os.environ["BENCH_OUT"]) if os.environ.get("BENCH_OUT") else default
         try:
             rec = measure(f, board, sn)
         except Exception as e:  # keep going; report at the end of the line

@@ -175,3 +175,16 @@ def get_dmir_lcr_v4_setup(**_):
 
 def get_dmir_lcl_v4_setup(**_):
     return _v4_regression("regression_lcl", "dmir_lcl_v4", 0.48)
+
+
+# Part A (2026-11-02): the final intention search above with the training runs spent by
+# configs/noise_aware_search.py (NAS_MODE random, fixed or adaptive; NAS_BUDGET runs).
+# Run through unas/run_noise_aware.sh, which also sets DMIR_V4_SUFFIX per variant and seed.
+def get_dmir_cls_v4n_setup(**_):
+    from configs.noise_aware_search import NoiseAwareSearch
+    setup = get_dmir_cls_v4_setup()
+    setup["config"]["search_algorithm"] = NoiseAwareSearch
+    if os.environ.get("NAS_SMOKE_BOUNDS") == "1":     # smoke tests only: every candidate feasible
+        b = setup["config"]["bound_config"]
+        b.peak_mem_bound, b.model_size_bound, b.mac_bound = 10 ** 9, 10 ** 9, 10 ** 12
+    return setup

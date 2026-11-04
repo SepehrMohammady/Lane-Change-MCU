@@ -155,3 +155,16 @@ def get_highd_cls_v4_setup(**_):
 def get_highd_ttlc_v4_setup(**_):
     return _setup("highd_ttlc", "highd_ttlc_v4" + V2_SUFFIX, REG_ERROR_BOUND,
                   v2=True, faithful=True, model_size_bound=8_081, mac_bound=26_112)
+
+
+# Part A (2026-11-02): the final-search setup above with the training runs spent by
+# configs/noise_aware_search.py (NAS_MODE random, fixed or adaptive; NAS_BUDGET runs).
+# Run through unas/run_noise_aware.sh, which also sets HIGHD_V2_SUFFIX per variant and seed.
+def get_highd_cls_v4n_setup(**_):
+    from configs.noise_aware_search import NoiseAwareSearch
+    setup = get_highd_cls_v4_setup()
+    setup["config"]["search_algorithm"] = NoiseAwareSearch
+    if os.environ.get("NAS_SMOKE_BOUNDS") == "1":     # smoke tests only: every candidate feasible
+        b = setup["config"]["bound_config"]
+        b.peak_mem_bound, b.model_size_bound, b.mac_bound = 10 ** 9, 10 ** 9, 10 ** 12
+    return setup
