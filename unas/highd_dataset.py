@@ -98,7 +98,13 @@ class HighD_Dataset(Dataset):
         return self._input_shape
 
 
-EXID_ROOT = Path(os.environ.get("EXID_DATA_ROOT", DATA_ROOT.parents[2] / "exid" / "data" / "prepared"))
+def exid_root():
+    """EXID_DATA_ROOT, or exiD's folder next to highD's. Resolved only when a TwoDomain_Dataset is built:
+    the fork imports this module for every search, and without HIGHD_DATA_ROOT (LCIR runs) the default
+    above is a Windows path that has no parent folders on Linux."""
+    if os.environ.get("EXID_DATA_ROOT"):
+        return Path(os.environ["EXID_DATA_ROOT"])
+    return DATA_ROOT.parents[2] / "exid" / "data" / "prepared"
 
 
 class TwoDomain_Dataset(HighD_Dataset):
@@ -111,7 +117,7 @@ class TwoDomain_Dataset(HighD_Dataset):
 
     def __init__(self, task="highd_cls", roots=None):
         assert task in ("highd_cls", "highd_ttlc")
-        roots = roots or {"highd": DATA_ROOT, "exid": EXID_ROOT}
+        roots = roots or {"highd": DATA_ROOT, "exid": exid_root()}
         self._task = task
         cls = task == "highd_cls"
         self._num_classes = 3 if cls else 1

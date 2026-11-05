@@ -14,10 +14,13 @@ exporting the graph with unas/export_graph.py under Keras 3:
   source ~/dmir_nas/env.sh
   DMIR_DATA_ROOT=/mnt/c/Projects/PhD/DIMIR/datasets/dmir/data TF_USE_LEGACY_KERAS=1 \
     ~/dmir_nas/bin/python unas/qat_finetune.py \
-    <task> <graph.json> <weights.pkl> <out_dir>
+    <task> <graph.json> <weights.pkl> <out_dir> [<stem>_deploy.json]
   task in {classification, regression_lcr, regression_lcl}
+The optional deploy record (unas/prepare_deploy_lcir.py) gives the anchors and the file stem of a
+model other than the first searches' (cls_best, lcr_best, lcl_best, whose anchors are built in).
 
-Emits <out_dir>/<model>_qat_int8.tflite + <model>_qat_result.json.
+Emits <out_dir>/<stem>_qat_int8.tflite, <stem>_qat_int8_io.tflite, <stem>_qat_model.h5 and
+<stem>_qat_result.json.
 No fabrication: every number is a real test-set evaluation of a real artifact.
 """
 import json
@@ -142,11 +145,21 @@ def metric_keras(model, x, y, is_cls):
     return float(np.mean(np.abs(p.squeeze(-1) - y)))
 
 
-def main(task, graph_path, weights_path, out_dir):
+def anchors_from_deploy(deploy_json, is_cls):
+    """Anchors and file stem of another model from its prepare_deploy_lcir.py record
+    (<stem>_deploy.json): the Keras float test metric and the measured 1D int8 one."""
+    rec = json.load(open(deploy_json))
+    key = "acc" if is_cls else "mae"
+    return {"float": rec["keras_float"][key], "int8": rec["variants"]["int8"][key],
+            "model": os.path.basename(deploy_json).removesuffix("_deploy.json")}
+
+
+def main(task, graph_path, weights_path, out_dir, deploy_json=None):
     if task not in ANCHORS:
         raise SystemExit(f"task must be one of {sorted(ANCHORS)}")
     is_cls = LAYOUT[task][2]
-    anchor = ANCHORS[task]
+    # ANCHORS hold the first searches' models; any other model brings its own (2026-11-05)
+    anchor = anchors_from_deploy(deploy_json, is_cls) if deploy_json else ANCHORS[task]
     name = anchor["model"]
     mname = "acc" if is_cls else "MAE"
     better = "higher" if is_cls else "lower"
@@ -230,4 +243,4 @@ def main(task, graph_path, weights_path, out_dir):
 
 
 if __name__ == "__main__":
-    main(sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4])
+    main(*sys.argv[1:6])
