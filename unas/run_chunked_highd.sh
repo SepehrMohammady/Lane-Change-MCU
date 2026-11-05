@@ -52,7 +52,7 @@ cd "$FORK"
 
 for chunk in $(seq 1 "$MAX_CHUNKS"); do
   LOG="$REPO/runs/nas/${NAME}_${RUN_TAG}_chunk${chunk}.log"
-  args=(-c "$CONFIG" --seed 42 --save-every 5)
+  args=(-c "$CONFIG" --seed "${SEARCH_SEED:-42}" --save-every 5)   # SEARCH_SEED: a further search seed (name it with the suffix)
   [ -f "$STATE" ] && args+=(-l "$STATE")
   echo ">>> $NAME chunk $chunk @ $(date) (target $TARGET) -> $LOG"
   "$VENV/bin/python" driver.py "${args[@]}" > "$LOG" 2>&1
