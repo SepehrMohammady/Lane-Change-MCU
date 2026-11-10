@@ -30,6 +30,13 @@ keeps the raw output bytes in `g_check_out` for an SWD read, to compare the boar
 host build of the same generated code. The header holds real test inputs, so it is generated into
 `build/` and never versioned.
 
+`h7b3/` also builds with `make STREAM=1 GEN=../build/gen/<tag> CFG=../build/stream/<tag>` (2026-11-10,
+hardware in the loop): after the timed runs the board answers frames from the virtual COM port (USART1,
+921,600 baud): each frame of raw features is scaled and quantized on the board, the last 10 frames form
+the window, and every full window runs the network; the reply carries the raw output bytes and the DWT
+cycles of preprocessing and network. `CFG/stream_cfg.h` comes from `unas/hil_prepare.py` (training
+statistics, so it stays in `build/`), and `unas/hil_stream.py` builds, flashes and drives it.
+
 Tools (paths in the Makefiles and the script; this machine): ST Edge AI Core 4.0.0
 (`C:\ST\STEdgeAI\4.0`), STM32CubeIDE 2.1.1 (GCC 14.3.1, make), STM32CubeProgrammer 2.22,
 STM32CubeH7 1.13.0 (from STM32CubeMX). Not versioned: `third_party/` (ST's CMSIS F4 device

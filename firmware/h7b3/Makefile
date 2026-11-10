@@ -3,6 +3,9 @@
 #   make AXI=1 GEN=../build/gen/<tag>  -> ../build/h7b3axi/<tag>/fw.elf   (activations in AXI SRAM)
 #   make CHECK=1 GEN=../build/gen/<tag> -> ../build/h7b3check/<tag>/fw.elf (AXI SRAM, plus the
 #        input/output check of main.c with ../build/check/check_io.h)
+#   make STREAM=1 GEN=../build/gen/<tag> CFG=../build/stream/<tag> -> ../build/h7b3stream/<tag>/fw.elf
+#        (DTCM; after the timed runs, the frame-by-frame streaming mode of main.c over the virtual COM
+#        port, with CFG/stream_cfg.h from unas/hil_prepare.py)
 # Startup, system file, HAL configuration and linker script come from ST's STM32H7B3I-DK
 # template in STM32CubeH7 1.13.0 (installed by STM32CubeMX); nothing is copied into the repo.
 
@@ -15,6 +18,8 @@ GEN ?= ../build/gen/highd_cls_model_1790282740507531593_621856_int8_io
 AXI ?= 0
 IDLE ?=
 CHECK ?= 0
+STREAM ?= 0
+CFG ?= ../build/stream/$(notdir $(GEN))
 ifneq ($(IDLE),)
 BUILD ?= ../build/h7b3/idle$(IDLE)
 AXIDEF := -DIDLE_MODE=$(IDLE)
@@ -22,6 +27,10 @@ else ifeq ($(CHECK),1)
 # input/output check (see main.c); check_io.h is generated into ../build/check, outside the repository
 BUILD ?= ../build/h7b3check/$(notdir $(GEN))
 AXIDEF := -DACT_AXI -DCHECK_IO -I../build/check
+else ifeq ($(STREAM),1)
+# streaming mode (see main.c); stream_cfg.h is generated into ../build/stream, outside the repository
+BUILD ?= ../build/h7b3stream/$(notdir $(GEN))
+AXIDEF := -DSTREAM_MODE -I$(CFG)
 else ifeq ($(AXI),1)
 BUILD ?= ../build/h7b3axi/$(notdir $(GEN))
 AXIDEF := -DACT_AXI
@@ -49,6 +58,10 @@ SRCS := main.c $(TPL)/Src/system_stm32h7xx.c \
         $(HAL)/Src/stm32h7xx_hal.c $(HAL)/Src/stm32h7xx_hal_rcc.c $(HAL)/Src/stm32h7xx_hal_rcc_ex.c \
         $(HAL)/Src/stm32h7xx_hal_pwr.c $(HAL)/Src/stm32h7xx_hal_pwr_ex.c $(HAL)/Src/stm32h7xx_hal_cortex.c \
         $(wildcard $(GEN)/*.c)
+ifeq ($(STREAM),1)
+SRCS += $(HAL)/Src/stm32h7xx_hal_gpio.c $(HAL)/Src/stm32h7xx_hal_uart.c $(HAL)/Src/stm32h7xx_hal_uart_ex.c \
+        $(HAL)/Src/stm32h7xx_hal_dma.c $(HAL)/Src/stm32h7xx_hal_dma_ex.c
+endif
 ASRC := $(CUBE)/Drivers/CMSIS/Device/ST/STM32H7xx/Source/Templates/gcc/startup_stm32h7b3xxq.s
 
 all: $(BUILD)/fw.elf

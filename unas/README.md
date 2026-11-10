@@ -106,7 +106,8 @@ the model's own Keras; `path_check.py` compares the fork's trainer with `select_
 | `seed_variance.py exid_*` | trains the architectures found by the highD searches on exiD (both recipes) | `datasets/exid/results/seeds/seed_variance*.jsonl` |
 | `transfer_eval.py` | applies the deployed highD searched models to exiD with the highD input scaling | `datasets/exid/results/transfer_searched.jsonl` |
 | `select_by_seeds.py <search>` | v2 searches: shortlists the 12 candidates with the best single-run validation metric, retrains each with five seeds, picks the best mean validation metric and the smallest model within one standard error of it; test data never enter the choice | `datasets/highd/results/seeds/select_<search>.jsonl`, `datasets/highd/results/nas-v2/<search>/` |
-| `input_scaling_check.py [task ...]` | trains the corrected LCIR choices with five seeds on raw and on per-feature min-max scaled inputs and converts every run to full int8 (int8 I/O): with raw inputs one int8 input scale leaves up to half the features fewer than 8 steps | `datasets/dmir/results/seeds/input_scaling.jsonl` |
+| `input_scaling_check.py [task ...]` | trains the corrected LCIR choices with five seeds on raw and on per-feature min-max scaled inputs and converts every run to full int8 (int8 I/O): with raw inputs one int8 input scale leaves up to half the features fewer than 8 steps; `CHOICES_FROM=<search>,...` scores the choices of named searches instead, on the inputs each was searched on | `datasets/dmir/results/seeds/input_scaling.jsonl` |
+| `run_mm_searches.sh` | the three corrected seed-42 LCIR searches again on min-max scaled inputs (runs named `*_mm*`; `DMIR_SCALE=minmax` in `dmir_dataset.py`, set from the name by the runners, `select_by_seeds.py` and `final_eval.py`), their selections, then float and int8 scores on fresh seeds 100-104 for the new and the raw-input choices | `datasets/dmir/results/seeds/input_scaling_mm.jsonl` |
 | `resource_bias.py [search ...]` | for every evaluated candidate of a search: the fork's stored peak memory, size and MACs against the Keras model's weights and MACs and the faithful graph (CPU, from the fork's state files) | `datasets/highd/results/resource_bias.json` |
 
 ## Spending training runs under noise (2026-11-02)
@@ -193,6 +194,19 @@ Outputs: `datasets/exid/results/nas-v2/twod_cls_v4_k3_<arm>_s<seed>/`, `seeds/se
 Both run in the WSL `dmir_nas` venv and resume from their output files. The
 hand-built baselines take a seed argument: `scripts/run_baseline.py <task> <seed>`
 (DMIR) and `datasets/highd/train_highd.py <task> <run> <seed>`.
+
+## Hardware in the loop, step 1 (2026-11-10)
+
+The board takes the test split one frame at a time, as a sensor would deliver it: the streaming build of
+`firmware/h7b3` (`make STREAM=1`) reads a frame of raw features from the ST-LINK virtual COM port, scales
+and quantizes it with the training statistics and the network's input quantization, keeps the last 10
+frames and runs the network on every frame once the window is full (26 decisions per 35-frame highD or
+exiD scenario, the protocol's windows).
+
+| script | what it does |
+|---|---|
+| `hil_prepare.py <tflite>` | WSL: the firmware header (window, per-feature offset and range, input quantization) and the host reference (int8 frames and TFLite outputs for every test window), both under `firmware/build/stream/` (not versioned: training statistics and test data) |
+| `hil_stream.py <tflite> [--rate 5] [--limit N]` | Windows: generates, builds and flashes the streaming firmware, replays the test scenarios at `--rate` frames per second (0 = as fast as the link allows) and compares the board's int8 outputs with the host reference; writes agreement, the protocol's metrics from the board's outputs, cycles per frame and the host round trip to `datasets/<ds>/results/hil/hil_stream.jsonl` |
 
 ## Thresholds (first pass, in `dmir_config.py`)
 
