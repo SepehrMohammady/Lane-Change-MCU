@@ -50,6 +50,8 @@ esac
 NAME="${BASE}${TAG}_${MODE}_s${SEED}"
 case "$MODE" in single) CONFIG="$BASE" ;; costfirst) CONFIG="${BASE}cf" ;; *) CONFIG="${BASE}n" ;; esac
 export CF_TAU CF_MARGIN
+# runs named *_mm* search on min-max scaled inputs (unas/dmir_dataset.py), all others on raw units
+case "$NAME" in *_mm*) export DMIR_SCALE=minmax ;; *) export DMIR_SCALE= ;; esac
 STATE="$FORK/artifacts/$NAME/${NAME}_agingevosearch_state.pickle"      # single and costfirst; the others keep their own
 OUT="$REPO/datasets/$DS/results/nas-noise"
 mkdir -p "$OUT" "$REPO/runs/nas"

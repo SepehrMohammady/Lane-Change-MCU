@@ -89,6 +89,18 @@ def objective_of(search: str) -> str:
     return "worst" if "_worst_" in search else "pooled"
 
 
+def set_scaling(search: str) -> str:
+    """LCIR inputs as the search saw them: searches named *_mm* ran on min-max scaled inputs
+    (unas/dmir_dataset.py, DMIR_SCALE), all others on raw units. Sets DMIR_SCALE for the datasets built
+    afterwards and refuses a contradicting value already in the environment."""
+    want = "minmax" if "_mm" in search else ""
+    have = os.environ.get("DMIR_SCALE", "")
+    if have and have != want:
+        sys.exit(f"DMIR_SCALE={have!r} contradicts the search name {search}")
+    os.environ["DMIR_SCALE"] = want
+    return want
+
+
 def scores(net, x, y, task: str) -> dict:
     p = net.predict(x, batch_size=4096, verbose=0)
     if task != "cls":
@@ -137,6 +149,7 @@ def summarize(rows: list[dict], key: str, split: str) -> dict:
 
 def main(search: str, k: int = 12) -> None:
     ds_name, folder = dataset_of(search)
+    set_scaling(search)
     task = "cls" if "_cls" in search else "ttlc"
     objective = objective_of(search)
     # sort ascending on sign * metric; the worst-domain arm ranks by its own objective

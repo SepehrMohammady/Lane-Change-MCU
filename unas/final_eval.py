@@ -59,6 +59,7 @@ def chosen(search: str, folder: str) -> tuple[str, Path]:
 
 def main(search: str) -> None:
     ds_name, folder = sel.dataset_of(search)
+    sel.set_scaling(search)
     if "_cls" not in search:
         sys.exit("only the classification searches are set up")
     m = re.search(rf"_({MODES})_s(\d+)$", search)

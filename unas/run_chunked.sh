@@ -18,6 +18,8 @@ MAX_CHUNKS="${MAX_CHUNKS:-8}"
 RUN_TAG="$(date +%m%d%H%M)"
 VENV="$HOME/dmir_nas"; FORK="$HOME/uNAS"; REPO="/mnt/c/Projects/PhD/DIMIR"
 case "$CONFIG" in *_v4) NAME="$CONFIG${DMIR_V4_SUFFIX:-}" ;; *) NAME="$CONFIG" ;; esac
+# runs named *_mm* search on min-max scaled inputs (unas/dmir_dataset.py), all others on raw units
+case "$NAME" in *_mm*) export DMIR_SCALE=minmax ;; *) export DMIR_SCALE= ;; esac
 STATE="$FORK/artifacts/$NAME/${NAME}_agingevosearch_state.pickle"
 
 source "$VENV/env.sh"

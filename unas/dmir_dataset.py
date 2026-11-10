@@ -15,6 +15,12 @@ The prepared pickles already follow the official driver-wise split
 Optional `drop_indicators=True` removes the turn-signal channels for the
 label-leak ablation (indicator channels: classification 28/29, regression 3/4;
 see datasets/dmir/docs/feature-map.md).
+
+Inputs are raw units unless `scale="minmax"` (default: the DMIR_SCALE env var, see
+input_scaling()): then every feature is scaled to 0-1 by the training windows'
+range, after val/test are clipped to it, as unas/input_scaling_check.py does; a
+constant feature (intention: feature 7) stays 0. The searches on scaled inputs
+carry `_mm` in their names (2026-11-10).
 """
 import os
 import pickle
@@ -40,6 +46,15 @@ _INDICATOR_IDX = {"classification": [28, 29],
                   "regression_lcl": [3, 4], "regression_lcr": [3, 4]}
 
 
+def input_scaling() -> str:
+    """Input variant from DMIR_SCALE: "" (raw units, every search before 2026-11-10) or "minmax".
+    select_by_seeds.py and final_eval.py set it from the search name, the runners from the run name."""
+    v = os.environ.get("DMIR_SCALE", "")
+    if v not in ("", "minmax"):
+        raise ValueError(f"DMIR_SCALE must be empty or 'minmax', not {v!r}")
+    return v
+
+
 def _load(folder, sfx, split):
     base = DATA_ROOT / folder
     with open(base / f"x_{split}_{sfx}.pkl", "rb") as f:
@@ -51,9 +66,12 @@ def _load(folder, sfx, split):
 
 class DMIR_Dataset(Dataset):
     def __init__(self, task="regression_lcr", clip_to_train_range=True,
-                 drop_indicators=False):
+                 drop_indicators=False, scale=None):
         if task not in _LAYOUT:
             raise ValueError(f"task must be one of {list(_LAYOUT)}")
+        scale = input_scaling() if scale is None else scale
+        if scale not in ("", "minmax"):
+            raise ValueError(f"scale must be '' or 'minmax', not {scale!r}")
         folder, sfx, n_out = _LAYOUT[task]
         self._task = task
         self._num_classes = n_out
@@ -62,10 +80,18 @@ class DMIR_Dataset(Dataset):
         xva, yva = _load(folder, sfx, "val")
         xte, yte = _load(folder, sfx, "test")
 
+        lo, hi = xtr.min(axis=(0, 1)), xtr.max(axis=(0, 1))
         if clip_to_train_range:
-            lo, hi = xtr.min(axis=(0, 1)), xtr.max(axis=(0, 1))
             np.clip(xva, lo, hi, out=xva)
             np.clip(xte, lo, hi, out=xte)
+
+        self.input_scaling = scale or "raw"
+        if scale == "minmax":
+            span = (hi - lo).astype(np.float32)
+            span[span == 0] = 1.0
+            xtr, xva, xte = (((x - lo) / span).astype(np.float32) for x in (xtr, xva, xte))
+            self.scale_lo, self.scale_span = lo, span          # x_scaled = (x_raw - lo) / span, per feature
+            print(f"DMIR {task}: inputs min-max scaled per feature (training range)", flush=True)
 
         if drop_indicators:
             keep = [c for c in range(xtr.shape[2])

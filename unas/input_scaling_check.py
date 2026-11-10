@@ -17,6 +17,10 @@ Run in the WSL dmir_nas venv, from the fork (as select_by_seeds.py):
 Output: datasets/dmir/results/seeds/input_scaling.jsonl (one line per task, input variant and seed;
 resumable). SEEDS and EPOCH_CAP as in seed_variance.py (smoke tests: EPOCH_CAP=1 SEEDS=0
 OUT_NAME=input_scaling_smoke.jsonl).
+
+CHOICES_FROM=<search>[,<search>...] (2026-11-10) scores the "best" choice of each named search instead
+(its selection.json), on the inputs it was searched on: scaled for searches named *_mm*, raw otherwise.
+The scaling here is always this script's own `scaled`, so DMIR_SCALE is cleared for its datasets.
 """
 from __future__ import annotations
 
@@ -103,18 +107,34 @@ def train(h5, ds, cls, seed):
     return net, len(hist.history["loss"])
 
 
+def task_of(search):
+    return "classification" if "_cls" in search else "regression_lcr" if "_lcr" in search else "regression_lcl"
+
+
+def arms(tasks):
+    """(task, search, chosen network, input variants) to score."""
+    names = [s for s in os.environ.get("CHOICES_FROM", "").split(",") if s]
+    if not names:
+        return [(t, *CHOICES[t], ("raw", "scaled")) for t in tasks]
+    out = []
+    for search in names:
+        model = json.loads((NV / search / "selection.json").read_text())["best"]
+        out.append((task_of(search), search, model, ("scaled",) if "_mm" in search else ("raw",)))
+    return out
+
+
 def main(tasks):
+    os.environ["DMIR_SCALE"] = ""                            # scaling below is this script's own `scaled`
     done = set()
     if OUT.exists():
         for line in OUT.read_text().splitlines():
             r = json.loads(line)
-            done.add((r["task"], r["inputs"], r["seed"]))
-    for task in tasks:
-        search, model = CHOICES[task]
+            done.add((r["task"], r["inputs"], r["seed"], r["search"]))
+    for task, search, model, variants in arms(tasks):
         h5 = str(NV / search / f"{model}.h5")
         cls = task == "classification"
-        for variant in ("raw", "scaled"):
-            todo = [s for s in sv.SEEDS if (task, variant, s) not in done]
+        for variant in variants:
+            todo = [s for s in sv.SEEDS if (task, variant, s, search) not in done]
             if not todo:
                 continue
             ds = sv.DMIR_Dataset(task=task)
