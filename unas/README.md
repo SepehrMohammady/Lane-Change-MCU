@@ -128,8 +128,16 @@ changes only how training runs are spent; the budget counts training runs, 210 f
 existing shortlist and runs without training (written to `selection_costfirst.json`); `FINAL_SEL_TAG=_costfirst
 FINAL_TAG=_costfirst final_eval.py <search>` trains that choice with the fresh seeds.
 
+Outcome of the `costfirst` pilot (highD classifier and LCIR intention, search seeds 42 and 43, fresh seeds
+100-104; `final_eval.jsonl` mode `costfirst` and `final_eval_costfirst.jsonl`): its choices use 1.08x (highD,
+11,970 and 5,841 MACs) and 1.47x (LCIR, 44,900 and 19,908 MACs) the MACs of the `single` searches with the same
+final choice, so the change in parent selection does not pay off. In the search histories: on highD, the plateau
+networks cheaper than the final choice lose a median 0.32 points when retrained with five seeds (their single run
+was lucky); on LCIR seed 42, a 107,200-MAC network reached the plateau first and plateau-first parent selection
+only walked down from it (44,900 MACs after 150 runs).
+
 ```bash
-bash /mnt/c/Projects/PhD/DIMIR/unas/run_noise_aware.sh highd_cls|dmir_cls single|random|fixed|adaptive SEED
+bash /mnt/c/Projects/PhD/DIMIR/unas/run_noise_aware.sh highd_cls|dmir_cls single|random|fixed|adaptive|costfirst SEED
 SMOKE=1 bash .../run_noise_aware.sh highd_cls adaptive 42      # mechanics only, separate files
 ```
 
