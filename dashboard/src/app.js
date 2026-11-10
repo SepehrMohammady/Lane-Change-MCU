@@ -373,7 +373,7 @@
       h("span", {}, h("i", { class: "sw", style: "background:var(--acc)" }), "taken to the board"),
       task.fronts.map((fr, i) => h("span", {}, h("i", { class: "sw", style: "background:" + frontColor(fr, i) }), fr.label)),
       task.refs.some(r => r.kind === "point") ? h("span", {}, h("i", { class: "sw sq", style: "background:var(--ref);transform:rotate(45deg)" }), "reference") : null,
-      task.refs.some(r => r.kind === "line") ? h("span", {}, h("i", { class: "sw line", style: "background:var(--ref)" }), "published figure") : null,
+      task.refs.some(r => r.kind === "line") ? h("span", {}, h("i", { class: "sw line", style: "background:var(--ref)" }), "literature model") : null,
       showSeeds ? h("span", {}, h("i", { class: "sw", style: "background:transparent;border:2px solid var(--ink-2)" }), "mean ± 1 std over seeds") : null);
 
     const table = () => simpleTable(["model", "search", "parameters", "int8 KB", task.metric.name],

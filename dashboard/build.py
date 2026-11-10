@@ -585,7 +585,7 @@ def build_highd(share: bool):
                    {"id": "cls_v3", "model": kept["cls_v3"][1], "front": None, "params": 7919, "label": "third search, 7.9 k", "seed_key": "highd_cls_v3_best"},
                    {"id": "cls_v4", "model": kept["cls_v4"][1], "front": 2, "params": 3968, "label": "final search, 4.0 k", "seed_key": "highd_cls_v4_best"}],
          "refs": [{"kind": "point", "label": "hand-designed CNN", "params": hand_params(HIGHD, "highd_baseline_cls"), "value": 0.9109, "seed_key": "highd_baseline_cls"},
-                  {"kind": "line", "label": "published model (T-IV 2022)", "value": refs["published"]["acc"]}]},
+                  {"kind": "line", "label": "EarlyLCPred, retrained with its authors' code", "value": refs["retrained"]["acc"]}]},
         {"id": "highd_ttlc", "label": "Time to lane change", "long": "Seconds until the lane crossing (0.2 to 5.2 s)",
          "metric": {"key": "rmse", "name": "test RMSE (s)", "better": "low", "fmt": "s3"},
          "fronts": [{"label": "first search", "rows": read_front(fr / "highd_ttlc.csv", "test_rmse")},
@@ -594,7 +594,7 @@ def build_highd(share: bool):
                    {"id": "ttlc_v2", "model": kept["ttlc_v2"][1], "front": None, "params": 25883, "label": "second search, 26 k", "seed_key": "highd_ttlc_v2p_best"},
                    {"id": "ttlc_v4", "model": kept["ttlc_v4"][1], "front": 1, "params": 4940, "label": "final search, 4.9 k", "seed_key": "highd_ttlc_v4_best"}],
          "refs": [{"kind": "point", "label": "hand-designed CNN", "params": hand_params(HIGHD, "highd_baseline_ttlc"), "value": 0.2763, "seed_key": "highd_baseline_ttlc"},
-                  {"kind": "line", "label": "published model (T-IV 2022)", "value": refs["published"]["ttlc_rmse"]}]},
+                  {"kind": "line", "label": "EarlyLCPred, retrained with its authors' code", "value": refs["retrained"]["ttlc_rmse"]}]},
     ]
 
     quant = [
@@ -608,12 +608,13 @@ def build_highd(share: bool):
                                   "cls_v4": "Final search", "baseline_ttlc": "Hand-designed, time to change",
                                   "ttlc_v2": "Second search, time to change", "ttlc_v4": "Final search, time to change"})
 
-    pub, hb, sr = refs["published"], refs["baseline_their_metrics"], refs["searched_their_metrics"]
+    # EarlyLCPred retrained with its authors' code, five seeds (replaces the published Table III, 2026-11-10)
+    pub, hb, sr = refs["retrained"], refs["baseline_their_metrics"], refs["searched_their_metrics"]
     # the 4.0 k classifier of the searches with the faithful cost count, scored 2026-10-02
     # (datasets/highd/eval_their_protocol_keras.py; TTLC from its 4.9 k regressor)
     s4 = read_json(HIGHD / "results/their_protocol_eval_model_1790282740507531593_621856.json", None)
     def rows(p, h, s53, key4):
-        r = [["published", p], ["hand-designed", h], ["searched 5.3 k", s53]]
+        r = [["EarlyLCPred, retrained", p], ["hand-designed", h], ["searched 5.3 k", s53]]
         return r + [["searched 4.0 k", s4[key4]]] if s4 else r
     bench = {
         "metrics": [
@@ -625,11 +626,13 @@ def build_highd(share: bool):
         ],
         "splits": refs["splits"],
         "notes": ["Single runs of the deployed weights. Our accuracy moves by one to three points between training seeds (Seeds tab); "
-                  "the means stay above the published figure, and one hand-recipe run of the 5.3 k model falls to 81.4%.",
+                  "the means stay above EarlyLCPred retrained with its authors' code (82.0%, five seeds), and one hand-recipe run "
+                  "of the 5.3 k model falls to 81.4%.",
                   "Scored with the metric functions transcribed from the published code.",
-                  "Our reimplementation of their protocol, not a run of their own code.",
-                  "Their trained weights are not public, so their accuracy cannot be re-run in our pipeline; the cost of "
-                  "their architecture was measured with random weights (cost does not depend on the weights)."],
+                  "Our models: our reimplementation of their protocol. EarlyLCPred: their own code, data preparation and "
+                  "recipe on our copy of highD, five seeds, scored with dropout off on all 693 test scenarios (their "
+                  "evaluation leaves dropout on, about 1.3 points lower).",
+                  "The cost of their architecture was measured with random weights (cost does not depend on the weights)."],
     }
 
     media = []
@@ -666,7 +669,7 @@ def build_highd(share: bool):
         "kpis": [
             {"label": "Accuracy, five runs", "value": mean_only(stat(seeds, "highd_cls_v4_best", "acc")),
              "sub": f"final search, 4.0 k · hand-designed 8.4 k CNN {mean_only(stat(base, 'highd_baseline_cls', 'acc'))} · "
-                    f"published {pub['acc'] * 100:.0f}%",
+                    f"EarlyLCPred retrained {pub['acc'] * 100:.1f}%",
              "seed": (f"best saved classifier of the first two searches: {rerank['best_mean']['stats']['mean'] * 100:.1f}% at "
                       f"{rerank['best_mean']['params'] / 1000:.0f} k") if rerank else None},
             {"label": "Energy per prediction", "value": mj(energy_of(reg, "cls_v4", "int8 PTQ", "int8")),
@@ -674,10 +677,10 @@ def build_highd(share: bool):
                     f"5.3 k model {mj(energy_of(reg, 'cls_aaaaap', 'int8 PTQ', 'int8'))}",
              "seed": "above the core asleep, measured on our board"},
             {"label": "Robust horizon", "value": f"{s4['tau_c_s']:.2f} s" if s4 else "–",
-             "sub": f"final 4.0 k model · 5.3 k model {sr['tau_c_s']:.2f} s · published {pub['tau_c_s']:.2f} s"},
+             "sub": f"final 4.0 k model · 5.3 k model {sr['tau_c_s']:.2f} s · EarlyLCPred retrained {pub['tau_c_s']:.2f} s"},
             {"label": "Time-to-change RMSE", "value": mean_only(stat(seeds, "highd_ttlc_v4_best", "rmse"), False),
              "sub": f"final search, 4.9 k · hand-designed {mean_only(stat(base, 'highd_baseline_ttlc', 'rmse'), False)} · "
-                    f"published {pub['ttlc_rmse']} s",
+                    f"EarlyLCPred retrained {pub['ttlc_rmse']:.3f} s",
              "seed": f"five runs each, {(latency(reg, 'baseline_ttlc') / latency(reg, 'ttlc_v4')):.1f}× faster than the hand-designed CNN"},
         ],
         "pipeline": [["Searches", str(sum(len(t["fronts"]) for t in tasks) + sum(1 for t in tasks for p in t["picks"] if p["front"] is None))],

@@ -112,7 +112,7 @@ both. Five seeds each, test sets:
 
 | model | highD accuracy | highD TTLC RMSE | exiD accuracy | exiD TTLC RMSE |
 |---|--:|--:|--:|--:|
-| published (Mozaffari et al.) | 83% | 0.629 s | – | – |
+| EarlyLCPred (Mozaffari et al.), 3.2 M, retrained with the authors' code⁵ | 82.01 ± 0.59% | 0.752 ± 0.010 s | – | – |
 | hand-designed CNN (8.4 k, TTLC 8.2 k), trained on that dataset | 92.11 ± 0.71% | 0.276 ± 0.009 s | 89.93 ± 0.24% | 0.406 ± 0.008 s |
 | searched classifier, 7.9 k¹ | 92.16 ± 0.71% | – | 89.50 ± 0.31% | – |
 | searched classifier, 5.3 k¹ | 90.83 ± 1.57% | – | 87.40 ± 0.14% | – |
@@ -124,8 +124,8 @@ both. Five seeds each, test sets:
 | hand-designed CNN trained on highD, applied as is | – | – | 61.24 ± 2.32% | 0.867 ± 0.062 s |
 | the same, fine-tuned on exiD | – | – | 90.13 ± 0.22% | 0.393 ± 0.002 s |
 
-- On highD every retrained model beats the published figures on average, and the
-  deployed 5.3 k int8 classifier predicts in 0.106 ms on the Cortex-M7.
+- On highD every model in the table beats EarlyLCPred retrained with its authors' code, and
+  the deployed 5.3 k int8 classifier predicts in 0.106 ms on the Cortex-M7.
 - A highD model at motorway junctions gets exits right in 33% of the windows and
   lane keeping in 45%; trained on exiD, 94% and 85%.
 - Starting from highD weights adds 1.3 points with 10% of the exiD training data,
@@ -158,6 +158,15 @@ both. Five seeds each, test sets:
   0.263 ms (float32) and 0.195 ms (int8), 2.5 and 1.8 times faster than the
   hand-designed CNN (0.669 and 0.350 ms). The final TTLC regressor runs in 0.396 and
   0.252 ms, 1.7 and 1.4 times faster, for about 0.01 s more RMSE.
+- ⁵ The authors' public code, data preparation and recipe on our copy of highD, five seeds,
+  scored with dropout off on all 693 test scenarios (their evaluation leaves dropout on, about
+  1.3 points lower).
+- The search tool's trainer, in its Ray workers, used Keras 2 metrics on Keras 3 models
+  (tfmot sets `TF_USE_LEGACY_KERAS`), so every search before 2026-11-03 ranked candidates
+  on a score accumulated over the whole run (`unas/patch_fork.py`, patch 3, fixes it). The
+  five-seed retrains in this table are not affected, but which candidates the searches kept
+  is. The searches were run again with the fixed trainer, two search seeds per task (result
+  files named `*_k3*`); this table will be updated with them.
 - On the boards the hand-designed highD CNN takes 0.669 ms (float32) and 0.350 ms
   (int8) on the Cortex-M7: as accurate as the 7.9 k searched classifier and 12%
   faster, 4.3 times slower than the 5.3 k one, which is 1.3 points less accurate

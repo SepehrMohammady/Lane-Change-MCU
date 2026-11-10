@@ -661,6 +661,25 @@
         698
       ],
       "_format": "[ours, paper]"
+    },
+    "retrained": {
+      "label": "EarlyLCPred (Mozaffari et al., IEEE T-IV 2022), retrained with the authors' code",
+      "acc": 0.8201,
+      "recall": 0.8682,
+      "precision": 0.8429,
+      "f1": 0.8552,
+      "auc": 0.8807,
+      "tau_f_s": 4.7316,
+      "tau_c_s": 4.2265,
+      "ttlc_rmse": 0.7522,
+      "std": {
+        "acc": 0.0059,
+        "f1": 0.0047,
+        "auc": 0.0079,
+        "tau_c_s": 0.0957,
+        "ttlc_rmse": 0.0099
+      },
+      "note": "The authors' public code, data preparation and recipe on our copy of highD; mean of five seeds, scored with dropout off on all 693 test scenarios (their evaluation leaves dropout on, about 1.3 points lower)."
     }
   }
 }
