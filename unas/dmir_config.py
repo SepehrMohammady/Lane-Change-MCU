@@ -188,3 +188,15 @@ def get_dmir_cls_v4n_setup(**_):
         b = setup["config"]["bound_config"]
         b.peak_mem_bound, b.model_size_bound, b.mac_bound = 10 ** 9, 10 ** 9, 10 ** 12
     return setup
+
+
+# Cost-first search (2026-11-10): the final-search setup above with the noise-aware cost-first parent selection of
+# configs/cost_first_search.py (CF_TAU set by unas/run_noise_aware.sh, mode costfirst).
+def get_dmir_cls_v4cf_setup(**_):
+    from configs.cost_first_search import CostFirstSearch
+    setup = get_dmir_cls_v4_setup()
+    setup["config"]["search_algorithm"] = CostFirstSearch
+    if os.environ.get("NAS_SMOKE_BOUNDS") == "1":     # smoke tests only: every candidate feasible
+        b = setup["config"]["bound_config"]
+        b.peak_mem_bound, b.model_size_bound, b.mac_bound = 10 ** 9, 10 ** 9, 10 ** 12
+    return setup

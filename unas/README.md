@@ -122,6 +122,11 @@ changes only how training runs are spent; the budget counts training runs, 210 f
 | `random` | random architectures, 150 runs | the same selection (60) |
 | `fixed` | 70 candidates x 3 runs, scored by the mean | best mean among candidates within the resource bounds |
 | `adaptive` | one run per new candidate; extra runs, up to five, for candidates within the bounds whose interval still reaches the best one | best mean among those with five runs |
+| `costfirst` (2026-11-10, `cost_first_search.py`) | the fork's aging evolution, 150 runs; in parent selection, candidates within the bounds whose validation error is within `CF_TAU` of the best one compete on MACs and beat all others | the 12 cheapest of those x 5 seeds (60); the cheapest whose mean is within `CF_MARGIN` of the best mean |
+
+`SEL_RESCORE=1 SEL_TAG=_costfirst select_by_seeds.py <search>` applies the `costfirst` final choice to a search's
+existing shortlist and runs without training (written to `selection_costfirst.json`); `FINAL_SEL_TAG=_costfirst
+FINAL_TAG=_costfirst final_eval.py <search>` trains that choice with the fresh seeds.
 
 ```bash
 bash /mnt/c/Projects/PhD/DIMIR/unas/run_noise_aware.sh highd_cls|dmir_cls single|random|fixed|adaptive SEED

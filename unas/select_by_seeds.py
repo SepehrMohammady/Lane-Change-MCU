@@ -57,6 +57,13 @@ tf, keras = sv.tf, sv.keras
 REPO = sv.REPO
 SEEDS = [int(x) for x in os.environ.get("SEEDS", "0,1,2,3,4").split(",")]
 TAG = os.environ.get("SEL_TAG", "")          # suffix of the output files, e.g. "_permuted"
+# Cost-first search (2026-11-10, unas/cost_first_search.py). SEL_RULE=costfirst: shortlist the K cheapest (MACs)
+# candidates whose single-run validation error is within CF_TAU of the best (filled by validation error if
+# fewer), and choose the cheapest whose five-seed validation mean is within CF_MARGIN of the best mean.
+# SEL_RESCORE=1: no training; apply that choice to the shortlist and runs a search already has (the uNAS
+# baseline with the cost-first choice); writes selection{SEL_TAG}.json only.
+RULE = os.environ.get("SEL_RULE", "best")
+RESCORE = os.environ.get("SEL_RESCORE") == "1"
 
 
 def load_candidates(search: str) -> list[dict]:
@@ -134,7 +141,9 @@ def main(search: str, k: int = 12) -> None:
     objective = objective_of(search)
     # sort ascending on sign * metric; the worst-domain arm ranks by its own objective
     key, sign = ("worst_acc" if objective == "worst" else "acc", -1) if task == "cls" else ("rmse", 1)
-    if ds_name == "dmir":
+    if RESCORE:
+        ds = None                                 # no training: the runs are on disk
+    elif ds_name == "dmir":
         ds = sv.DMIR_Dataset(task="classification" if task == "cls"
                              else "regression_lcr" if "_lcr" in search else "regression_lcl")
     elif ds_name == "highd_exid":
@@ -147,14 +156,20 @@ def main(search: str, k: int = 12) -> None:
         sys.exit(f"no sidecars under ~/uNAS/artifacts/{search}/models")
     # single-run validation metric as the search saw it: val_error = 1 - acc, or val MAE
     cands.sort(key=lambda r: (r["val_error"], r["params"]))
-    short = cands[:k]
+    if RULE == "costfirst" and not RESCORE:
+        tau = float(os.environ["CF_TAU"])
+        plateau = [r for r in cands if r["val_error"] <= cands[0]["val_error"] + tau]
+        short = sorted(plateau, key=lambda r: (r["macs"], r["val_error"]))[:k]
+        short += [r for r in cands if r not in short][:k - len(short)]
+    else:
+        short = cands[:k]
     dest = results / "nas-v2" / search
     dest.mkdir(parents=True, exist_ok=True)
     for r in short:
         for suffix in (".h5", ".json"):
             src = Path(r["h5"]).with_suffix(suffix)
             shutil.copy2(src, dest / src.name)
-    out = results / "seeds" / f"select_{search}{TAG}.jsonl"
+    out = results / "seeds" / f"select_{search}{'' if RESCORE else TAG}.jsonl"
     done = {}
     if out.exists():
         for line in out.read_text().splitlines():
@@ -166,6 +181,8 @@ def main(search: str, k: int = 12) -> None:
         for seed in SEEDS:
             if (name, seed) in done:
                 continue
+            if RESCORE:
+                sys.exit(f"SEL_RESCORE: no run of {name} with seed {seed} in {out.name}")
             res = train_one(r["h5"], ds, task, seed, ds_name, objective)
             rec = {"search": search, "model": name, "params": r["params"], "seed": seed,
                    "search_val_error": r["val_error"], "pmu": r["pmu"], "ms": r["ms"], "macs": r["macs"],
@@ -192,13 +209,26 @@ def main(search: str, k: int = 12) -> None:
            "saved_candidates": len(cands),
            "rules": {"best": "best mean validation metric",
                      "smallest": "fewest parameters within one standard error of the best mean validation metric"},
-           "best": best["model"], "smallest": smallest["model"], "table": table,
+           "best": best["model"], "smallest": smallest["model"], "chosen": best["model"], "table": table,
            "utc": datetime.now(timezone.utc).isoformat(timespec="seconds")}
-    sel["train_order"] = getattr(ds, "train_order", "as stored")
+    cheapest = None
+    if RULE == "costfirst" or RESCORE:
+        margin = float(os.environ["CF_MARGIN"])
+        tied = [t for t in table if sign * (t["val"]["mean"] - best["val"]["mean"]) <= margin]
+        cheapest = min(tied, key=lambda t: (t["macs"], sign * t["val"]["mean"]))
+        sel["chosen"] = cheapest["model"]
+        sel["rules"]["chosen"] = (f"fewest MACs among the candidates whose mean validation metric is within {margin} "
+                                  f"of the best mean" + ("" if RESCORE else
+                                  f"; shortlist: the {k} cheapest with single-run validation error within "
+                                  f"{os.environ['CF_TAU']} of the best"))
+    else:
+        sel["rules"]["chosen"] = "best"
+    sel["train_order"] = getattr(ds, "train_order", None) or next(iter(done.values())).get("train_order", "as stored")
     (dest / f"selection{TAG}.json").write_text(json.dumps(sel, indent=1))
     for t in table:
-        tag = ("best " if t is best else "") + ("smallest" if t is smallest else "")
-        print(f"{t['model']:>34} {t['params']:>7,}  val {t['val']['mean']:.4f}±{t['val']['std']:.4f}  "
+        tag = ("best " if t is best else "") + ("smallest " if t is smallest else "") + \
+              ("chosen" if t is cheapest else "")
+        print(f"{t['model']:>34} {t['params']:>7,} p {t['macs']:>8,} MACs  val {t['val']['mean']:.4f}±{t['val']['std']:.4f}  "
               f"test {t['test']['mean']:.4f}±{t['test']['std']:.4f}  {tag}", flush=True)
 
 

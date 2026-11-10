@@ -38,16 +38,21 @@ import select_by_seeds as sel                               # noqa: E402  (sets 
 keras = sel.keras
 REPO = sel.REPO
 SEEDS = [int(x) for x in os.environ.get("FINAL_SEEDS", "100,101,102,103,104").split(",")]
-MODES = "single|random|fixed|adaptive|pooled|worst"
+MODES = "single|random|fixed|adaptive|pooled|worst|costfirst"
+# Cost-first search (2026-11-10): FINAL_SEL_TAG=_costfirst evaluates the network a search's selection_costfirst.json
+# chose (select_by_seeds.py SEL_RESCORE=1, the uNAS baseline with the cost-first choice); pair it with
+# FINAL_TAG=_costfirst so its runs go to their own file.
+SEL_FILE = f"selection{os.environ.get('FINAL_SEL_TAG', '')}.json"
 
 
 def chosen(search: str, folder: str) -> tuple[str, Path]:
     results = REPO / "datasets" / folder / "results"
     m = re.search(rf"_({MODES})_s(\d+)$", search)
     mode = m.group(1) if m else "single"
-    if mode in ("single", "random", "pooled", "worst"):
-        sel_json = json.loads((results / "nas-v2" / search / "selection.json").read_text())
-        return sel_json["best"], results / "nas-v2" / search / f"{sel_json['best']}.h5"
+    if mode in ("single", "random", "pooled", "worst", "costfirst"):
+        sel_json = json.loads((results / "nas-v2" / search / SEL_FILE).read_text())
+        name = sel_json.get("chosen", sel_json["best"])      # files before 2026-11-10 hold "best" only
+        return name, results / "nas-v2" / search / f"{name}.h5"
     final = json.loads((results / "nas-noise" / search / f"{search}_final.json").read_text())
     return f"candidate_{final['chosen']['candidate']}", results / "nas-noise" / search / f"{search}_final.h5"
 
