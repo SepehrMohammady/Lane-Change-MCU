@@ -109,6 +109,7 @@ the model's own Keras; `path_check.py` compares the fork's trainer with `select_
 | `input_scaling_check.py [task ...]` | trains the corrected LCIR choices with five seeds on raw and on per-feature min-max scaled inputs and converts every run to full int8 (int8 I/O): with raw inputs one int8 input scale leaves up to half the features fewer than 8 steps; `CHOICES_FROM=<search>,...` scores the choices of named searches instead, on the inputs each was searched on | `datasets/dmir/results/seeds/input_scaling.jsonl` |
 | `run_mm_searches.sh` | the three corrected seed-42 LCIR searches again on min-max scaled inputs (runs named `*_mm*`; `DMIR_SCALE=minmax` in `dmir_dataset.py`, set from the name by the runners, `select_by_seeds.py` and `final_eval.py`), their selections, then float and int8 scores on fresh seeds 100-104 for the new and the raw-input choices | `datasets/dmir/results/seeds/input_scaling_mm.jsonl` |
 | `input_clip_check.py [task ...]` | trains the corrected LCIR choices with five seeds on raw inputs and converts every run to full int8 (int8 I/O) with the calibration windows as they are and clipped to [-B, B] for eight bounds B: the features are standardized with rare extremes of several hundred, which set the int8 input range; `--report` picks B per head on validation and applies the rule on test | `datasets/dmir/results/seeds/input_clip.jsonl` |
+| `input_equalize_check.py` | the hand-designed exiD classifier of seeds 0-4 (bundles of `scripts/export_hand_cnn.py exid5`) with a per-feature input gain folded into the first convolution, exact in float, for five strengths; full int8 (int8 I/O) on validation and test; `--report` picks the strength on validation and applies the rule on test | `datasets/exid/results/seeds/input_equalize.jsonl` |
 | `resource_bias.py [search ...]` | for every evaluated candidate of a search: the fork's stored peak memory, size and MACs against the Keras model's weights and MACs and the faithful graph (CPU, from the fork's state files) | `datasets/highd/results/resource_bias.json` |
 
 Outcome of `run_mm_searches.sh` (2026-11-11, test, fresh seeds 100-104): searched on scaled inputs, the LCR and
@@ -128,6 +129,14 @@ the int8 builds take 0.520, 1.183 and 0.243 ms against 0.805, 3.229 and 0.507 ms
 is deployed in int8 (`CALIB_CLIP=<B> prepare_deploy_lcir.py`, files `lcir_v4k3sat_*`). The same extremes set
 the ranges of the min-max scaling used by the scaled-input searches, where the central 98% of the values of 4
 to 7 features fills under 5% of the unit interval; whether that causes their float loss was not tested.
+
+Outcome of `input_equalize_check.py` (2026-11-11, exiD, hand-designed classifier, seeds 0-4, rule fixed before
+the run): in int8 this network loses 2.4 points on average (89.93% to 87.49%, up to 4.9 for one seed), and the
+whole loss sits in the weights of its first convolution, where the largest weight on one input feature is 66 to
+143 times the largest on another. A gain g_f = (W_f / max W)^0.25 per input feature, folded into that layer
+(float outputs equal to 1e-4), brings int8 to 89.50%, 0.43 points under float32. On a board the gain is part of
+the scaling table. `EQUALIZE_ALPHA=0.25 deploy_hand_cnn.py` writes the files (`exid_dscnn_cls_eq_*`: 89.44% in
+int8 against 86.82% before, seed 0).
 
 ## Spending training runs under noise (2026-11-02)
 
@@ -248,7 +257,7 @@ exiD (hand-designed CNN trained on exiD, seed 0, files from `scripts/export_hand
 equal the reference in all but 6 windows (at most 2 LSB) and the TTLC network's in all but 1 (1 LSB). From the
 board's outputs: 86.82% accuracy, τ_c 4.65 s, RMSE 0.417 s, the values of the deploy records; the network takes
 0.315 ms per frame. In float32 this classifier reaches 89.94%, so int8 costs it 3.1 points on exiD against 0.2
-on highD (not examined yet). `hil_host_check.py` on the 8 differing windows of all replays (6 + 1 on exiD, 1 on
+on highD; `input_equalize_check.py` (above) finds the cause and removes the loss. `hil_host_check.py` on the 8 differing windows of all replays (6 + 1 on exiD, 1 on
 highD) and 32 control windows per network: ST's C model on the PC returns the board's values in every one, so
 the board equals ST's C model wherever checked, and the few differences are between ST's kernels and the TFLite
 interpreter.

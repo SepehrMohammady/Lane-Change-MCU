@@ -141,6 +141,10 @@ def main(tfl_arg: str) -> None:
     hi = train.reshape(-1, n_feat).max(0)
     span = hi - lo + 1e-12                                  # as unas/highd_dataset.py
     assert lo.dtype == span.dtype == np.float32
+    record = tfl.parent / (tfl.stem.rsplit("_int8_io", 1)[0] + "_deploy.json")
+    gain = json.loads(record.read_text()).get("input_gain") if record.exists() else None
+    if gain is not None:                                    # equalized network: the gain goes into the span
+        span = (span / np.asarray(gain, np.float32)).astype(np.float32)
 
     it, inp, out = interface(tfl, IN_LEN, n_feat)
     (si, zi), (so, zo) = inp["quantization"], out["quantization"]

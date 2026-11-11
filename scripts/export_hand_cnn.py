@@ -16,7 +16,10 @@ with int8 I/O):
 
 All windows are channel-last (N, T, C), the layout of the searched models.
 
-    python scripts/export_hand_cnn.py [lcir] [highd] [exid]      (default: lcir highd)
+    python scripts/export_hand_cnn.py [lcir] [highd] [exid] [exid5]      (default: lcir highd)
+
+exid5 writes the exiD classifier of seeds 0-4 (exid_dscnn_cls_seed<n>.npz), each with the validation
+windows as well, for unas/input_equalize_check.py.
 
 Output: datasets/<dmir|highd|exid>/data/hand_export/<name>.npz (gitignored: holds data).
 LCIR weights come from scripts/run_baseline.py <task> --save; highD weights are
@@ -97,19 +100,24 @@ def export_lcir(task: str) -> None:
          {"y_test": bundle.y_test})
 
 
-def export_highd(task: str, ds: str = "highd") -> None:
+def export_highd(task: str, ds: str = "highd", seed: int | None = None) -> None:
     prep = ROOT / "datasets" / ds / "data" / "prepared"
     ckpt = (ROOT / "datasets/highd/results" / f"highd_baseline_{task}_v2.pt" if ds == "highd" else
-            ROOT / "datasets" / ds / "results" / "weights" / f"{ds}_baseline_{task}_seed0.pt")
+            ROOT / "datasets" / ds / "results" / "weights" / f"{ds}_baseline_{task}_seed{seed or 0}.pt")
     xtr, _, _ = make_windows(*load_split(prep, "train"))
     lo, hi = norm_stats(xtr)
     xte, yte, tte = make_windows(*load_split(prep, "test"))
     model = BaselineDSCNN(n_features=18, n_outputs=3 if task == "cls" else 1)
     model.load_state_dict(torch.load(ckpt, weights_only=True))
-    save(ROOT / "datasets" / ds / "data" / "hand_export" / f"{ds}_dscnn_{task}.npz", model,
+    extras = {"y_test": yte, "ttlc_test": tte.astype(np.float32)}
+    name = f"{ds}_dscnn_{task}.npz"
+    if seed is not None:                                    # per-seed bundle, with the validation windows
+        xva, yva, _ = make_windows(*load_split(prep, "val"))
+        extras.update(x_val=apply_norm(xva, lo, hi).astype(np.float32), y_val=yva)
+        name = f"{ds}_dscnn_{task}_seed{seed}.npz"
+    save(ROOT / "datasets" / ds / "data" / "hand_export" / name, model,
          "cls" if task == "cls" else "ttlc", str(ckpt.relative_to(ROOT)),
-         apply_norm(xtr, lo, hi).astype(np.float32), apply_norm(xte, lo, hi).astype(np.float32),
-         {"y_test": yte, "ttlc_test": tte.astype(np.float32)})
+         apply_norm(xtr, lo, hi).astype(np.float32), apply_norm(xte, lo, hi).astype(np.float32), extras)
 
 
 if __name__ == "__main__":
@@ -121,3 +129,6 @@ if __name__ == "__main__":
         if ds in which:
             for t in ("cls", "ttlc"):
                 export_highd(t, ds)
+    if "exid5" in which:
+        for seed in range(5):
+            export_highd("cls", "exid", seed)

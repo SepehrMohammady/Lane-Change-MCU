@@ -16,6 +16,12 @@ Run in the WSL dmir_nas venv, CPU-safe:
 
 Emits <stem>_<f32|float32>.tflite, <stem>_int8.tflite, <stem>_int8_io.tflite and
 <stem>_deploy.json (parity, test metrics of the Keras model and of each file).
+
+EQUALIZE_ALPHA=<alpha> (2026-11-11, unas/input_equalize_check.py) feeds the network g_f x with the
+per-feature gain g_f = (W_f / max W)^alpha and divides the first convolution's weights by g_f; the
+float outputs do not change and the int8 weights of that layer keep their resolution. The files are
+then named <stem>_eq_*, and the deploy record carries alpha and the gains, which a board folds into
+its scaling table (unas/hil_prepare.py).
 """
 import json
 import os
@@ -124,6 +130,16 @@ def main(bundle, out_dir, f32_suffix="f32"):
            "variants": {}}
     calib = z["x_calib"].astype(np.float32)
     x = z["x_test"].astype(np.float32)
+    alpha = float(os.environ.get("EQUALIZE_ALPHA", "0") or 0)
+    if alpha:
+        from input_equalize_check import gains
+        g, _ = gains(model, alpha)
+        g = g.astype(np.float32)
+        layer = model.get_layer("stem_conv")
+        layer.set_weights([layer.get_weights()[0] / g[None, :, None]])
+        calib, x, stem = calib * g, x * g, stem + "_eq"
+        rec.update(equalize_alpha=alpha, input_gain=[float(v) for v in g],
+                   keras_float_equalized=metrics(z, model.predict(x, batch_size=4096, verbose=0)))
     for name, mode, io in ((f32_suffix, "f32", False), ("int8", "int8", False), ("int8_io", "int8", True)):
         tfl = convert(model, calib, mode, io)
         (out / f"{stem}_{name}.tflite").write_bytes(tfl)

@@ -871,7 +871,9 @@ minimum and maximum alone.
 
 The rule fixed before the run (int8 within 1.0 point or 0.03 s of float32) is met for the three heads.
 For every B from 3 to 8 the int8 test result stays within 0.3 points and 0.006 s of float32; 0.1 to 0.5%
-of the test input values saturate.
+of the test input values saturate. In the deployed files one int8 input step was 1.11 (intention), 1.89
+(LCR) and 0.60 (LCL) feature units, which are standard deviations; with the clipped calibration it is
+0.031, 0.031 and 0.047.
 
 Deployed files (`CALIB_CLIP=<B> unas/prepare_deploy_lcir.py`, the search-trained models,
 `lcir_v4k3sat_<task>_*.tflite`) on the STM32H7B3I-DK (`unas/local_bench.py`, 280 MHz, 200 timed runs;
