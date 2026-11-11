@@ -217,6 +217,24 @@ exiD scenario, the protocol's windows).
 | `hil_prepare.py <tflite>` | WSL: the firmware header (window, per-feature offset and range, input quantization) and the host reference (int8 frames and TFLite outputs for every test window), both under `firmware/build/stream/` (not versioned: training statistics and test data) |
 | `hil_stream.py <tflite> [--rate 5] [--limit N]` | Windows: generates, builds and flashes the streaming firmware, replays the test scenarios at `--rate` frames per second (0 = as fast as the link allows) and compares the board's int8 outputs with the host reference; writes agreement, the protocol's metrics from the board's outputs, cycles per frame and the host round trip to `datasets/<ds>/results/hil/hil_stream.jsonl` |
 
+Outcome on the STM32H7B3I-DK (2026-11-11, `datasets/highd/results/hil/hil_stream.jsonl`; 693 test scenarios,
+18,018 windows per network, at top speed): the searched classifier, the searched TTLC regressor and the
+hand-designed classifier return the int8 outputs of the TFLite reference in every window. The hand-designed
+TTLC network differs by 1 LSB in one window, and there ST's C model run on the host (`stedgeai validate --mode
+host`) differs from TFLite in the same way. Per frame the board spends 6.4 µs on scaling, quantization and the
+window copy and 0.107 to 0.316 ms on the network; the host round trip over the virtual COM port takes 1.4 to
+1.6 ms. `--save` keeps the board's raw outputs next to the reference.
+
+Before closing a loop around the board (2026-11-11): `datasets/highd/cutin_headroom.py` replaces the follower of
+each test lane change by a car with an ACC (point mass, the car-following model of Milanés and Shladover, 2014)
+and asks what that car gains from knowing the lane change k seconds before the crossing; recorded data only.
+Rule fixed before the run: at least 30 runs above 2.0 m/s² deceleration without early knowledge, at most half as
+many with 2 s of it. Not met: 86 against 76 of 91 eligible scenarios. The braking comes from the controller's gap
+rule, not from the traffic: the recorded followers never exceed 1.33 m/s² on highD and 1.28 m/s² on exiD
+(`datasets/exid/cutin_followers.py`, 272 lane changes), because the vehicle that cuts in is usually faster than
+its new follower. These recordings hold no conflict that an earlier prediction could resolve for a following
+car, so that closed loop is not built. Results: `datasets/*/results/hil/cutin_*.json`.
+
 ## Thresholds (first pass, in `dmir_config.py`)
 
 | Bound | Value | Rationale |

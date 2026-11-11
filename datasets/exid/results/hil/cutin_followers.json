@@ -1,0 +1,182 @@
+{
+ "dataset": "exid",
+ "split": "test",
+ "lane_change_scenarios": 1174,
+ "eligible": 272,
+ "skipped": {
+  "follower not tracked 7 s before": 359,
+  "less than 3 s after the crossing": 187,
+  "no follower": 356
+ },
+ "all": {
+  "scenarios": 272,
+  "peak_decel": {
+   "p50": 0.07,
+   "p90": 0.58,
+   "p99": 1.07,
+   "max": 1.28
+  },
+  "over_1.0": 7,
+  "over_2.0": 0,
+  "over_3.5": 0,
+  "tv_minus_follower_speed": {
+   "p10": -2.84,
+   "p50": 0.74,
+   "p90": 5.67
+  },
+  "tv_slower": 94,
+  "time_gap_at_crossing_s": {
+   "p10": 0.47,
+   "p50": 1.15
+  },
+  "min_ttc_under_3s": 8,
+  "min_ttc_under_2s": 4
+ },
+ "right_lc": {
+  "scenarios": 77,
+  "peak_decel": {
+   "p50": 0.05,
+   "p90": 0.58,
+   "p99": 1.15,
+   "max": 1.28
+  },
+  "over_1.0": 3,
+  "over_2.0": 0,
+  "over_3.5": 0,
+  "tv_minus_follower_speed": {
+   "p10": 0.49,
+   "p50": 3.4,
+   "p90": 8.48
+  },
+  "tv_slower": 6,
+  "time_gap_at_crossing_s": {
+   "p10": 0.44,
+   "p50": 0.85
+  },
+  "min_ttc_under_3s": 0,
+  "min_ttc_under_2s": 0
+ },
+ "left_lc": {
+  "scenarios": 195,
+  "peak_decel": {
+   "p50": 0.1,
+   "p90": 0.54,
+   "p99": 1.01,
+   "max": 1.06
+  },
+  "over_1.0": 4,
+  "over_2.0": 0,
+  "over_3.5": 0,
+  "tv_minus_follower_speed": {
+   "p10": -3.63,
+   "p50": 0.18,
+   "p90": 3.03
+  },
+  "tv_slower": 88,
+  "time_gap_at_crossing_s": {
+   "p10": 0.51,
+   "p50": 1.26
+  },
+  "min_ttc_under_3s": 8,
+  "min_ttc_under_2s": 4
+ },
+ "by_kind": {
+  "exit to off-ramp": {
+   "scenarios": 2,
+   "peak_decel": {
+    "p50": 0.43,
+    "p90": 0.55,
+    "p99": 0.57,
+    "max": 0.58
+   },
+   "over_1.0": 0,
+   "over_2.0": 0,
+   "over_3.5": 0,
+   "tv_minus_follower_speed": {
+    "p10": 1.12,
+    "p50": 2.73,
+    "p90": 4.35
+   },
+   "tv_slower": 0,
+   "time_gap_at_crossing_s": {
+    "p10": 0.49,
+    "p50": 0.58
+   },
+   "min_ttc_under_3s": 0,
+   "min_ttc_under_2s": 0
+  },
+  "main carriageway": {
+   "scenarios": 173,
+   "peak_decel": {
+    "p50": 0.16,
+    "p90": 0.65,
+    "p99": 1.09,
+    "max": 1.28
+   },
+   "over_1.0": 7,
+   "over_2.0": 0,
+   "over_3.5": 0,
+   "tv_minus_follower_speed": {
+    "p10": -2.78,
+    "p50": 1.49,
+    "p90": 6.65
+   },
+   "tv_slower": 47,
+   "time_gap_at_crossing_s": {
+    "p10": 0.48,
+    "p50": 1.15
+   },
+   "min_ttc_under_3s": 1,
+   "min_ttc_under_2s": 0
+  },
+  "merge from on-ramp": {
+   "scenarios": 88,
+   "peak_decel": {
+    "p50": 0.02,
+    "p90": 0.3,
+    "p99": 0.47,
+    "max": 0.6
+   },
+   "over_1.0": 0,
+   "over_2.0": 0,
+   "over_3.5": 0,
+   "tv_minus_follower_speed": {
+    "p10": -4.41,
+    "p50": 0.08,
+    "p90": 2.96
+   },
+   "tv_slower": 42,
+   "time_gap_at_crossing_s": {
+    "p10": 0.47,
+    "p50": 1.14
+   },
+   "min_ttc_under_3s": 7,
+   "min_ttc_under_2s": 4
+  },
+  "on a ramp": {
+   "scenarios": 9,
+   "peak_decel": {
+    "p50": -0.02,
+    "p90": 0.37,
+    "p99": 0.43,
+    "max": 0.44
+   },
+   "over_1.0": 0,
+   "over_2.0": 0,
+   "over_3.5": 0,
+   "tv_minus_follower_speed": {
+    "p10": -1.03,
+    "p50": -0.07,
+    "p90": 1.35
+   },
+   "tv_slower": 5,
+   "time_gap_at_crossing_s": {
+    "p10": 0.87,
+    "p50": 1.01
+   },
+   "min_ttc_under_3s": 0,
+   "min_ttc_under_2s": 0
+  }
+ },
+ "utc": "2026-11-11T12:12:07+00:00"
+}
