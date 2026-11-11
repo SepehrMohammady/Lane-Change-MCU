@@ -272,13 +272,16 @@ frames per network) all outputs are again equal; with a decision on every frame 
 More replays at top speed: the seed-43 choices of the corrected highD searches (18,010 and 18,018 of 18,018 windows
 equal; 92.57%, τ_c 4.76 s; TTLC RMSE 0.338 s), the equalized exiD classifier (45,674 of 45,682;
 89.44%, τ_c 4.60 s) and the simulated scenarios of `datasets/carla/` given to the highD classifier (7,436
-of 7,436 windows equal, with inputs far outside the training range). Over all replays of the three datasets:
-12 networks, 280,046 windows, 25 of them different from TFLite by at most 2 LSB. `hil_host_check.py --board` on
+of 7,436 windows equal, with inputs far outside the training range), and the three LCIR networks searched on
+scaled inputs, where the board also applies the min-max scaling (intention 19,722 of 19,722 windows equal, 87.91%;
+LCR 7,072 of 7,073, RMSE 0.459 s; LCL 8,096 of 8,097, RMSE 0.467 s). Over all replays of the three datasets:
+15 networks, 314,938 windows, 27 of them different from TFLite by at most 2 LSB. `hil_host_check.py --board` on
 every replay with a difference: given the reference's int8 window directly, without its own preprocessing, the board
-returns the streamed value in all 25 differing windows and all 48 control windows, so its preprocessing and the
-link are not involved in any difference. ST's C model compiled for the PC returns the board's value in 22 of the 25
-and TFLite's value in the other 3 (all three in the equalized exiD classifier): the differences lie in the network
-arithmetic of ST's Cortex-M7 kernels against the TFLite interpreter and, rarely, against ST's own PC build.
+returns the streamed value in all 27 differing windows and all 64 control windows, so its preprocessing and the
+link are not involved in any difference. ST's C model compiled for the PC returns the board's value in 23 of the 27
+and TFLite's value in the other 4 (three in the equalized exiD classifier, one in the LCL network searched on scaled
+inputs): the differences lie in the network arithmetic of ST's Cortex-M7 kernels against the TFLite interpreter and,
+rarely, against ST's own PC build.
 
 Before closing a loop around the board (2026-11-11): `datasets/highd/cutin_headroom.py` replaces the follower of
 each test lane change by a car with an ACC (point mass, the car-following model of Milanés and Shladover, 2014)

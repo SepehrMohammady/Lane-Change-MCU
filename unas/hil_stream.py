@@ -91,7 +91,7 @@ def stream(port, feats, rate: float, n_out: int, limit: int | None, in_len: int 
                     time.sleep(t_next - now)
                 late.append(time.perf_counter() - t_next)
                 t_next += period
-            pkt = struct.pack("<BBH", 0xA5, 1 if f == 0 else 0, seq & 0xFFFF) + feats[s, f].astype("<f4").tobytes()
+            pkt = struct.pack("<BBH", 0xA5, 1 if f == 0 else 0, seq & 0xFFFF) + feats[s][f].astype("<f4").tobytes()
             t0 = time.perf_counter()
             port.write(pkt)
             rep = port.read(reply_len)
