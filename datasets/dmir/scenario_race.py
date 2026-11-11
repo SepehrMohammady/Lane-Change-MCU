@@ -8,9 +8,12 @@ official test drivers). The provider's preprocessing is recovered, not guessed:
   * every pickle channel is an affine map of one raw signal; the map is fitted
     on windows located in the test pickle by correlation (r > 0.9995 on YawRate
     and LatAcceleration) and then checked to reproduce those windows exactly;
-  * car1 (channels 16-21) is the vehicle nearest in |LongPosition| among object
-    slots 1-10; car2 (22-27) is object slot 11, the scenario's dedicated "car on
-    the left"; car2Present (30) is that slot's ID != -1; an absent car is zeros;
+  * car1 (channels 16-21) is the vehicle nearest by straight-line distance among
+    object slots 1-10, as in the lab's h5_to_CSV script (corrected 2026-11-11: this
+    file had used |LongPosition|; the two differ in 1 of 8,430 frames of driver 36,
+    which shows in the LCR and LCL pickles); car2 (22-27) is object slot 11, the
+    scenario's dedicated "car on the left"; car2Present (30) is that slot's ID != -1;
+    an absent car is zeros;
   * the turn-indicator channels (28, 29) are unscaled 0/1;
   * egoLaneWidth (7) is constant and maps to 0.
 
@@ -73,14 +76,11 @@ def raw_matrix(ego, ll, ob):
     N = len(ego)
     S = {fn: np.nan_to_num(so[fn].astype(float), nan=0.0) for fn in CAR_FIELDS}
     car1 = np.zeros((N, 6))
-    for i in range(N):
-        best = None
-        for j in range(1, min(nobj[i], 11)):          # slots 1-10 = traffic; 0 = ego, 11 = left car
-            d = abs(so["LongPosition"][i, j])
-            if best is None or d < best[0]:
-                best = (d, j)
-        if best is not None:
-            car1[i] = [S[fn][i, best[1]] for fn in CAR_FIELDS]
+    dist = np.hypot(so["LatPosition"][:, 1:11].astype(float), so["LongPosition"][:, 1:11].astype(float))
+    for i in range(N):                                # slots 1-10 = traffic; 0 = ego, 11 = left car
+        if not np.all(np.isnan(dist[i])):
+            j = 1 + int(np.nanargmin(dist[i]))        # nearest by straight-line distance (the lab's rule)
+            car1[i] = [S[fn][i, j] for fn in CAR_FIELDS]
     car2 = np.stack([S[fn][:, 11] for fn in CAR_FIELDS], 1)
     present = (ids[:, 11] != -1).astype(float)
     dy, yaw, cur, cdx = (ll["sLaneLine"][k] for k in ("Dy", "YawAngle", "Curvature", "CurvatureDx"))

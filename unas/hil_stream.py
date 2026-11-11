@@ -17,6 +17,11 @@ LCIR networks (datasets/dmir/results/deploy/lcir_*_int8_io.tflite): every test w
 sequence with one decision (10 Hz in the recordings, so --rate 10 is real time); the record carries the
 accuracy or the RMSE of the board's outputs.
 
+Whole LCIR drives (a reference made from datasets/dmir/data/sessions/sessions_<file name>): the sessions
+of the test drivers have different lengths and are sent one after the other, a decision on every frame
+from the 50th on; --seq <name> sends one session only. The record goes to
+datasets/dmir/results/hil/hil_sessions.jsonl; datasets/dmir/session_metrics.py scores the outputs.
+
   .venv\\Scripts\\python unas/hil_stream.py datasets/highd/results/deploy/<stem>.tflite [--rate 5] [--limit N] [--save]
   .venv\\Scripts\\python unas/hil_stream.py <tflite> --build-only        # no board needed
 """
@@ -67,20 +72,19 @@ def open_port(sn: str):
     return serial.Serial(ports[0].device, BAUD, timeout=2.0)
 
 
-def stream(port, feats: np.ndarray, rate: float, n_out: int, limit: int | None, in_len: int = IN_LEN):
-    """Send each sequence frame by frame; returns board outputs (S, windows per sequence, n_out) int8,
-    cycles and round trips."""
+def stream(port, feats, rate: float, n_out: int, limit: int | None, in_len: int = IN_LEN):
+    """Send each sequence frame by frame; returns the board's outputs, one int8 array (windows, n_out) per
+    sequence, cycles and round trips. feats: an array (S, frames, features) or a list of (frames, features)."""
     S = len(feats) if limit is None else min(limit, len(feats))
-    seq_len = feats.shape[1]
     reply_len = 12 + n_out
-    outs = np.zeros((S, seq_len - in_len + 1, n_out), np.int8)
+    outs = [np.zeros((len(feats[s]) - in_len + 1, n_out), np.int8) for s in range(S)]
     pre, inf, rtt, late = [], [], [], []
     port.reset_input_buffer()
     period = 1.0 / rate if rate > 0 else 0.0
     t_next = time.perf_counter()
     seq = 0
     for s in range(S):
-        for f in range(seq_len):
+        for f in range(len(feats[s])):
             if period:
                 now = time.perf_counter()
                 if now < t_next:
@@ -101,7 +105,7 @@ def stream(port, feats: np.ndarray, rate: float, n_out: int, limit: int | None, 
             pre.append(c_pre)
             if ran:
                 inf.append(c_inf)
-                outs[s, f - in_len + 1] = np.frombuffer(rep[12:], np.int8)
+                outs[s][f - in_len + 1] = np.frombuffer(rep[12:], np.int8)
             seq += 1
     return outs, np.array(pre), np.array(inf), np.array(rtt), np.array(late)
 
@@ -117,6 +121,7 @@ def main():
     ap.add_argument("tflite")
     ap.add_argument("--rate", type=float, default=5.0, help="frames per second; 0 = as fast as the link allows")
     ap.add_argument("--limit", type=int, default=None, help="first N test scenarios only")
+    ap.add_argument("--seq", default=None, help="whole drives: this session only (its name, e.g. user13LC)")
     ap.add_argument("--build-only", action="store_true")
     ap.add_argument("--save", action="store_true",
                     help="keep the board's raw outputs and timings next to the reference (firmware/build/stream)")
@@ -135,21 +140,46 @@ def main():
         raise RuntimeError(f"firmware reported status {status:#x}")
     n_out = ref["ref"].shape[-1]
     in_len = int(ref["in_len"]) if "in_len" in ref else IN_LEN
-    seq_len = ref["feats"].shape[1]
-    n_slides = seq_len - in_len + 1
-    with open_port(sn) as port:
-        outs, pre, inf, rtt, late = stream(port, ref["feats"], a.rate, n_out, a.limit, in_len)
-    S = len(outs)
-    if a.save:
-        tag = f"rate{a.rate:g}" + (f"_n{S}" if S < len(ref["feats"]) else "")
-        np.savez_compressed(lb.FW / "build" / "stream" / tfl.stem / f"board_out_{tag}.npz",
-                            outs=outs, pre=pre, inf=inf, rtt=rtt, late=late)
-    want = ref["ref"][:S]
-    label = ref["label"][:S]
+    drives = "seq_lens" in ref                               # whole drives: sequences of different lengths
+    if drives:
+        lens = ref["seq_lens"]
+        ends = np.cumsum(lens)
+        seqs = np.split(ref["feats"], ends[:-1])
+        w_ends = np.cumsum(lens - in_len + 1)
+        keep = list(range(len(seqs)))
+        if a.seq:
+            keep = [int(np.flatnonzero(ref["names"] == a.seq)[0])]
+        elif a.limit is not None:
+            keep = keep[:a.limit]
+        with open_port(sn) as port:
+            outs_l, pre, inf, rtt, late = stream(port, [seqs[k] for k in keep], a.rate, n_out, None, in_len)
+        outs = np.concatenate(outs_l)
+        want = np.concatenate([ref["ref"][w_ends[k] - (lens[k] - in_len + 1):w_ends[k]] for k in keep])
+        S, frames = len(keep), int(sum(lens[k] for k in keep))
+        n_slides, seq_len = len(outs), frames                # for the share of the period below
+        sub = "" if len(keep) == len(seqs) else ("_" + (a.seq or f"n{S}"))
+        if a.save:
+            np.savez_compressed(lb.FW / "build" / "stream" / tfl.stem / f"board_out_rate{a.rate:g}{sub}.npz",
+                                outs=outs, kept=np.array(keep), pre=pre, inf=inf, rtt=rtt, late=late)
+        label = None
+    else:
+        seq_len = ref["feats"].shape[1]
+        n_slides = seq_len - in_len + 1
+        with open_port(sn) as port:
+            outs_l, pre, inf, rtt, late = stream(port, ref["feats"], a.rate, n_out, a.limit, in_len)
+        outs = np.stack(outs_l)
+        S = len(outs)
+        if a.save:
+            tag = f"rate{a.rate:g}" + (f"_n{S}" if S < len(ref["feats"]) else "")
+            np.savez_compressed(lb.FW / "build" / "stream" / tfl.stem / f"board_out_{tag}.npz",
+                                outs=outs, pre=pre, inf=inf, rtt=rtt, late=late)
+        want = ref["ref"][:S]
+        label = ref["label"][:S]
     so, zo = float(ref["out_scale"]), int(ref["out_zp"])
     deq = (outs.astype(np.float32) - zo) * so
     rec = {"model": tfl.name, "board": "STM32H7B3I-DK", "core_hz": hz, "baud": BAUD,
-           "rate_hz": a.rate, "scenarios": S, "frames": int(S * seq_len), "windows": int(S * n_slides),
+           "rate_hz": a.rate, "scenarios": S,
+           "frames": int(seq_len if drives else S * seq_len), "windows": int(n_slides if drives else S * n_slides),
            "agreement": {"identical_windows": round(float((outs == want).all(-1).mean()), 6),
                          "differing_windows": int((outs != want).any(-1).sum()),
                          "max_abs_lsb": int(np.abs(outs.astype(np.int16) - want.astype(np.int16)).max())},
@@ -163,7 +193,9 @@ def main():
         rec["compute_share_of_period"] = round(float((pre.mean() + inf.mean() * n_slides / seq_len) / hz * a.rate), 8)
         # the same with a decision on every frame, as on a continuous stream
         rec["compute_share_every_frame"] = round(float((pre.mean() + inf.mean()) / hz * a.rate), 8)
-    if ds == "dmir":
+    if drives:
+        rec["sessions"] = [str(ref["names"][k]) for k in keep]
+    elif ds == "dmir":
         if n_out == 3:
             rec["accuracy"] = round(float((deq[:, 0].argmax(-1) == label).mean()), 5)
         else:
@@ -182,7 +214,8 @@ def main():
         err = deq[lc, :, 0] - gt[lc]
         rec["ttlc_rmse_s"] = round(float(np.sqrt((err ** 2).mean())), 4)
     rec["utc"] = datetime.now(timezone.utc).isoformat(timespec="seconds")
-    out = Path(os.environ.get("HIL_OUT", ROOT / "datasets" / ds / "results" / "hil" / "hil_stream.jsonl"))
+    out = Path(os.environ.get("HIL_OUT", ROOT / "datasets" / ds / "results" / "hil" /
+                              ("hil_sessions.jsonl" if drives else "hil_stream.jsonl")))
     out.parent.mkdir(parents=True, exist_ok=True)
     with open(out, "a", encoding="utf-8") as f:
         f.write(json.dumps(rec) + "\n")

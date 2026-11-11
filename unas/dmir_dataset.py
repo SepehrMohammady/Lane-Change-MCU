@@ -13,7 +13,7 @@ The prepared pickles already follow the official driver-wise split
 (verified: scripts/analysis/verify_split.py), so we load train/val/test as-is.
 
 Optional `drop_indicators=True` removes the turn-signal channels for the
-label-leak ablation (indicator channels: classification 28/29, regression 3/4;
+label-leak ablation (indicator channels: classification and LCL 28/29, LCR 3/4;
 see datasets/dmir/docs/feature-map.md).
 
 Inputs are raw units unless `scale="minmax"` (default: the DMIR_SCALE env var, see
@@ -42,8 +42,8 @@ _LAYOUT = {
     "regression_lcl": ("data-regression-lcl", "lcl", 1),
     "regression_lcr": ("data-prepared-lcr", "lcr", 1),
 }
-_INDICATOR_IDX = {"classification": [28, 29],
-                  "regression_lcl": [3, 4], "regression_lcr": [3, 4]}
+_INDICATOR_IDX = {"classification": [28, 29],                    # LCL shares the classification layout
+                  "regression_lcl": [28, 29], "regression_lcr": [3, 4]}   # (corrected 2026-11-11: was [3, 4])
 
 
 def input_scaling() -> str:

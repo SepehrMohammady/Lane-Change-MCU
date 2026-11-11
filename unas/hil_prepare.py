@@ -17,6 +17,13 @@ every feature to its training range (as every LCIR evaluation does, prepare_depl
 min-max scaling of a network searched on scaled inputs (offsets and spans of its deploy record; none for
 raw-input networks) and quantizes. The header then also defines STREAM_CLAMP with the training range.
 
+Whole LCIR drives (2026-11-11): a copy of an LCIR network's file named
+datasets/dmir/data/sessions/sessions_<file name> selects the raw sessions of the official test drivers
+(datasets/dmir/session_stream.py build) instead of the test windows: every frame of every session in raw
+units, a decision on every frame from the 50th on. The board's table then holds the provider's
+normalization (recovered per task, pickle = a * raw + b), followed by the network's own min-max scaling
+if it has one, and the training range in raw units.
+
 Simulated traffic (a copy of a highD network's file under datasets/carla/, scenarios of
 datasets/carla/prepare_carla.py): the scaling uses highD's training statistics, as the deployed network does.
 
@@ -127,11 +134,77 @@ def lcir(tfl: Path) -> None:
     print(f"wrote {dest / 'stream_cfg.h'} and {dest / 'reference.npz'}")
 
 
+def lcir_sessions(tfl: Path) -> None:
+    """Whole drives of the LCIR test drivers, frame by frame, for one network."""
+    deploy = tfl.stem[len("sessions_"):].rsplit("_int8_io", 1)[0]
+    rec = json.loads((ROOT / "datasets" / "dmir" / "results" / "deploy" / f"{deploy}_deploy.json").read_text())
+    task = rec["task"]
+    base = ROOT / "datasets" / "dmir" / "data" / "stream"
+    norm = json.loads((base / f"{task}_norm.json").read_text())
+    z = np.load(base / f"{task}_sessions.npz")
+    feats, lens = z["feats"].astype(np.float32), z["seq_lens"].astype(np.int64)
+    n_feat, in_len, big = feats.shape[1], 50, 1e30
+    a, b = np.array(norm["a"]), np.array(norm["b"])
+    tmin, tmax = np.array(norm["train_min"]), np.array(norm["train_max"])
+    moving = a != 0
+    safe = np.where(moving, a, 1.0)
+    lo = np.where(moving, -b / safe, -b * big)               # pickle value = (raw - lo) / span
+    span = np.where(moving, 1.0 / safe, big)
+    c1, c2 = (tmin - b) / safe, (tmax - b) / safe            # the training range in raw units
+    fmax = float(np.finfo(np.float32).max)
+    cmin = np.where(moving, np.minimum(c1, c2), -fmax)
+    cmax = np.where(moving, np.maximum(c1, c2), fmax)
+    if rec.get("input_scaling", "raw") == "minmax":          # the network's own scaling of the pickle value
+        mlo, mspan = np.array(rec["scale_lo"], float), np.array(rec["scale_span"], float)
+        const = (b - mlo) / mspan
+        lo = np.where(moving, lo + span * mlo, -const * big)
+        span = np.where(moving, span * mspan, big)
+    lo, span, cmin, cmax = (v.astype(np.float32) for v in (lo, span, cmin, cmax))
+
+    it, inp, out = interface(tfl, in_len, n_feat)
+    (si, zi), (so, zo) = inp["quantization"], out["quantization"]
+    n_out = int(np.prod(out["shape"][1:]))
+    xs = (np.clip(feats, cmin, cmax) - lo) / span            # float32, the board's arithmetic
+    assert xs.dtype == np.float32
+    q = np.clip(np.rint(xs / np.float32(si) + np.float32(zi)), -128, 127).astype(np.int8)
+    starts = np.concatenate([[0], np.cumsum(lens)[:-1]])
+    wins = [(int(s) + k) for s, n in zip(starts, lens) for k in range(int(n) - in_len + 1)]
+    ref = np.empty((len(wins), n_out), np.int8)
+    for w, s in enumerate(wins):
+        it.set_tensor(inp["index"], q[s:s + in_len][None])
+        it.invoke()
+        ref[w] = it.get_tensor(out["index"]).reshape(-1)
+
+    dest = ROOT / "firmware" / "build" / "stream" / tfl.stem
+    dest.mkdir(parents=True, exist_ok=True)
+    (dest / "stream_cfg.h").write_text(header(tfl, in_len, lo, span, si, zi, clamp=(cmin, cmax)), encoding="utf-8")
+    last = np.array(wins) + in_len - 1                       # the frame a window ends on
+    np.savez_compressed(dest / "reference.npz", feats=feats, q=q, ref=ref, seq_lens=lens, names=z["names"],
+                        ttlc=z["ttlc"], direction=z["direction"], window_last_frame=last, events=z["events"],
+                        in_scale=np.float32(si), in_zp=int(zi), out_scale=np.float32(so), out_zp=int(zo),
+                        lo=lo, span=span, cmin=cmin, cmax=cmax, in_len=in_len, task=task, tflite=tfl.name)
+    deq = (ref.astype(np.float32) - zo) * so
+    ttlc, direction = z["ttlc"][last], z["direction"][last]
+    summary = {"tflite": tfl.name, "task": task, "sessions": len(lens), "frames": int(lens.sum()),
+               "windows": len(wins), "minutes": round(float(lens.sum()) / 600, 1),
+               "input_scaling": rec.get("input_scaling", "raw"), "deploy_record": rec["variants"]["int8_io"]}
+    scored = ~np.isnan(ttlc)
+    if n_out == 3:
+        summary["frame_accuracy_all_sessions"] = round(float((deq.argmax(-1)[scored] == direction[scored]).mean()), 5)
+    else:
+        want = 1 if task == "regression_lcr" else 2
+        sel = scored & (direction == want)
+        summary["rmse_before_own_lane_changes"] = round(float(np.sqrt(((deq[sel, 0] - ttlc[sel]) ** 2).mean())), 5)
+        summary["frames_before_own_lane_changes"] = int(sel.sum())
+    print(json.dumps(summary))
+    print(f"wrote {dest / 'stream_cfg.h'} and {dest / 'reference.npz'}")
+
+
 def main(tfl_arg: str) -> None:
     tfl = (ROOT / tfl_arg).resolve() if not Path(tfl_arg).is_absolute() else Path(tfl_arg)
     ds = tfl.relative_to(ROOT).parts[1]
     if ds == "dmir":
-        return lcir(tfl)
+        return lcir_sessions(tfl) if tfl.parent.name == "sessions" else lcir(tfl)
     if ds not in ("highd", "exid", "carla"):
         sys.exit("streaming is set up for the highD and exiD scenarios and the LCIR windows")
     # simulated traffic (datasets/carla) is given to a highD network as deployed: highD's statistics

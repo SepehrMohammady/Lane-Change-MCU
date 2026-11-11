@@ -86,12 +86,17 @@ def check(tfl: Path, direct: bool = False) -> dict:
     board = np.load(folder / "board_out_rate0.npz")["outs"]
     want = ref["ref"][:len(board)]
     in_len = int(ref["in_len"]) if "in_len" in ref else 10
+    drives = "seq_lens" in ref                              # whole drives: one flat list of windows
     differ = np.argwhere((board != want).any(-1))
     same = np.argwhere((board == want).all(-1))
     rng = np.random.default_rng(0)
     control = same[rng.choice(len(same), size=min(len(same), max(32, len(differ))), replace=False)]
     rows = np.concatenate([differ, control]) if len(differ) else control
-    x = np.stack([ref["q"][s, k:k + in_len] for s, k in rows]).astype(np.int8)
+    if drives:
+        last = ref["window_last_frame"]
+        x = np.stack([ref["q"][last[w] - in_len + 1:last[w] + 1] for (w,) in rows]).astype(np.int8)
+    else:
+        x = np.stack([ref["q"][s, k:k + in_len] for s, k in rows]).astype(np.int8)
 
     work = lb.FW / "build" / "hostcheck" / tfl.stem
     shutil.rmtree(work, ignore_errors=True)
@@ -104,10 +109,10 @@ def check(tfl: Path, direct: bool = False) -> dict:
     c = z["c_outputs_1"].reshape(len(z["c_outputs_1"]), -1)
     if len(c) != len(x) or not (z["m_inputs_1"].reshape(x.shape) == x).all():
         raise RuntimeError(f"{tfl.name}: the host run used {len(c)} of {len(x)} windows")
-    b = np.stack([board[s, k] for s, k in rows])
-    t = np.stack([want[s, k] for s, k in rows])
+    b = np.stack([board[tuple(r)] for r in rows])
+    t = np.stack([want[tuple(r)] for r in rows])
     nd = len(differ)
-    rec = {"model": tfl.name, "windows_replayed": int(board.shape[0] * board.shape[1]),
+    rec = {"model": tfl.name, "windows_replayed": int(len(board) if drives else board.shape[0] * board.shape[1]),
            "differing_windows": nd,
            "differing": {"host_c_equals_board": int((c[:nd] == b[:nd]).all(-1).sum()),
                          "host_c_equals_tflite": int((c[:nd] == t[:nd]).all(-1).sum()),

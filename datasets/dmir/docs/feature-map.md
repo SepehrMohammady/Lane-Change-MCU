@@ -17,7 +17,13 @@ The raw `DirectionIndicator` is a single ternary signal {0 = off, 1 = left,
 2 = right}; the prepared data splits it into two binary channels
 (`leftDirectionIndicator`, `rightDirectionIndicator`).
 
-## Regression layout (LCL, LCR) — 31 channels
+**Correction, 2026-11-11.** The LCL pickle does not have the layout of the LCR pickle: it has the
+classification layout (indicators at 28 and 29, `egoLaneWidth` at 7, the `curvatureDx` spike pair at
+12-13). Its test windows are found in the raw sessions with that layout only, and every channel then fits
+an affine map of its raw signal to 1e-12 (`datasets/dmir/session_stream.py`). The sections below are
+named accordingly; `src/features.py` and `unas/dmir_dataset.py` were corrected the same day.
+
+## LCR layout — 31 channels
 
 Matches the doc's order (minus `fileTime`) with `car2Present` appended.
 
@@ -48,7 +54,7 @@ Matches the doc's order (minus `fileTime`) with `car2Present` appended.
 (LCR pickle stats deviate from mean 0 / std 1 → its StandardScaler was fit on
 a different subset than the classification one.)
 
-## Classification layout — 31 channels
+## Classification and LCL layout — 31 channels
 
 Same signals, but the **two indicator binaries are moved to the end**
 (28, 29); everything between `brakePedalPos` and the car block shifts down by 2,
@@ -89,7 +95,8 @@ Blinker-active-in-window rate: no-intent 6.5%, LCR 91.7%, LCL 70.7%. So the
 classification headline is largely "read the blinker."
 
 The regression tasks are NOT leaky (`indicator_leak_regression.py`):
-indicator-only test RMSE 0.72 (LCR) / 0.90 (LCL), far above our DSCNN
+indicator-only test RMSE 0.72 (LCR) / 0.75 (LCL; 0.90 until 2026-11-11, computed on channels 3-4,
+which are steering angle and throttle in the LCL pickle), far above our DSCNN
 (0.439/0.459) and the SOTA (0.42/0.44). The leak is specific to classification.
 
 Consequences for the paper:
@@ -110,9 +117,12 @@ two test drivers, max deviation 1.4e-7). What the check established:
   fitted once on the training split;
 - the two indicator channels (28, 29) are **unscaled** 0/1;
 - `egoLaneWidth` (7) maps to exactly 0;
-- **car1 (16-21) = the object nearest in |LongPosition| among object slots
+- **car1 (16-21) = the object nearest by straight-line distance among object slots
   1-10** of the H5 `objects` group (slot 0 is the ego itself); ahead or behind,
-  any lane;
+  any lane. Corrected 2026-11-11: this note said "nearest in |LongPosition|". The
+  lab's script uses sqrt(LatPosition^2 + LongPosition^2); the two rules differ in
+  1 of 8,430 frames of driver 36, inside LCR and LCL test windows, and only the
+  straight-line rule reproduces those (`datasets/dmir/session_stream.py`);
 - **car2 (22-27) = object slot 11**, the scenario's dedicated "car on the
   left"; `car2Present` (30) = that slot's ID != -1; an absent car is all zeros
   (raw), i.e. the constant `b` after scaling;

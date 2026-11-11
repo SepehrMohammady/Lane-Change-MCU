@@ -1,10 +1,14 @@
 """Verified channel names and roles for the prepared windows.
 
-Two layouts (see datasets/dmir/docs/feature-map.md): the regression tasks keep the
-turn indicators inline (channels 3-4); classification moves them to the end
-(channels 28-29). Names for channels 0-7 (classification) were verified by
+Two layouts (see datasets/dmir/docs/feature-map.md): the LCR pickle keeps the turn
+indicators inline (channels 3-4); the classification and the LCL pickles have them
+at the end (channels 28-29). Names for channels 0-7 (classification) were verified by
 correlating each channel against the raw H5 signals; the rest follow the data
 provider's feature list plus the fingerprint signatures.
+
+Corrected 2026-11-11: until then the LCL pickle was listed with the LCR layout. Its
+test windows are found in the raw sessions with the classification layout only, and
+the affine map of every channel then fits to 1e-12 (datasets/dmir/session_stream.py).
 
 Use these to build feature masks (e.g. drop the leaky indicators for an
 ablation, or drop the constant egoLaneWidth) without magic indices in the
@@ -12,7 +16,7 @@ pipeline.
 """
 from __future__ import annotations
 
-# Regression layout (LCL, LCR): provider order minus fileTime, + car2Present.
+# LCR layout: provider order minus fileTime, + car2Present.
 REGRESSION_FEATURES = [
     "latAcceleration", "longAcceleration", "brakePedalPos",
     "leftDirectionIndicator", "rightDirectionIndicator", "steeringAngle",
@@ -26,7 +30,7 @@ REGRESSION_FEATURES = [
     "car2LongVelocity", "car2YawAngle", "car2YawRate", "car2Present",
 ]
 
-# Classification layout: indicators relocated to the end (28, 29).
+# Classification and LCL layout: indicators relocated to the end (28, 29).
 CLASSIFICATION_FEATURES = [
     "latAcceleration", "longAcceleration", "brakePedalPos", "steeringAngle",
     "throttlePedalPos", "vehicleSpeed", "yawRate", "egoLaneWidth",
@@ -42,7 +46,7 @@ CLASSIFICATION_FEATURES = [
 
 FEATURES_BY_TASK = {
     "classification": CLASSIFICATION_FEATURES,
-    "regression_lcl": REGRESSION_FEATURES,
+    "regression_lcl": CLASSIFICATION_FEATURES,
     "regression_lcr": REGRESSION_FEATURES,
 }
 
