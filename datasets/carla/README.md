@@ -53,3 +53,11 @@ recognizes the simulated lane changes in the last 0.8 s only (97% in the last wi
 So a study of lane-change prediction in CARLA needs lane changes with a human lead-up: human drivers in a
 driving simulator, or recorded trajectories replayed in the simulator. The result says nothing about real
 traffic.
+
+## On the board
+
+The same scenarios were replayed frame by frame to the STM32H7B3I-DK (`unas/hil_prepare.py` and
+`unas/hil_stream.py` on a copy of the highD classifier's int8 file named
+`data/deploy/carla_<file name>`, which makes the scripts take these scenarios with highD's input
+statistics): the board's outputs equal the reference in all 7,436 windows, although many inputs lie far
+outside the range the network was trained on (`results/hil/hil_stream.jsonl`).

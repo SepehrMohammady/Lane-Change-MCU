@@ -1,0 +1,1 @@
+{"model": "carla_highd_cls_model_1793711684616882545_453917_int8_io.tflite", "windows_replayed": 7436, "differing_windows": 0, "differing": {"host_c_equals_board": 0, "host_c_equals_tflite": 0, "max_abs_lsb_board_vs_tflite": 0}, "control": {"windows": 32, "host_c_equals_board": 32}, "utc": "2026-11-11T15:11:00+00:00"}

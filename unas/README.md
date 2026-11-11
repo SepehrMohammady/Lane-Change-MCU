@@ -236,7 +236,7 @@ decision; there the board first limits every feature to its training range, as e
 |---|---|
 | `hil_prepare.py <tflite>` | WSL: the firmware header (window, per-feature offset and range, input quantization) and the host reference (int8 frames and TFLite outputs for every test window), both under `firmware/build/stream/` (not versioned: training statistics and test data) |
 | `hil_stream.py <tflite> [--rate 5] [--limit N]` | Windows: generates, builds and flashes the streaming firmware, replays the test scenarios at `--rate` frames per second (0 = as fast as the link allows) and compares the board's int8 outputs with the host reference; writes agreement, the protocol's metrics from the board's outputs, cycles per frame and the host round trip to `datasets/<ds>/results/hil/hil_stream.jsonl` |
-| `hil_host_check.py <tflite> [...]` | Windows, after `hil_stream.py --rate 0 --save`: runs ST's generated C model on the PC (`stedgeai validate --mode host`) on the windows where board and reference differ and on control windows; counts to `datasets/<ds>/results/hil/hil_host_check.jsonl` |
+| `hil_host_check.py [--board] <tflite> [...]` | Windows, after `hil_stream.py --rate 0 --save`: runs ST's generated C model on the PC (`stedgeai validate --mode host`) on the windows where board and reference differ and on control windows; with `--board` it also gives those int8 windows to the board directly (`make CHECK=1`, outputs read over SWD), which separates the board's preprocessing from its network code; counts to `datasets/<ds>/results/hil/hil_host_check.jsonl` |
 
 Outcome on the STM32H7B3I-DK (2026-11-11, `datasets/highd/results/hil/hil_stream.jsonl`; 693 test scenarios,
 18,018 windows per network, at top speed): the searched classifier, the searched TTLC regressor and the
@@ -258,9 +258,27 @@ equal the reference in all but 6 windows (at most 2 LSB) and the TTLC network's 
 board's outputs: 86.82% accuracy, τ_c 4.65 s, RMSE 0.417 s, the values of the deploy records; the network takes
 0.315 ms per frame. In float32 this classifier reaches 89.94%, so int8 costs it 3.1 points on exiD against 0.2
 on highD; `input_equalize_check.py` (above) finds the cause and removes the loss. `hil_host_check.py` on the 8 differing windows of all replays (6 + 1 on exiD, 1 on
-highD) and 32 control windows per network: ST's C model on the PC returns the board's values in every one, so
-the board equals ST's C model wherever checked, and the few differences are between ST's kernels and the TFLite
-interpreter.
+highD) and 32 control windows per network: ST's C model on the PC returns the board's values in every one of
+them (a later replay has three windows where it does not: last paragraph of this section).
+
+LCIR (the three int8 files with the clipped calibration, every test window as one 50-frame sequence, top speed):
+intention 19,722 of 19,722 windows equal to the reference and 91.26% from the board's
+outputs; LCR 7,073 of 7,073, RMSE 0.450 s; LCL 8,096 of 8,097 (1 LSB), RMSE 0.433 s: the values of
+the deploy records. Per frame the board spends 12 µs on limiting, quantizing and storing the 31 features and
+0.521, 1.187 and 0.243 ms on the networks. At LCIR's 10 Hz (the first 120 windows of each test set, 6,000
+frames per network) all outputs are again equal; with a decision on every frame the core would compute for 0.53,
+1.20 and 0.25% of the frame period.
+
+More replays at top speed: the seed-43 choices of the corrected highD searches (18,010 and 18,018 of 18,018 windows
+equal; 92.57%, τ_c 4.76 s; TTLC RMSE 0.338 s), the equalized exiD classifier (45,674 of 45,682;
+89.44%, τ_c 4.60 s) and the simulated scenarios of `datasets/carla/` given to the highD classifier (7,436
+of 7,436 windows equal, with inputs far outside the training range). Over all replays of the three datasets:
+12 networks, 280,046 windows, 25 of them different from TFLite by at most 2 LSB. `hil_host_check.py --board` on
+every replay with a difference: given the reference's int8 window directly, without its own preprocessing, the board
+returns the streamed value in all 25 differing windows and all 48 control windows, so its preprocessing and the
+link are not involved in any difference. ST's C model compiled for the PC returns the board's value in 22 of the 25
+and TFLite's value in the other 3 (all three in the equalized exiD classifier): the differences lie in the network
+arithmetic of ST's Cortex-M7 kernels against the TFLite interpreter and, rarely, against ST's own PC build.
 
 Before closing a loop around the board (2026-11-11): `datasets/highd/cutin_headroom.py` replaces the follower of
 each test lane change by a car with an ACC (point mass, the car-following model of Milanés and Shladover, 2014)
