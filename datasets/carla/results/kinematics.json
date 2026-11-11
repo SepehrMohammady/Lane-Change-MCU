@@ -1,0 +1,72 @@
+{
+ "recordings": [
+  {
+   "file": "tm_seed1.npz",
+   "seed": 1,
+   "spawned": 42,
+   "lane_change_percentage": 5.0,
+   "sim_s": 300.0,
+   "real_time_factor": 8.1,
+   "vehicles_removed_by_the_simulator": 8,
+   "lane_changes": 191,
+   "lane_keeping_candidates": 1424
+  }
+ ],
+ "scenarios": {
+  "right_lc": 91,
+  "left_lc": 100,
+  "lane_keeping": 95
+ },
+ "simulated_traffic_manager": {
+  "lane_change_scenarios": 191,
+  "peak_lateral_speed_m_s_p10_p50_p90": [
+   3.48,
+   4.1,
+   4.97
+  ],
+  "lateral_speed_2s_before_p10_p50_p90": [
+   0.0,
+   0.0,
+   0.01
+  ],
+  "lateral_speed_1s_before_p10_p50_p90": [
+   0.0,
+   0.01,
+   0.38
+  ],
+  "moved_toward_new_lane_m_2s_before_p50": -0.0,
+  "moved_toward_new_lane_m_1s_before_p50": 0.0,
+  "moved_toward_new_lane_m_last_frame_p50": 1.45,
+  "seconds_before_crossing_lateral_speed_first_above_0.2_p10_p50_p90": [
+   0.6,
+   0.8,
+   1.0
+  ]
+ },
+ "highd_test": {
+  "lane_change_scenarios": 463,
+  "peak_lateral_speed_m_s_p10_p50_p90": [
+   0.6,
+   0.87,
+   1.18
+  ],
+  "lateral_speed_2s_before_p10_p50_p90": [
+   0.26,
+   0.47,
+   0.64
+  ],
+  "lateral_speed_1s_before_p10_p50_p90": [
+   0.53,
+   0.75,
+   0.98
+  ],
+  "moved_toward_new_lane_m_2s_before_p50": 0.46,
+  "moved_toward_new_lane_m_1s_before_p50": 1.09,
+  "moved_toward_new_lane_m_last_frame_p50": 1.77,
+  "seconds_before_crossing_lateral_speed_first_above_0.2_p10_p50_p90": [
+   2.2,
+   3.0,
+   7.0
+  ]
+ }
+}

@@ -263,6 +263,17 @@ rule, not from the traffic: the recorded followers never exceed 1.33 m/s² on hi
 its new follower. These recordings hold no conflict that an earlier prediction could resolve for a following
 car, so that closed loop is not built. Results: `datasets/*/results/hil/cutin_*.json`.
 
+A simulator as the source of the frames (2026-11-11, `datasets/carla/`): `sim_features.py` computes the 18
+features of the highD protocol from positions, velocities and lane geometry alone, with the neighbours found
+geometrically; on highD's five test recordings it equals `prepare_highd.py` in at least 99.87% of the vehicle
+frames for every feature. `run_carla.sh` and `carla_record.py` record CARLA Traffic Manager vehicles on a
+straight three-lane carriageway (no rendering, 8 times real time with 42 vehicles). Rule fixed before the
+network saw that traffic: usable if 80% of the simulated lane changes are recognized 2 s before the crossing
+with at most 10% of the lane-keeping windows called a lane change. Not met: 11.5% and 40.3% (highD test split:
+100% and 9.4%). The Traffic Manager's lane changes have no lead-up: no lateral motion until 0.8 s before the
+crossing, then 4.1 m/s sideways against 0.87 m/s on highD. A study of lane-change prediction in CARLA therefore
+needs human drivers or replayed recordings; details in `datasets/carla/README.md`.
+
 ## Thresholds (first pass, in `dmir_config.py`)
 
 | Bound | Value | Rationale |

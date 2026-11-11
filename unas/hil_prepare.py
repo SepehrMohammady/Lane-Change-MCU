@@ -17,6 +17,9 @@ every feature to its training range (as every LCIR evaluation does, prepare_depl
 min-max scaling of a network searched on scaled inputs (offsets and spans of its deploy record; none for
 raw-input networks) and quantizes. The header then also defines STREAM_CLAMP with the training range.
 
+Simulated traffic (a copy of a highD network's file under datasets/carla/, scenarios of
+datasets/carla/prepare_carla.py): the scaling uses highD's training statistics, as the deployed network does.
+
 Run in the WSL NAS venv (TensorFlow), from anywhere:
   ~/dmir_nas/bin/python /mnt/c/Projects/PhD/DIMIR/unas/hil_prepare.py \
       datasets/highd/results/deploy/<stem>_int8_io.tflite
@@ -129,9 +132,10 @@ def main(tfl_arg: str) -> None:
     ds = tfl.relative_to(ROOT).parts[1]
     if ds == "dmir":
         return lcir(tfl)
-    if ds not in ("highd", "exid"):
+    if ds not in ("highd", "exid", "carla"):
         sys.exit("streaming is set up for the highD and exiD scenarios and the LCIR windows")
-    train, _, _ = frames(ds, "train")
+    # simulated traffic (datasets/carla) is given to a highD network as deployed: highD's statistics
+    train, _, _ = frames("highd" if ds == "carla" else ds, "train")
     n_feat = train.shape[-1]
     lo = train.reshape(-1, n_feat).min(0)
     hi = train.reshape(-1, n_feat).max(0)

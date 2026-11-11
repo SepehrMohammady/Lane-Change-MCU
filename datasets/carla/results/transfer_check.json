@@ -1,0 +1,106 @@
+{
+ "network": "highd_cls_model_1793711684616882545_453917_int8_io.tflite",
+ "input_statistics": "highD training split",
+ "rule": {
+  "min_lane_change_scenarios": 100,
+  "a_min_correct_2s_before": 0.8,
+  "b_max_lane_keeping_windows_called_lane_change": 0.1
+ },
+ "enough_scenarios": true,
+ "a_met": false,
+ "b_met": false,
+ "verdict": "NO GO",
+ "simulated_traffic_manager": {
+  "scenarios": {
+   "right_lc": 91,
+   "left_lc": 100,
+   "lane_keeping": 95
+  },
+  "correct_class_2s_before_crossing": 0.1152,
+  "lane_keeping_windows_called_lane_change": 0.4028,
+  "correct_class_by_seconds_before_crossing": {
+   "0.2": 0.974,
+   "0.4": 0.859,
+   "0.6": 0.602,
+   "0.8": 0.921,
+   "1.0": 0.377,
+   "1.2": 0.173,
+   "1.4": 0.157,
+   "1.6": 0.168,
+   "1.8": 0.173,
+   "2.0": 0.115,
+   "2.2": 0.152,
+   "2.4": 0.115,
+   "2.6": 0.147,
+   "2.8": 0.157,
+   "3.0": 0.173,
+   "3.2": 0.152,
+   "3.4": 0.147,
+   "3.6": 0.147,
+   "3.8": 0.173,
+   "4.0": 0.131,
+   "4.2": 0.147,
+   "4.4": 0.168,
+   "4.6": 0.12,
+   "4.8": 0.131,
+   "5.0": 0.152,
+   "5.2": 0.168
+  },
+  "protocol_metrics": {
+   "accuracy": 0.3755,
+   "recall": 0.2652,
+   "precision": 0.4202,
+   "f1": 0.3252,
+   "auc": 0.3232,
+   "tau_c_s": 0.6136,
+   "tau_f_s": 2.8942
+  }
+ },
+ "highd_test": {
+  "scenarios": {
+   "right_lc": 230,
+   "left_lc": 233,
+   "lane_keeping": 230
+  },
+  "correct_class_2s_before_crossing": 1.0,
+  "lane_keeping_windows_called_lane_change": 0.0941,
+  "correct_class_by_seconds_before_crossing": {
+   "0.2": 0.994,
+   "0.4": 0.998,
+   "0.6": 0.998,
+   "0.8": 0.998,
+   "1.0": 0.998,
+   "1.2": 0.998,
+   "1.4": 0.998,
+   "1.6": 1.0,
+   "1.8": 1.0,
+   "2.0": 1.0,
+   "2.2": 1.0,
+   "2.4": 1.0,
+   "2.6": 1.0,
+   "2.8": 1.0,
+   "3.0": 1.0,
+   "3.2": 1.0,
+   "3.4": 0.998,
+   "3.6": 0.989,
+   "3.8": 0.968,
+   "4.0": 0.952,
+   "4.2": 0.911,
+   "4.4": 0.847,
+   "4.6": 0.78,
+   "4.8": 0.708,
+   "5.0": 0.672,
+   "5.2": 0.592
+  },
+  "protocol_metrics": {
+   "accuracy": 0.9276,
+   "recall": 0.9384,
+   "precision": 0.9498,
+   "f1": 0.9441,
+   "auc": 0.9724,
+   "tau_c_s": 4.7762,
+   "tau_f_s": 4.9477
+  }
+ },
+ "utc": "2026-11-11T14:25:26+00:00"
+}
