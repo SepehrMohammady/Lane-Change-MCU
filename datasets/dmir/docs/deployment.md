@@ -805,3 +805,29 @@ model has 12% fewer MACC than the DSCNN but takes 14% longer and twice the RAM: 
 1x1 convolution keeps all 50 steps with 87 channels. A MAC budget does not bound latency. As
 before on LCIR, int8 PTQ costs accuracy (intention 90.72 to 83.05%, LCR RMSE 0.463 to 0.785 s).
 
+
+## Searched on scaled inputs (2026-11-11)
+
+The corrected LCR and LCL searches, repeated on per-feature min-max scaled inputs (`dmir_lcr_v4_k3_mm`,
+`dmir_lcl_v4_k3_mm`; scaled by the training windows' range after clipping), choose networks that keep
+their accuracy in full int8. Five fresh seeds (100-104, `datasets/dmir/results/seeds/input_scaling_mm.jsonl`),
+test RMSE, against the raw-input choices of the same searches:
+
+| head | network, parameters | MACs | float32 | int8 (int8 I/O) |
+|---|---|--:|--:|--:|
+| LCR | raw-input choice, 3,809 | 162,080 | 0.452 ± 0.008 s | 0.688 ± 0.022 s |
+| LCR | scaled-input choice, 10,091 | 127,765 | 0.454 ± 0.010 s | 0.456 ± 0.012 s |
+| LCL | raw-input choice, 1,979 | 22,605 | 0.441 ± 0.014 s | 0.490 ± 0.007 s |
+| LCL | scaled-input choice, 9,945 | 162,353 | 0.460 ± 0.013 s | 0.458 ± 0.015 s |
+
+The intention search on scaled inputs ends 2.1 points lower on validation, and its choice reaches
+87.95% in int8 against 91.30% in float32 for the raw-input choice, so intention stays on raw inputs
+(QAT int8).
+
+`unas/prepare_deploy_lcir.py` applies the search's scaling to models from `*_mm*` folders and stores
+the offsets and spans (`scale_lo`, `scale_span`) in the deploy record; a board applies
+`(x - scale_lo) / scale_span` before quantizing the input. Deployed files (the search-trained models):
+`lcir_v4k3mm_regression_lcr_int8_io.tflite` RMSE 0.459 s, 23,208 B (float32 0.463 s);
+`lcir_v4k3mm_regression_lcl_int8_io.tflite` RMSE 0.467 s, 23,600 B (float32 0.460 s). Board times are
+not measured yet. The LCL network has 7.2 times the MACs of the raw-input choice, so only the board
+can show whether its int8 build is faster than that choice's float32 build.

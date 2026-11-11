@@ -7,6 +7,12 @@ Emits, next to the hand-designed DSCNN builds and in their format:
   evaluation (prepare_deploy.prep); int8 files are evaluated through their tensor
   interface (quantized input, dequantized output), as export_int8_io.py does.
 
+A model from a search on scaled inputs (folder name with "_mm", DMIR_SCALE=minmax) gets the
+same per-feature min-max scaling as in its search (training windows' range after clipping,
+constant features 0) for calibration and evaluation; the deploy record then carries the
+scaling's offsets and spans, which the board applies before quantizing the input. A
+DMIR_SCALE value that contradicts the folder name is refused.
+
 Run in the WSL dmir_nas venv, CPU:
   source ~/dmir_nas/env.sh
   CUDA_VISIBLE_DEVICES= DMIR_DATA_ROOT=/mnt/c/Projects/PhD/DIMIR/datasets/dmir/data \
@@ -58,13 +64,38 @@ def metrics(p, y, is_cls):
     return {"rmse": round(float(np.sqrt((e ** 2).mean())), 5), "mae": round(float(np.abs(e).mean()), 5)}
 
 
+def input_scaling(h5):
+    """'minmax' for a model from a search on scaled inputs (*_mm* folder), else '', as
+    select_by_seeds.set_scaling decides for the searches."""
+    want = "minmax" if "_mm" in Path(h5).resolve().parent.name else ""
+    have = os.environ.get("DMIR_SCALE", "")
+    if have and have != want:
+        sys.exit(f"DMIR_SCALE={have!r} contradicts the folder of {h5}")
+    return want
+
+
+def scale_minmax(xtr, xte):
+    """Per-feature min-max scaling by the training windows' range, as DMIR_SCALE=minmax in
+    dmir_dataset.py (test already clipped to that range; constant features become 0)."""
+    lo, hi = xtr.min(axis=(0, 1)), xtr.max(axis=(0, 1))
+    span = (hi - lo).astype(np.float32)
+    span[span == 0] = 1.0
+    return ((xtr - lo) / span).astype(np.float32), ((xte - lo) / span).astype(np.float32), lo, span
+
+
 def main(task, h5, out_dir, stem):
     xtr, xte, yte, is_cls = prep(task)
+    scaling = input_scaling(h5)
+    if scaling == "minmax":
+        xtr, xte, lo, span = scale_minmax(xtr, xte)
+        print(f"{task}: inputs min-max scaled per feature (training range)", flush=True)
     model = tf.keras.models.load_model(h5, compile=False)
     out = Path(out_dir)
     out.mkdir(parents=True, exist_ok=True)
     rec = {"task": task, "source_h5": Path(h5).name, "params": int(model.count_params()),
-           "input_shape": list(xte.shape[1:]),
+           "input_shape": list(xte.shape[1:]), "input_scaling": scaling or "raw",
+           **({"scale_lo": [float(v) for v in lo], "scale_span": [float(v) for v in span]}
+              if scaling == "minmax" else {}),
            "keras_float": metrics(model.predict(xte, batch_size=4096, verbose=0), yte, is_cls),
            "variants": {}}
     builds = (("float32", convert(model, xtr, "float32")),

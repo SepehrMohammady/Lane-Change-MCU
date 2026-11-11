@@ -110,6 +110,12 @@ the model's own Keras; `path_check.py` compares the fork's trainer with `select_
 | `run_mm_searches.sh` | the three corrected seed-42 LCIR searches again on min-max scaled inputs (runs named `*_mm*`; `DMIR_SCALE=minmax` in `dmir_dataset.py`, set from the name by the runners, `select_by_seeds.py` and `final_eval.py`), their selections, then float and int8 scores on fresh seeds 100-104 for the new and the raw-input choices | `datasets/dmir/results/seeds/input_scaling_mm.jsonl` |
 | `resource_bias.py [search ...]` | for every evaluated candidate of a search: the fork's stored peak memory, size and MACs against the Keras model's weights and MACs and the faithful graph (CPU, from the fork's state files) | `datasets/highd/results/resource_bias.json` |
 
+Outcome of `run_mm_searches.sh` (2026-11-11, test, fresh seeds 100-104): searched on scaled inputs, the LCR and
+LCL choices lose almost nothing in full int8 (RMSE 0.456 and 0.458 s, against 0.452 and 0.441 s in float32 for
+the raw-input choices, whose int8 builds reach 0.688 and 0.490 s); the intention choice does not keep the float
+accuracy (87.95% int8 against 91.30% float). `prepare_deploy_lcir.py` applies the search's scaling to models
+from `*_mm*` folders; results and deploy files in `datasets/dmir/docs/deployment.md`.
+
 ## Spending training runs under noise (2026-11-02)
 
 One training run does not rank the candidates (Spearman 0.17 between the run the search kept and
