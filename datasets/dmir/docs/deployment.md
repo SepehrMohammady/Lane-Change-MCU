@@ -898,3 +898,36 @@ The hand-designed DSCNN gains in the same way, with the same bounds (not chosen 
 reach 91.51% on intention (float32 90.96%; 87.14% with the calibration as before), RMSE 0.435 s on LCR
 (0.439 s; 0.652 s) and 0.454 s on LCL (0.459 s; 0.480 s). Searched and hand-designed networks can
 therefore be compared in int8 on equal terms.
+
+## All int8 candidates on the board, by aspect (2026-11-11)
+
+Every network is kept; which one is deployed depends on what counts (decided 2026-11-11): the fastest
+when latency or energy per decision counts, the smallest when flash and RAM count. int8 with int8 I/O on
+the STM32H7B3I-DK (`unas/local_bench.py`: time, firmware flash, static RAM); accuracy of the deployed
+file, and the five-seed int8 result where one exists.
+
+| head | network | parameters | time | flash | RAM | deployed file | five seeds, int8 |
+|---|---|--:|--:|--:|--:|--:|--:|
+| intention | searched on raw inputs | 2,336 | 0.520 ms | 30,672 B | 12,104 B | 91.26% | 91.25 ± 0.35% |
+| intention | searched on scaled inputs | 902 | **0.187 ms** | **21,124 B** | **8,376 B** | 87.91% | 87.95 ± 0.99% |
+| intention | hand-designed | 10,451 | 1.097 ms | 45,380 B | 17,744 B | 91.51% | |
+| LCR | searched on raw inputs | 3,809 | 1.183 ms | **32,424 B** | 16,208 B | 0.450 s | 0.449 ± 0.008 s |
+| LCR | searched on scaled inputs | 10,091 | **1.012 ms** | 40,624 B | **15,984 B** | 0.459 s | 0.456 ± 0.012 s |
+| LCR | hand-designed | 10,321 | 1.098 ms | 46,988 B | 17,744 B | 0.435 s | |
+| LCL | searched on raw inputs | 1,979 | **0.243 ms** | **29,064 B** | **11,736 B** | 0.433 s | 0.434 ± 0.008 s |
+| LCL | searched on scaled inputs | 9,945 | 1.321 ms | 44,376 B | 16,960 B | 0.467 s | 0.458 ± 0.015 s |
+| LCL | hand-designed | 10,321 | 1.098 ms | 46,988 B | 17,744 B | 0.454 s | |
+
+Bold: the best of a column within a head. Reading it:
+
+- **Intention:** the network searched on raw inputs is as accurate as the hand-designed one, 2.1 times
+  faster and a third smaller. The network searched on scaled inputs is 2.8 times faster again and the
+  smallest, at 3.3 points less.
+- **LCR:** fastest and smallest are different networks: the scaled-input choice is 14% faster, the
+  raw-input choice needs 20% less flash. The hand-designed network runs as fast as the searched ones in
+  int8 (1.098 ms) with 45% more flash than the raw-input choice; its one deployed file is the most
+  accurate here, a single training run against five-seed means of 0.449 and 0.456 s.
+- **LCL:** the raw-input choice is fastest, smallest and most accurate: 4.5 times faster than the
+  hand-designed network.
+
+Energy per decision follows the time; it is measured when the power probe is available.
