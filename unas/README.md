@@ -225,6 +225,12 @@ host`) differs from TFLite in the same way. Per frame the board spends 6.4 µs o
 window copy and 0.107 to 0.316 ms on the network; the host round trip over the virtual COM port takes 1.4 to
 1.6 ms. `--save` keeps the board's raw outputs next to the reference.
 
+In real time (searched classifier, full test split, 24,255 frames per run): at the protocol's 5 Hz and at
+highD's camera rate of 25 Hz every window again equals the reference and the metrics are those of the deploy
+record (92.76% accuracy, τ_c 4.78 s). The core computes for 0.07% of the frame period at 5 Hz and 0.36% at
+25 Hz. The host sends a frame a mean 0.47 ms and 0.37 ms after its due time (99th percentile 1.0 and 0.9 ms,
+worst case 30 and 99 ms: the PC's scheduling, not the board).
+
 Before closing a loop around the board (2026-11-11): `datasets/highd/cutin_headroom.py` replaces the follower of
 each test lane change by a car with an ACC (point mass, the car-following model of Milanés and Shladover, 2014)
 and asks what that car gains from knowing the lane change k seconds before the crossing; recorded data only.
