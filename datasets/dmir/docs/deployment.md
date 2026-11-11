@@ -828,6 +828,21 @@ The intention search on scaled inputs ends 2.1 points lower on validation, and i
 the offsets and spans (`scale_lo`, `scale_span`) in the deploy record; a board applies
 `(x - scale_lo) / scale_span` before quantizing the input. Deployed files (the search-trained models):
 `lcir_v4k3mm_regression_lcr_int8_io.tflite` RMSE 0.459 s, 23,208 B (float32 0.463 s);
-`lcir_v4k3mm_regression_lcl_int8_io.tflite` RMSE 0.467 s, 23,600 B (float32 0.460 s). Board times are
-not measured yet. The LCL network has 7.2 times the MACs of the raw-input choice, so only the board
-can show whether its int8 build is faster than that choice's float32 build.
+`lcir_v4k3mm_regression_lcl_int8_io.tflite` RMSE 0.467 s, 23,600 B (float32 0.460 s).
+
+On the STM32H7B3I-DK (`unas/local_bench.py`, 280 MHz, 200 timed runs; firmware flash and static RAM
+of the local build; RMSE of the deployed file):
+
+| head | build | time | flash | RAM | RMSE |
+|---|---|--:|--:|--:|--:|
+| LCR | raw-input choice, float32 | 3.229 ms | 34,788 B | 20,024 B | 0.450 s |
+| LCR | raw-input choice, int8 I/O | 1.186 ms | 32,424 B | 16,208 B | 0.662 s |
+| LCR | scaled-input choice, int8 I/O | 1.012 ms | 40,624 B | 15,984 B | 0.459 s |
+| LCL | raw-input choice, float32 | 0.507 ms | 26,548 B | 16,136 B | 0.437 s |
+| LCL | raw-input choice, int8 I/O | 0.243 ms | 29,064 B | 11,736 B | 0.492 s |
+| LCL | scaled-input choice, int8 I/O | 1.321 ms | 44,376 B | 16,960 B | 0.467 s |
+
+For LCR the scaled-input choice in int8 runs 3.2 times faster than the raw-input choice in float32
+at 0.009 s higher RMSE. For LCL it does not pay: the scaled-input choice has 7.2 times the MACs, and
+its int8 build is 2.6 times slower than the raw-input choice in float32, takes more flash and RAM
+and has the higher RMSE, so float32 stays the LCL build.

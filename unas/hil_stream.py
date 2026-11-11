@@ -13,7 +13,7 @@ One JSON line per run goes to datasets/<ds>/results/hil/hil_stream.jsonl: exact 
 the protocol's metrics from the board's outputs (src/lc_windows.early_metrics for the classifiers), cycles
 per frame on the board (scaling, quantization and window copy; network) and the host's round trip.
 
-  .venv\\Scripts\\python unas/hil_stream.py datasets/highd/results/deploy/<stem>.tflite [--rate 5] [--limit N]
+  .venv\\Scripts\\python unas/hil_stream.py datasets/highd/results/deploy/<stem>.tflite [--rate 5] [--limit N] [--save]
   .venv\\Scripts\\python unas/hil_stream.py <tflite> --build-only        # no board needed
 """
 from __future__ import annotations
@@ -113,6 +113,8 @@ def main():
     ap.add_argument("--rate", type=float, default=5.0, help="frames per second; 0 = as fast as the link allows")
     ap.add_argument("--limit", type=int, default=None, help="first N test scenarios only")
     ap.add_argument("--build-only", action="store_true")
+    ap.add_argument("--save", action="store_true",
+                    help="keep the board's raw outputs and timings next to the reference (firmware/build/stream)")
     a = ap.parse_args()
     tfl = (ROOT / a.tflite).resolve()
     ds = tfl.relative_to(ROOT).parts[1]
@@ -130,6 +132,10 @@ def main():
     with open_port(sn) as port:
         outs, pre, inf, rtt, late = stream(port, ref["feats"], a.rate, n_out, a.limit)
     S = len(outs)
+    if a.save:
+        tag = f"rate{a.rate:g}" + (f"_n{S}" if S < len(ref["feats"]) else "")
+        np.savez_compressed(lb.FW / "build" / "stream" / tfl.stem / f"board_out_{tag}.npz",
+                            outs=outs, pre=pre, inf=inf, rtt=rtt, late=late)
     want = ref["ref"][:S]
     label = ref["label"][:S]
     so, zo = float(ref["out_scale"]), int(ref["out_zp"])
@@ -137,6 +143,7 @@ def main():
     rec = {"model": tfl.name, "board": "STM32H7B3I-DK", "core_hz": hz, "baud": BAUD,
            "rate_hz": a.rate, "scenarios": S, "frames": int(S * SEQ_LEN), "windows": int(S * N_SLIDES),
            "agreement": {"identical_windows": round(float((outs == want).all(-1).mean()), 6),
+                         "differing_windows": int((outs != want).any(-1).sum()),
                          "max_abs_lsb": int(np.abs(outs.astype(np.int16) - want.astype(np.int16)).max())},
            "timed_runs_cycles_mean": cmean,
            "board_cycles": {"preprocess": stats(pre, nd=1), "network": stats(inf, nd=1)},

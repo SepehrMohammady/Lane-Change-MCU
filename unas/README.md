@@ -113,8 +113,11 @@ the model's own Keras; `path_check.py` compares the fork's trainer with `select_
 Outcome of `run_mm_searches.sh` (2026-11-11, test, fresh seeds 100-104): searched on scaled inputs, the LCR and
 LCL choices lose almost nothing in full int8 (RMSE 0.456 and 0.458 s, against 0.452 and 0.441 s in float32 for
 the raw-input choices, whose int8 builds reach 0.688 and 0.490 s); the intention choice does not keep the float
-accuracy (87.95% int8 against 91.30% float). `prepare_deploy_lcir.py` applies the search's scaling to models
-from `*_mm*` folders; results and deploy files in `datasets/dmir/docs/deployment.md`.
+accuracy (87.95% int8 against 91.30% float). On the H7B3I-DK the LCR choice in int8 runs 3.2 times faster
+than the raw-input choice in float32 (1.012 against 3.229 ms); the LCL choice has 7.2 times the MACs and is
+2.6 times slower (1.321 against 0.507 ms), so float32 stays the LCL build. `prepare_deploy_lcir.py` applies
+the search's scaling to models from `*_mm*` folders; results and deploy files in
+`datasets/dmir/docs/deployment.md`.
 
 ## Spending training runs under noise (2026-11-02)
 
