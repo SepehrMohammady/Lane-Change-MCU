@@ -49,6 +49,24 @@ spread (mean ≈ 2.0).
    50 × 31 input contract, may be pruned by NAS automatically.
 3. No NaNs in any split.
 
+## What the prepared pickles hold of the drives (found 2026-11-11)
+
+`datasets/dmir/session_stream.py` rebuilds the raw sessions of the seven test drivers and locates every
+test-pickle window in them (results: `datasets/dmir/results/hil/session_stream.json`):
+
+- All test windows come from the sessions with lane changes (`userNLC`); the baseline sessions (`userNN`)
+  are in no pickle.
+- One affine map per channel and task reproduces every test window (19,722, 7,073 and 8,097) to 5e-7: the
+  three scalers are recovered. The LCL pickle has the classification channel layout.
+- Targets: the time to the lane change is 0.0 s on the last frame before the lane-line distance jumps;
+  a lane change is labelled back to the previous lane change, not past it.
+- The lab's rule finds 527 lane changes with enough history in these sessions; the test pickles hold 382
+  of them (driver 13: 44 of 80, driver 31: 27 of 111). The frames before the others are in no class. The
+  reason is not known to us.
+- Free-driving windows never contain a completed lane change (a window with an ignored frame is dropped),
+  so they end at least 6.4 s after the previous lane change. A stream delivers such windows after every
+  lane change; see the whole-drive results in `unas/README.md`.
+
 ## Provenance (resolved 2026-07-07 — details in datasets/dmir/docs/dataset-provenance.md)
 
 The data is the ELIOS "Lane Change Intention Recognition Dataset" (Zenodo DOI

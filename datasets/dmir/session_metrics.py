@@ -136,7 +136,7 @@ def intention(ref, deq):
                 run += 1
                 k -= 1
             lead.append(run / FPS)
-            in_pickle.append(bool(held_reg[[by_frame[f] for f in range(i - 41, i) if f in by_frame]].mean() >= 0.5))
+            in_pickle.append(bool(held_reg[[by_frame[f] for f in range(i - 41, i) if f in by_frame]].sum() >= 20))
     lead, in_pickle = np.array(lead), np.array(in_pickle)
 
     def lead_summary(v):

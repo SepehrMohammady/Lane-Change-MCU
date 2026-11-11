@@ -283,6 +283,37 @@ and TFLite's value in the other 4 (three in the equalized exiD classifier, one i
 inputs): the differences lie in the network arithmetic of ST's Cortex-M7 kernels against the TFLite interpreter and,
 rarely, against ST's own PC build.
 
+Whole LCIR drives (2026-11-11). The prepared test sets are shuffled, class-balanced windows; a deployed network
+gets every frame of a drive. `datasets/dmir/session_stream.py` rebuilds the complete raw sessions of the seven
+official test drivers as frame streams (14 sessions, 175 minutes, 543 lane changes) and recovers
+the provider's normalization for the three prepared datasets: one affine map per channel, which reproduces every
+window of the test pickles. A copy of a network's file under `datasets/dmir/data/sessions/sessions_<file name>` makes
+`hil_prepare.py` and `hil_stream.py` replay those drives, a decision on every frame from the 50th on;
+`datasets/dmir/session_metrics.py` scores the board's outputs with measures fixed before the first output existed.
+Six networks, 104,288 windows each: 50 of 625,728 windows differ from TFLite by at most 2 LSB, and the board
+given those int8 windows directly returns the streamed value in all 50. One drive at the recording's 10 Hz
+(9,422 frames): every output equal, the core computes for 0.54% of the frame period, the host is a mean
+0.52 ms late (99th percentile 1.0 ms). On the frames of the test pickles the stream returns the deploy
+records (91.26%, 0.450 s, 0.433 s). On the whole drives, intention network searched on raw inputs:
+
+| measure | result |
+|---|---|
+| lane changes recognized at least 2 s before the crossing | 90.4% of 543 (median lead 5.0 s, 2.4% missed) |
+| the same, lane changes held by the lab's test pickles | 95.0% of 382 |
+| the same, lane changes not in the pickles (145 left out, 16 made in the baseline sessions) | 79.5% of 161 |
+| baseline sessions, 69 minutes of free driving (they hold 16 lane changes): frames called a lane change | 4.2%; 52 false alarms of 0.5 s or more per hour |
+| sessions with lane changes: free-driving frames called a lane change | 46.6% |
+| of those frames, window still holding a completed lane change (post hoc split) | 84.0% called a lane change, against 21.4% otherwise |
+| LCR / LCL RMSE on test-pickle frames | 0.450 / 0.433 s |
+| LCR / LCL RMSE before lane changes left out of the pickles | 0.835 / 0.747 s |
+
+The lab's test pickles hold 382 of the 527 lane changes that its own rule finds in the seven sessions with lane
+changes, and their
+free-driving windows never contain a completed lane change, while a stream delivers such windows after every lane
+change; there the network keeps announcing a lane change. An accuracy on balanced windows therefore does not
+describe the deployed behaviour. The network searched on scaled inputs: 85.1% at 2 s (median 3.3 s),
+37 false alarms per hour in the baseline sessions. All numbers: `datasets/dmir/results/hil/session_metrics.json`.
+
 Before closing a loop around the board (2026-11-11): `datasets/highd/cutin_headroom.py` replaces the follower of
 each test lane change by a car with an ACC (point mass, the car-following model of Milanés and Shladover, 2014)
 and asks what that car gains from knowing the lane change k seconds before the crossing; recorded data only.

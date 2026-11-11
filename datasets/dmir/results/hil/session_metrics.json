@@ -1,0 +1,299 @@
+{
+ "networks": {
+  "intention, searched on raw inputs": {
+   "file": "lcir_v4k3sat_classification_int8_io.tflite",
+   "outputs_from": "board",
+   "windows": 104288,
+   "windows_differing_from_the_host_reference": 0,
+   "lc_sessions": {
+    "scored_frames": 55680,
+    "frame_accuracy": 0.6813,
+    "recall": {
+     "free driving": 0.5339,
+     "before a right lane change": 0.9743,
+     "before a left lane change": 0.8912
+    },
+    "frames_per_class": {
+     "free": 35052,
+     "right": 10076,
+     "left": 10552
+    },
+    "accuracy_on_the_frames_of_the_test_pickle": 0.91264,
+    "frames_of_the_test_pickle": 19722,
+    "false_alarms": {
+     "free_driving_minutes": 58.4,
+     "runs_of_1_frame_or_more": 473,
+     "runs_of_5_frames_or_more": 237,
+     "per_hour_1_frame_or_more": 485.8,
+     "per_hour_5_frames_or_more": 243.4,
+     "longest_run_s": 27.8,
+     "free_frames_called_lane_change": 0.4661
+    }
+   },
+   "n_sessions": {
+    "false_alarms": {
+     "free_driving_minutes": 69.1,
+     "runs_of_1_frame_or_more": 167,
+     "runs_of_5_frames_or_more": 60,
+     "per_hour_1_frame_or_more": 145.0,
+     "per_hour_5_frames_or_more": 52.1,
+     "longest_run_s": 12.4,
+     "free_frames_called_lane_change": 0.0421
+    }
+   },
+   "detection_lead": {
+    "all": {
+     "lane_changes": 543,
+     "median_s": 5.0,
+     "p10_s": 2.02,
+     "mean_s": 5.22,
+     "at_least_1s": 0.943,
+     "at_least_2s": 0.904,
+     "at_least_3s": 0.79,
+     "missed": 0.024
+    },
+    "lane_changes_in_the_test_pickles": {
+     "lane_changes": 382,
+     "median_s": 5.3,
+     "p10_s": 2.6,
+     "mean_s": 5.46,
+     "at_least_1s": 0.976,
+     "at_least_2s": 0.95,
+     "at_least_3s": 0.84,
+     "missed": 0.01
+    },
+    "lane_changes_left_out_of_the_pickles": {
+     "lane_changes": 161,
+     "median_s": 4.3,
+     "p10_s": 0.7,
+     "mean_s": 4.64,
+     "at_least_1s": 0.863,
+     "at_least_2s": 0.795,
+     "at_least_3s": 0.671,
+     "missed": 0.056
+    }
+   },
+   "post_hoc_by_window_content_lc_sessions": {
+    "window_without_a_completed_lane_change": {
+     "free_frames": 20945,
+     "minutes": 34.9,
+     "called_lane_change": 0.2138,
+     "false_alarm_runs_of_5_frames_or_more_per_hour": 250.9
+    },
+    "window_still_holding_a_completed_lane_change": {
+     "free_frames": 14107,
+     "minutes": 23.5,
+     "called_lane_change": 0.8405,
+     "false_alarm_runs_of_5_frames_or_more_per_hour": 954.4
+    },
+    "frame_accuracy_without_such_windows": 0.8584,
+    "frames_without_such_windows": 41573
+   }
+  },
+  "intention, searched on scaled inputs": {
+   "file": "lcir_v4k3mm_classification_int8_io.tflite",
+   "outputs_from": "board",
+   "windows": 104288,
+   "windows_differing_from_the_host_reference": 0,
+   "lc_sessions": {
+    "scored_frames": 55680,
+    "frame_accuracy": 0.7229,
+    "recall": {
+     "free driving": 0.6433,
+     "before a right lane change": 0.908,
+     "before a left lane change": 0.8106
+    },
+    "frames_per_class": {
+     "free": 35052,
+     "right": 10076,
+     "left": 10552
+    },
+    "accuracy_on_the_frames_of_the_test_pickle": 0.87912,
+    "frames_of_the_test_pickle": 19722,
+    "false_alarms": {
+     "free_driving_minutes": 58.4,
+     "runs_of_1_frame_or_more": 1225,
+     "runs_of_5_frames_or_more": 347,
+     "per_hour_1_frame_or_more": 1258.1,
+     "per_hour_5_frames_or_more": 356.4,
+     "longest_run_s": 13.5,
+     "free_frames_called_lane_change": 0.3567
+    }
+   },
+   "n_sessions": {
+    "false_alarms": {
+     "free_driving_minutes": 69.1,
+     "runs_of_1_frame_or_more": 116,
+     "runs_of_5_frames_or_more": 43,
+     "per_hour_1_frame_or_more": 100.7,
+     "per_hour_5_frames_or_more": 37.3,
+     "longest_run_s": 11.0,
+     "free_frames_called_lane_change": 0.0279
+    }
+   },
+   "detection_lead": {
+    "all": {
+     "lane_changes": 543,
+     "median_s": 3.3,
+     "p10_s": 1.5,
+     "mean_s": 3.76,
+     "at_least_1s": 0.939,
+     "at_least_2s": 0.851,
+     "at_least_3s": 0.602,
+     "missed": 0.039
+    },
+    "lane_changes_in_the_test_pickles": {
+     "lane_changes": 382,
+     "median_s": 3.5,
+     "p10_s": 2.0,
+     "mean_s": 4.05,
+     "at_least_1s": 0.974,
+     "at_least_2s": 0.906,
+     "at_least_3s": 0.66,
+     "missed": 0.018
+    },
+    "lane_changes_left_out_of_the_pickles": {
+     "lane_changes": 161,
+     "median_s": 2.7,
+     "p10_s": 0.4,
+     "mean_s": 3.07,
+     "at_least_1s": 0.857,
+     "at_least_2s": 0.72,
+     "at_least_3s": 0.466,
+     "missed": 0.087
+    }
+   },
+   "post_hoc_by_window_content_lc_sessions": {
+    "window_without_a_completed_lane_change": {
+     "free_frames": 20945,
+     "minutes": 34.9,
+     "called_lane_change": 0.1309,
+     "false_alarm_runs_of_5_frames_or_more_per_hour": 245.8
+    },
+    "window_still_holding_a_completed_lane_change": {
+     "free_frames": 14107,
+     "minutes": 23.5,
+     "called_lane_change": 0.6919,
+     "false_alarm_runs_of_5_frames_or_more_per_hour": 1005.5
+    },
+    "frame_accuracy_without_such_windows": 0.8637,
+    "frames_without_such_windows": 41573
+   }
+  },
+  "LCR, searched on raw inputs": {
+   "file": "lcir_v4k3sat_regression_lcr_int8_io.tflite",
+   "outputs_from": "board",
+   "windows": 104288,
+   "windows_differing_from_the_host_reference": 9,
+   "all_frames_before_its_lane_changes": {
+    "frames": 10246,
+    "rmse_s": 0.5966,
+    "mae_s": 0.4226
+   },
+   "frames_of_the_test_pickle": {
+    "frames": 7073,
+    "rmse_s": 0.4502,
+    "mae_s": 0.3224
+   },
+   "frames_left_out_of_the_pickle": {
+    "frames": 3173,
+    "rmse_s": 0.8353,
+    "mae_s": 0.6459
+   },
+   "where_the_intention_network_predicts_this_direction": {
+    "frames": 9944,
+    "rmse_s": 0.5788,
+    "mae_s": 0.4131,
+    "share_of_frames": 0.971
+   }
+  },
+  "LCR, searched on scaled inputs": {
+   "file": "lcir_v4k3mm_regression_lcr_int8_io.tflite",
+   "outputs_from": "board",
+   "windows": 104288,
+   "windows_differing_from_the_host_reference": 10,
+   "all_frames_before_its_lane_changes": {
+    "frames": 10246,
+    "rmse_s": 0.6622,
+    "mae_s": 0.4415
+   },
+   "frames_of_the_test_pickle": {
+    "frames": 7073,
+    "rmse_s": 0.4593,
+    "mae_s": 0.329
+   },
+   "frames_left_out_of_the_pickle": {
+    "frames": 3173,
+    "rmse_s": 0.9725,
+    "mae_s": 0.6922
+   },
+   "where_the_intention_network_predicts_this_direction": {
+    "frames": 9944,
+    "rmse_s": 0.6182,
+    "mae_s": 0.4283,
+    "share_of_frames": 0.971
+   }
+  },
+  "LCL, searched on raw inputs": {
+   "file": "lcir_v4k3sat_regression_lcl_int8_io.tflite",
+   "outputs_from": "board",
+   "windows": 104288,
+   "windows_differing_from_the_host_reference": 1,
+   "all_frames_before_its_lane_changes": {
+    "frames": 10880,
+    "rmse_s": 0.5311,
+    "mae_s": 0.3806
+   },
+   "frames_of_the_test_pickle": {
+    "frames": 8097,
+    "rmse_s": 0.4328,
+    "mae_s": 0.318
+   },
+   "frames_left_out_of_the_pickle": {
+    "frames": 2783,
+    "rmse_s": 0.7469,
+    "mae_s": 0.5627
+   },
+   "where_the_intention_network_predicts_this_direction": {
+    "frames": 9514,
+    "rmse_s": 0.5092,
+    "mae_s": 0.3593,
+    "share_of_frames": 0.874
+   }
+  },
+  "LCL, searched on scaled inputs": {
+   "file": "lcir_v4k3mm_regression_lcl_int8_io.tflite",
+   "outputs_from": "board",
+   "windows": 104288,
+   "windows_differing_from_the_host_reference": 30,
+   "all_frames_before_its_lane_changes": {
+    "frames": 10880,
+    "rmse_s": 0.5965,
+    "mae_s": 0.4078
+   },
+   "frames_of_the_test_pickle": {
+    "frames": 8097,
+    "rmse_s": 0.4671,
+    "mae_s": 0.3297
+   },
+   "frames_left_out_of_the_pickle": {
+    "frames": 2783,
+    "rmse_s": 0.8695,
+    "mae_s": 0.6351
+   },
+   "where_the_intention_network_predicts_this_direction": {
+    "frames": 9514,
+    "rmse_s": 0.5491,
+    "mae_s": 0.3729,
+    "share_of_frames": 0.874
+   }
+  }
+ },
+ "utc": "2026-11-11T17:38:02+00:00",
+ "sessions": {
+  "count": 14,
+  "minutes": 175.0,
+  "lc_minutes": 104.2,
+  "n_minutes": 70.8
+ }
+}
