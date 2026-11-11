@@ -108,6 +108,7 @@ the model's own Keras; `path_check.py` compares the fork's trainer with `select_
 | `select_by_seeds.py <search>` | v2 searches: shortlists the 12 candidates with the best single-run validation metric, retrains each with five seeds, picks the best mean validation metric and the smallest model within one standard error of it; test data never enter the choice | `datasets/highd/results/seeds/select_<search>.jsonl`, `datasets/highd/results/nas-v2/<search>/` |
 | `input_scaling_check.py [task ...]` | trains the corrected LCIR choices with five seeds on raw and on per-feature min-max scaled inputs and converts every run to full int8 (int8 I/O): with raw inputs one int8 input scale leaves up to half the features fewer than 8 steps; `CHOICES_FROM=<search>,...` scores the choices of named searches instead, on the inputs each was searched on | `datasets/dmir/results/seeds/input_scaling.jsonl` |
 | `run_mm_searches.sh` | the three corrected seed-42 LCIR searches again on min-max scaled inputs (runs named `*_mm*`; `DMIR_SCALE=minmax` in `dmir_dataset.py`, set from the name by the runners, `select_by_seeds.py` and `final_eval.py`), their selections, then float and int8 scores on fresh seeds 100-104 for the new and the raw-input choices | `datasets/dmir/results/seeds/input_scaling_mm.jsonl` |
+| `input_clip_check.py [task ...]` | trains the corrected LCIR choices with five seeds on raw inputs and converts every run to full int8 (int8 I/O) with the calibration windows as they are and clipped to [-B, B] for eight bounds B: the features are standardized with rare extremes of several hundred, which set the int8 input range; `--report` picks B per head on validation and applies the rule on test | `datasets/dmir/results/seeds/input_clip.jsonl` |
 | `resource_bias.py [search ...]` | for every evaluated candidate of a search: the fork's stored peak memory, size and MACs against the Keras model's weights and MACs and the faithful graph (CPU, from the fork's state files) | `datasets/highd/results/resource_bias.json` |
 
 Outcome of `run_mm_searches.sh` (2026-11-11, test, fresh seeds 100-104): searched on scaled inputs, the LCR and
@@ -118,6 +119,15 @@ than the raw-input choice in float32 (1.012 against 3.229 ms); the LCL choice ha
 2.6 times slower (1.321 against 0.507 ms), so float32 stays the LCL build. `prepare_deploy_lcir.py` applies
 the search's scaling to models from `*_mm*` folders; results and deploy files in
 `datasets/dmir/docs/deployment.md`.
+
+Outcome of `input_clip_check.py` (2026-11-11, test, fresh seeds 100-104, rule fixed before the run): with the
+calibration windows clipped to ±4 (intention, LCR) or ±6 (LCL) standard deviations, the raw-input choices keep
+their float32 accuracy in full int8 without retraining: intention 91.25% against 91.00% (85.24% with the
+calibration as before), LCR 0.449 against 0.451 s (0.659 s), LCL 0.434 against 0.438 s (0.503 s). On the H7B3I-DK
+the int8 builds take 0.520, 1.183 and 0.243 ms against 0.805, 3.229 and 0.507 ms in float32, so every LCIR head
+is deployed in int8 (`CALIB_CLIP=<B> prepare_deploy_lcir.py`, files `lcir_v4k3sat_*`). The same extremes set
+the ranges of the min-max scaling used by the scaled-input searches, where the central 98% of the values of 4
+to 7 features fills under 5% of the unit interval; whether that causes their float loss was not tested.
 
 ## Spending training runs under noise (2026-11-02)
 
@@ -210,12 +220,14 @@ The board takes the test split one frame at a time, as a sensor would deliver it
 `firmware/h7b3` (`make STREAM=1`) reads a frame of raw features from the ST-LINK virtual COM port, scales
 and quantizes it with the training statistics and the network's input quantization, keeps the last 10
 frames and runs the network on every frame once the window is full (26 decisions per 35-frame highD or
-exiD scenario, the protocol's windows).
+exiD scenario, the protocol's windows). An LCIR test window is one sequence of 50 frames at 10 Hz with one
+decision; there the board first limits every feature to its training range, as every LCIR evaluation does.
 
 | script | what it does |
 |---|---|
 | `hil_prepare.py <tflite>` | WSL: the firmware header (window, per-feature offset and range, input quantization) and the host reference (int8 frames and TFLite outputs for every test window), both under `firmware/build/stream/` (not versioned: training statistics and test data) |
 | `hil_stream.py <tflite> [--rate 5] [--limit N]` | Windows: generates, builds and flashes the streaming firmware, replays the test scenarios at `--rate` frames per second (0 = as fast as the link allows) and compares the board's int8 outputs with the host reference; writes agreement, the protocol's metrics from the board's outputs, cycles per frame and the host round trip to `datasets/<ds>/results/hil/hil_stream.jsonl` |
+| `hil_host_check.py <tflite> [...]` | Windows, after `hil_stream.py --rate 0 --save`: runs ST's generated C model on the PC (`stedgeai validate --mode host`) on the windows where board and reference differ and on control windows; counts to `datasets/<ds>/results/hil/hil_host_check.jsonl` |
 
 Outcome on the STM32H7B3I-DK (2026-11-11, `datasets/highd/results/hil/hil_stream.jsonl`; 693 test scenarios,
 18,018 windows per network, at top speed): the searched classifier, the searched TTLC regressor and the
@@ -230,6 +242,16 @@ highD's camera rate of 25 Hz every window again equals the reference and the met
 record (92.76% accuracy, τ_c 4.78 s). The core computes for 0.07% of the frame period at 5 Hz and 0.36% at
 25 Hz. The host sends a frame a mean 0.47 ms and 0.37 ms after its due time (99th percentile 1.0 and 0.9 ms,
 worst case 30 and 99 ms: the PC's scheduling, not the board).
+
+exiD (hand-designed CNN trained on exiD, seed 0, files from `scripts/export_hand_cnn.py exid` and
+`deploy_hand_cnn.py`; 1,757 test scenarios, 45,682 windows per network, top speed): the classifier's outputs
+equal the reference in all but 6 windows (at most 2 LSB) and the TTLC network's in all but 1 (1 LSB). From the
+board's outputs: 86.82% accuracy, τ_c 4.65 s, RMSE 0.417 s, the values of the deploy records; the network takes
+0.315 ms per frame. In float32 this classifier reaches 89.94%, so int8 costs it 3.1 points on exiD against 0.2
+on highD (not examined yet). `hil_host_check.py` on the 8 differing windows of all replays (6 + 1 on exiD, 1 on
+highD) and 32 control windows per network: ST's C model on the PC returns the board's values in every one, so
+the board equals ST's C model wherever checked, and the few differences are between ST's kernels and the TFLite
+interpreter.
 
 Before closing a loop around the board (2026-11-11): `datasets/highd/cutin_headroom.py` replaces the follower of
 each test lane change by a car with an ACC (point mass, the car-following model of Milanés and Shladover, 2014)

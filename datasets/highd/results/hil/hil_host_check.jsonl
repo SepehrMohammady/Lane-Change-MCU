@@ -1,0 +1,1 @@
+{"model": "highd_dscnn_ttlc_int8_io.tflite", "windows_replayed": 18018, "differing_windows": 1, "differing": {"host_c_equals_board": 1, "host_c_equals_tflite": 0, "max_abs_lsb_board_vs_tflite": 1}, "control": {"windows": 32, "host_c_equals_board": 32}, "utc": "2026-11-11T13:45:18+00:00"}

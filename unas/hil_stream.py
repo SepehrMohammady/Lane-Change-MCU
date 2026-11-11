@@ -13,6 +13,10 @@ One JSON line per run goes to datasets/<ds>/results/hil/hil_stream.jsonl: exact 
 the protocol's metrics from the board's outputs (src/lc_windows.early_metrics for the classifiers), cycles
 per frame on the board (scaling, quantization and window copy; network) and the host's round trip.
 
+LCIR networks (datasets/dmir/results/deploy/lcir_*_int8_io.tflite): every test window is one 50-frame
+sequence with one decision (10 Hz in the recordings, so --rate 10 is real time); the record carries the
+accuracy or the RMSE of the board's outputs.
+
   .venv\\Scripts\\python unas/hil_stream.py datasets/highd/results/deploy/<stem>.tflite [--rate 5] [--limit N] [--save]
   .venv\\Scripts\\python unas/hil_stream.py <tflite> --build-only        # no board needed
 """
@@ -37,8 +41,7 @@ sys.path.insert(0, str(ROOT))
 from src.lc_windows import early_metrics                    # noqa: E402
 
 BAUD = 921600
-IN_LEN, SEQ_LEN = 10, 35
-N_SLIDES = SEQ_LEN - IN_LEN + 1
+IN_LEN, SEQ_LEN = 10, 35                                    # highD and exiD; other lengths come with the reference
 
 
 def build(tfl: Path) -> Path:
@@ -64,18 +67,20 @@ def open_port(sn: str):
     return serial.Serial(ports[0].device, BAUD, timeout=2.0)
 
 
-def stream(port, feats: np.ndarray, rate: float, n_out: int, limit: int | None):
-    """Send each scenario frame by frame; returns board outputs (S, 26, n_out) int8, cycles and round trips."""
+def stream(port, feats: np.ndarray, rate: float, n_out: int, limit: int | None, in_len: int = IN_LEN):
+    """Send each sequence frame by frame; returns board outputs (S, windows per sequence, n_out) int8,
+    cycles and round trips."""
     S = len(feats) if limit is None else min(limit, len(feats))
+    seq_len = feats.shape[1]
     reply_len = 12 + n_out
-    outs = np.zeros((S, N_SLIDES, n_out), np.int8)
+    outs = np.zeros((S, seq_len - in_len + 1, n_out), np.int8)
     pre, inf, rtt, late = [], [], [], []
     port.reset_input_buffer()
     period = 1.0 / rate if rate > 0 else 0.0
     t_next = time.perf_counter()
     seq = 0
     for s in range(S):
-        for f in range(SEQ_LEN):
+        for f in range(seq_len):
             if period:
                 now = time.perf_counter()
                 if now < t_next:
@@ -90,13 +95,13 @@ def stream(port, feats: np.ndarray, rate: float, n_out: int, limit: int | None):
             if len(rep) != reply_len or rep[0] != 0x5A or struct.unpack_from("<H", rep, 2)[0] != (seq & 0xFFFF):
                 raise RuntimeError(f"bad reply at scenario {s} frame {f}: {rep!r}")
             ran = rep[1] == 1
-            if ran != (f >= IN_LEN - 1):
+            if ran != (f >= in_len - 1):
                 raise RuntimeError(f"scenario {s} frame {f}: the board ran={ran}")
             c_pre, c_inf = struct.unpack_from("<II", rep, 4)
             pre.append(c_pre)
             if ran:
                 inf.append(c_inf)
-                outs[s, f - IN_LEN + 1] = np.frombuffer(rep[12:], np.int8)
+                outs[s, f - in_len + 1] = np.frombuffer(rep[12:], np.int8)
             seq += 1
     return outs, np.array(pre), np.array(inf), np.array(rtt), np.array(late)
 
@@ -129,8 +134,11 @@ def main():
     if status != 0:
         raise RuntimeError(f"firmware reported status {status:#x}")
     n_out = ref["ref"].shape[-1]
+    in_len = int(ref["in_len"]) if "in_len" in ref else IN_LEN
+    seq_len = ref["feats"].shape[1]
+    n_slides = seq_len - in_len + 1
     with open_port(sn) as port:
-        outs, pre, inf, rtt, late = stream(port, ref["feats"], a.rate, n_out, a.limit)
+        outs, pre, inf, rtt, late = stream(port, ref["feats"], a.rate, n_out, a.limit, in_len)
     S = len(outs)
     if a.save:
         tag = f"rate{a.rate:g}" + (f"_n{S}" if S < len(ref["feats"]) else "")
@@ -141,7 +149,7 @@ def main():
     so, zo = float(ref["out_scale"]), int(ref["out_zp"])
     deq = (outs.astype(np.float32) - zo) * so
     rec = {"model": tfl.name, "board": "STM32H7B3I-DK", "core_hz": hz, "baud": BAUD,
-           "rate_hz": a.rate, "scenarios": S, "frames": int(S * SEQ_LEN), "windows": int(S * N_SLIDES),
+           "rate_hz": a.rate, "scenarios": S, "frames": int(S * seq_len), "windows": int(S * n_slides),
            "agreement": {"identical_windows": round(float((outs == want).all(-1).mean()), 6),
                          "differing_windows": int((outs != want).any(-1).sum()),
                          "max_abs_lsb": int(np.abs(outs.astype(np.int16) - want.astype(np.int16)).max())},
@@ -152,8 +160,17 @@ def main():
     if a.rate > 0:
         rec["frame_lateness_ms"] = stats(late, 1e3, 3)
         # share of the frame period the core spends computing (the polling UART wait is not counted)
-        rec["compute_share_of_period"] = round(float((pre.mean() + inf.mean() * N_SLIDES / SEQ_LEN) / hz * a.rate), 8)
-    if n_out == 3:
+        rec["compute_share_of_period"] = round(float((pre.mean() + inf.mean() * n_slides / seq_len) / hz * a.rate), 8)
+        # the same with a decision on every frame, as on a continuous stream
+        rec["compute_share_every_frame"] = round(float((pre.mean() + inf.mean()) / hz * a.rate), 8)
+    if ds == "dmir":
+        if n_out == 3:
+            rec["accuracy"] = round(float((deq[:, 0].argmax(-1) == label).mean()), 5)
+        else:
+            err = deq[:, 0, 0] - label
+            rec["rmse_s"] = round(float(np.sqrt((err ** 2).mean())), 5)
+            rec["mae_s"] = round(float(np.abs(err).mean()), 5)
+    elif n_out == 3:
         z = deq - deq.max(-1, keepdims=True)
         probs = np.exp(z) / np.exp(z).sum(-1, keepdims=True)
         m = early_metrics(probs, label)
@@ -161,7 +178,7 @@ def main():
     else:
         lc = label != 0
         cross = ref["cross"][:S].astype(np.float64)
-        gt = (cross[:, None] - (np.arange(N_SLIDES)[None, :] + IN_LEN) + 1) / 5.0   # unas/highd_dataset.py
+        gt = (cross[:, None] - (np.arange(n_slides)[None, :] + in_len) + 1) / 5.0   # unas/highd_dataset.py
         err = deq[lc, :, 0] - gt[lc]
         rec["ttlc_rmse_s"] = round(float(np.sqrt((err ** 2).mean())), 4)
     rec["utc"] = datetime.now(timezone.utc).isoformat(timespec="seconds")

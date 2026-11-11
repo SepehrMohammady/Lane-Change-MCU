@@ -822,7 +822,7 @@ test RMSE, against the raw-input choices of the same searches:
 
 The intention search on scaled inputs ends 2.1 points lower on validation, and its choice reaches
 87.95% in int8 against 91.30% in float32 for the raw-input choice, so intention stays on raw inputs
-(QAT int8).
+(in int8 with the calibration of the next section).
 
 `unas/prepare_deploy_lcir.py` applies the search's scaling to models from `*_mm*` folders and stores
 the offsets and spans (`scale_lo`, `scale_span`) in the deploy record; a board applies
@@ -845,4 +845,48 @@ of the local build; RMSE of the deployed file):
 For LCR the scaled-input choice in int8 runs 3.2 times faster than the raw-input choice in float32
 at 0.009 s higher RMSE. For LCL it does not pay: the scaled-input choice has 7.2 times the MACs, and
 its int8 build is 2.6 times slower than the raw-input choice in float32, takes more flash and RAM
-and has the higher RMSE, so float32 stays the LCL build.
+and has the higher RMSE, so the LCL head keeps the raw-input choice. The next section brings the
+raw-input choices of all three heads to int8 without a new search.
+
+## int8 with a saturating input calibration (2026-11-11)
+
+The int8 loss on LCIR comes from the input tensor. The features are standardized (1st to 99th percentile
+within about -5 to +5 for every feature) with rare extremes of up to 431, and TFLite takes the range of
+the int8 input from the minimum and maximum of the calibration windows, so one int8 step spans 1 to 2
+standard deviations. Clipping the 500 calibration windows to [-B, B] sets the input range to that
+interval; values outside it saturate in the input quantization, on the board as in the interpreter. The
+networks, their weights and the float32 builds do not change and nothing is retrained. Clipped
+calibration is a known practice; here it only has to be applied by hand, because the converter offers
+minimum and maximum alone.
+
+`unas/input_clip_check.py`: the three raw-input choices trained with five fresh seeds (100-104), B from
+{3, 4, 6, 8, 12, 16, 24, 32} chosen per head on the mean int8 validation result, test results
+(`datasets/dmir/results/seeds/input_clip.jsonl`; int8 files scored on the test windows as they are):
+
+| head | parameters | B | float32 | int8 I/O, calibration as before | int8 I/O, clipped calibration |
+|---|--:|--:|--:|--:|--:|
+| intention | 2,336 | 4 | 91.00 ± 0.40% | 85.24 ± 1.87% | 91.25 ± 0.35% |
+| LCR | 3,809 | 4 | 0.451 ± 0.012 s | 0.659 ± 0.011 s | 0.449 ± 0.008 s |
+| LCL | 1,979 | 6 | 0.438 ± 0.011 s | 0.503 ± 0.027 s | 0.434 ± 0.008 s |
+
+The rule fixed before the run (int8 within 1.0 point or 0.03 s of float32) is met for the three heads.
+For every B from 3 to 8 the int8 test result stays within 0.3 points and 0.006 s of float32; 0.1 to 0.5%
+of the test input values saturate.
+
+Deployed files (`CALIB_CLIP=<B> unas/prepare_deploy_lcir.py`, the search-trained models,
+`lcir_v4k3sat_<task>_*.tflite`) on the STM32H7B3I-DK (`unas/local_bench.py`, 280 MHz, 200 timed runs;
+firmware flash and static RAM of the local build):
+
+| head | build | time | flash | RAM | deployed file |
+|---|---|--:|--:|--:|--:|
+| intention | float32 | 0.805 ms | 29,128 B | 19,496 B | 91.37% |
+| intention | int8 I/O | 0.520 ms | 30,672 B | 12,104 B | 91.26% |
+| LCR | float32 | 3.229 ms | 34,788 B | 20,024 B | RMSE 0.450 s |
+| LCR | int8 I/O | 1.183 ms | 32,424 B | 16,208 B | RMSE 0.450 s |
+| LCL | float32 | 0.507 ms | 26,548 B | 16,136 B | RMSE 0.437 s |
+| LCL | int8 I/O | 0.243 ms | 29,064 B | 11,736 B | RMSE 0.433 s |
+
+All three LCIR heads therefore run in int8 at the accuracy of float32: 1.5, 2.7 and 2.1 times faster and
+with 38, 19 and 27% less static RAM. Neither quantization-aware training nor a search on scaled inputs
+is needed for that. The scaled-input LCR choice of the previous section stays an alternative (1.012 ms,
+0.459 s, 40,624 B of flash).

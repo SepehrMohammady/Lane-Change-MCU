@@ -1,0 +1,27 @@
+{
+ "task": "cls",
+ "source": "datasets\\exid\\results\\weights\\exid_baseline_cls_seed0.pt",
+ "params": 8371,
+ "input_shape": [
+  10,
+  18
+ ],
+ "parity_max_abs_diff": 0.00012969970703125,
+ "keras_float": {
+  "acc": 0.89941
+ },
+ "variants": {
+  "f32": {
+   "bytes": 41796,
+   "acc": 0.89941
+  },
+  "int8": {
+   "bytes": 24392,
+   "acc": 0.8682
+  },
+  "int8_io": {
+   "bytes": 24056,
+   "acc": 0.8682
+  }
+ }
+}

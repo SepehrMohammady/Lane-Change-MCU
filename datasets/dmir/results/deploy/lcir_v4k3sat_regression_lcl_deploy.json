@@ -1,0 +1,32 @@
+{
+ "task": "regression_lcl",
+ "source_h5": "model_1793796654473538939_1632373.h5",
+ "params": 1979,
+ "input_shape": [
+  50,
+  31
+ ],
+ "input_scaling": "raw",
+ "calibration_clip": 6.0,
+ "keras_float": {
+  "rmse": 0.43738,
+  "mae": 0.31887
+ },
+ "variants": {
+  "float32": {
+   "bytes": 13824,
+   "rmse": 0.43738,
+   "mae": 0.31887
+  },
+  "int8": {
+   "bytes": 10352,
+   "rmse": 0.43279,
+   "mae": 0.31798
+  },
+  "int8_io": {
+   "bytes": 10016,
+   "rmse": 0.43279,
+   "mae": 0.31798
+  }
+ }
+}

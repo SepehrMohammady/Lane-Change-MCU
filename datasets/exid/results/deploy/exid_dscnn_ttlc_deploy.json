@@ -1,0 +1,31 @@
+{
+ "task": "ttlc",
+ "source": "datasets\\exid\\results\\weights\\exid_baseline_ttlc_seed0.pt",
+ "params": 8241,
+ "input_shape": [
+  10,
+  18
+ ],
+ "parity_max_abs_diff": 3.814697265625e-06,
+ "keras_float": {
+  "rmse": 0.41196,
+  "mae": 0.28015
+ },
+ "variants": {
+  "f32": {
+   "bytes": 41272,
+   "rmse": 0.41196,
+   "mae": 0.28015
+  },
+  "int8": {
+   "bytes": 24200,
+   "rmse": 0.41691,
+   "mae": 0.2844
+  },
+  "int8_io": {
+   "bytes": 23872,
+   "rmse": 0.41691,
+   "mae": 0.2844
+  }
+ }
+}

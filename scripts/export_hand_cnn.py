@@ -16,11 +16,13 @@ with int8 I/O):
 
 All windows are channel-last (N, T, C), the layout of the searched models.
 
-    python scripts/export_hand_cnn.py
+    python scripts/export_hand_cnn.py [lcir] [highd] [exid]      (default: lcir highd)
 
-Output: datasets/<dmir|highd>/data/hand_export/<name>.npz (gitignored: holds data).
+Output: datasets/<dmir|highd|exid>/data/hand_export/<name>.npz (gitignored: holds data).
 LCIR weights come from scripts/run_baseline.py <task> --save; highD weights are
-the committed checkpoints scored in datasets/highd/results/their_protocol_eval.json.
+the committed checkpoints scored in datasets/highd/results/their_protocol_eval.json;
+exiD weights are the seed-0 networks trained on exiD by datasets/exid/run_experiments.py
+(datasets/exid/results/weights/exid_baseline_<task>_seed0.pt).
 """
 from __future__ import annotations
 
@@ -95,22 +97,27 @@ def export_lcir(task: str) -> None:
          {"y_test": bundle.y_test})
 
 
-def export_highd(task: str) -> None:
-    prep = ROOT / "datasets/highd/data/prepared"
-    ckpt = ROOT / "datasets/highd/results" / f"highd_baseline_{task}_v2.pt"
+def export_highd(task: str, ds: str = "highd") -> None:
+    prep = ROOT / "datasets" / ds / "data" / "prepared"
+    ckpt = (ROOT / "datasets/highd/results" / f"highd_baseline_{task}_v2.pt" if ds == "highd" else
+            ROOT / "datasets" / ds / "results" / "weights" / f"{ds}_baseline_{task}_seed0.pt")
     xtr, _, _ = make_windows(*load_split(prep, "train"))
     lo, hi = norm_stats(xtr)
     xte, yte, tte = make_windows(*load_split(prep, "test"))
     model = BaselineDSCNN(n_features=18, n_outputs=3 if task == "cls" else 1)
     model.load_state_dict(torch.load(ckpt, weights_only=True))
-    save(ROOT / "datasets/highd/data/hand_export" / f"highd_dscnn_{task}.npz", model,
+    save(ROOT / "datasets" / ds / "data" / "hand_export" / f"{ds}_dscnn_{task}.npz", model,
          "cls" if task == "cls" else "ttlc", str(ckpt.relative_to(ROOT)),
          apply_norm(xtr, lo, hi).astype(np.float32), apply_norm(xte, lo, hi).astype(np.float32),
          {"y_test": yte, "ttlc_test": tte.astype(np.float32)})
 
 
 if __name__ == "__main__":
-    for t in ("classification", "regression_lcr", "regression_lcl"):
-        export_lcir(t)
-    for t in ("cls", "ttlc"):
-        export_highd(t)
+    which = sys.argv[1:] or ["lcir", "highd"]
+    if "lcir" in which:
+        for t in ("classification", "regression_lcr", "regression_lcl"):
+            export_lcir(t)
+    for ds in ("highd", "exid"):
+        if ds in which:
+            for t in ("cls", "ttlc"):
+                export_highd(t, ds)

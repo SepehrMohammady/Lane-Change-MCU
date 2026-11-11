@@ -13,6 +13,12 @@ constant features 0) for calibration and evaluation; the deploy record then carr
 scaling's offsets and spans, which the board applies before quantizing the input. A
 DMIR_SCALE value that contradicts the folder name is refused.
 
+CALIB_CLIP=<B> (2026-11-11, unas/input_clip_check.py) clips the calibration windows of the int8 builds to
+[-B, B]: the LCIR features are standardized with rare extremes of several hundred, and TFLite takes the
+int8 input range from the calibration windows' minimum and maximum. The network and the float32 build do
+not change; the int8 files are scored on the test windows as they are, through the input quantization,
+which saturates (as the board's quantizer does). The deploy record carries the bound.
+
 Run in the WSL dmir_nas venv, CPU:
   source ~/dmir_nas/env.sh
   CUDA_VISIBLE_DEVICES= DMIR_DATA_ROOT=/mnt/c/Projects/PhD/DIMIR/datasets/dmir/data \
@@ -89,18 +95,23 @@ def main(task, h5, out_dir, stem):
     if scaling == "minmax":
         xtr, xte, lo, span = scale_minmax(xtr, xte)
         print(f"{task}: inputs min-max scaled per feature (training range)", flush=True)
+    bound = float(os.environ["CALIB_CLIP"]) if os.environ.get("CALIB_CLIP") else None
+    if bound is not None and scaling:
+        sys.exit("CALIB_CLIP is for raw-input networks (standardized features), not for scaled inputs")
+    xcal = xtr if bound is None else np.clip(xtr, -bound, bound)
     model = tf.keras.models.load_model(h5, compile=False)
     out = Path(out_dir)
     out.mkdir(parents=True, exist_ok=True)
     rec = {"task": task, "source_h5": Path(h5).name, "params": int(model.count_params()),
            "input_shape": list(xte.shape[1:]), "input_scaling": scaling or "raw",
+           **({"calibration_clip": bound} if bound is not None else {}),
            **({"scale_lo": [float(v) for v in lo], "scale_span": [float(v) for v in span]}
               if scaling == "minmax" else {}),
            "keras_float": metrics(model.predict(xte, batch_size=4096, verbose=0), yte, is_cls),
            "variants": {}}
     builds = (("float32", convert(model, xtr, "float32")),
-              ("int8", convert_int8(model, xtr, int8_io=False)),
-              ("int8_io", convert_int8(model, xtr, int8_io=True)))
+              ("int8", convert_int8(model, xcal, int8_io=False)),
+              ("int8_io", convert_int8(model, xcal, int8_io=True)))
     for name, tfl in builds:
         (out / f"{stem}_{name}.tflite").write_bytes(tfl)
         rec["variants"][name] = {"bytes": len(tfl), **metrics(predict(tfl, xte), yte, is_cls)}
