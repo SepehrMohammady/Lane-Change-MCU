@@ -892,3 +892,9 @@ All three LCIR heads therefore run in int8 at the accuracy of float32: 1.5, 2.7 
 with 38, 19 and 27% less static RAM. Neither quantization-aware training nor a search on scaled inputs
 is needed for that. The scaled-input LCR choice of the previous section stays an alternative (1.012 ms,
 0.459 s, 40,624 B of flash).
+
+The hand-designed DSCNN gains in the same way, with the same bounds (not chosen for it):
+`CALIB_CLIP=<B> unas/deploy_hand_cnn.py` writes `lcir_dscnn_<task>_sat_*`, and in int8 the deployed files
+reach 91.51% on intention (float32 90.96%; 87.14% with the calibration as before), RMSE 0.435 s on LCR
+(0.439 s; 0.652 s) and 0.454 s on LCL (0.459 s; 0.480 s). Searched and hand-designed networks can
+therefore be compared in int8 on equal terms.

@@ -22,6 +22,9 @@ per-feature gain g_f = (W_f / max W)^alpha and divides the first convolution's w
 float outputs do not change and the int8 weights of that layer keep their resolution. The files are
 then named <stem>_eq_*, and the deploy record carries alpha and the gains, which a board folds into
 its scaling table (unas/hil_prepare.py).
+
+CALIB_CLIP=<B> (LCIR bundles, as in unas/prepare_deploy_lcir.py) clips the calibration windows of the
+int8 builds to [-B, B]; the files are named <stem>_sat_* and scored on the test windows as they are.
 """
 import json
 import os
@@ -140,6 +143,10 @@ def main(bundle, out_dir, f32_suffix="f32"):
         calib, x, stem = calib * g, x * g, stem + "_eq"
         rec.update(equalize_alpha=alpha, input_gain=[float(v) for v in g],
                    keras_float_equalized=metrics(z, model.predict(x, batch_size=4096, verbose=0)))
+    bound = float(os.environ.get("CALIB_CLIP", "0") or 0)
+    if bound:
+        calib, stem = np.clip(calib, -bound, bound), stem + "_sat"
+        rec["calibration_clip"] = bound
     for name, mode, io in ((f32_suffix, "f32", False), ("int8", "int8", False), ("int8_io", "int8", True)):
         tfl = convert(model, calib, mode, io)
         (out / f"{stem}_{name}.tflite").write_bytes(tfl)
