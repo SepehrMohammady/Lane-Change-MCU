@@ -82,6 +82,18 @@ validation drivers, whose pickles the map recovered on the test drivers reproduc
 - On whole drives 31.2% of the free-driving frames of the sessions with lane changes have a window that
   holds a completed lane change (validation: 28.6%).
 
+Where the pairing shortcut comes from (read 2026-11-12 in the lab's public code, LC-Intention-Framework,
+`data_preparation/machine_learning/CSV_to_windows_by_users_5s.ipynb`): a window before a lane change is kept
+whenever its last row is labelled 0.0 to 4.0 s, whatever the window contains; a free-driving window is kept only
+if none of its 50 rows is an ignored one (`"-" not in window['labels'].values`), and free-driving windows are
+then drawn at random to match the count. The public record's per-driver CSV files (`userNLC.csv`, all 50
+drivers) are the input of that notebook: the 30 features per frame and a `labels` column with the time to the
+lane change, 4.1 for free driving and "-" for the 15 rows after a lane change. They are not exactly what the
+prepared pickles were cut from: for test drivers 13 and 31 the CSV labels 78 and 99 lane changes where the rule
+that reproduces every pickle target finds 80 and 111, and the notebook's rule would give 2,854 and 3,207
+windows before a lane change where the LCR and LCL test pickles hold 1,690 and 999 of these drivers. Which
+further selection made the pickles is the open question behind the 382 of 527 lane changes above.
+
 Which drivers the training pickles hold (found 2026-11-12, `session_stream.py build train` and `build more`,
 results `session_stream_train.json` and `session_stream_more.json`): exactly 36, the 22 drivers of the local
 archive that are neither test nor validation drivers and users 37-50, whose sessions with lane changes are
