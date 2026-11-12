@@ -1,0 +1,301 @@
+{
+ "sessions": {
+  "user37LC": {
+   "frames": 10767,
+   "minutes": 17.9,
+   "lane_changes_right": 12,
+   "lane_changes_left": 12
+  },
+  "user38LC": {
+   "frames": 8603,
+   "minutes": 14.3,
+   "lane_changes_right": 32,
+   "lane_changes_left": 32
+  },
+  "user39LC": {
+   "frames": 8546,
+   "minutes": 14.2,
+   "lane_changes_right": 47,
+   "lane_changes_left": 47
+  },
+  "user40LC": {
+   "frames": 8873,
+   "minutes": 14.8,
+   "lane_changes_right": 44,
+   "lane_changes_left": 44
+  },
+  "user41LC": {
+   "frames": 8698,
+   "minutes": 14.5,
+   "lane_changes_right": 39,
+   "lane_changes_left": 40
+  },
+  "user42LC": {
+   "frames": 9736,
+   "minutes": 16.2,
+   "lane_changes_right": 25,
+   "lane_changes_left": 26
+  },
+  "user43LC": {
+   "frames": 10138,
+   "minutes": 16.9,
+   "lane_changes_right": 21,
+   "lane_changes_left": 21
+  },
+  "user44LC": {
+   "frames": 8916,
+   "minutes": 14.9,
+   "lane_changes_right": 43,
+   "lane_changes_left": 43
+  },
+  "user45LC": {
+   "frames": 8638,
+   "minutes": 14.4,
+   "lane_changes_right": 45,
+   "lane_changes_left": 47
+  },
+  "user46LC": {
+   "frames": 9134,
+   "minutes": 15.2,
+   "lane_changes_right": 34,
+   "lane_changes_left": 34
+  },
+  "user47LC": {
+   "frames": 8284,
+   "minutes": 13.8,
+   "lane_changes_right": 32,
+   "lane_changes_left": 32
+  },
+  "user48LC": {
+   "frames": 8384,
+   "minutes": 14.0,
+   "lane_changes_right": 47,
+   "lane_changes_left": 48
+  },
+  "user49LC": {
+   "frames": 8675,
+   "minutes": 14.5,
+   "lane_changes_right": 37,
+   "lane_changes_left": 37
+  },
+  "user50LC": {
+   "frames": 9057,
+   "minutes": 15.1,
+   "lane_changes_right": 48,
+   "lane_changes_left": 48
+  }
+ },
+ "tasks": {
+  "classification": {
+   "more_pickle_windows": 94620,
+   "located_in_the_sessions": 33651,
+   "map": "recovered on the test drivers, applied unchanged",
+   "sessions_the_pickle_was_cut_from": [
+    "user37LC",
+    "user38LC",
+    "user39LC",
+    "user40LC",
+    "user41LC",
+    "user42LC",
+    "user43LC",
+    "user44LC",
+    "user45LC",
+    "user46LC",
+    "user47LC",
+    "user48LC",
+    "user49LC",
+    "user50LC"
+   ],
+   "look_alike_windows_elsewhere": {},
+   "look_alike_matches_not_counted": 18,
+   "max_abs_error_of_the_map": 1.6967760529951192e-11,
+   "worst_channel": "curvatureDxRightLine",
+   "max_abs_error_per_driver": {
+    "user37LC": 1.0174971976084635e-11,
+    "user38LC": 3.581968055499374e-12,
+    "user39LC": 3.5922931296283878e-12,
+    "user40LC": 3.5920155738722315e-12,
+    "user41LC": 3.59151597351115e-12,
+    "user42LC": 1.5660361896152608e-11,
+    "user43LC": 1.6967760529951192e-11,
+    "user44LC": 6.266986929404084e-12,
+    "user45LC": 1.5475620784854982e-11,
+    "user46LC": 1.2434497875801753e-11,
+    "user47LC": 3.5827174560409958e-12,
+    "user48LC": 1.695354967523599e-11,
+    "user49LC": 5.554667836804583e-12,
+    "user50LC": 3.581940299923758e-12
+   },
+   "recovered": true,
+   "share_of_located_windows_with_another_class": 0.004291845493562232,
+   "unscaled_channels": [
+    "leftDirectionIndicator",
+    "rightDirectionIndicator",
+    "car2Present"
+   ],
+   "constant_channels": [
+    "egoLaneWidth"
+   ]
+  },
+  "regression_lcr": {
+   "more_pickle_windows": 33201,
+   "located_in_the_sessions": 12602,
+   "map": "recovered on the test drivers, applied unchanged",
+   "sessions_the_pickle_was_cut_from": [
+    "user37LC",
+    "user38LC",
+    "user39LC",
+    "user40LC",
+    "user41LC",
+    "user42LC",
+    "user43LC",
+    "user44LC",
+    "user45LC",
+    "user46LC",
+    "user47LC",
+    "user48LC",
+    "user49LC",
+    "user50LC"
+   ],
+   "look_alike_windows_elsewhere": {},
+   "look_alike_matches_not_counted": 0,
+   "max_abs_error_of_the_map": 2.7995383788947947e-12,
+   "worst_channel": "curvatureDxRightLine",
+   "max_abs_error_per_driver": {
+    "user37LC": 9.34641253280688e-13,
+    "user38LC": 9.360845432127007e-13,
+    "user39LC": 9.37638855447176e-13,
+    "user40LC": 9.360845432127007e-13,
+    "user41LC": 9.34641253280688e-13,
+    "user42LC": 9.360845432127007e-13,
+    "user43LC": 9.346134977050724e-13,
+    "user44LC": 9.376943665984072e-13,
+    "user45LC": 2.7995383788947947e-12,
+    "user46LC": 2.7426949600339867e-12,
+    "user47LC": 9.362510766663945e-13,
+    "user48LC": 2.7426949600339867e-12,
+    "user49LC": 1.9326762412674725e-12,
+    "user50LC": 9.360845432127007e-13
+   },
+   "recovered": true,
+   "max_abs_difference_to_the_pickle_target_s": 3.5,
+   "unscaled_channels": [
+    "leftDirectionIndicator",
+    "rightDirectionIndicator",
+    "car2Present"
+   ],
+   "constant_channels": [
+    "egoLaneWidth"
+   ]
+  },
+  "regression_lcl": {
+   "more_pickle_windows": 39313,
+   "located_in_the_sessions": 15491,
+   "map": "recovered on the test drivers, applied unchanged",
+   "sessions_the_pickle_was_cut_from": [
+    "user37LC",
+    "user38LC",
+    "user39LC",
+    "user40LC",
+    "user41LC",
+    "user42LC",
+    "user43LC",
+    "user44LC",
+    "user45LC",
+    "user46LC",
+    "user47LC",
+    "user48LC",
+    "user49LC",
+    "user50LC"
+   ],
+   "look_alike_windows_elsewhere": {},
+   "look_alike_matches_not_counted": 5,
+   "max_abs_error_of_the_map": 1.5774048733874224e-11,
+   "worst_channel": "curvatureDxRightLine",
+   "max_abs_error_per_driver": {
+    "user37LC": 5.3814175338118275e-12,
+    "user38LC": 5.366623812008697e-12,
+    "user39LC": 5.373756994941914e-12,
+    "user40LC": 5.381473044963059e-12,
+    "user41LC": 5.381139978055671e-12,
+    "user42LC": 1.482192146795569e-11,
+    "user43LC": 5.362488231241969e-12,
+    "user44LC": 7.73070496506989e-12,
+    "user45LC": 5.366568300857466e-12,
+    "user46LC": 9.968914582714206e-12,
+    "user47LC": 5.3664572785550035e-12,
+    "user48LC": 1.5774048733874224e-11,
+    "user49LC": 7.108980071279802e-12,
+    "user50LC": 5.366651567584313e-12
+   },
+   "recovered": true,
+   "max_abs_difference_to_the_pickle_target_s": 3.8,
+   "unscaled_channels": [
+    "leftDirectionIndicator",
+    "rightDirectionIndicator",
+    "car2Present"
+   ],
+   "constant_channels": [
+    "egoLaneWidth"
+   ]
+  }
+ },
+ "lane_changes_held_by_the_more_pickles": {
+  "user37LC": {
+   "lane_changes": 24,
+   "in_the_test_pickles": 24
+  },
+  "user38LC": {
+   "lane_changes": 64,
+   "in_the_test_pickles": 58
+  },
+  "user39LC": {
+   "lane_changes": 94,
+   "in_the_test_pickles": 70
+  },
+  "user40LC": {
+   "lane_changes": 88,
+   "in_the_test_pickles": 37
+  },
+  "user41LC": {
+   "lane_changes": 79,
+   "in_the_test_pickles": 62
+  },
+  "user42LC": {
+   "lane_changes": 51,
+   "in_the_test_pickles": 43
+  },
+  "user43LC": {
+   "lane_changes": 42,
+   "in_the_test_pickles": 30
+  },
+  "user44LC": {
+   "lane_changes": 86,
+   "in_the_test_pickles": 51
+  },
+  "user45LC": {
+   "lane_changes": 92,
+   "in_the_test_pickles": 56
+  },
+  "user46LC": {
+   "lane_changes": 68,
+   "in_the_test_pickles": 57
+  },
+  "user47LC": {
+   "lane_changes": 64,
+   "in_the_test_pickles": 39
+  },
+  "user48LC": {
+   "lane_changes": 95,
+   "in_the_test_pickles": 80
+  },
+  "user49LC": {
+   "lane_changes": 74,
+   "in_the_test_pickles": 51
+  },
+  "user50LC": {
+   "lane_changes": 96,
+   "in_the_test_pickles": 61
+  }
+ }
+}

@@ -82,6 +82,15 @@ validation drivers, whose pickles the map recovered on the test drivers reproduc
 - On whole drives 31.2% of the free-driving frames of the sessions with lane changes have a window that
   holds a completed lane change (validation: 28.6%).
 
+Which drivers the training pickles hold (found 2026-11-12, `session_stream.py build train` and `build more`,
+results `session_stream_train.json` and `session_stream_more.json`): exactly 36, the 22 drivers of the local
+archive that are neither test nor validation drivers and users 37-50, whose sessions with lane changes are
+in the public record (Zenodo, DOI 10.5281/zenodo.16686054; the record has no baseline sessions). Every
+window is accounted for: classification 60,969 + 33,651 = 94,620, LCR 20,599 + 12,602 = 33,201, LCL
+23,822 + 15,491 = 39,313, each reproduced by the map recovered on the test drivers to 2e-11. The frame
+rule gives another class than the pickle for 12 of the 60,969 local classification windows: frames
+between two lane-line jumps 5 to 8 frames apart, where the car straddles the line.
+
 ## Provenance (resolved 2026-07-07 — details in datasets/dmir/docs/dataset-provenance.md)
 
 The data is the ELIOS "Lane Change Intention Recognition Dataset" (Zenodo DOI

@@ -33,6 +33,14 @@ the test drivers (2026-11-12):
 The map is not fitted again: the one recovered on the test drivers is applied unchanged and must
 reproduce the windows of the validation pickles, which is a check of the map on other drivers. Output:
 <task>_sessions_val.npz and datasets/dmir/results/hil/session_stream_val.json.
+
+The training drivers, for training on windows taken from whole drives (unas/stream_train_check.py):
+  .venv\\Scripts\\python datasets/dmir/session_stream.py build train    # the other 22 drivers of the archive
+  .venv\\Scripts\\python datasets/dmir/session_stream.py build more     # users 37-50, sessions with lane changes
+The lab's training pickles hold 36 drivers. The archive used here has 22 of them; the sessions with lane
+changes of users 37-50 are in the dataset's public record (Zenodo, DOI 10.5281/zenodo.16686054; put
+userNLC.h5 next to the other raw sessions). A window of a pickle counts as located only if the map
+reproduces all of its channels; <task>_<split>_pickle_located.npy marks those windows of the pickle.
 """
 from __future__ import annotations
 
@@ -55,6 +63,8 @@ DATA = HERE / "data"
 OUT = DATA / "stream"
 ZIP = ROOT / "Materials" / "Overtaking2.zip"
 USERS = {"test": (2, 7, 13, 18, 25, 31, 36), "val": (5, 8, 10, 12, 16, 19, 27)}   # the official split
+USERS["train"] = tuple(u for u in range(1, 37) if u not in USERS["test"] + USERS["val"])   # the other 22 of the archive
+USERS["more"] = tuple(range(37, 51))            # in the public record only (Zenodo 16686054), sessions with lane changes
 PHASES = ("LC", "N")
 PICKLES = {"classification": ("data-classification", "multi"), "regression_lcr": ("data-prepared-lcr", "lcr"),
            "regression_lcl": ("data-regression-lcl", "lcl")}
@@ -63,8 +73,10 @@ W = 50
 
 def ensure_h5(split: str = "test") -> list[str]:
     """The sessions of the split's drivers, unpacked next to the other raw samples."""
-    names = [f"user{u}{ph}" for u in USERS[split] for ph in PHASES]
+    names = [f"user{u}{ph}" for u in USERS[split] for ph in (("LC",) if split == "more" else PHASES)]
     missing = [n for n in names if not (sr.H5DIR / f"{n}.h5").exists()]
+    if missing and split == "more":
+        sys.exit(f"download {', '.join(missing)} (.h5) from the dataset's public record into {sr.H5DIR.name}/")
     if missing:
         with zipfile.ZipFile(ZIP) as z:
             members = {i.filename.split("/")[-1]: i for i in z.infolist()}
@@ -161,9 +173,14 @@ def build(split: str = "test"):
     for task, (folder, sfx) in PICKLES.items():
         feats = FEATURES_BY_TASK[task]
         ch = (feats.index("yawRate"), feats.index("latAcceleration"))
-        x_test = pickle.load(open(DATA / folder / f"x_{split}_{sfx}.pkl", "rb")).astype(np.float64)
+        part = "train" if split == "more" else split         # users 37-50 are training drivers of the lab's split
+        x_test = pickle.load(open(DATA / folder / f"x_{part}_{sfx}.pkl", "rb")).astype(np.float64)
         samples, found, stray, label_gap, in_pickle = {}, set(), {}, 0.0, {}
-        y_test = np.asarray(pickle.load(open(DATA / folder / f"y_{split}_{sfx}.pkl", "rb"))).reshape(-1)
+        y_test = np.asarray(pickle.load(open(DATA / folder / f"y_{part}_{sfx}.pkl", "rb"))).reshape(-1)
+        look_alike = 0
+        if split != "test":                                 # the map recovered on the test drivers, unchanged
+            norm = json.loads((OUT / f"{task}_norm.json").read_text())
+            a, b = np.array(norm["a"]), np.array(norm["b"])
         for n in names:
             m = to_layout(sessions[n][0], task)
             pairs = locate(m, x_test, ch)
@@ -172,6 +189,15 @@ def build(split: str = "test"):
             if not n.endswith("LC"):                        # the pickles were cut from the LC sessions; a few
                 stray[n] = int(len(pairs))                  # look-alike windows of quiet driving turn up elsewhere
                 continue
+            if split != "test":
+                # A pickle may hold windows of drivers that are not in these sessions (the training pickle
+                # does); some of them resemble a window here on the two channels used to locate. A located
+                # window counts only if the map reproduces all of its channels.
+                gap = np.abs(sr.windows(m)[pairs[:, 1]] * a + b - x_test[pairs[:, 0]]).max(axis=(1, 2))
+                look_alike += int((gap > 1e-5).sum())
+                pairs = pairs[gap <= 1e-5]
+                if not len(pairs):
+                    continue
             samples[n] = (sr.windows(m)[pairs[:, 1]], x_test[pairs[:, 0]])
             found.update(int(p) for p in pairs[:, 0])
             last = pairs[:, 1] + W - 1                      # the frame each located window ends on
@@ -192,11 +218,12 @@ def build(split: str = "test"):
                 {"task": task, "features": feats, "a": a.tolist(), "b": b.tolist(), "max_abs_error": err.tolist(),
                  "train_min": lo_std.tolist(), "train_max": hi_std.tolist(),
                  "note": "pickle = a * raw + b per channel; training range in pickle units"}, indent=1))
-        else:                                               # the map recovered on the test drivers, unchanged
-            norm = json.loads((OUT / f"{task}_norm.json").read_text())
-            a, b = np.array(norm["a"]), np.array(norm["b"])
+        else:
             err = np.array([max(float(np.abs(a[c] * r[:, :, c] + b[c] - p[:, :, c]).max())
                                 for r, p in samples.values()) for c in range(len(feats))])
+            mask = np.zeros(len(x_test), bool)              # the pickle's windows that are in these sessions
+            mask[sorted(found)] = True
+            np.save(OUT / f"{task}_{split}_pickle_located.npy", mask)
         per_driver = {n: float(max(np.abs(a[c] * r[:, :, c] + b[c] - p[:, :, c]).max() for c in range(len(feats))))
                       for n, (r, p) in samples.items()}     # the one map on each driver's windows
         ok = bool(err.max() <= 1e-5)
@@ -219,6 +246,7 @@ def build(split: str = "test"):
             f"{split}_pickle_windows": int(len(x_test)), "located_in_the_sessions": len(found),
             "map": "fitted on these windows" if split == "test" else "recovered on the test drivers, applied unchanged",
             "sessions_the_pickle_was_cut_from": sorted(samples), "look_alike_windows_elsewhere": stray,
+            **({} if split == "test" else {"look_alike_matches_not_counted": look_alike}),
             "max_abs_error_of_the_map": float(err.max()), "worst_channel": feats[int(err.argmax())],
             "max_abs_error_per_driver": per_driver, "recovered": ok,
             ("share_of_located_windows_with_another_class" if task == "classification"

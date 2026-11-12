@@ -1,0 +1,2337 @@
+{
+ "utc": "2026-11-12T11:06:32+00:00",
+ "seeds": [
+  100,
+  101,
+  102,
+  103,
+  104
+ ],
+ "arms": {
+  "A": {
+   "seeds": [
+    100,
+    101,
+    102,
+    103,
+    104
+   ],
+   "training_windows": 94620,
+   "training_set": "the lab's training pickle",
+   "lab_test_pickle_accuracy_int8": {
+    "mean": 0.9125,
+    "std": 0.0035,
+    "values": [
+     0.9139,
+     0.9162,
+     0.9113,
+     0.9142,
+     0.9072
+    ]
+   },
+   "lab_test_pickle_accuracy_float32": {
+    "mean": 0.9101,
+    "std": 0.004,
+    "values": [
+     0.9135,
+     0.9128,
+     0.9075,
+     0.9122,
+     0.9043
+    ]
+   },
+   "selected_rules": [
+    {
+     "theta": 0.6,
+     "hold_off_frames": 0,
+     "persistence_frames": 5
+    },
+    {
+     "theta": 0.6,
+     "hold_off_frames": 0,
+     "persistence_frames": 5
+    },
+    {
+     "theta": 0.6,
+     "hold_off_frames": 0,
+     "persistence_frames": 5
+    },
+    {
+     "theta": 0.0,
+     "hold_off_frames": 0,
+     "persistence_frames": 5
+    },
+    {
+     "theta": 0.6,
+     "hold_off_frames": 0,
+     "persistence_frames": 5
+    }
+   ],
+   "validation_drivers": {
+    "raw_output": {
+     "timely_share": {
+      "mean": 0.9378,
+      "std": 0.0061,
+      "values": [
+       0.9296,
+       0.9352,
+       0.9463,
+       0.9389,
+       0.9389
+      ]
+     },
+     "false_alarms_per_hour": {
+      "mean": 349.82,
+      "std": 47.1683,
+      "values": [
+       284.2,
+       407.1,
+       332.1,
+       344.7,
+       381.0
+      ]
+     },
+     "median_lead_s": {
+      "mean": 5.06,
+      "std": 0.1517,
+      "values": [
+       5.0,
+       5.0,
+       5.3,
+       5.1,
+       4.9
+      ]
+     },
+     "free_frames_in_alarm": {
+      "mean": 0.2252,
+      "std": 0.0121,
+      "values": [
+       0.2132,
+       0.2239,
+       0.2456,
+       0.222,
+       0.2213
+      ]
+     },
+     "missed_share": {
+      "mean": 0.0093,
+      "std": 0.0019,
+      "values": [
+       0.0093,
+       0.0074,
+       0.0111,
+       0.0111,
+       0.0074
+      ]
+     }
+    },
+    "selected": {
+     "timely_share": {
+      "mean": 0.8989,
+      "std": 0.0112,
+      "values": [
+       0.8833,
+       0.8926,
+       0.9093,
+       0.9093,
+       0.9
+      ]
+     },
+     "false_alarms_per_hour": {
+      "mean": 164.8,
+      "std": 13.4583,
+      "values": [
+       144.3,
+       171.4,
+       166.0,
+       180.6,
+       161.7
+      ]
+     },
+     "median_lead_s": {
+      "mean": 4.42,
+      "std": 0.2588,
+      "values": [
+       4.2,
+       4.3,
+       4.7,
+       4.7,
+       4.2
+      ]
+     },
+     "free_frames_in_alarm": {
+      "mean": 0.1791,
+      "std": 0.0155,
+      "values": [
+       0.169,
+       0.1684,
+       0.2014,
+       0.1895,
+       0.1674
+      ]
+     },
+     "missed_share": {
+      "mean": 0.0171,
+      "std": 0.0008,
+      "values": [
+       0.0167,
+       0.0185,
+       0.0167,
+       0.0167,
+       0.0167
+      ]
+     }
+    },
+    "frame_accuracy": {
+     "all": {
+      "mean": 0.8166,
+      "std": 0.0087,
+      "values": [
+       0.825,
+       0.818,
+       0.8018,
+       0.8196,
+       0.8186
+      ]
+     },
+     "lane_change_sessions": {
+      "mean": 0.7255,
+      "std": 0.0102,
+      "values": [
+       0.7299,
+       0.7305,
+       0.7092,
+       0.7224,
+       0.7354
+      ]
+     },
+     "baseline_sessions": {
+      "mean": 0.9443,
+      "std": 0.0122,
+      "values": [
+       0.9584,
+       0.9405,
+       0.9316,
+       0.9558,
+       0.935
+      ]
+     }
+    },
+    "output_after_a_lane_change": {
+     "free driving": {
+      "mean": 0.1562,
+      "std": 0.0132,
+      "values": [
+       0.155,
+       0.1639,
+       0.1342,
+       0.1601,
+       0.168
+      ]
+     },
+     "the completed direction": {
+      "mean": 0.113,
+      "std": 0.0067,
+      "values": [
+       0.1139,
+       0.1174,
+       0.1062,
+       0.1212,
+       0.1064
+      ]
+     },
+     "the opposite direction": {
+      "mean": 0.7308,
+      "std": 0.017,
+      "values": [
+       0.7311,
+       0.7187,
+       0.7597,
+       0.7188,
+       0.7256
+      ]
+     }
+    },
+    "baseline_sessions_false_alarms_per_hour_raw_output": {
+     "mean": 269.18,
+     "std": 75.2066,
+     "values": [
+      190.8,
+      351.7,
+      280.8,
+      192.7,
+      329.9
+     ]
+    }
+   },
+   "test_drivers": {
+    "raw_output": {
+     "timely_share": {
+      "mean": 0.8958,
+      "std": 0.0076,
+      "values": [
+       0.884,
+       0.8987,
+       0.9042,
+       0.8932,
+       0.8987
+      ]
+     },
+     "false_alarms_per_hour": {
+      "mean": 301.22,
+      "std": 39.018,
+      "values": [
+       248.0,
+       334.5,
+       275.7,
+       339.2,
+       308.7
+      ]
+     },
+     "median_lead_s": {
+      "mean": 4.74,
+      "std": 0.1517,
+      "values": [
+       4.6,
+       4.9,
+       4.9,
+       4.7,
+       4.6
+      ]
+     },
+     "free_frames_in_alarm": {
+      "mean": 0.2284,
+      "std": 0.0086,
+      "values": [
+       0.2217,
+       0.2306,
+       0.2424,
+       0.2253,
+       0.2218
+      ]
+     },
+     "missed_share": {
+      "mean": 0.0225,
+      "std": 0.004,
+      "values": [
+       0.0276,
+       0.0203,
+       0.0203,
+       0.0184,
+       0.0258
+      ]
+     }
+    },
+    "selected": {
+     "timely_share": {
+      "mean": 0.8339,
+      "std": 0.0097,
+      "values": [
+       0.8232,
+       0.8435,
+       0.8343,
+       0.8435,
+       0.825
+      ]
+     },
+     "false_alarms_per_hour": {
+      "mean": 178.32,
+      "std": 4.3574,
+      "values": [
+       173.6,
+       184.4,
+       179.7,
+       179.3,
+       174.6
+      ]
+     },
+     "median_lead_s": {
+      "mean": 4.04,
+      "std": 0.2302,
+      "values": [
+       3.8,
+       4.1,
+       4.2,
+       4.3,
+       3.8
+      ]
+     },
+     "free_frames_in_alarm": {
+      "mean": 0.1874,
+      "std": 0.011,
+      "values": [
+       0.1791,
+       0.1847,
+       0.2028,
+       0.1944,
+       0.1762
+      ]
+     },
+     "missed_share": {
+      "mean": 0.035,
+      "std": 0.0029,
+      "values": [
+       0.0387,
+       0.0331,
+       0.0368,
+       0.0313,
+       0.035
+      ]
+     }
+    },
+    "frame_accuracy": {
+     "all": {
+      "mean": 0.8014,
+      "std": 0.0059,
+      "values": [
+       0.8061,
+       0.8007,
+       0.7915,
+       0.8038,
+       0.8048
+      ]
+     },
+     "lane_change_sessions": {
+      "mean": 0.6894,
+      "std": 0.0079,
+      "values": [
+       0.6929,
+       0.691,
+       0.6763,
+       0.6894,
+       0.6972
+      ]
+     },
+     "baseline_sessions": {
+      "mean": 0.95,
+      "std": 0.0055,
+      "values": [
+       0.9563,
+       0.9461,
+       0.9444,
+       0.9555,
+       0.9477
+      ]
+     }
+    },
+    "output_after_a_lane_change": {
+     "free driving": {
+      "mean": 0.1705,
+      "std": 0.0148,
+      "values": [
+       0.1684,
+       0.1796,
+       0.1474,
+       0.1704,
+       0.1866
+      ]
+     },
+     "the completed direction": {
+      "mean": 0.0812,
+      "std": 0.0098,
+      "values": [
+       0.0775,
+       0.0944,
+       0.0736,
+       0.0885,
+       0.072
+      ]
+     },
+     "the opposite direction": {
+      "mean": 0.7483,
+      "std": 0.0198,
+      "values": [
+       0.754,
+       0.726,
+       0.779,
+       0.7411,
+       0.7414
+      ]
+     }
+    },
+    "baseline_sessions_false_alarms_per_hour_raw_output": {
+     "mean": 149.18,
+     "std": 30.5276,
+     "values": [
+      122.4,
+      192.8,
+      148.5,
+      119.0,
+      163.2
+     ]
+    }
+   }
+  },
+  "A22": {
+   "seeds": [
+    100,
+    101,
+    102,
+    103,
+    104
+   ],
+   "training_windows": 60969,
+   "training_set": "the lab's windows of the 22 local drivers",
+   "lab_test_pickle_accuracy_int8": {
+    "mean": 0.9082,
+    "std": 0.0073,
+    "values": [
+     0.9179,
+     0.9066,
+     0.9076,
+     0.8977,
+     0.911
+    ]
+   },
+   "lab_test_pickle_accuracy_float32": {
+    "mean": 0.9067,
+    "std": 0.0068,
+    "values": [
+     0.916,
+     0.9053,
+     0.9058,
+     0.8973,
+     0.909
+    ]
+   },
+   "selected_rules": [
+    {
+     "theta": 0.6,
+     "hold_off_frames": 0,
+     "persistence_frames": 5
+    },
+    {
+     "theta": 0.0,
+     "hold_off_frames": 0,
+     "persistence_frames": 5
+    },
+    {
+     "theta": 0.0,
+     "hold_off_frames": 0,
+     "persistence_frames": 5
+    },
+    {
+     "theta": 0.0,
+     "hold_off_frames": 0,
+     "persistence_frames": 3
+    },
+    {
+     "theta": 0.0,
+     "hold_off_frames": 0,
+     "persistence_frames": 5
+    }
+   ],
+   "validation_drivers": {
+    "raw_output": {
+     "timely_share": {
+      "mean": 0.9181,
+      "std": 0.0105,
+      "values": [
+       0.9222,
+       0.9111,
+       0.9241,
+       0.9037,
+       0.9296
+      ]
+     },
+     "false_alarms_per_hour": {
+      "mean": 306.16,
+      "std": 39.1271,
+      "values": [
+       295.8,
+       262.9,
+       308.4,
+       369.4,
+       294.3
+      ]
+     },
+     "median_lead_s": {
+      "mean": 4.83,
+      "std": 0.2588,
+      "values": [
+       5.0,
+       4.6,
+       5.05,
+       4.5,
+       5.0
+      ]
+     },
+     "free_frames_in_alarm": {
+      "mean": 0.2061,
+      "std": 0.0108,
+      "values": [
+       0.2128,
+       0.1978,
+       0.2219,
+       0.1991,
+       0.199
+      ]
+     },
+     "missed_share": {
+      "mean": 0.0159,
+      "std": 0.0028,
+      "values": [
+       0.013,
+       0.0185,
+       0.013,
+       0.0185,
+       0.0167
+      ]
+     }
+    },
+    "selected": {
+     "timely_share": {
+      "mean": 0.8822,
+      "std": 0.0107,
+      "values": [
+       0.8722,
+       0.8704,
+       0.8907,
+       0.8833,
+       0.8944
+      ]
+     },
+     "false_alarms_per_hour": {
+      "mean": 217.94,
+      "std": 74.0677,
+      "values": [
+       168.0,
+       201.9,
+       191.2,
+       348.5,
+       180.1
+      ]
+     },
+     "median_lead_s": {
+      "mean": 4.41,
+      "std": 0.2012,
+      "values": [
+       4.3,
+       4.2,
+       4.65,
+       4.3,
+       4.6
+      ]
+     },
+     "free_frames_in_alarm": {
+      "mean": 0.1734,
+      "std": 0.0106,
+      "values": [
+       0.1704,
+       0.1673,
+       0.192,
+       0.171,
+       0.1662
+      ]
+     },
+     "missed_share": {
+      "mean": 0.0226,
+      "std": 0.002,
+      "values": [
+       0.0204,
+       0.0241,
+       0.0204,
+       0.0241,
+       0.0241
+      ]
+     }
+    },
+    "frame_accuracy": {
+     "all": {
+      "mean": 0.8275,
+      "std": 0.0069,
+      "values": [
+       0.8242,
+       0.832,
+       0.817,
+       0.8302,
+       0.834
+      ]
+     },
+     "lane_change_sessions": {
+      "mean": 0.7308,
+      "std": 0.0089,
+      "values": [
+       0.7281,
+       0.7408,
+       0.7185,
+       0.7286,
+       0.738
+      ]
+     },
+     "baseline_sessions": {
+      "mean": 0.9629,
+      "std": 0.0074,
+      "values": [
+       0.9588,
+       0.9597,
+       0.9549,
+       0.9726,
+       0.9686
+      ]
+     }
+    },
+    "output_after_a_lane_change": {
+     "free driving": {
+      "mean": 0.1961,
+      "std": 0.0195,
+      "values": [
+       0.1731,
+       0.2168,
+       0.1778,
+       0.2092,
+       0.2034
+      ]
+     },
+     "the completed direction": {
+      "mean": 0.1348,
+      "std": 0.0195,
+      "values": [
+       0.125,
+       0.1412,
+       0.1126,
+       0.1644,
+       0.1306
+      ]
+     },
+     "the opposite direction": {
+      "mean": 0.6692,
+      "std": 0.0363,
+      "values": [
+       0.7019,
+       0.642,
+       0.7096,
+       0.6264,
+       0.666
+      ]
+     }
+    },
+    "baseline_sessions_false_alarms_per_hour_raw_output": {
+     "mean": 144.84,
+     "std": 22.2057,
+     "values": [
+      160.8,
+      148.1,
+      169.0,
+      113.6,
+      132.7
+     ]
+    }
+   },
+   "test_drivers": {
+    "raw_output": {
+     "timely_share": {
+      "mean": 0.8855,
+      "std": 0.0086,
+      "values": [
+       0.8969,
+       0.8877,
+       0.884,
+       0.8729,
+       0.8858
+      ]
+     },
+     "false_alarms_per_hour": {
+      "mean": 294.9,
+      "std": 15.9074,
+      "values": [
+       294.5,
+       278.5,
+       280.0,
+       313.8,
+       307.7
+      ]
+     },
+     "median_lead_s": {
+      "mean": 4.46,
+      "std": 0.1517,
+      "values": [
+       4.6,
+       4.3,
+       4.6,
+       4.3,
+       4.5
+      ]
+     },
+     "free_frames_in_alarm": {
+      "mean": 0.2149,
+      "std": 0.0106,
+      "values": [
+       0.2219,
+       0.206,
+       0.2261,
+       0.2192,
+       0.2015
+      ]
+     },
+     "missed_share": {
+      "mean": 0.0346,
+      "std": 0.003,
+      "values": [
+       0.0295,
+       0.0368,
+       0.035,
+       0.035,
+       0.0368
+      ]
+     }
+    },
+    "selected": {
+     "timely_share": {
+      "mean": 0.8416,
+      "std": 0.0047,
+      "values": [
+       0.8361,
+       0.8379,
+       0.8453,
+       0.8471,
+       0.8416
+      ]
+     },
+     "false_alarms_per_hour": {
+      "mean": 221.34,
+      "std": 59.1626,
+      "values": [
+       189.1,
+       216.4,
+       182.6,
+       324.7,
+       193.9
+      ]
+     },
+     "median_lead_s": {
+      "mean": 4.06,
+      "std": 0.114,
+      "values": [
+       4.0,
+       3.9,
+       4.2,
+       4.1,
+       4.1
+      ]
+     },
+     "free_frames_in_alarm": {
+      "mean": 0.1841,
+      "std": 0.0132,
+      "values": [
+       0.1773,
+       0.1758,
+       0.1999,
+       0.1968,
+       0.1709
+      ]
+     },
+     "missed_share": {
+      "mean": 0.0438,
+      "std": 0.0056,
+      "values": [
+       0.0387,
+       0.0497,
+       0.0424,
+       0.0387,
+       0.0497
+      ]
+     }
+    },
+    "frame_accuracy": {
+     "all": {
+      "mean": 0.8078,
+      "std": 0.0076,
+      "values": [
+       0.8068,
+       0.8127,
+       0.8004,
+       0.8011,
+       0.8182
+      ]
+     },
+     "lane_change_sessions": {
+      "mean": 0.699,
+      "std": 0.0127,
+      "values": [
+       0.7014,
+       0.7094,
+       0.6877,
+       0.6842,
+       0.7124
+      ]
+     },
+     "baseline_sessions": {
+      "mean": 0.9523,
+      "std": 0.0049,
+      "values": [
+       0.9467,
+       0.9498,
+       0.9501,
+       0.9562,
+       0.9585
+      ]
+     }
+    },
+    "output_after_a_lane_change": {
+     "free driving": {
+      "mean": 0.2055,
+      "std": 0.0195,
+      "values": [
+       0.1902,
+       0.2307,
+       0.1854,
+       0.2009,
+       0.2205
+      ]
+     },
+     "the completed direction": {
+      "mean": 0.1222,
+      "std": 0.0284,
+      "values": [
+       0.0967,
+       0.1318,
+       0.0955,
+       0.1642,
+       0.1228
+      ]
+     },
+     "the opposite direction": {
+      "mean": 0.6723,
+      "std": 0.041,
+      "values": [
+       0.7132,
+       0.6375,
+       0.7192,
+       0.6349,
+       0.6567
+      ]
+     }
+    },
+    "baseline_sessions_false_alarms_per_hour_raw_output": {
+     "mean": 115.14,
+     "std": 12.2169,
+     "values": [
+      128.5,
+      121.6,
+      120.7,
+      99.0,
+      105.9
+     ]
+    }
+   }
+  },
+  "B": {
+   "seeds": [
+    100,
+    101,
+    102,
+    103,
+    104
+   ],
+   "training_windows": 82695,
+   "training_set": "stream windows, scored frames per class before balancing [135725, 27565, 28974]",
+   "lab_test_pickle_accuracy_int8": {
+    "mean": 0.8999,
+    "std": 0.0051,
+    "values": [
+     0.9082,
+     0.8972,
+     0.9012,
+     0.8961,
+     0.8967
+    ]
+   },
+   "lab_test_pickle_accuracy_float32": {
+    "mean": 0.8988,
+    "std": 0.0058,
+    "values": [
+     0.9088,
+     0.8956,
+     0.8979,
+     0.8975,
+     0.8942
+    ]
+   },
+   "selected_rules": [
+    {
+     "theta": 0.0,
+     "hold_off_frames": 0,
+     "persistence_frames": 5
+    },
+    {
+     "theta": 0.0,
+     "hold_off_frames": 0,
+     "persistence_frames": 5
+    },
+    {
+     "theta": 0.0,
+     "hold_off_frames": 0,
+     "persistence_frames": 5
+    },
+    {
+     "theta": 0.6,
+     "hold_off_frames": 0,
+     "persistence_frames": 5
+    },
+    {
+     "theta": 0.6,
+     "hold_off_frames": 0,
+     "persistence_frames": 5
+    }
+   ],
+   "validation_drivers": {
+    "raw_output": {
+     "timely_share": {
+      "mean": 0.9185,
+      "std": 0.0082,
+      "values": [
+       0.9148,
+       0.9093,
+       0.9148,
+       0.9296,
+       0.9241
+      ]
+     },
+     "false_alarms_per_hour": {
+      "mean": 445.08,
+      "std": 133.5261,
+      "values": [
+       324.8,
+       344.7,
+       380.5,
+       618.7,
+       556.7
+      ]
+     },
+     "median_lead_s": {
+      "mean": 4.33,
+      "std": 0.211,
+      "values": [
+       4.4,
+       4.05,
+       4.2,
+       4.4,
+       4.6
+      ]
+     },
+     "free_frames_in_alarm": {
+      "mean": 0.1107,
+      "std": 0.0325,
+      "values": [
+       0.0872,
+       0.0803,
+       0.0949,
+       0.1403,
+       0.1509
+      ]
+     },
+     "missed_share": {
+      "mean": 0.0137,
+      "std": 0.001,
+      "values": [
+       0.013,
+       0.0148,
+       0.013,
+       0.013,
+       0.0148
+      ]
+     }
+    },
+    "selected": {
+     "timely_share": {
+      "mean": 0.8793,
+      "std": 0.0058,
+      "values": [
+       0.8852,
+       0.8704,
+       0.8796,
+       0.8833,
+       0.8778
+      ]
+     },
+     "false_alarms_per_hour": {
+      "mean": 108.06,
+      "std": 8.0283,
+      "values": [
+       94.4,
+       107.5,
+       111.3,
+       113.8,
+       113.3
+      ]
+     },
+     "median_lead_s": {
+      "mean": 3.79,
+      "std": 0.1673,
+      "values": [
+       4.0,
+       3.65,
+       3.8,
+       3.6,
+       3.9
+      ]
+     },
+     "free_frames_in_alarm": {
+      "mean": 0.0587,
+      "std": 0.0051,
+      "values": [
+       0.059,
+       0.054,
+       0.0628,
+       0.053,
+       0.0645
+      ]
+     },
+     "missed_share": {
+      "mean": 0.023,
+      "std": 0.0031,
+      "values": [
+       0.0222,
+       0.0278,
+       0.0204,
+       0.0204,
+       0.0241
+      ]
+     }
+    },
+    "frame_accuracy": {
+     "all": {
+      "mean": 0.9015,
+      "std": 0.0235,
+      "values": [
+       0.9193,
+       0.923,
+       0.9126,
+       0.8795,
+       0.8729
+      ]
+     },
+     "lane_change_sessions": {
+      "mean": 0.8875,
+      "std": 0.0072,
+      "values": [
+       0.8895,
+       0.897,
+       0.8898,
+       0.8836,
+       0.8778
+      ]
+     },
+     "baseline_sessions": {
+      "mean": 0.921,
+      "std": 0.0471,
+      "values": [
+       0.961,
+       0.9594,
+       0.9445,
+       0.8739,
+       0.8661
+      ]
+     }
+    },
+    "output_after_a_lane_change": {
+     "free driving": {
+      "mean": 0.8398,
+      "std": 0.0153,
+      "values": [
+       0.8541,
+       0.8507,
+       0.8477,
+       0.8237,
+       0.8226
+      ]
+     },
+     "the completed direction": {
+      "mean": 0.0178,
+      "std": 0.004,
+      "values": [
+       0.0118,
+       0.022,
+       0.0169,
+       0.0208,
+       0.0173
+      ]
+     },
+     "the opposite direction": {
+      "mean": 0.1424,
+      "std": 0.0144,
+      "values": [
+       0.1341,
+       0.1272,
+       0.1354,
+       0.1554,
+       0.1601
+      ]
+     }
+    },
+    "baseline_sessions_false_alarms_per_hour_raw_output": {
+     "mean": 374.96,
+     "std": 222.7967,
+     "values": [
+      203.6,
+      166.3,
+      274.4,
+      609.8,
+      620.7
+     ]
+    }
+   },
+   "test_drivers": {
+    "raw_output": {
+     "timely_share": {
+      "mean": 0.8726,
+      "std": 0.0068,
+      "values": [
+       0.8674,
+       0.8656,
+       0.8711,
+       0.8766,
+       0.8821
+      ]
+     },
+     "false_alarms_per_hour": {
+      "mean": 358.06,
+      "std": 54.939,
+      "values": [
+       312.4,
+       324.7,
+       321.8,
+       437.1,
+       394.3
+      ]
+     },
+     "median_lead_s": {
+      "mean": 4.1,
+      "std": 0.1871,
+      "values": [
+       4.0,
+       3.9,
+       4.1,
+       4.1,
+       4.4
+      ]
+     },
+     "free_frames_in_alarm": {
+      "mean": 0.104,
+      "std": 0.0206,
+      "values": [
+       0.0828,
+       0.091,
+       0.0964,
+       0.1166,
+       0.1333
+      ]
+     },
+     "missed_share": {
+      "mean": 0.021,
+      "std": 0.0036,
+      "values": [
+       0.0258,
+       0.0221,
+       0.0166,
+       0.0184,
+       0.0221
+      ]
+     }
+    },
+    "selected": {
+     "timely_share": {
+      "mean": 0.8217,
+      "std": 0.0162,
+      "values": [
+       0.8343,
+       0.8103,
+       0.8361,
+       0.7993,
+       0.8287
+      ]
+     },
+     "false_alarms_per_hour": {
+      "mean": 106.22,
+      "std": 4.7804,
+      "values": [
+       100.2,
+       102.1,
+       111.0,
+       109.6,
+       108.2
+      ]
+     },
+     "median_lead_s": {
+      "mean": 3.48,
+      "std": 0.228,
+      "values": [
+       3.6,
+       3.5,
+       3.7,
+       3.1,
+       3.5
+      ]
+     },
+     "free_frames_in_alarm": {
+      "mean": 0.0626,
+      "std": 0.0076,
+      "values": [
+       0.0591,
+       0.0655,
+       0.0699,
+       0.0511,
+       0.0673
+      ]
+     },
+     "missed_share": {
+      "mean": 0.0339,
+      "std": 0.0028,
+      "values": [
+       0.035,
+       0.0368,
+       0.0295,
+       0.035,
+       0.0331
+      ]
+     }
+    },
+    "frame_accuracy": {
+     "all": {
+      "mean": 0.8956,
+      "std": 0.0137,
+      "values": [
+       0.9105,
+       0.9034,
+       0.9009,
+       0.8862,
+       0.8769
+      ]
+     },
+     "lane_change_sessions": {
+      "mean": 0.856,
+      "std": 0.0098,
+      "values": [
+       0.8674,
+       0.8632,
+       0.8557,
+       0.8511,
+       0.8427
+      ]
+     },
+     "baseline_sessions": {
+      "mean": 0.9481,
+      "std": 0.0195,
+      "values": [
+       0.9678,
+       0.9567,
+       0.9608,
+       0.9328,
+       0.9224
+      ]
+     }
+    },
+    "output_after_a_lane_change": {
+     "free driving": {
+      "mean": 0.7744,
+      "std": 0.018,
+      "values": [
+       0.7954,
+       0.7871,
+       0.7764,
+       0.7622,
+       0.751
+      ]
+     },
+     "the completed direction": {
+      "mean": 0.021,
+      "std": 0.005,
+      "values": [
+       0.0149,
+       0.0265,
+       0.0174,
+       0.0253,
+       0.0211
+      ]
+     },
+     "the opposite direction": {
+      "mean": 0.2045,
+      "std": 0.017,
+      "values": [
+       0.1897,
+       0.1864,
+       0.2062,
+       0.2125,
+       0.2279
+      ]
+     }
+    },
+    "baseline_sessions_false_alarms_per_hour_raw_output": {
+     "mean": 190.0,
+     "std": 71.889,
+     "values": [
+      116.4,
+      135.5,
+      171.9,
+      288.3,
+      237.9
+     ]
+    }
+   }
+  },
+  "C": {
+   "seeds": [
+    100,
+    101,
+    102,
+    103,
+    104
+   ],
+   "training_windows": 84906,
+   "training_set": "stream windows, scored frames per class before balancing [265244, 28302, 30559]",
+   "lab_test_pickle_accuracy_int8": {
+    "mean": 0.8913,
+    "std": 0.0059,
+    "values": [
+     0.8909,
+     0.8965,
+     0.897,
+     0.8894,
+     0.8826
+    ]
+   },
+   "lab_test_pickle_accuracy_float32": {
+    "mean": 0.8898,
+    "std": 0.0063,
+    "values": [
+     0.8917,
+     0.8935,
+     0.8965,
+     0.8869,
+     0.8803
+    ]
+   },
+   "selected_rules": [
+    {
+     "theta": 0.0,
+     "hold_off_frames": 0,
+     "persistence_frames": 5
+    },
+    {
+     "theta": 0.0,
+     "hold_off_frames": 0,
+     "persistence_frames": 5
+    },
+    {
+     "theta": 0.0,
+     "hold_off_frames": 0,
+     "persistence_frames": 5
+    },
+    {
+     "theta": 0.0,
+     "hold_off_frames": 0,
+     "persistence_frames": 5
+    },
+    {
+     "theta": 0.0,
+     "hold_off_frames": 0,
+     "persistence_frames": 5
+    }
+   ],
+   "validation_drivers": {
+    "raw_output": {
+     "timely_share": {
+      "mean": 0.9145,
+      "std": 0.004,
+      "values": [
+       0.9093,
+       0.9111,
+       0.9167,
+       0.9167,
+       0.9185
+      ]
+     },
+     "false_alarms_per_hour": {
+      "mean": 357.54,
+      "std": 46.257,
+      "values": [
+       364.0,
+       317.1,
+       308.4,
+       421.6,
+       376.6
+      ]
+     },
+     "median_lead_s": {
+      "mean": 4.72,
+      "std": 0.2775,
+      "values": [
+       4.3,
+       4.8,
+       4.6,
+       5.0,
+       4.9
+      ]
+     },
+     "free_frames_in_alarm": {
+      "mean": 0.1067,
+      "std": 0.023,
+      "values": [
+       0.0843,
+       0.0955,
+       0.0908,
+       0.1282,
+       0.1345
+      ]
+     },
+     "missed_share": {
+      "mean": 0.0089,
+      "std": 0.0035,
+      "values": [
+       0.0074,
+       0.0093,
+       0.0056,
+       0.0148,
+       0.0074
+      ]
+     }
+    },
+    "selected": {
+     "timely_share": {
+      "mean": 0.8815,
+      "std": 0.0086,
+      "values": [
+       0.8704,
+       0.8815,
+       0.8759,
+       0.8889,
+       0.8907
+      ]
+     },
+     "false_alarms_per_hour": {
+      "mean": 101.4,
+      "std": 16.3383,
+      "values": [
+       128.8,
+       89.1,
+       92.5,
+       104.1,
+       92.5
+      ]
+     },
+     "median_lead_s": {
+      "mean": 4.32,
+      "std": 0.2775,
+      "values": [
+       3.9,
+       4.4,
+       4.2,
+       4.6,
+       4.5
+      ]
+     },
+     "free_frames_in_alarm": {
+      "mean": 0.0767,
+      "std": 0.0195,
+      "values": [
+       0.0564,
+       0.0683,
+       0.0643,
+       0.0922,
+       0.1021
+      ]
+     },
+     "missed_share": {
+      "mean": 0.0152,
+      "std": 0.0036,
+      "values": [
+       0.013,
+       0.0167,
+       0.0111,
+       0.0204,
+       0.0148
+      ]
+     }
+    },
+    "frame_accuracy": {
+     "all": {
+      "mean": 0.9068,
+      "std": 0.0174,
+      "values": [
+       0.9225,
+       0.9167,
+       0.9188,
+       0.8906,
+       0.8852
+      ]
+     },
+     "lane_change_sessions": {
+      "mean": 0.8523,
+      "std": 0.0267,
+      "values": [
+       0.8756,
+       0.8676,
+       0.8713,
+       0.828,
+       0.8189
+      ]
+     },
+     "baseline_sessions": {
+      "mean": 0.983,
+      "std": 0.0046,
+      "values": [
+       0.9883,
+       0.9854,
+       0.9852,
+       0.9782,
+       0.9781
+      ]
+     }
+    },
+    "output_after_a_lane_change": {
+     "free driving": {
+      "mean": 0.7489,
+      "std": 0.0412,
+      "values": [
+       0.771,
+       0.7703,
+       0.7921,
+       0.7163,
+       0.6948
+      ]
+     },
+     "the completed direction": {
+      "mean": 0.026,
+      "std": 0.0036,
+      "values": [
+       0.0281,
+       0.0285,
+       0.0198,
+       0.0263,
+       0.0274
+      ]
+     },
+     "the opposite direction": {
+      "mean": 0.2251,
+      "std": 0.0399,
+      "values": [
+       0.2009,
+       0.2012,
+       0.1881,
+       0.2575,
+       0.2778
+      ]
+     }
+    },
+    "baseline_sessions_false_alarms_per_hour_raw_output": {
+     "mean": 81.78,
+     "std": 21.7068,
+     "values": [
+      70.9,
+      70.9,
+      62.7,
+      117.2,
+      87.2
+     ]
+    }
+   },
+   "test_drivers": {
+    "raw_output": {
+     "timely_share": {
+      "mean": 0.8729,
+      "std": 0.0076,
+      "values": [
+       0.8637,
+       0.8729,
+       0.8674,
+       0.8785,
+       0.8821
+      ]
+     },
+     "false_alarms_per_hour": {
+      "mean": 349.96,
+      "std": 37.2409,
+      "values": [
+       409.8,
+       310.1,
+       331.2,
+       352.9,
+       345.8
+      ]
+     },
+     "median_lead_s": {
+      "mean": 4.48,
+      "std": 0.2864,
+      "values": [
+       4.1,
+       4.5,
+       4.3,
+       4.8,
+       4.7
+      ]
+     },
+     "free_frames_in_alarm": {
+      "mean": 0.114,
+      "std": 0.0205,
+      "values": [
+       0.0948,
+       0.1049,
+       0.0984,
+       0.1335,
+       0.1386
+      ]
+     },
+     "missed_share": {
+      "mean": 0.0088,
+      "std": 0.003,
+      "values": [
+       0.0055,
+       0.011,
+       0.0055,
+       0.011,
+       0.011
+      ]
+     }
+    },
+    "selected": {
+     "timely_share": {
+      "mean": 0.8335,
+      "std": 0.0108,
+      "values": [
+       0.8214,
+       0.8324,
+       0.825,
+       0.8416,
+       0.8471
+      ]
+     },
+     "false_alarms_per_hour": {
+      "mean": 114.16,
+      "std": 11.405,
+      "values": [
+       133.2,
+       102.6,
+       110.1,
+       113.4,
+       111.5
+      ]
+     },
+     "median_lead_s": {
+      "mean": 4.08,
+      "std": 0.2864,
+      "values": [
+       3.7,
+       4.1,
+       3.9,
+       4.4,
+       4.3
+      ]
+     },
+     "free_frames_in_alarm": {
+      "mean": 0.0848,
+      "std": 0.0192,
+      "values": [
+       0.0654,
+       0.0768,
+       0.071,
+       0.1038,
+       0.1068
+      ]
+     },
+     "missed_share": {
+      "mean": 0.0169,
+      "std": 0.0031,
+      "values": [
+       0.0147,
+       0.0147,
+       0.0147,
+       0.0203,
+       0.0203
+      ]
+     }
+    },
+    "frame_accuracy": {
+     "all": {
+      "mean": 0.8909,
+      "std": 0.0142,
+      "values": [
+       0.9025,
+       0.8989,
+       0.9019,
+       0.878,
+       0.8731
+      ]
+     },
+     "lane_change_sessions": {
+      "mean": 0.8263,
+      "std": 0.0232,
+      "values": [
+       0.8454,
+       0.839,
+       0.8447,
+       0.8053,
+       0.7972
+      ]
+     },
+     "baseline_sessions": {
+      "mean": 0.9766,
+      "std": 0.0022,
+      "values": [
+       0.9784,
+       0.9785,
+       0.9777,
+       0.9745,
+       0.974
+      ]
+     }
+    },
+    "output_after_a_lane_change": {
+     "free driving": {
+      "mean": 0.695,
+      "std": 0.0424,
+      "values": [
+       0.7217,
+       0.7208,
+       0.7338,
+       0.6412,
+       0.6574
+      ]
+     },
+     "the completed direction": {
+      "mean": 0.0289,
+      "std": 0.0038,
+      "values": [
+       0.0343,
+       0.0291,
+       0.0238,
+       0.0295,
+       0.0279
+      ]
+     },
+     "the opposite direction": {
+      "mean": 0.2761,
+      "std": 0.0423,
+      "values": [
+       0.244,
+       0.2502,
+       0.2424,
+       0.3293,
+       0.3147
+      ]
+     }
+    },
+    "baseline_sessions_false_alarms_per_hour_raw_output": {
+     "mean": 88.04,
+     "std": 3.5061,
+     "values": [
+      85.1,
+      84.2,
+      91.2,
+      92.0,
+      87.7
+     ]
+    }
+   }
+  },
+  "B36": {
+   "seeds": [
+    100,
+    101,
+    102,
+    103,
+    104
+   ],
+   "training_windows": 139797,
+   "training_set": "stream windows, scored frames per class before balancing [210048, 46599, 49063]",
+   "lab_test_pickle_accuracy_int8": {
+    "mean": 0.907,
+    "std": 0.004,
+    "values": [
+     0.905,
+     0.9041,
+     0.9067,
+     0.9053,
+     0.914
+    ]
+   },
+   "lab_test_pickle_accuracy_float32": {
+    "mean": 0.9059,
+    "std": 0.0016,
+    "values": [
+     0.9077,
+     0.9073,
+     0.904,
+     0.906,
+     0.9045
+    ]
+   },
+   "selected_rules": [
+    {
+     "theta": 0.0,
+     "hold_off_frames": 0,
+     "persistence_frames": 5
+    },
+    {
+     "theta": 0.6,
+     "hold_off_frames": 0,
+     "persistence_frames": 5
+    },
+    {
+     "theta": 0.6,
+     "hold_off_frames": 0,
+     "persistence_frames": 5
+    },
+    {
+     "theta": 0.6,
+     "hold_off_frames": 0,
+     "persistence_frames": 5
+    },
+    {
+     "theta": 0.6,
+     "hold_off_frames": 0,
+     "persistence_frames": 3
+    }
+   ],
+   "validation_drivers": {
+    "raw_output": {
+     "timely_share": {
+      "mean": 0.9267,
+      "std": 0.0038,
+      "values": [
+       0.9296,
+       0.9278,
+       0.9296,
+       0.9259,
+       0.9204
+      ]
+     },
+     "false_alarms_per_hour": {
+      "mean": 413.9,
+      "std": 105.1032,
+      "values": [
+       341.3,
+       465.7,
+       399.9,
+       564.4,
+       298.2
+      ]
+     },
+     "median_lead_s": {
+      "mean": 4.5,
+      "std": 0.1,
+      "values": [
+       4.4,
+       4.5,
+       4.6,
+       4.4,
+       4.6
+      ]
+     },
+     "free_frames_in_alarm": {
+      "mean": 0.0987,
+      "std": 0.0221,
+      "values": [
+       0.0852,
+       0.1031,
+       0.0979,
+       0.1328,
+       0.0745
+      ]
+     },
+     "missed_share": {
+      "mean": 0.01,
+      "std": 0.0046,
+      "values": [
+       0.0111,
+       0.0111,
+       0.0056,
+       0.0056,
+       0.0167
+      ]
+     }
+    },
+    "selected": {
+     "timely_share": {
+      "mean": 0.8855,
+      "std": 0.0133,
+      "values": [
+       0.9056,
+       0.8907,
+       0.8833,
+       0.8759,
+       0.8722
+      ]
+     },
+     "false_alarms_per_hour": {
+      "mean": 85.86,
+      "std": 19.0132,
+      "values": [
+       99.7,
+       87.6,
+       69.7,
+       108.4,
+       63.9
+      ]
+     },
+     "median_lead_s": {
+      "mean": 3.84,
+      "std": 0.2302,
+      "values": [
+       4.0,
+       3.8,
+       3.8,
+       3.5,
+       4.1
+      ]
+     },
+     "free_frames_in_alarm": {
+      "mean": 0.0445,
+      "std": 0.0068,
+      "values": [
+       0.0563,
+       0.0431,
+       0.0397,
+       0.0431,
+       0.0402
+      ]
+     },
+     "missed_share": {
+      "mean": 0.0178,
+      "std": 0.0041,
+      "values": [
+       0.0167,
+       0.0185,
+       0.0167,
+       0.013,
+       0.0241
+      ]
+     }
+    },
+    "frame_accuracy": {
+     "all": {
+      "mean": 0.913,
+      "std": 0.0172,
+      "values": [
+       0.9227,
+       0.9113,
+       0.9153,
+       0.8852,
+       0.9307
+      ]
+     },
+     "lane_change_sessions": {
+      "mean": 0.891,
+      "std": 0.0082,
+      "values": [
+       0.8972,
+       0.8953,
+       0.8842,
+       0.8803,
+       0.8982
+      ]
+     },
+     "baseline_sessions": {
+      "mean": 0.9438,
+      "std": 0.0327,
+      "values": [
+       0.9585,
+       0.9337,
+       0.9587,
+       0.892,
+       0.9763
+      ]
+     }
+    },
+    "output_after_a_lane_change": {
+     "free driving": {
+      "mean": 0.8209,
+      "std": 0.0324,
+      "values": [
+       0.8402,
+       0.8338,
+       0.8067,
+       0.7713,
+       0.8525
+      ]
+     },
+     "the completed direction": {
+      "mean": 0.0175,
+      "std": 0.0057,
+      "values": [
+       0.0143,
+       0.0168,
+       0.0223,
+       0.0241,
+       0.0102
+      ]
+     },
+     "the opposite direction": {
+      "mean": 0.1616,
+      "std": 0.0271,
+      "values": [
+       0.1455,
+       0.1494,
+       0.1711,
+       0.2047,
+       0.1373
+      ]
+     }
+    },
+    "baseline_sessions_false_alarms_per_hour_raw_output": {
+     "mean": 324.78,
+     "std": 151.4589,
+     "values": [
+      203.6,
+      428.9,
+      279.0,
+      532.5,
+      179.9
+     ]
+    }
+   },
+   "test_drivers": {
+    "raw_output": {
+     "timely_share": {
+      "mean": 0.8711,
+      "std": 0.0054,
+      "values": [
+       0.8729,
+       0.8637,
+       0.8785,
+       0.8692,
+       0.8711
+      ]
+     },
+     "false_alarms_per_hour": {
+      "mean": 321.64,
+      "std": 48.69,
+      "values": [
+       295.5,
+       382.1,
+       295.5,
+       364.6,
+       270.5
+      ]
+     },
+     "median_lead_s": {
+      "mean": 4.3,
+      "std": 0.1225,
+      "values": [
+       4.2,
+       4.3,
+       4.5,
+       4.2,
+       4.3
+      ]
+     },
+     "free_frames_in_alarm": {
+      "mean": 0.0944,
+      "std": 0.0098,
+      "values": [
+       0.0876,
+       0.0995,
+       0.1004,
+       0.1039,
+       0.0807
+      ]
+     },
+     "missed_share": {
+      "mean": 0.0217,
+      "std": 0.006,
+      "values": [
+       0.0239,
+       0.0295,
+       0.0166,
+       0.0147,
+       0.0239
+      ]
+     }
+    },
+    "selected": {
+     "timely_share": {
+      "mean": 0.8191,
+      "std": 0.0244,
+      "values": [
+       0.8379,
+       0.8122,
+       0.8232,
+       0.7808,
+       0.8416
+      ]
+     },
+     "false_alarms_per_hour": {
+      "mean": 86.64,
+      "std": 13.0427,
+      "values": [
+       87.0,
+       88.9,
+       71.0,
+       106.3,
+       80.0
+      ]
+     },
+     "median_lead_s": {
+      "mean": 3.56,
+      "std": 0.3286,
+      "values": [
+       3.8,
+       3.6,
+       3.6,
+       3.0,
+       3.8
+      ]
+     },
+     "free_frames_in_alarm": {
+      "mean": 0.0504,
+      "std": 0.0077,
+      "values": [
+       0.0633,
+       0.0463,
+       0.0497,
+       0.0432,
+       0.0494
+      ]
+     },
+     "missed_share": {
+      "mean": 0.0324,
+      "std": 0.0042,
+      "values": [
+       0.035,
+       0.0368,
+       0.0331,
+       0.0258,
+       0.0313
+      ]
+     }
+    },
+    "frame_accuracy": {
+     "all": {
+      "mean": 0.9046,
+      "std": 0.0074,
+      "values": [
+       0.9078,
+       0.9011,
+       0.9025,
+       0.896,
+       0.9156
+      ]
+     },
+     "lane_change_sessions": {
+      "mean": 0.8576,
+      "std": 0.0085,
+      "values": [
+       0.8605,
+       0.8613,
+       0.8512,
+       0.8468,
+       0.8681
+      ]
+     },
+     "baseline_sessions": {
+      "mean": 0.967,
+      "std": 0.0096,
+      "values": [
+       0.9705,
+       0.9538,
+       0.9707,
+       0.9612,
+       0.9786
+      ]
+     }
+    },
+    "output_after_a_lane_change": {
+     "free driving": {
+      "mean": 0.7663,
+      "std": 0.0242,
+      "values": [
+       0.7731,
+       0.7873,
+       0.7591,
+       0.7278,
+       0.7843
+      ]
+     },
+     "the completed direction": {
+      "mean": 0.0182,
+      "std": 0.0027,
+      "values": [
+       0.0171,
+       0.0171,
+       0.0209,
+       0.0211,
+       0.015
+      ]
+     },
+     "the opposite direction": {
+      "mean": 0.2154,
+      "std": 0.022,
+      "values": [
+       0.2098,
+       0.1956,
+       0.22,
+       0.2511,
+       0.2007
+      ]
+     }
+    },
+    "baseline_sessions_false_alarms_per_hour_raw_output": {
+     "mean": 146.74,
+     "std": 52.6163,
+     "values": [
+      110.3,
+      229.2,
+      119.0,
+      169.3,
+      105.9
+     ]
+    }
+   }
+  }
+ },
+ "criterion": {
+  "rule": "test drivers, means over the seeds, raw output: false alarms per hour at most half and timely share at most 5 points lower",
+  "B_against_A": {
+   "false_alarms_per_hour": [
+    358.06,
+    301.22
+   ],
+   "timely_share": [
+    0.8726,
+    0.8958
+   ],
+   "false_alarms_at_least_halved": false,
+   "timely_share_within_5_points": true,
+   "met": false
+  },
+  "B36_against_A_equal_drivers": {
+   "false_alarms_per_hour": [
+    321.64,
+    301.22
+   ],
+   "timely_share": [
+    0.8711,
+    0.8958
+   ],
+   "false_alarms_at_least_halved": false,
+   "timely_share_within_5_points": true,
+   "met": false
+  },
+  "B_against_A22_for_information": {
+   "false_alarms_per_hour": [
+    358.06,
+    294.9
+   ],
+   "timely_share": [
+    0.8726,
+    0.8855
+   ],
+   "false_alarms_at_least_halved": false,
+   "timely_share_within_5_points": true,
+   "met": false
+  },
+  "C_against_A_for_information": {
+   "false_alarms_per_hour": [
+    349.96,
+    301.22
+   ],
+   "timely_share": [
+    0.8729,
+    0.8958
+   ],
+   "false_alarms_at_least_halved": false,
+   "timely_share_within_5_points": true,
+   "met": false
+  }
+ }
+}

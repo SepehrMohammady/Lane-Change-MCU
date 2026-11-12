@@ -100,6 +100,7 @@
     "user8LC"
    ],
    "look_alike_windows_elsewhere": {},
+   "look_alike_matches_not_counted": 0,
    "max_abs_error_of_the_map": 1.7038814803527202e-11,
    "worst_channel": "curvatureDxRightLine",
    "max_abs_error_per_driver": {
@@ -136,6 +137,7 @@
     "user8LC"
    ],
    "look_alike_windows_elsewhere": {},
+   "look_alike_matches_not_counted": 0,
    "max_abs_error_of_the_map": 2.6716406864579767e-12,
    "worst_channel": "curvatureDxRightLine",
    "max_abs_error_per_driver": {
@@ -172,6 +174,7 @@
     "user8LC"
    ],
    "look_alike_windows_elsewhere": {},
+   "look_alike_matches_not_counted": 0,
    "max_abs_error_of_the_map": 1.3301360013429075e-11,
    "worst_channel": "curvatureDxRightLine",
    "max_abs_error_per_driver": {

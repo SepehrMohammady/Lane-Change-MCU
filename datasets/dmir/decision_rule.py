@@ -67,7 +67,7 @@ WIDTH = FEATURES_BY_TASK["classification"].index("egoLaneWidth")
 
 
 def load(stem: str, split: str):
-    """Per session: predicted class, the probability test's left side, labels, jumps, lane changes."""
+    """The sessions of one deployed network: board outputs for the test drivers, PC reference otherwise."""
     folder = STREAM / f"sessions_{stem}_int8_io{'' if split == 'test' else '_' + split}"
     ref = np.load(folder / "reference.npz")
     if split == "test":
@@ -76,6 +76,13 @@ def load(stem: str, split: str):
             raise RuntimeError(f"{stem}: the board replay holds {len(outs)} of {len(ref['ref'])} windows")
     else:
         outs, source = ref["ref"], "PC reference (TFLite)"
+    return sessions_of(ref, outs), source, int((outs != ref["ref"]).any(-1).sum())
+
+
+def sessions_of(ref, outs: np.ndarray) -> list:
+    """Per session: predicted class, the probability test's left side, labels, jumps, lane changes.
+    ref: seq_lens, names, window_last_frame, events, feats (raw frames), ttlc, direction, out_scale;
+    outs: the int8 outputs of the windows, in the order of window_last_frame."""
     expo = np.exp(-np.float32(ref["out_scale"]) * np.arange(256, dtype=np.float32)).astype(np.float32)
     lens = ref["seq_lens"].astype(np.int64)
     starts = np.concatenate([[0], np.cumsum(lens)[:-1]])
@@ -103,7 +110,7 @@ def load(stem: str, split: str):
         label = np.where(ttlc <= 4.0, dir_all[a:a + n], 0)   # NaN compares False: ignored frames are 0 here
         sessions.append({"name": name, "cls": cls, "e": e, "has_out": has_out, "jump": jump, "scored": scored,
                          "label": label, "events": [(i, d_) for i, d_ in events[name] if i >= 90]})
-    return sessions, source, int((outs != ref["ref"]).any(-1).sum())
+    return sessions
 
 
 def alarm_of(s: dict, theta: float, hold: int, k: int) -> np.ndarray:

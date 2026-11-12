@@ -110,6 +110,7 @@ the model's own Keras; `path_check.py` compares the fork's trainer with `select_
 | `run_mm_searches.sh` | the three corrected seed-42 LCIR searches again on min-max scaled inputs (runs named `*_mm*`; `DMIR_SCALE=minmax` in `dmir_dataset.py`, set from the name by the runners, `select_by_seeds.py` and `final_eval.py`), their selections, then float and int8 scores on fresh seeds 100-104 for the new and the raw-input choices | `datasets/dmir/results/seeds/input_scaling_mm.jsonl` |
 | `input_clip_check.py [task ...]` | trains the corrected LCIR choices with five seeds on raw inputs and converts every run to full int8 (int8 I/O) with the calibration windows as they are and clipped to [-B, B] for eight bounds B: the features are standardized with rare extremes of several hundred, which set the int8 input range; `--report` picks B per head on validation and applies the rule on test | `datasets/dmir/results/seeds/input_clip.jsonl` |
 | `input_equalize_check.py` | the hand-designed exiD classifier of seeds 0-4 (bundles of `scripts/export_hand_cnn.py exid5`) with a per-feature input gain folded into the first convolution, exact in float, for five strengths; full int8 (int8 I/O) on validation and test; `--report` picks the strength on validation and applies the rule on test | `datasets/exid/results/seeds/input_equalize.jsonl` |
+| `stream_train_check.py [arm ...]` | the LCIR intention network of the raw-input search trained with five seeds on the lab's windows and on windows taken from the whole drives of the training drivers (`datasets/dmir/session_stream.py build train`, `build more`), converted to int8 as deployed and scored on the whole drives of the validation and test drivers with the measures of `datasets/dmir/decision_rule.py`; `--report` gives the means and the criterion (see Hardware in the loop) |
 | `resource_bias.py [search ...]` | for every evaluated candidate of a search: the fork's stored peak memory, size and MACs against the Keras model's weights and MACs and the faithful graph (CPU, from the fork's state files) | `datasets/highd/results/resource_bias.json` |
 
 Outcome of `run_mm_searches.sh` (2026-11-11, test, fresh seeds 100-104): searched on scaled inputs, the LCR and
@@ -343,6 +344,42 @@ free-driving frames of the sessions with lane changes have such a window. There 
 opposite lane change (72.8% of those frames between 1.5 and 6.3 s after a lane change, validation drivers); that
 lane change follows within 10 s of the completed one in 48% of the cases. Numbers:
 `datasets/dmir/results/hil/decision_rule.json`, `lane_change_pairs.json`, `session_stream_val.json`.
+
+Training windows taken from whole drives (2026-11-12, `unas/stream_train_check.py`). If the shortcut is in the
+windows, the windows have to change: every frame of the training drivers' sessions with lane changes, from the
+50th on and not ignored, gives a window with the class of its last frame, whatever else the window holds; the
+classes are balanced by subsampling. The architecture (the intention network searched on raw inputs), the recipe
+and the five seeds are the same in every arm, the networks are scored in int8 as deployed, and the arms and the
+criterion were fixed beforehand: adopted if, on the test drivers and for the raw output, the false alarms per
+hour are at most half of those of the networks trained on the lab's windows, within 5 points of the lane changes
+announced 2 s early. The lab's training pickles hold 36 drivers: the 22 of the archive used here and users 37-50
+of the public record (`session_stream.py build train`, `build more`; every training window is located).
+
+| test drivers, mean of five seeds | lab's pickle, 36 drivers | lab's windows, 22 drivers | whole drives, 22 drivers | whole drives and baseline sessions, 22 drivers | whole drives, 36 drivers |
+|---|---|---|---|---|---|
+| training windows | 94,620 | 60,969 | 82,695 | 84,906 | 139,797 |
+| lane changes announced 2 s early, raw output | 89.6% | 88.5% | 87.3% | 87.3% | 87.1% |
+| false alarms per hour, raw output | 301 ± 39 | 295 ± 16 | 358 ± 55 | 350 ± 37 | 322 ± 49 |
+| free-driving frames in alarm, raw output | 22.8% | 21.5% | 10.4% | 11.4% | 9.4% |
+| with the rule chosen on the validation drivers: announced early, false alarms per hour | 83.4%, 178 | 84.2%, 221 | 82.2%, 106 | 83.4%, 114 | 81.9%, 87 |
+| correct frames on whole drives | 80.1% ± 0.6 | 80.8% ± 0.8 | 89.6% ± 1.4 | 89.1% ± 1.4 | 90.5% ± 0.7 |
+| frames after a lane change on which the opposite one is announced | 74.8% | 67.2% | 20.4% | 27.6% | 21.5% |
+| false alarms per hour in the baseline sessions, raw output | 149 | 115 | 190 | 88 | 147 |
+| accuracy on the lab's balanced test set, int8 | 91.25% | 90.82% | 89.99% | 89.13% | 90.70% |
+
+The criterion is not met: the number of alarm runs does not fall, it rises (358 against 301 per hour at 87.3%
+against 89.6%). With all 36 training drivers, the comparison with equal drivers, it is 322 per hour at 87.1%:
+not met either. The other measures fixed beforehand show what did change. After a lane change the network
+announces the opposite one on 20% of the frames instead of 75%, the free-driving frames in alarm fall from 22.8%
+to 10.4%, and the share of correct frames on whole drives rises from 80.1% to 89.6% (90.5% with 36 drivers), for
+1.3 points on the lab's balanced test set (0.6 with 36 drivers). The alarms that remain are shorter and more
+numerous, which a count of runs of any length does not reward. With the persistence rule chosen for each network
+on the validation drivers, the windows from whole drives give 106 false alarms per hour at 82.2% (87 at 81.9%
+with 36 drivers), and 114 at 83.4% when the baseline sessions are added, against 178 at 83.4% for the lab's
+windows; none of these is within 5 points of the 89.6%. The networks trained on the lab's windows are right on
+91.25% of the lab's balanced test windows and on 80.1% of the frames of whole drives, and the windows are the
+reason. Per seed: `datasets/dmir/results/seeds/stream_windows.jsonl`; means and the criterion:
+`datasets/dmir/results/hil/stream_windows.json`.
 
 Before closing a loop around the board (2026-11-11): `datasets/highd/cutin_headroom.py` replaces the follower of
 each test lane change by a car with an ACC (point mass, the car-following model of Milanés and Shladover, 2014)

@@ -40,7 +40,7 @@ OUT = REPO / "datasets" / "dmir" / "results" / "seeds" / os.environ.get("OUT_NAM
 KEEP = REPO / "datasets" / "dmir" / "data" / "clip_check"
 
 
-def predict_int8(tf, tfl: bytes, x: np.ndarray, batch: int = 1024):
+def predict_int8(tf, tfl: bytes, x: np.ndarray, batch: int = 1024, as_int8: bool = False):
     """Outputs of the int8 file for float windows x, quantized by the file's own input scale with
     saturation; batched when the interpreter gives the per-window values for a resized batch."""
     it = tf.lite.Interpreter(model_content=tfl)
@@ -77,6 +77,8 @@ def predict_int8(tf, tfl: bytes, x: np.ndarray, batch: int = 1024):
         print(f"  batched int8 inference not used ({type(e).__name__}: {e})", flush=True)
         loop(range(len(head), len(x)))
         raw = one
+    if as_int8:                                              # the int8 outputs and their quantization
+        return raw, (float(so), int(zo))
     return (raw.astype(np.float32) - zo) * so, (float(si), int(zi)), float((np.abs(xq.astype(np.int16)) >= 127).mean())
 
 

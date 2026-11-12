@@ -1,0 +1,575 @@
+{
+ "sessions": {
+  "user1LC": {
+   "frames": 15910,
+   "minutes": 26.5,
+   "lane_changes_right": 31,
+   "lane_changes_left": 31
+  },
+  "user1N": {
+   "frames": 12468,
+   "minutes": 20.8,
+   "lane_changes_right": 2,
+   "lane_changes_left": 2
+  },
+  "user3LC": {
+   "frames": 11343,
+   "minutes": 18.9,
+   "lane_changes_right": 38,
+   "lane_changes_left": 38
+  },
+  "user3N": {
+   "frames": 7410,
+   "minutes": 12.3,
+   "lane_changes_right": 0,
+   "lane_changes_left": 0
+  },
+  "user4LC": {
+   "frames": 10987,
+   "minutes": 18.3,
+   "lane_changes_right": 58,
+   "lane_changes_left": 58
+  },
+  "user4N": {
+   "frames": 8243,
+   "minutes": 13.7,
+   "lane_changes_right": 0,
+   "lane_changes_left": 0
+  },
+  "user6LC": {
+   "frames": 9528,
+   "minutes": 15.9,
+   "lane_changes_right": 27,
+   "lane_changes_left": 27
+  },
+  "user6N": {
+   "frames": 6674,
+   "minutes": 11.1,
+   "lane_changes_right": 0,
+   "lane_changes_left": 0
+  },
+  "user9LC": {
+   "frames": 9386,
+   "minutes": 15.6,
+   "lane_changes_right": 26,
+   "lane_changes_left": 26
+  },
+  "user9N": {
+   "frames": 6073,
+   "minutes": 10.1,
+   "lane_changes_right": 0,
+   "lane_changes_left": 0
+  },
+  "user11LC": {
+   "frames": 6133,
+   "minutes": 10.2,
+   "lane_changes_right": 19,
+   "lane_changes_left": 19
+  },
+  "user11N": {
+   "frames": 5720,
+   "minutes": 9.5,
+   "lane_changes_right": 0,
+   "lane_changes_left": 0
+  },
+  "user14LC": {
+   "frames": 9037,
+   "minutes": 15.1,
+   "lane_changes_right": 30,
+   "lane_changes_left": 30
+  },
+  "user14N": {
+   "frames": 5627,
+   "minutes": 9.4,
+   "lane_changes_right": 0,
+   "lane_changes_left": 0
+  },
+  "user15LC": {
+   "frames": 10092,
+   "minutes": 16.8,
+   "lane_changes_right": 44,
+   "lane_changes_left": 44
+  },
+  "user15N": {
+   "frames": 5378,
+   "minutes": 9.0,
+   "lane_changes_right": 20,
+   "lane_changes_left": 20
+  },
+  "user17LC": {
+   "frames": 8790,
+   "minutes": 14.7,
+   "lane_changes_right": 39,
+   "lane_changes_left": 39
+  },
+  "user17N": {
+   "frames": 5293,
+   "minutes": 8.8,
+   "lane_changes_right": 2,
+   "lane_changes_left": 2
+  },
+  "user20LC": {
+   "frames": 8937,
+   "minutes": 14.9,
+   "lane_changes_right": 35,
+   "lane_changes_left": 35
+  },
+  "user20N": {
+   "frames": 5319,
+   "minutes": 8.9,
+   "lane_changes_right": 1,
+   "lane_changes_left": 1
+  },
+  "user21LC": {
+   "frames": 9470,
+   "minutes": 15.8,
+   "lane_changes_right": 40,
+   "lane_changes_left": 40
+  },
+  "user21N": {
+   "frames": 5503,
+   "minutes": 9.2,
+   "lane_changes_right": 0,
+   "lane_changes_left": 0
+  },
+  "user22LC": {
+   "frames": 8860,
+   "minutes": 14.8,
+   "lane_changes_right": 36,
+   "lane_changes_left": 36
+  },
+  "user22N": {
+   "frames": 5358,
+   "minutes": 8.9,
+   "lane_changes_right": 1,
+   "lane_changes_left": 1
+  },
+  "user23LC": {
+   "frames": 9294,
+   "minutes": 15.5,
+   "lane_changes_right": 26,
+   "lane_changes_left": 26
+  },
+  "user23N": {
+   "frames": 5248,
+   "minutes": 8.7,
+   "lane_changes_right": 0,
+   "lane_changes_left": 0
+  },
+  "user24LC": {
+   "frames": 9294,
+   "minutes": 15.5,
+   "lane_changes_right": 26,
+   "lane_changes_left": 26
+  },
+  "user24N": {
+   "frames": 5845,
+   "minutes": 9.7,
+   "lane_changes_right": 4,
+   "lane_changes_left": 4
+  },
+  "user26LC": {
+   "frames": 10961,
+   "minutes": 18.3,
+   "lane_changes_right": 15,
+   "lane_changes_left": 15
+  },
+  "user26N": {
+   "frames": 5598,
+   "minutes": 9.3,
+   "lane_changes_right": 0,
+   "lane_changes_left": 0
+  },
+  "user28LC": {
+   "frames": 8678,
+   "minutes": 14.5,
+   "lane_changes_right": 34,
+   "lane_changes_left": 34
+  },
+  "user28N": {
+   "frames": 5211,
+   "minutes": 8.7,
+   "lane_changes_right": 0,
+   "lane_changes_left": 0
+  },
+  "user29LC": {
+   "frames": 8506,
+   "minutes": 14.2,
+   "lane_changes_right": 38,
+   "lane_changes_left": 38
+  },
+  "user29N": {
+   "frames": 5352,
+   "minutes": 8.9,
+   "lane_changes_right": 0,
+   "lane_changes_left": 0
+  },
+  "user30LC": {
+   "frames": 8956,
+   "minutes": 14.9,
+   "lane_changes_right": 34,
+   "lane_changes_left": 34
+  },
+  "user30N": {
+   "frames": 5608,
+   "minutes": 9.3,
+   "lane_changes_right": 0,
+   "lane_changes_left": 0
+  },
+  "user32LC": {
+   "frames": 8367,
+   "minutes": 13.9,
+   "lane_changes_right": 42,
+   "lane_changes_left": 42
+  },
+  "user32N": {
+   "frames": 5243,
+   "minutes": 8.7,
+   "lane_changes_right": 1,
+   "lane_changes_left": 1
+  },
+  "user33LC": {
+   "frames": 10097,
+   "minutes": 16.8,
+   "lane_changes_right": 22,
+   "lane_changes_left": 22
+  },
+  "user33N": {
+   "frames": 5730,
+   "minutes": 9.6,
+   "lane_changes_right": 2,
+   "lane_changes_left": 2
+  },
+  "user34LC": {
+   "frames": 9233,
+   "minutes": 15.4,
+   "lane_changes_right": 51,
+   "lane_changes_left": 51
+  },
+  "user34N": {
+   "frames": 5210,
+   "minutes": 8.7,
+   "lane_changes_right": 10,
+   "lane_changes_left": 9
+  },
+  "user35LC": {
+   "frames": 9300,
+   "minutes": 15.5,
+   "lane_changes_right": 25,
+   "lane_changes_left": 25
+  },
+  "user35N": {
+   "frames": 5355,
+   "minutes": 8.9,
+   "lane_changes_right": 0,
+   "lane_changes_left": 0
+  }
+ },
+ "tasks": {
+  "classification": {
+   "train_pickle_windows": 94620,
+   "located_in_the_sessions": 60969,
+   "map": "recovered on the test drivers, applied unchanged",
+   "sessions_the_pickle_was_cut_from": [
+    "user11LC",
+    "user14LC",
+    "user15LC",
+    "user17LC",
+    "user1LC",
+    "user20LC",
+    "user21LC",
+    "user22LC",
+    "user23LC",
+    "user24LC",
+    "user26LC",
+    "user28LC",
+    "user29LC",
+    "user30LC",
+    "user32LC",
+    "user33LC",
+    "user34LC",
+    "user35LC",
+    "user3LC",
+    "user4LC",
+    "user6LC",
+    "user9LC"
+   ],
+   "look_alike_windows_elsewhere": {
+    "user1N": 5,
+    "user6N": 5,
+    "user17N": 10,
+    "user21N": 1,
+    "user26N": 2,
+    "user29N": 10,
+    "user32N": 6
+   },
+   "look_alike_matches_not_counted": 42,
+   "max_abs_error_of_the_map": 1.6711965145077556e-11,
+   "worst_channel": "curvatureDxRightLine",
+   "max_abs_error_per_driver": {
+    "user1LC": 1.0658141036401503e-11,
+    "user3LC": 1.6711965145077556e-11,
+    "user4LC": 1.5759837879159022e-11,
+    "user6LC": 3.5919600627210002e-12,
+    "user9LC": 3.592792729989469e-12,
+    "user11LC": 9.805489753489383e-12,
+    "user14LC": 5.966782623545441e-12,
+    "user15LC": 3.5920710850234627e-12,
+    "user17LC": 7.44648787076585e-12,
+    "user20LC": 3.5917935292673064e-12,
+    "user21LC": 3.5922376184771565e-12,
+    "user22LC": 3.592570685384544e-12,
+    "user23LC": 9.947598300641403e-12,
+    "user24LC": 9.947598300641403e-12,
+    "user26LC": 1.1979750524915289e-11,
+    "user28LC": 3.5823011224067614e-12,
+    "user29LC": 3.5920155738722315e-12,
+    "user30LC": 8.000711204658728e-12,
+    "user32LC": 3.5924041519308503e-12,
+    "user33LC": 1.0658141036401503e-11,
+    "user34LC": 3.5918490404185377e-12,
+    "user35LC": 3.591904551569769e-12
+   },
+   "recovered": true,
+   "share_of_located_windows_with_another_class": 0.002686366689053056,
+   "unscaled_channels": [
+    "leftDirectionIndicator",
+    "rightDirectionIndicator",
+    "car2Present"
+   ],
+   "constant_channels": [
+    "egoLaneWidth"
+   ]
+  },
+  "regression_lcr": {
+   "train_pickle_windows": 33201,
+   "located_in_the_sessions": 20599,
+   "map": "recovered on the test drivers, applied unchanged",
+   "sessions_the_pickle_was_cut_from": [
+    "user11LC",
+    "user14LC",
+    "user15LC",
+    "user17LC",
+    "user1LC",
+    "user20LC",
+    "user21LC",
+    "user22LC",
+    "user23LC",
+    "user24LC",
+    "user26LC",
+    "user28LC",
+    "user29LC",
+    "user30LC",
+    "user32LC",
+    "user33LC",
+    "user34LC",
+    "user35LC",
+    "user3LC",
+    "user4LC",
+    "user6LC",
+    "user9LC"
+   ],
+   "look_alike_windows_elsewhere": {},
+   "look_alike_matches_not_counted": 0,
+   "max_abs_error_of_the_map": 2.9842794901924208e-12,
+   "worst_channel": "curvatureDxRightLine",
+   "max_abs_error_per_driver": {
+    "user1LC": 9.346690088563037e-13,
+    "user3LC": 2.9842794901924208e-12,
+    "user4LC": 2.8990143619012088e-12,
+    "user6LC": 9.34641253280688e-13,
+    "user9LC": 9.378053889008697e-13,
+    "user11LC": 1.2789769243681803e-12,
+    "user14LC": 9.36140054363932e-13,
+    "user15LC": 9.376943665984072e-13,
+    "user17LC": 9.805489753489383e-13,
+    "user20LC": 9.345857421294568e-13,
+    "user21LC": 1.9326762412674725e-12,
+    "user22LC": 9.377498777496385e-13,
+    "user23LC": 9.805489753489383e-13,
+    "user24LC": 9.805489753489383e-13,
+    "user26LC": 9.376943665984072e-13,
+    "user28LC": 9.346690088563037e-13,
+    "user29LC": 9.36140054363932e-13,
+    "user30LC": 1.3216094885137863e-12,
+    "user32LC": 1.9326762412674725e-12,
+    "user33LC": 1.9326762412674725e-12,
+    "user34LC": 9.345302309782255e-13,
+    "user35LC": 9.34641253280688e-13
+   },
+   "recovered": true,
+   "max_abs_difference_to_the_pickle_target_s": 3.1,
+   "unscaled_channels": [
+    "leftDirectionIndicator",
+    "rightDirectionIndicator",
+    "car2Present"
+   ],
+   "constant_channels": [
+    "egoLaneWidth"
+   ]
+  },
+  "regression_lcl": {
+   "train_pickle_windows": 39313,
+   "located_in_the_sessions": 23822,
+   "map": "recovered on the test drivers, applied unchanged",
+   "sessions_the_pickle_was_cut_from": [
+    "user11LC",
+    "user14LC",
+    "user15LC",
+    "user17LC",
+    "user1LC",
+    "user20LC",
+    "user21LC",
+    "user22LC",
+    "user23LC",
+    "user24LC",
+    "user26LC",
+    "user28LC",
+    "user29LC",
+    "user30LC",
+    "user32LC",
+    "user33LC",
+    "user34LC",
+    "user35LC",
+    "user3LC",
+    "user4LC",
+    "user6LC",
+    "user9LC"
+   ],
+   "look_alike_windows_elsewhere": {
+    "user1N": 2,
+    "user17N": 9,
+    "user26N": 1,
+    "user29N": 5,
+    "user32N": 5
+   },
+   "look_alike_matches_not_counted": 30,
+   "max_abs_error_of_the_map": 1.0544454198679887e-11,
+   "worst_channel": "curvatureDxRightLine",
+   "max_abs_error_per_driver": {
+    "user1LC": 5.381917134172909e-12,
+    "user3LC": 6.338041202980094e-12,
+    "user4LC": 5.3818616230216776e-12,
+    "user6LC": 5.3814175338118275e-12,
+    "user9LC": 5.3818616230216776e-12,
+    "user11LC": 5.366596056433082e-12,
+    "user14LC": 7.482015007553855e-12,
+    "user15LC": 5.366568300857466e-12,
+    "user17LC": 5.381362022660596e-12,
+    "user20LC": 5.381306511509365e-12,
+    "user21LC": 5.38152855611429e-12,
+    "user22LC": 5.381251000358134e-12,
+    "user23LC": 5.366707078735544e-12,
+    "user24LC": 5.366707078735544e-12,
+    "user26LC": 1.0544454198679887e-11,
+    "user28LC": 5.37403455069807e-12,
+    "user29LC": 5.38152855611429e-12,
+    "user30LC": 5.381584067265521e-12,
+    "user32LC": 5.381306511509365e-12,
+    "user33LC": 5.366512789706235e-12,
+    "user34LC": 5.366623812008697e-12,
+    "user35LC": 5.374145573000533e-12
+   },
+   "recovered": true,
+   "max_abs_difference_to_the_pickle_target_s": 2.6,
+   "unscaled_channels": [
+    "leftDirectionIndicator",
+    "rightDirectionIndicator",
+    "car2Present"
+   ],
+   "constant_channels": [
+    "egoLaneWidth"
+   ]
+  }
+ },
+ "lane_changes_held_by_the_train_pickles": {
+  "user1LC": {
+   "lane_changes": 62,
+   "in_the_test_pickles": 52
+  },
+  "user3LC": {
+   "lane_changes": 76,
+   "in_the_test_pickles": 74
+  },
+  "user4LC": {
+   "lane_changes": 116,
+   "in_the_test_pickles": 104
+  },
+  "user6LC": {
+   "lane_changes": 54,
+   "in_the_test_pickles": 44
+  },
+  "user9LC": {
+   "lane_changes": 52,
+   "in_the_test_pickles": 52
+  },
+  "user11LC": {
+   "lane_changes": 38,
+   "in_the_test_pickles": 38
+  },
+  "user14LC": {
+   "lane_changes": 60,
+   "in_the_test_pickles": 45
+  },
+  "user15LC": {
+   "lane_changes": 88,
+   "in_the_test_pickles": 46
+  },
+  "user17LC": {
+   "lane_changes": 78,
+   "in_the_test_pickles": 52
+  },
+  "user20LC": {
+   "lane_changes": 70,
+   "in_the_test_pickles": 54
+  },
+  "user21LC": {
+   "lane_changes": 80,
+   "in_the_test_pickles": 44
+  },
+  "user22LC": {
+   "lane_changes": 72,
+   "in_the_test_pickles": 61
+  },
+  "user23LC": {
+   "lane_changes": 52,
+   "in_the_test_pickles": 50
+  },
+  "user24LC": {
+   "lane_changes": 52,
+   "in_the_test_pickles": 50
+  },
+  "user26LC": {
+   "lane_changes": 30,
+   "in_the_test_pickles": 25
+  },
+  "user28LC": {
+   "lane_changes": 68,
+   "in_the_test_pickles": 35
+  },
+  "user29LC": {
+   "lane_changes": 76,
+   "in_the_test_pickles": 64
+  },
+  "user30LC": {
+   "lane_changes": 68,
+   "in_the_test_pickles": 67
+  },
+  "user32LC": {
+   "lane_changes": 84,
+   "in_the_test_pickles": 63
+  },
+  "user33LC": {
+   "lane_changes": 44,
+   "in_the_test_pickles": 40
+  },
+  "user34LC": {
+   "lane_changes": 102,
+   "in_the_test_pickles": 32
+  },
+  "user35LC": {
+   "lane_changes": 50,
+   "in_the_test_pickles": 48
+  }
+ }
+}
