@@ -24,7 +24,8 @@ units, a decision on every frame from the 50th on. The board's table then holds 
 normalization (recovered per task, pickle = a * raw + b), followed by the network's own min-max scaling
 if it has one, and the training range in raw units. With LCIR_SPLIT=val in the environment the sessions
 of the official validation drivers are taken instead (2026-11-12, for choices that must not be made on
-the test drivers); their files go to firmware/build/stream/<stem>_val/.
+the test drivers); their files go to firmware/build/stream/<stem>_val/. LCIR_SPLIT=own takes sessions of one's own
+(datasets/dmir/session_stream.py own, e.g. recorded with the lab's simulator) the same way.
 
 Simulated traffic (a copy of a highD network's file under datasets/carla/, scenarios of
 datasets/carla/prepare_carla.py): the scaling uses highD's training statistics, as the deployed network does.

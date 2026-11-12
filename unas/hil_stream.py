@@ -122,6 +122,9 @@ def main():
     ap.add_argument("--rate", type=float, default=5.0, help="frames per second; 0 = as fast as the link allows")
     ap.add_argument("--limit", type=int, default=None, help="first N test scenarios only")
     ap.add_argument("--seq", default=None, help="whole drives: this session only (its name, e.g. user13LC)")
+    ap.add_argument("--split", default=None,
+                    help="whole LCIR drives: the sessions prepared by hil_prepare.py with LCIR_SPLIT=<split> "
+                         "(same network and table, so the same firmware)")
     ap.add_argument("--build-only", action="store_true")
     ap.add_argument("--save", action="store_true",
                     help="keep the board's raw outputs and timings next to the reference (firmware/build/stream)")
@@ -132,7 +135,8 @@ def main():
     print(f"built {elf.relative_to(ROOT).as_posix()}: {lb.elf_size(elf)}")
     if a.build_only:
         return
-    ref = np.load(lb.FW / "build" / "stream" / tfl.stem / "reference.npz")
+    folder = lb.FW / "build" / "stream" / (tfl.stem + (f"_{a.split}" if a.split else ""))
+    ref = np.load(folder / "reference.npz")
     sn = lb.find_stlink("STM32H7B3I-DK")
     lb.run([lb.CLI, "-c", "port=SWD", f"sn={sn}", "mode=UR", "-w", elf, "-v", "-rst"])
     magic, hz, runs, cmin, cmean, cmax, status, _ = lb.read_result(elf, sn)
@@ -159,7 +163,7 @@ def main():
         n_slides, seq_len = len(outs), frames                # for the share of the period below
         sub = "" if len(keep) == len(seqs) else ("_" + (a.seq or f"n{S}"))
         if a.save:
-            np.savez_compressed(lb.FW / "build" / "stream" / tfl.stem / f"board_out_rate{a.rate:g}{sub}.npz",
+            np.savez_compressed(folder / f"board_out_rate{a.rate:g}{sub}.npz",
                                 outs=outs, kept=np.array(keep), pre=pre, inf=inf, rtt=rtt, late=late)
         label = None
     else:
@@ -171,7 +175,7 @@ def main():
         S = len(outs)
         if a.save:
             tag = f"rate{a.rate:g}" + (f"_n{S}" if S < len(ref["feats"]) else "")
-            np.savez_compressed(lb.FW / "build" / "stream" / tfl.stem / f"board_out_{tag}.npz",
+            np.savez_compressed(folder / f"board_out_{tag}.npz",
                                 outs=outs, pre=pre, inf=inf, rtt=rtt, late=late)
         want = ref["ref"][:S]
         label = ref["label"][:S]
@@ -195,6 +199,8 @@ def main():
         rec["compute_share_every_frame"] = round(float((pre.mean() + inf.mean()) / hz * a.rate), 8)
     if drives:
         rec["sessions"] = [str(ref["names"][k]) for k in keep]
+        if a.split:
+            rec["split"] = a.split
     elif ds == "dmir":
         if n_out == 3:
             rec["accuracy"] = round(float((deq[:, 0].argmax(-1) == label).mean()), 5)

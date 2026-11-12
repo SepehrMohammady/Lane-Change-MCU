@@ -41,6 +41,12 @@ The lab's training pickles hold 36 drivers. The archive used here has 22 of them
 changes of users 37-50 are in the dataset's public record (Zenodo, DOI 10.5281/zenodo.16686054; put
 userNLC.h5 next to the other raw sessions). A window of a pickle counts as located only if the map
 reproduces all of its channels; <task>_<split>_pickle_located.npy marks those windows of the pickle.
+
+Sessions of one's own, recorded with the lab's simulator (2026-11-12):
+  .venv\\Scripts\\python datasets/dmir/session_stream.py own <name> [<name> ...]
+puts sessions made with the lab's client and data preparation (H5 files next to the other raw sessions)
+into <task>_sessions_own.npz, which unas/hil_prepare.py takes with LCIR_SPLIT=own and unas/hil_stream.py
+with --split own.
 """
 from __future__ import annotations
 
@@ -276,5 +282,31 @@ def build(split: str = "test"):
           f"{sum(s['lane_changes_right'] + s['lane_changes_left'] for s in summary['sessions'].values())} lane changes")
 
 
+def own(names: list[str]):
+    """Sessions recorded with the lab's simulator and converted by its data preparation (LC-Intention-
+    Framework: data_collection/main.py, then data_preparation/generate_CDF_Carla_log_to_H5.py), as frame
+    streams: <task>_sessions_own.npz for unas/hil_prepare.py with LCIR_SPLIT=own. The H5 files are expected
+    next to the other raw sessions; nothing is located in a pickle."""
+    OUT.mkdir(parents=True, exist_ok=True)
+    rows = []
+    for n in names:
+        ego, ll, ob, _ = sr.load_session(n)
+        ttlc, direction, events = frame_labels(ll)
+        rows.append((n, sr.raw_matrix(ego, ll, ob), ttlc, direction, events))
+        print(f"{n}: {len(rows[-1][1])} frames = {len(rows[-1][1]) / 600:.1f} minutes, {len(events)} lane changes")
+    for task in PICKLES:
+        np.savez_compressed(
+            OUT / f"{task}_sessions_own.npz",
+            feats=np.concatenate([to_layout(m, task).astype(np.float32) for _, m, _, _, _ in rows]),
+            seq_lens=np.array([len(m) for _, m, _, _, _ in rows]), names=np.array([n for n, _, _, _, _ in rows]),
+            ttlc=np.concatenate([t for _, _, t, _, _ in rows]).astype(np.float32),
+            direction=np.concatenate([d for _, _, _, d, _ in rows]),
+            events=json.dumps({n: [[int(i), int(dd)] for i, dd in ev] for n, _, _, _, ev in rows}),
+            in_own_pickle=np.zeros(sum(len(m) for _, m, _, _, _ in rows), bool))
+
+
 if __name__ == "__main__":
-    {"build": build}[sys.argv[1] if len(sys.argv) > 1 else "build"](sys.argv[2] if len(sys.argv) > 2 else "test")
+    if sys.argv[1:2] == ["own"]:
+        own(sys.argv[2:])
+    else:
+        {"build": build}[sys.argv[1] if len(sys.argv) > 1 else "build"](sys.argv[2] if len(sys.argv) > 2 else "test")

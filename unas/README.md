@@ -381,6 +381,19 @@ windows; none of these is within 5 points of the 89.6%. The networks trained on 
 reason. Per seed: `datasets/dmir/results/seeds/stream_windows.jsonl`; means and the criterion:
 `datasets/dmir/results/hil/stream_windows.json`.
 
+The dataset's simulator as the source of the frames (2026-11-12). The simulator behind LCIR is public
+(LC-Intention-Framework: a packaged CARLA 0.9.15 with the dataset's road, the driving client and the data
+preparation). On the development laptop the unmodified client drove one minute on autopilot, the simulator's
+recorder file went through the lab's `generate_CDF_Carla_log_to_H5.py`, and
+`datasets/dmir/session_stream.py own <name>` turned that H5 into a frame stream: 573 frames at 10 Hz,
+every channel inside the training range. `hil_prepare.py` with `LCIR_SPLIT=own` and
+`hil_stream.py --split own --rate 10` sent it to the board in real time: 524 decisions, all identical to
+TFLite, 0.54% of the frame period (`datasets/dmir/results/hil/hil_own.jsonl`). This checks the chain from
+the simulator to the board with a recording; the autopilot changes no lane, so it says nothing about
+recognition. Two things were needed to run the package on Windows 11: the DirectX runtime of June 2010 (the
+package has no installer for it) and a start of the client that waits until the simulator answers (5 to 7 s
+here, the client connects after 3 s).
+
 Before closing a loop around the board (2026-11-11): `datasets/highd/cutin_headroom.py` replaces the follower of
 each test lane change by a car with an ACC (point mass, the car-following model of Milanés and Shladover, 2014)
 and asks what that car gains from knowing the lane change k seconds before the crossing; recorded data only.
