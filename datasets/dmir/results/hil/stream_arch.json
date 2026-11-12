@@ -1,0 +1,305 @@
+{
+ "utc": "2026-11-12T16:11:55+00:00",
+ "records": 45,
+ "measure": "share of correct frames, validation drivers' sessions with lane changes, int8, mean over seeds",
+ "candidates": [
+  {
+   "candidate": "14.4k MACs, 2,132 parameters",
+   "macs": 14360,
+   "params": 2132,
+   "seeds": [
+    100,
+    101,
+    102,
+    103,
+    104
+   ],
+   "int8_io_bytes": 11912,
+   "frames_correct_sessions_with_lane_changes": {
+    "mean": 0.8755,
+    "std": 0.0111,
+    "values": [
+     0.875,
+     0.8593,
+     0.8754,
+     0.8771,
+     0.8906
+    ]
+   },
+   "frames_correct_all_sessions": 0.8881,
+   "frames_correct_baseline_sessions": 0.9057,
+   "opposite_announced_after_a_lane_change": 0.1739,
+   "timely_share": 0.917,
+   "alarm_runs_per_hour": 564.7,
+   "alarm_runs_of_0.5_s_or_more_per_hour": 116.5,
+   "lab_validation_set_accuracy_int8": 0.9265,
+   "epochs_run_mean": 33.4
+  },
+  {
+   "candidate": "30.4k MACs, 2,336 parameters (deployed)",
+   "macs": 30448,
+   "params": 2336,
+   "seeds": [
+    100,
+    101,
+    102,
+    103,
+    104
+   ],
+   "int8_io_bytes": 12112,
+   "frames_correct_sessions_with_lane_changes": {
+    "mean": 0.8958,
+    "std": 0.0079,
+    "values": [
+     0.9035,
+     0.9028,
+     0.8873,
+     0.8979,
+     0.8876
+    ]
+   },
+   "frames_correct_all_sessions": 0.9124,
+   "frames_correct_baseline_sessions": 0.9356,
+   "opposite_announced_after_a_lane_change": 0.1492,
+   "timely_share": 0.9263,
+   "alarm_runs_per_hour": 419.1,
+   "alarm_runs_of_0.5_s_or_more_per_hour": 95.5,
+   "lab_validation_set_accuracy_int8": 0.9335,
+   "epochs_run_mean": 32.2
+  },
+  {
+   "candidate": "49.1k MACs, 7,119 parameters",
+   "macs": 49091,
+   "params": 7119,
+   "seeds": [
+    100,
+    101,
+    102,
+    103,
+    104
+   ],
+   "int8_io_bytes": 18040,
+   "frames_correct_sessions_with_lane_changes": {
+    "mean": 0.9092,
+    "std": 0.0059,
+    "values": [
+     0.9174,
+     0.9098,
+     0.9114,
+     0.9052,
+     0.902
+    ]
+   },
+   "frames_correct_all_sessions": 0.9189,
+   "frames_correct_baseline_sessions": 0.9326,
+   "opposite_announced_after_a_lane_change": 0.1185,
+   "timely_share": 0.92,
+   "alarm_runs_per_hour": 308.6,
+   "alarm_runs_of_0.5_s_or_more_per_hour": 102.5,
+   "lab_validation_set_accuracy_int8": 0.9352,
+   "epochs_run_mean": 21.8
+  },
+  {
+   "candidate": "68.0k MACs, 3,424 parameters",
+   "macs": 68023,
+   "params": 3424,
+   "seeds": [
+    100,
+    101,
+    102,
+    103,
+    104
+   ],
+   "int8_io_bytes": 17552,
+   "frames_correct_sessions_with_lane_changes": {
+    "mean": 0.9041,
+    "std": 0.0072,
+    "values": [
+     0.9163,
+     0.8991,
+     0.9047,
+     0.901,
+     0.8995
+    ]
+   },
+   "frames_correct_all_sessions": 0.9242,
+   "frames_correct_baseline_sessions": 0.9523,
+   "opposite_announced_after_a_lane_change": 0.1281,
+   "timely_share": 0.923,
+   "alarm_runs_per_hour": 271.4,
+   "alarm_runs_of_0.5_s_or_more_per_hour": 76.1,
+   "lab_validation_set_accuracy_int8": 0.9326,
+   "epochs_run_mean": 28.8
+  },
+  {
+   "candidate": "85.1k MACs, 4,288 parameters",
+   "macs": 85086,
+   "params": 4288,
+   "seeds": [
+    100,
+    101,
+    102,
+    103,
+    104
+   ],
+   "int8_io_bytes": 14816,
+   "frames_correct_sessions_with_lane_changes": {
+    "mean": 0.8837,
+    "std": 0.0147,
+    "values": [
+     0.8928,
+     0.8794,
+     0.8762,
+     0.9038,
+     0.8663
+    ]
+   },
+   "frames_correct_all_sessions": 0.8906,
+   "frames_correct_baseline_sessions": 0.9001,
+   "opposite_announced_after_a_lane_change": 0.187,
+   "timely_share": 0.9207,
+   "alarm_runs_per_hour": 413.7,
+   "alarm_runs_of_0.5_s_or_more_per_hour": 88.6,
+   "lab_validation_set_accuracy_int8": 0.9348,
+   "epochs_run_mean": 27.2
+  },
+  {
+   "candidate": "146.0k MACs, 6,528 parameters",
+   "macs": 145986,
+   "params": 6528,
+   "seeds": [
+    100,
+    101,
+    102,
+    103,
+    104
+   ],
+   "int8_io_bytes": 17504,
+   "frames_correct_sessions_with_lane_changes": {
+    "mean": 0.8937,
+    "std": 0.0063,
+    "values": [
+     0.8995,
+     0.9004,
+     0.8938,
+     0.886,
+     0.889
+    ]
+   },
+   "frames_correct_all_sessions": 0.9046,
+   "frames_correct_baseline_sessions": 0.9199,
+   "opposite_announced_after_a_lane_change": 0.1456,
+   "timely_share": 0.9241,
+   "alarm_runs_per_hour": 307.2,
+   "alarm_runs_of_0.5_s_or_more_per_hour": 113.3,
+   "lab_validation_set_accuracy_int8": 0.9326,
+   "epochs_run_mean": 22.2
+  },
+  {
+   "candidate": "152.3k MACs, 9,660 parameters",
+   "macs": 152250,
+   "params": 9660,
+   "seeds": [
+    100,
+    101,
+    102,
+    103,
+    104
+   ],
+   "int8_io_bytes": 20400,
+   "frames_correct_sessions_with_lane_changes": {
+    "mean": 0.8983,
+    "std": 0.0034,
+    "values": [
+     0.8937,
+     0.8994,
+     0.8983,
+     0.8972,
+     0.903
+    ]
+   },
+   "frames_correct_all_sessions": 0.9116,
+   "frames_correct_baseline_sessions": 0.9301,
+   "opposite_announced_after_a_lane_change": 0.1391,
+   "timely_share": 0.9278,
+   "alarm_runs_per_hour": 305.9,
+   "alarm_runs_of_0.5_s_or_more_per_hour": 110.7,
+   "lab_validation_set_accuracy_int8": 0.9291,
+   "epochs_run_mean": 29.4
+  },
+  {
+   "candidate": "hand-designed network of July, 83,803 parameters",
+   "macs": null,
+   "params": 83803,
+   "seeds": [
+    100,
+    101,
+    102,
+    103,
+    104
+   ],
+   "int8_io_bytes": 112568,
+   "frames_correct_sessions_with_lane_changes": {
+    "mean": 0.9009,
+    "std": 0.0146,
+    "values": [
+     0.8803,
+     0.9213,
+     0.9016,
+     0.9034,
+     0.8977
+    ]
+   },
+   "frames_correct_all_sessions": 0.9129,
+   "frames_correct_baseline_sessions": 0.9297,
+   "opposite_announced_after_a_lane_change": 0.145,
+   "timely_share": 0.9204,
+   "alarm_runs_per_hour": 338.0,
+   "alarm_runs_of_0.5_s_or_more_per_hour": 107.0,
+   "lab_validation_set_accuracy_int8": 0.9321,
+   "epochs_run_mean": 16.4
+  },
+  {
+   "candidate": "the lab's reference CNN, 441,347 parameters",
+   "macs": null,
+   "params": 441347,
+   "seeds": [
+    100,
+    101,
+    102,
+    103,
+    104
+   ],
+   "int8_io_bytes": 454864,
+   "frames_correct_sessions_with_lane_changes": {
+    "mean": 0.9016,
+    "std": 0.0054,
+    "values": [
+     0.9107,
+     0.9005,
+     0.9003,
+     0.896,
+     0.9003
+    ]
+   },
+   "frames_correct_all_sessions": 0.9142,
+   "frames_correct_baseline_sessions": 0.9321,
+   "opposite_announced_after_a_lane_change": 0.1391,
+   "timely_share": 0.9222,
+   "alarm_runs_per_hour": 224.4,
+   "alarm_runs_of_0.5_s_or_more_per_hour": 95.8,
+   "lab_validation_set_accuracy_int8": 0.9357,
+   "epochs_run_mean": 18
+  }
+ ],
+ "rule": {
+  "text": "GO if the best candidate is at least 2 points above the deployed network and the difference is at least twice its standard error",
+  "deployed": 0.8958,
+  "best": "49.1k MACs, 7,119 parameters",
+  "best_value": 0.9092,
+  "gain": 0.0134,
+  "standard_error": 0.0044,
+  "go": false,
+  "cheapest_within_one_point_of_the_best_for_information": "49.1k MACs, 7,119 parameters"
+ }
+}

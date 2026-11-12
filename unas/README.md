@@ -112,6 +112,7 @@ the model's own Keras; `path_check.py` compares the fork's trainer with `select_
 | `input_equalize_check.py` | the hand-designed exiD classifier of seeds 0-4 (bundles of `scripts/export_hand_cnn.py exid5`) with a per-feature input gain folded into the first convolution, exact in float, for five strengths; full int8 (int8 I/O) on validation and test; `--report` picks the strength on validation and applies the rule on test | `datasets/exid/results/seeds/input_equalize.jsonl` |
 | `stream_train_check.py [arm ...]` | the LCIR intention network of the raw-input search trained with five seeds on the lab's windows and on windows taken from the whole drives of the training drivers (`datasets/dmir/session_stream.py build train`, `build more`), converted to int8 as deployed and scored on the whole drives of the validation and test drivers with the measures of `datasets/dmir/decision_rule.py`; `--report` gives the means and the criterion (see Hardware in the loop); `--six` scores the kept networks again on the six test drivers that are not a copy of a training drive | `datasets/dmir/results/seeds/stream_windows.jsonl`, `stream_windows_six_test_drivers.jsonl`, `datasets/dmir/results/hil/stream_windows.json` |
 | `stream_cv_check.py [L] [D]` | the same comparison as a cross-validation over the 48 different LCIR drives, six folds of eight: the lab's windows of the training drives against windows taken from their whole drives, five seeds, int8 as deployed, every held-out drive scored on its whole session; criterion fixed beforehand on the 34 drives that were never a test or validation drive; `--report` gives the per-drive table and the criterion | `datasets/dmir/results/seeds/stream_cv.jsonl`, `datasets/dmir/results/hil/stream_cv.json` |
+| `stream_arch_check.py [index ...]` | nine existing LCIR intention networks (seven from the searches' shortlists, 14k to 152k MACs, and two hand-designed references of 84k and 441k parameters) trained with five seeds on windows from the whole drives of the training drivers and scored on the whole drives of the validation drivers: a check, with its rule fixed beforehand, of whether a search under that measure has anything to select on; `--report` gives the table and the rule | `datasets/dmir/results/seeds/stream_arch.jsonl`, `datasets/dmir/results/hil/stream_arch.json` |
 | `resource_bias.py [search ...]` | for every evaluated candidate of a search: the fork's stored peak memory, size and MACs against the Keras model's weights and MACs and the faithful graph (CPU, from the fork's state files) | `datasets/highd/results/resource_bias.json` |
 
 Outcome of `run_mm_searches.sh` (2026-11-11, test, fresh seeds 100-104): searched on scaled inputs, the LCR and
@@ -435,6 +436,33 @@ The event rates are per hour of free driving inside the sessions with lane chang
 a criterion; the two earlier criteria on the number of alarm runs of any length stay failed. Per fold, arm
 and seed: `datasets/dmir/results/seeds/stream_cv.jsonl`; per drive and the criterion:
 `datasets/dmir/results/hil/stream_cv.json`.
+
+Does the architecture matter on such windows? (2026-11-12, `unas/stream_arch_check.py`.) Under the lab's
+windows every shortlisted network of the searches reaches about the same accuracy, so a search can only lower
+cost. A search under the whole-drive measure would make sense if that measure told architectures apart. Before
+starting one, nine existing networks were trained on the same 136,623 windows from the whole drives of the 35
+different training drives (five seeds, int8) and scored on the whole drives of the seven validation drivers;
+the test drivers were not touched. Rule fixed beforehand: go ahead with a search if the best candidate is at
+least 2 points above the deployed network in the share of correct frames of the sessions with lane changes,
+and by at least twice the standard error of the difference.
+
+| network | parameters | correct frames, sessions with lane changes | alarm runs of 0.5 s or more per hour | announced 2 s early |
+|---|---|---|---|---|
+| search shortlist, 14.4k MACs | 2,132 | 87.55% ± 1.11 | 116 ± 41 | 91.7% |
+| search shortlist, 30.4k MACs (the deployed network) | 2,336 | 89.58% ± 0.79 | 95 ± 24 | 92.6% |
+| search shortlist, 49.1k MACs | 7,119 | 90.92% ± 0.59 | 103 ± 26 | 92.0% |
+| search shortlist, 68.0k MACs | 3,424 | 90.41% ± 0.72 | 76 ± 22 | 92.3% |
+| search shortlist, 85.1k MACs | 4,288 | 88.37% ± 1.47 | 89 ± 37 | 92.1% |
+| search shortlist, 146.0k MACs | 6,528 | 89.37% ± 0.63 | 113 ± 26 | 92.4% |
+| search shortlist, 152.3k MACs | 9,660 | 89.83% ± 0.34 | 111 ± 8 | 92.8% |
+| hand-designed network (ours, July) | 83,803 | 90.09% ± 1.46 | 107 ± 40 | 92.0% |
+| reference CNN of the dataset's authors | 441,347 | 90.16% ± 0.54 | 96 ± 10 | 92.2% |
+
+The best candidate is 1.34 points above the deployed network (three standard errors, below the 2 points of the
+rule): no search is started. A network with 190 times the parameters of the deployed one is 0.6 points above
+it. Together with the cross-validation above: on this task the training windows move the share of correct
+frames by 16 points, the architecture by about one. Numbers: `datasets/dmir/results/seeds/stream_arch.jsonl`,
+`datasets/dmir/results/hil/stream_arch.json`.
 
 The dataset's simulator as the source of the frames (2026-11-12). The simulator behind LCIR is public
 (LC-Intention-Framework: a packaged CARLA 0.9.15 with the dataset's road, the driving client and the data
