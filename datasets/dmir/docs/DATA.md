@@ -67,6 +67,21 @@ test-pickle window in them (results: `datasets/dmir/results/hil/session_stream.j
   so they end at least 6.4 s after the previous lane change. A stream delivers such windows after every
   lane change; see the whole-drive results in `unas/README.md`.
 
+Lane changes come in pairs (found 2026-11-12, `datasets/dmir/lane_change_pairs.py`, results
+`datasets/dmir/results/hil/lane_change_pairs.json`; `session_stream.py build val` gives the same for the seven
+validation drivers, whose pickles the map recovered on the test drivers reproduces to 2e-11):
+
+- On the two-lane road every lane change is the opposite of the one before it (520 of 520 for the test
+  drivers, 531 of 531 for the validation drivers). The median gap is 8.6 s (validation: 7.7 s); 49% follow
+  the previous one within 8.4 s (56%), and 78% of those are the return to the right after an overtake (81%).
+- The windows before a lane change may contain the previous lane change, the free-driving windows never do.
+  In the classification test pickle a completed lane change is inside 0 of the 6,574 free-driving windows,
+  3,162 (48.1%) of the windows before a right lane change and 487 (7.4%) of those before a left one
+  (validation: 0, 59.1%, 8.8%). In the prepared data a window that holds a lane-line jump therefore always
+  means that the opposite lane change is coming.
+- On whole drives 31.2% of the free-driving frames of the sessions with lane changes have a window that
+  holds a completed lane change (validation: 28.6%).
+
 ## Provenance (resolved 2026-07-07 — details in datasets/dmir/docs/dataset-provenance.md)
 
 The data is the ELIOS "Lane Change Intention Recognition Dataset" (Zenodo DOI

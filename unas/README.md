@@ -314,6 +314,36 @@ change; there the network keeps announcing a lane change. An accuracy on balance
 describe the deployed behaviour. The network searched on scaled inputs: 85.1% at 2 s (median 3.3 s),
 37 false alarms per hour in the baseline sessions. All numbers: `datasets/dmir/results/hil/session_metrics.json`.
 
+A decision rule for the alarm (2026-11-12, `datasets/dmir/decision_rule.py`). A deployed system would not show
+the frame-by-frame output but an alarm. Eighty rules were fixed before any validation session was built: a
+probability threshold (none, 0.6, 0.8, 0.9), a hold-off after the car's own lane-line crossing (0, 1.5, 3, 5,
+6.4 s) and a persistence (the last 1, 3, 5 or 10 frames agree). The rule is chosen on the whole drives of the seven
+validation drivers (`session_stream.py build val`: 14 sessions, 170 minutes, 540 lane changes; the map recovered
+on the test drivers reproduces every window of the validation pickles) as the one with the fewest false alarms
+among those that lose at most 5 points of the lane changes announced 2 s early, and it is adopted if on the
+test drivers it at least halves the false alarms per hour of free driving within the same 5 points. A false
+alarm here is every run of alarm frames that reaches no frame labelled as before a lane change, of any length,
+all 14 sessions pooled; the outputs are the board's.
+
+| intention network | chosen on the validation drivers | test drivers, raw output | test drivers, with the rule | adopted |
+|---|---|---|---|---|
+| searched on raw inputs | 5 frames of persistence, no threshold, no hold-off | 90.4% of 543 early, 301 false alarms per hour | 87.8%, 200 per hour (34% fewer) | no |
+| searched on scaled inputs | 3 frames of persistence, no threshold, no hold-off | 85.1%, 631 per hour | 80.8%, 284 per hour (55% fewer) | yes |
+
+For the network searched on raw inputs no rule of this family meets the criterion. In its baseline sessions the
+chosen rule lowers the alarms from 145 to 66 per hour (52 to 39 per hour for those of 0.5 s or more). Only 5 of
+the 80 rules stay within the 5 points on the validation drivers, and none of them has a hold-off: a hold-off of
+6.4 s leaves 48.2% of the lane changes announced early on the test drivers. The reason is in the drives
+(`datasets/dmir/lane_change_pairs.py`, not planned beforehand): on this two-lane road every lane change is the
+opposite of the one before it, the median gap between them is 8.6 s for the test drivers, 49% follow within
+8.4 s and 78% of those are the return to the right after an overtake. The prepared windows carry this pairing as
+a shortcut: no free-driving window of the classification test pickle holds a completed lane change, while 48.1%
+of its windows before a right lane change and 7.4% of those before a left one do. On whole drives 31.2% of the
+free-driving frames of the sessions with lane changes have such a window. There the network announces the
+opposite lane change (72.8% of those frames between 1.5 and 6.3 s after a lane change, validation drivers); that
+lane change follows within 10 s of the completed one in 48% of the cases. Numbers:
+`datasets/dmir/results/hil/decision_rule.json`, `lane_change_pairs.json`, `session_stream_val.json`.
+
 Before closing a loop around the board (2026-11-11): `datasets/highd/cutin_headroom.py` replaces the follower of
 each test lane change by a car with an ACC (point mass, the car-following model of Milanés and Shladover, 2014)
 and asks what that car gains from knowing the lane change k seconds before the crossing; recorded data only.

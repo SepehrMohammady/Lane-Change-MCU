@@ -1,0 +1,141 @@
+{
+ "test_drivers": {
+  "lane_changes_with_a_previous_one": 520,
+  "same_direction_as_the_previous_one": 0,
+  "gap_to_the_previous_one_s": {
+   "p10": 4.0,
+   "p25": 5.6,
+   "median": 8.6,
+   "p75": 15.1,
+   "p90": 22.7
+  },
+  "share_within": {
+   "3.5_s": 0.085,
+   "5.0_s": 0.19,
+   "7.0_s": 0.379,
+   "8.4_s": 0.49,
+   "15.0_s": 0.74
+  },
+  "to_the_right_among_those_within_8.4_s": 0.78,
+  "to_the_right_among_the_others": 0.242,
+  "test_pickle_windows_by_class": {
+   "free driving": {
+    "windows": 6574,
+    "holding_a_completed_lane_change": 0,
+    "share": 0.0
+   },
+   "before a right lane change": {
+    "windows": 6574,
+    "holding_a_completed_lane_change": 3162,
+    "share": 0.481,
+    "of_the_opposite_direction": 3162
+   },
+   "before a left lane change": {
+    "windows": 6574,
+    "holding_a_completed_lane_change": 487,
+    "share": 0.074,
+    "of_the_opposite_direction": 487
+   }
+  },
+  "whole_drives_free_driving_frames": {
+   "frames": 35052,
+   "window_holds_a_completed_lane_change": 10950,
+   "share": 0.312
+  }
+ },
+ "validation_drivers": {
+  "lane_changes_with_a_previous_one": 531,
+  "same_direction_as_the_previous_one": 0,
+  "gap_to_the_previous_one_s": {
+   "p10": 3.3,
+   "p25": 4.8,
+   "median": 7.7,
+   "p75": 14.5,
+   "p90": 22.3
+  },
+  "share_within": {
+   "3.5_s": 0.113,
+   "5.0_s": 0.267,
+   "7.0_s": 0.446,
+   "8.4_s": 0.561,
+   "15.0_s": 0.757
+  },
+  "to_the_right_among_those_within_8.4_s": 0.812,
+  "to_the_right_among_the_others": 0.116,
+  "val_pickle_windows_by_class": {
+   "free driving": {
+    "windows": 5444,
+    "holding_a_completed_lane_change": 0,
+    "share": 0.0
+   },
+   "before a right lane change": {
+    "windows": 5444,
+    "holding_a_completed_lane_change": 3216,
+    "share": 0.591,
+    "of_the_opposite_direction": 3216
+   },
+   "before a left lane change": {
+    "windows": 5444,
+    "holding_a_completed_lane_change": 479,
+    "share": 0.088,
+    "of_the_opposite_direction": 479
+   }
+  },
+  "whole_drives_free_driving_frames": {
+   "frames": 34752,
+   "window_holds_a_completed_lane_change": 9923,
+   "share": 0.286
+  }
+ },
+ "after_a_lane_change": {
+  "note": "post hoc; validation drivers; frames labelled free driving 1.5 to 6.3 s after a lane change",
+  "network": "intention, searched on raw inputs (PC reference)",
+  "lane_changes": 538,
+  "frames": 14468,
+  "output_share": {
+   "free driving": 0.147,
+   "the completed direction": 0.126,
+   "the opposite direction": 0.728
+  },
+  "output_share_by_time_after_the_lane_change": {
+   "1.5_s": {
+    "free driving": 0.0,
+    "the completed direction": 0.05,
+    "the opposite direction": 0.95
+   },
+   "2.3_s": {
+    "free driving": 0.0,
+    "the completed direction": 0.07,
+    "the opposite direction": 0.92
+   },
+   "3.1_s": {
+    "free driving": 0.01,
+    "the completed direction": 0.12,
+    "the opposite direction": 0.87
+   },
+   "3.9_s": {
+    "free driving": 0.02,
+    "the completed direction": 0.09,
+    "the opposite direction": 0.89
+   },
+   "4.7_s": {
+    "free driving": 0.08,
+    "the completed direction": 0.14,
+    "the opposite direction": 0.78
+   },
+   "5.5_s": {
+    "free driving": 0.44,
+    "the completed direction": 0.21,
+    "the opposite direction": 0.35
+   },
+   "6.3_s": {
+    "free driving": 0.45,
+    "the completed direction": 0.31,
+    "the opposite direction": 0.24
+   }
+  },
+  "lane_changes_after_which_the_opposite_one_is_announced": 394,
+  "of_those_the_opposite_one_follows_within_10_s": 189,
+  "share": 0.48
+ }
+}

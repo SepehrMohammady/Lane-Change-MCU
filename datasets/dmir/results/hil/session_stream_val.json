@@ -1,0 +1,228 @@
+{
+ "sessions": {
+  "user5LC": {
+   "frames": 8625,
+   "minutes": 14.4,
+   "lane_changes_right": 35,
+   "lane_changes_left": 35
+  },
+  "user5N": {
+   "frames": 6238,
+   "minutes": 10.4,
+   "lane_changes_right": 0,
+   "lane_changes_left": 0
+  },
+  "user8LC": {
+   "frames": 9182,
+   "minutes": 15.3,
+   "lane_changes_right": 30,
+   "lane_changes_left": 30
+  },
+  "user8N": {
+   "frames": 5933,
+   "minutes": 9.9,
+   "lane_changes_right": 1,
+   "lane_changes_left": 1
+  },
+  "user10LC": {
+   "frames": 8994,
+   "minutes": 15.0,
+   "lane_changes_right": 45,
+   "lane_changes_left": 45
+  },
+  "user10N": {
+   "frames": 6136,
+   "minutes": 10.2,
+   "lane_changes_right": 0,
+   "lane_changes_left": 0
+  },
+  "user12LC": {
+   "frames": 9136,
+   "minutes": 15.2,
+   "lane_changes_right": 42,
+   "lane_changes_left": 42
+  },
+  "user12N": {
+   "frames": 5435,
+   "minutes": 9.1,
+   "lane_changes_right": 0,
+   "lane_changes_left": 0
+  },
+  "user16LC": {
+   "frames": 9073,
+   "minutes": 15.1,
+   "lane_changes_right": 33,
+   "lane_changes_left": 33
+  },
+  "user16N": {
+   "frames": 5336,
+   "minutes": 8.9,
+   "lane_changes_right": 0,
+   "lane_changes_left": 0
+  },
+  "user19LC": {
+   "frames": 8566,
+   "minutes": 14.3,
+   "lane_changes_right": 40,
+   "lane_changes_left": 40
+  },
+  "user19N": {
+   "frames": 5363,
+   "minutes": 8.9,
+   "lane_changes_right": 0,
+   "lane_changes_left": 0
+  },
+  "user27LC": {
+   "frames": 8355,
+   "minutes": 13.9,
+   "lane_changes_right": 44,
+   "lane_changes_left": 44
+  },
+  "user27N": {
+   "frames": 5595,
+   "minutes": 9.3,
+   "lane_changes_right": 0,
+   "lane_changes_left": 0
+  }
+ },
+ "tasks": {
+  "classification": {
+   "val_pickle_windows": 16332,
+   "located_in_the_sessions": 16332,
+   "map": "recovered on the test drivers, applied unchanged",
+   "sessions_the_pickle_was_cut_from": [
+    "user10LC",
+    "user12LC",
+    "user16LC",
+    "user19LC",
+    "user27LC",
+    "user5LC",
+    "user8LC"
+   ],
+   "look_alike_windows_elsewhere": {},
+   "max_abs_error_of_the_map": 1.7038814803527202e-11,
+   "worst_channel": "curvatureDxRightLine",
+   "max_abs_error_per_driver": {
+    "user5LC": 1.3713474800169934e-11,
+    "user8LC": 3.5919600627210002e-12,
+    "user10LC": 1.7038814803527202e-11,
+    "user12LC": 6.778577699151356e-12,
+    "user16LC": 3.5921821073259252e-12,
+    "user19LC": 3.5919600627210002e-12,
+    "user27LC": 3.572225848458288e-12
+   },
+   "recovered": true,
+   "share_of_located_windows_with_another_class": 0.0,
+   "unscaled_channels": [
+    "leftDirectionIndicator",
+    "rightDirectionIndicator",
+    "car2Present"
+   ],
+   "constant_channels": [
+    "egoLaneWidth"
+   ]
+  },
+  "regression_lcr": {
+   "val_pickle_windows": 5828,
+   "located_in_the_sessions": 5828,
+   "map": "recovered on the test drivers, applied unchanged",
+   "sessions_the_pickle_was_cut_from": [
+    "user10LC",
+    "user12LC",
+    "user16LC",
+    "user19LC",
+    "user27LC",
+    "user5LC",
+    "user8LC"
+   ],
+   "look_alike_windows_elsewhere": {},
+   "max_abs_error_of_the_map": 2.6716406864579767e-12,
+   "worst_channel": "curvatureDxRightLine",
+   "max_abs_error_per_driver": {
+    "user5LC": 2.6716406864579767e-12,
+    "user8LC": 9.37638855447176e-13,
+    "user10LC": 9.345857421294568e-13,
+    "user12LC": 9.330591854705972e-13,
+    "user16LC": 9.375833442959447e-13,
+    "user19LC": 9.376943665984072e-13,
+    "user27LC": 9.330591854705972e-13
+   },
+   "recovered": true,
+   "max_abs_difference_to_the_pickle_target_s": 0.0,
+   "unscaled_channels": [
+    "leftDirectionIndicator",
+    "rightDirectionIndicator",
+    "car2Present"
+   ],
+   "constant_channels": [
+    "egoLaneWidth"
+   ]
+  },
+  "regression_lcl": {
+   "val_pickle_windows": 7742,
+   "located_in_the_sessions": 7742,
+   "map": "recovered on the test drivers, applied unchanged",
+   "sessions_the_pickle_was_cut_from": [
+    "user10LC",
+    "user12LC",
+    "user16LC",
+    "user19LC",
+    "user27LC",
+    "user5LC",
+    "user8LC"
+   ],
+   "look_alike_windows_elsewhere": {},
+   "max_abs_error_of_the_map": 1.3301360013429075e-11,
+   "worst_channel": "curvatureDxRightLine",
+   "max_abs_error_per_driver": {
+    "user5LC": 1.3301360013429075e-11,
+    "user8LC": 5.37359046148822e-12,
+    "user10LC": 5.374256595302995e-12,
+    "user12LC": 5.382194689929065e-12,
+    "user16LC": 5.3816395784167526e-12,
+    "user19LC": 5.3738680172443765e-12,
+    "user27LC": 5.366346256252541e-12
+   },
+   "recovered": true,
+   "max_abs_difference_to_the_pickle_target_s": 0.0,
+   "unscaled_channels": [
+    "leftDirectionIndicator",
+    "rightDirectionIndicator",
+    "car2Present"
+   ],
+   "constant_channels": [
+    "egoLaneWidth"
+   ]
+  }
+ },
+ "lane_changes_held_by_the_val_pickles": {
+  "user5LC": {
+   "lane_changes": 70,
+   "in_the_test_pickles": 69
+  },
+  "user8LC": {
+   "lane_changes": 60,
+   "in_the_test_pickles": 39
+  },
+  "user10LC": {
+   "lane_changes": 90,
+   "in_the_test_pickles": 63
+  },
+  "user12LC": {
+   "lane_changes": 84,
+   "in_the_test_pickles": 52
+  },
+  "user16LC": {
+   "lane_changes": 66,
+   "in_the_test_pickles": 60
+  },
+  "user19LC": {
+   "lane_changes": 80,
+   "in_the_test_pickles": 53
+  },
+  "user27LC": {
+   "lane_changes": 88,
+   "in_the_test_pickles": 5
+  }
+ }
+}

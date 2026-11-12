@@ -26,6 +26,13 @@ the task's channel order, session lengths and names, frame labels) and <task>_no
 fit error, the training range); a summary goes to datasets/dmir/results/hil/session_stream.json.
 The frames are replayed on the board by unas/hil_prepare.py and unas/hil_stream.py (a copy of the
 network's file under datasets/dmir/data/sessions/ selects this mode).
+
+The seven official validation drivers (5, 8, 10, 12, 16, 19, 27), for choices that must not be made on
+the test drivers (2026-11-12):
+  .venv\\Scripts\\python datasets/dmir/session_stream.py build val
+The map is not fitted again: the one recovered on the test drivers is applied unchanged and must
+reproduce the windows of the validation pickles, which is a check of the map on other drivers. Output:
+<task>_sessions_val.npz and datasets/dmir/results/hil/session_stream_val.json.
 """
 from __future__ import annotations
 
@@ -47,16 +54,16 @@ from src.features import FEATURES_BY_TASK                   # noqa: E402
 DATA = HERE / "data"
 OUT = DATA / "stream"
 ZIP = ROOT / "Materials" / "Overtaking2.zip"
-TEST_USERS = (2, 7, 13, 18, 25, 31, 36)
+USERS = {"test": (2, 7, 13, 18, 25, 31, 36), "val": (5, 8, 10, 12, 16, 19, 27)}   # the official split
 PHASES = ("LC", "N")
 PICKLES = {"classification": ("data-classification", "multi"), "regression_lcr": ("data-prepared-lcr", "lcr"),
            "regression_lcl": ("data-regression-lcl", "lcl")}
 W = 50
 
 
-def ensure_h5() -> list[str]:
-    """The test drivers' sessions, unpacked next to the other raw samples."""
-    names = [f"user{u}{ph}" for u in TEST_USERS for ph in PHASES]
+def ensure_h5(split: str = "test") -> list[str]:
+    """The sessions of the split's drivers, unpacked next to the other raw samples."""
+    names = [f"user{u}{ph}" for u in USERS[split] for ph in PHASES]
     missing = [n for n in names if not (sr.H5DIR / f"{n}.h5").exists()]
     if missing:
         with zipfile.ZipFile(ZIP) as z:
@@ -135,9 +142,12 @@ def fit(samples: list[tuple[np.ndarray, np.ndarray]], n_feat: int):
     return a, b, err
 
 
-def build():
+def build(split: str = "test"):
+    """Sessions of the split's drivers. test: the map is fitted and written; val: the map of the test
+    drivers is read and checked on the windows of the validation pickles."""
     OUT.mkdir(parents=True, exist_ok=True)
-    names = ensure_h5()
+    tag = "" if split == "test" else f"_{split}"
+    names = ensure_h5(split)
     sessions = {}
     for n in names:
         ego, ll, ob, _ = sr.load_session(n)
@@ -151,12 +161,9 @@ def build():
     for task, (folder, sfx) in PICKLES.items():
         feats = FEATURES_BY_TASK[task]
         ch = (feats.index("yawRate"), feats.index("latAcceleration"))
-        x_test = pickle.load(open(DATA / folder / f"x_test_{sfx}.pkl", "rb")).astype(np.float64)
-        x_train = pickle.load(open(DATA / folder / f"x_train_{sfx}.pkl", "rb"))
-        lo_std, hi_std = x_train.min(axis=(0, 1)).astype(np.float64), x_train.max(axis=(0, 1)).astype(np.float64)
-        del x_train
+        x_test = pickle.load(open(DATA / folder / f"x_{split}_{sfx}.pkl", "rb")).astype(np.float64)
         samples, found, stray, label_gap, in_pickle = {}, set(), {}, 0.0, {}
-        y_test = np.asarray(pickle.load(open(DATA / folder / f"y_test_{sfx}.pkl", "rb"))).reshape(-1)
+        y_test = np.asarray(pickle.load(open(DATA / folder / f"y_{split}_{sfx}.pkl", "rb"))).reshape(-1)
         for n in names:
             m = to_layout(sessions[n][0], task)
             pairs = locate(m, x_test, ch)
@@ -175,14 +182,24 @@ def build():
                 cls = np.where(np.isnan(sessions[n][1][last]), -1,
                                np.where(sessions[n][1][last] <= 4.0, sessions[n][2][last], 0))
                 label_gap = max(label_gap, float((cls != y_test[pairs[:, 0]]).mean()))
-        a, b, err = fit(list(samples.values()), len(feats))
+        if split == "test":
+            a, b, err = fit(list(samples.values()), len(feats))
+            x_train = pickle.load(open(DATA / folder / f"x_train_{sfx}.pkl", "rb"))
+            lo_std, hi_std = (x_train.min(axis=(0, 1)).astype(np.float64),
+                              x_train.max(axis=(0, 1)).astype(np.float64))
+            del x_train
+            (OUT / f"{task}_norm.json").write_text(json.dumps(
+                {"task": task, "features": feats, "a": a.tolist(), "b": b.tolist(), "max_abs_error": err.tolist(),
+                 "train_min": lo_std.tolist(), "train_max": hi_std.tolist(),
+                 "note": "pickle = a * raw + b per channel; training range in pickle units"}, indent=1))
+        else:                                               # the map recovered on the test drivers, unchanged
+            norm = json.loads((OUT / f"{task}_norm.json").read_text())
+            a, b = np.array(norm["a"]), np.array(norm["b"])
+            err = np.array([max(float(np.abs(a[c] * r[:, :, c] + b[c] - p[:, :, c]).max())
+                                for r, p in samples.values()) for c in range(len(feats))])
         per_driver = {n: float(max(np.abs(a[c] * r[:, :, c] + b[c] - p[:, :, c]).max() for c in range(len(feats))))
                       for n, (r, p) in samples.items()}     # the one map on each driver's windows
         ok = bool(err.max() <= 1e-5)
-        (OUT / f"{task}_norm.json").write_text(json.dumps(
-            {"task": task, "features": feats, "a": a.tolist(), "b": b.tolist(), "max_abs_error": err.tolist(),
-             "train_min": lo_std.tolist(), "train_max": hi_std.tolist(),
-             "note": "pickle = a * raw + b per channel; training range in pickle units"}, indent=1))
         lens, cat, ttlc, direction, events, held = [], [], [], [], {}, []
         for n in names:
             m, t, d, ev = sessions[n]
@@ -194,12 +211,13 @@ def build():
             flag = np.zeros(len(m), bool)                   # frames a window of the task's test pickle ends on
             flag[sorted(in_pickle.get(n, ()))] = True
             held.append(flag)
-        np.savez_compressed(OUT / f"{task}_sessions.npz", feats=np.concatenate(cat), seq_lens=np.array(lens),
+        np.savez_compressed(OUT / f"{task}_sessions{tag}.npz", feats=np.concatenate(cat), seq_lens=np.array(lens),
                             names=np.array(names), ttlc=np.concatenate(ttlc).astype(np.float32),
-                            direction=np.concatenate(direction), in_test_pickle=np.concatenate(held),
-                            events=json.dumps(events))
+                            direction=np.concatenate(direction), events=json.dumps(events),
+                            **{f"in_{split}_pickle": np.concatenate(held)})
         summary["tasks"][task] = {
-            "test_pickle_windows": int(len(x_test)), "located_in_the_sessions": len(found),
+            f"{split}_pickle_windows": int(len(x_test)), "located_in_the_sessions": len(found),
+            "map": "fitted on these windows" if split == "test" else "recovered on the test drivers, applied unchanged",
             "sessions_the_pickle_was_cut_from": sorted(samples), "look_alike_windows_elsewhere": stray,
             "max_abs_error_of_the_map": float(err.max()), "worst_channel": feats[int(err.argmax())],
             "max_abs_error_per_driver": per_driver, "recovered": ok,
@@ -221,14 +239,14 @@ def build():
         ev = [i for i, _ in sessions[n][3] if i >= W + 41]
         held[n] = {"lane_changes": len(ev),
                    "in_the_test_pickles": int(sum(sum(k in frames_in for k in range(i - 41, i)) >= 20 for i in ev))}
-    summary["lane_changes_held_by_the_test_pickles"] = held
+    summary[f"lane_changes_held_by_the_{split}_pickles"] = held
     res = HERE / "results" / "hil"
     res.mkdir(parents=True, exist_ok=True)
-    (res / "session_stream.json").write_text(json.dumps(summary, indent=1))
+    (res / f"session_stream{tag}.json").write_text(json.dumps(summary, indent=1))
     tot = sum(s["frames"] for s in summary["sessions"].values())
     print(f"{len(names)} sessions, {tot} frames = {tot / 600:.0f} minutes; "
           f"{sum(s['lane_changes_right'] + s['lane_changes_left'] for s in summary['sessions'].values())} lane changes")
 
 
 if __name__ == "__main__":
-    {"build": build}[sys.argv[1] if len(sys.argv) > 1 else "build"]()
+    {"build": build}[sys.argv[1] if len(sys.argv) > 1 else "build"](sys.argv[2] if len(sys.argv) > 2 else "test")

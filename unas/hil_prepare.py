@@ -22,7 +22,9 @@ datasets/dmir/data/sessions/sessions_<file name> selects the raw sessions of the
 (datasets/dmir/session_stream.py build) instead of the test windows: every frame of every session in raw
 units, a decision on every frame from the 50th on. The board's table then holds the provider's
 normalization (recovered per task, pickle = a * raw + b), followed by the network's own min-max scaling
-if it has one, and the training range in raw units.
+if it has one, and the training range in raw units. With LCIR_SPLIT=val in the environment the sessions
+of the official validation drivers are taken instead (2026-11-12, for choices that must not be made on
+the test drivers); their files go to firmware/build/stream/<stem>_val/.
 
 Simulated traffic (a copy of a highD network's file under datasets/carla/, scenarios of
 datasets/carla/prepare_carla.py): the scaling uses highD's training statistics, as the deployed network does.
@@ -135,13 +137,16 @@ def lcir(tfl: Path) -> None:
 
 
 def lcir_sessions(tfl: Path) -> None:
-    """Whole drives of the LCIR test drivers, frame by frame, for one network."""
+    """Whole drives of the LCIR test drivers, frame by frame, for one network. LCIR_SPLIT=val takes the
+    validation drivers' sessions (session_stream.py build val) and writes to <stem>_val."""
+    split = os.environ.get("LCIR_SPLIT", "test")
+    tag = "" if split == "test" else f"_{split}"
     deploy = tfl.stem[len("sessions_"):].rsplit("_int8_io", 1)[0]
     rec = json.loads((ROOT / "datasets" / "dmir" / "results" / "deploy" / f"{deploy}_deploy.json").read_text())
     task = rec["task"]
     base = ROOT / "datasets" / "dmir" / "data" / "stream"
     norm = json.loads((base / f"{task}_norm.json").read_text())
-    z = np.load(base / f"{task}_sessions.npz")
+    z = np.load(base / f"{task}_sessions{tag}.npz")
     feats, lens = z["feats"].astype(np.float32), z["seq_lens"].astype(np.int64)
     n_feat, in_len, big = feats.shape[1], 50, 1e30
     a, b = np.array(norm["a"]), np.array(norm["b"])
@@ -175,7 +180,7 @@ def lcir_sessions(tfl: Path) -> None:
         it.invoke()
         ref[w] = it.get_tensor(out["index"]).reshape(-1)
 
-    dest = ROOT / "firmware" / "build" / "stream" / tfl.stem
+    dest = ROOT / "firmware" / "build" / "stream" / (tfl.stem + tag)
     dest.mkdir(parents=True, exist_ok=True)
     (dest / "stream_cfg.h").write_text(header(tfl, in_len, lo, span, si, zi, clamp=(cmin, cmax)), encoding="utf-8")
     last = np.array(wins) + in_len - 1                       # the frame a window ends on

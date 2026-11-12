@@ -89,6 +89,7 @@
   "classification": {
    "test_pickle_windows": 19722,
    "located_in_the_sessions": 19722,
+   "map": "fitted on these windows",
    "sessions_the_pickle_was_cut_from": [
     "user13LC",
     "user18LC",
@@ -126,6 +127,7 @@
   "regression_lcr": {
    "test_pickle_windows": 7073,
    "located_in_the_sessions": 7073,
+   "map": "fitted on these windows",
    "sessions_the_pickle_was_cut_from": [
     "user13LC",
     "user18LC",
@@ -161,6 +163,7 @@
   "regression_lcl": {
    "test_pickle_windows": 8097,
    "located_in_the_sessions": 8097,
+   "map": "fitted on these windows",
    "sessions_the_pickle_was_cut_from": [
     "user13LC",
     "user18LC",
