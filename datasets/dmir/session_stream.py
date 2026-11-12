@@ -42,6 +42,19 @@ changes of users 37-50 are in the dataset's public record (Zenodo, DOI 10.5281/z
 userNLC.h5 next to the other raw sessions). A window of a pickle counts as located only if the map
 reproduces all of its channels; <task>_<split>_pickle_located.npy marks those windows of the pickle.
 
+The files of users 24 and 25 hold the drives of users 23 and 9 (datasets/dmir/duplicate_sessions.py): the
+dataset has 48 different drives with lane changes, and one of the seven test drivers is a training drive.
+
+The baseline sessions of users 37-46 (2026-11-12; they are not in the public record, the files come from
+the lab's recordings and go next to the other raw sessions):
+  .venv\\Scripts\\python datasets/dmir/session_stream.py build more_baseline
+
+Which drive each window of the prepared intention sets was cut from (for unas/stream_cv_check.py):
+  .venv\\Scripts\\python datasets/dmir/session_stream.py rows
+Output: classification_rows_by_drive.npz (per row of the training, validation and test set: the user
+number of the drive, a copy counted as the drive it holds, and whether an identical row came earlier)
+and datasets/dmir/results/hil/session_stream_rows.json.
+
 Sessions of one's own, recorded with the lab's simulator (2026-11-12):
   .venv\\Scripts\\python datasets/dmir/session_stream.py own <name> [<name> ...]
 puts sessions made with the lab's client and data preparation (H5 files next to the other raw sessions)
@@ -71,7 +84,10 @@ ZIP = ROOT / "Materials" / "Overtaking2.zip"
 USERS = {"test": (2, 7, 13, 18, 25, 31, 36), "val": (5, 8, 10, 12, 16, 19, 27)}   # the official split
 USERS["train"] = tuple(u for u in range(1, 37) if u not in USERS["test"] + USERS["val"])   # the other 22 of the archive
 USERS["more"] = tuple(range(37, 51))            # in the public record only (Zenodo 16686054), sessions with lane changes
+USERS["more_baseline"] = tuple(range(37, 47))   # their baseline sessions, as far as the lab's recordings hold them
+COPIES = {24: 23, 25: 9}                        # user: the user whose drive the user's files hold
 PHASES = ("LC", "N")
+PHASES_OF = {"more": ("LC",), "more_baseline": ("N",)}
 PICKLES = {"classification": ("data-classification", "multi"), "regression_lcr": ("data-prepared-lcr", "lcr"),
            "regression_lcl": ("data-regression-lcl", "lcl")}
 W = 50
@@ -79,10 +95,12 @@ W = 50
 
 def ensure_h5(split: str = "test") -> list[str]:
     """The sessions of the split's drivers, unpacked next to the other raw samples."""
-    names = [f"user{u}{ph}" for u in USERS[split] for ph in (("LC",) if split == "more" else PHASES)]
+    names = [f"user{u}{ph}" for u in USERS[split] for ph in PHASES_OF.get(split, PHASES)]
     missing = [n for n in names if not (sr.H5DIR / f"{n}.h5").exists()]
     if missing and split == "more":
         sys.exit(f"download {', '.join(missing)} (.h5) from the dataset's public record into {sr.H5DIR.name}/")
+    if missing and split == "more_baseline":
+        sys.exit(f"{', '.join(missing)} (.h5) are not in the public record; put the lab's files into {sr.H5DIR.name}/")
     if missing:
         with zipfile.ZipFile(ZIP) as z:
             members = {i.filename.split("/")[-1]: i for i in z.infolist()}
@@ -179,7 +197,7 @@ def build(split: str = "test"):
     for task, (folder, sfx) in PICKLES.items():
         feats = FEATURES_BY_TASK[task]
         ch = (feats.index("yawRate"), feats.index("latAcceleration"))
-        part = "train" if split == "more" else split         # users 37-50 are training drivers of the lab's split
+        part = "train" if split.startswith("more") else split   # users 37-50 are training drivers of the lab's split
         x_test = pickle.load(open(DATA / folder / f"x_{part}_{sfx}.pkl", "rb")).astype(np.float64)
         samples, found, stray, label_gap, in_pickle = {}, set(), {}, 0.0, {}
         y_test = np.asarray(pickle.load(open(DATA / folder / f"y_{part}_{sfx}.pkl", "rb"))).reshape(-1)
@@ -225,8 +243,9 @@ def build(split: str = "test"):
                  "train_min": lo_std.tolist(), "train_max": hi_std.tolist(),
                  "note": "pickle = a * raw + b per channel; training range in pickle units"}, indent=1))
         else:
-            err = np.array([max(float(np.abs(a[c] * r[:, :, c] + b[c] - p[:, :, c]).max())
-                                for r, p in samples.values()) for c in range(len(feats))])
+            err = np.array([max((float(np.abs(a[c] * r[:, :, c] + b[c] - p[:, :, c]).max())
+                                 for r, p in samples.values()), default=0.0)      # baseline sessions: no window
+                            for c in range(len(feats))])
             mask = np.zeros(len(x_test), bool)              # the pickle's windows that are in these sessions
             mask[sorted(found)] = True
             np.save(OUT / f"{task}_{split}_pickle_located.npy", mask)
@@ -282,6 +301,48 @@ def build(split: str = "test"):
           f"{sum(s['lane_changes_right'] + s['lane_changes_left'] for s in summary['sessions'].values())} lane changes")
 
 
+def rows():
+    """The drive each row of the three prepared intention sets was cut from."""
+    import hashlib
+    task = "classification"
+    folder, sfx = PICKLES[task]
+    feats = FEATURES_BY_TASK[task]
+    ch = (feats.index("yawRate"), feats.index("latAcceleration"))
+    norm = json.loads((OUT / f"{task}_norm.json").read_text())
+    a, b = np.array(norm["a"]), np.array(norm["b"])
+    drives = [u for u in range(1, 51) if u not in COPIES]
+    mats = {u: to_layout(sr.raw_matrix(*sr.load_session(f"user{u}LC")[:3]), task) for u in drives}
+    seen, out = set(), {}
+    summary = {"copies": {f"user{k}": f"holds the drive of user{v}" for k, v in COPIES.items()}, "sets": {}}
+    for part in ("train", "val", "test"):
+        x = pickle.load(open(DATA / folder / f"x_{part}_{sfx}.pkl", "rb"))
+        x64 = x.astype(np.float64)
+        drive = np.zeros(len(x), np.int16)
+        twice = 0
+        for u in drives:
+            pairs = locate(mats[u], x64, ch)
+            if not len(pairs):
+                continue
+            gap = np.abs(sr.windows(mats[u])[pairs[:, 1]] * a + b - x64[pairs[:, 0]]).max(axis=(1, 2))
+            r = np.unique(pairs[gap <= 1e-5][:, 0])
+            twice += int((drive[r] != 0).sum())
+            drive[r[drive[r] == 0]] = u
+        first = np.ones(len(x), bool)
+        xc = np.ascontiguousarray(x)
+        for i in range(len(x)):
+            d = hashlib.blake2b(xc[i].tobytes(), digest_size=12).digest()
+            first[i] = d not in seen
+            seen.add(d)
+        out[f"{part}_drive"], out[f"{part}_first"] = drive, first
+        summary["sets"][part] = {"rows": int(len(x)), "not_located": int((drive == 0).sum()),
+                                 "located_in_two_drives": twice,
+                                 "identical_to_an_earlier_row": int((~first).sum()),
+                                 "rows_per_drive": {f"user{u}": int((drive == u).sum()) for u in drives if (drive == u).any()}}
+        print(part, {k: v for k, v in summary["sets"][part].items() if k != "rows_per_drive"}, flush=True)
+    np.savez_compressed(OUT / f"{task}_rows_by_drive.npz", **out)
+    (HERE / "results" / "hil" / "session_stream_rows.json").write_text(json.dumps(summary, indent=1))
+
+
 def own(names: list[str]):
     """Sessions recorded with the lab's simulator and converted by its data preparation (LC-Intention-
     Framework: data_collection/main.py, then data_preparation/generate_CDF_Carla_log_to_H5.py), as frame
@@ -308,5 +369,7 @@ def own(names: list[str]):
 if __name__ == "__main__":
     if sys.argv[1:2] == ["own"]:
         own(sys.argv[2:])
+    elif sys.argv[1:2] == ["rows"]:
+        rows()
     else:
         {"build": build}[sys.argv[1] if len(sys.argv) > 1 else "build"](sys.argv[2] if len(sys.argv) > 2 else "test")

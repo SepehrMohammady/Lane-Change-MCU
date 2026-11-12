@@ -42,6 +42,14 @@ spread (mean ≈ 2.0).
    affected driver landed in the test split — which we cannot verify (no
    window→driver mapping in the prepared pickles). Recorded as a plausible
    hypothesis, not a conclusion.
+   **Resolved 2026-11-12** (every test window is now located in its driver's raw
+   session, `datasets/dmir/session_stream.py`): the spikes are one frame each in the
+   sessions with lane changes of test drivers 2 (frame 2,800) and 18 (frame 7,039),
+   10 and 35 frames from a lane change; the 56 / 37 / 21 affected test windows are
+   the windows that hold one of these two frames. The session of training driver 21
+   has such a frame too (7,901), which no training window holds: that is why the
+   spikes are test-only. They are not connected to the drivers named above (34 and
+   43 are training drivers and their sessions hold no such value).
    **Handling:** `Config.clip_to_train_range=True` clips val/test features to the
    per-feature train min/max. Training data is never modified.
 2. **Feature 7 is constant zero** in the classification training split (std = 0).
@@ -102,6 +110,46 @@ window is accounted for: classification 60,969 + 33,651 = 94,620, LCR 20,599 + 1
 23,822 + 15,491 = 39,313, each reproduced by the map recovered on the test drivers to 2e-11. The frame
 rule gives another class than the pickle for 12 of the 60,969 local classification windows: frames
 between two lane-line jumps 5 to 8 frames apart, where the car straddles the line.
+
+## Two drivers' files hold another driver's drive (found 2026-11-12)
+
+`datasets/dmir/duplicate_sessions.py`, results `datasets/dmir/results/hil/duplicate_sessions.json`. Found
+while scanning the raw sessions of all 50 drivers, not looked for.
+
+- `user25LC.h5` and `user25N.h5` hold, frame by frame and in every signal, the sessions of `user9LC.h5` and
+  `user9N.h5` (9,386 and 6,073 frames; the first frame is stamped 2024-09-25 in all four). `user24LC.h5`
+  holds the session of `user23LC.h5` (9,294 frames, first frame 2024-10-10 13:47); `user24N.h5` is a
+  session of its own. The files were written on different days, so the files differ as files; the signals
+  do not.
+- Checked that this is not a fault of our copy: the unpacked files equal the entries of the archive we
+  received, all 50 sessions with lane changes have the md5 checksums of the public record (Zenodo, DOI
+  10.5281/zenodo.16686054), and the record itself lists one checksum for `user9LC.csv` and
+  `user25LC.csv` and one for `user23LC.csv` and `user24LC.csv`.
+- The dataset therefore holds 48 different drives with lane changes.
+- Users 23 and 24 are both training drivers of the official split: that drive is in the training sets
+  twice (2,087 of the 94,620 intention training windows are identical to an earlier one).
+- User 25 is one of the seven official test drivers and user 9 is a training driver. 3,750 of the 19,722
+  windows of the intention test set (19.0%) come from that drive, 2,425 of them bit-identical to a
+  training window; so do 1,066 of the 7,073 LCR and 1,066 of the 8,097 LCL test windows, every one of
+  them bit-identical to a training window. No window of the six other test drivers is in a training set.
+
+What it does to the numbers of the networks deployed here (outputs of the board, int8):
+
+| | all seven test drivers | six drivers not in the training set | the copied drive |
+|---|---|---|---|
+| intention accuracy, test set | 91.26% | 90.63% | 93.97% |
+| LCR RMSE, test set | 0.450 s | 0.462 s | 0.374 s |
+| LCL RMSE, test set | 0.433 s | 0.445 s | 0.344 s |
+| whole drives: frames with the correct class | 79.8% | 78.7% | 85.9% |
+| whole drives: lane changes announced 2 s early, false alarms per hour | 90.4%, 301 | 89.4%, 317 | 100%, 220 |
+
+Every result measured on the official split, ours and published ones, carries this copy, so comparisons
+on that split stay like for like; the absolute numbers describe six unseen drivers and one seen drive.
+From 2026-11-12 on this repository reports the six drivers next to the official seven, and studies over
+drivers use the 48 different drives (users 24 and 25 left out).
+
+The lane changes our frame rule finds agree with the count the lab made at recording time for 47 of the
+50 sessions with lane changes (driver 31: 111 in both).
 
 ## Provenance (resolved 2026-07-07 — details in datasets/dmir/docs/dataset-provenance.md)
 

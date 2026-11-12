@@ -1,0 +1,81 @@
+{
+ "copies": {
+  "user24": "holds the drive of user23",
+  "user25": "holds the drive of user9"
+ },
+ "sets": {
+  "train": {
+   "rows": 94620,
+   "not_located": 0,
+   "located_in_two_drives": 0,
+   "identical_to_an_earlier_row": 2087,
+   "rows_per_drive": {
+    "user1": 4979,
+    "user3": 3585,
+    "user4": 4031,
+    "user6": 2823,
+    "user9": 3070,
+    "user11": 1950,
+    "user14": 2362,
+    "user15": 2423,
+    "user17": 2213,
+    "user20": 2430,
+    "user21": 2125,
+    "user22": 2649,
+    "user23": 5913,
+    "user26": 2941,
+    "user28": 1827,
+    "user29": 2775,
+    "user30": 3190,
+    "user32": 2575,
+    "user33": 2978,
+    "user34": 1402,
+    "user35": 2728,
+    "user37": 3278,
+    "user38": 2467,
+    "user39": 2611,
+    "user40": 1583,
+    "user41": 2481,
+    "user42": 2647,
+    "user43": 2584,
+    "user44": 2234,
+    "user45": 2011,
+    "user46": 2784,
+    "user47": 1398,
+    "user48": 2987,
+    "user49": 1958,
+    "user50": 2628
+   }
+  },
+  "val": {
+   "rows": 16332,
+   "not_located": 0,
+   "located_in_two_drives": 0,
+   "identical_to_an_earlier_row": 0,
+   "rows_per_drive": {
+    "user5": 3090,
+    "user8": 2656,
+    "user10": 2397,
+    "user12": 2323,
+    "user16": 3116,
+    "user19": 2160,
+    "user27": 590
+   }
+  },
+  "test": {
+   "rows": 19722,
+   "not_located": 0,
+   "located_in_two_drives": 0,
+   "identical_to_an_earlier_row": 2425,
+   "rows_per_drive": {
+    "user2": 4111,
+    "user7": 2403,
+    "user9": 3750,
+    "user13": 2136,
+    "user18": 3102,
+    "user31": 1373,
+    "user36": 2847
+   }
+  }
+ }
+}

@@ -34,6 +34,11 @@ the fork (as input_clip_check.py):
     ~/dmir_nas/bin/python /mnt/c/Projects/PhD/DIMIR/unas/stream_train_check.py [arm ...]
   .venv\\Scripts\\python unas/stream_train_check.py --report     # means, the criterion, the summary file
 
+One of the seven test drivers is a copy of a training drive (user 25 holds the drive of user 9,
+datasets/dmir/duplicate_sessions.py; found after this study). `--six` scores the kept networks again on
+the six test drivers that are not (stream_windows_six_test_drivers.jsonl); the report lists those numbers
+next to the others. The criterion above was fixed for all seven and stays as it was judged.
+
 Output: datasets/dmir/results/seeds/stream_windows.jsonl (one line per arm and seed; resumable) and
 datasets/dmir/results/hil/stream_windows.json (the report). The trained networks and their int8 files are
 kept in datasets/dmir/data/stream_train/ (not versioned). EPOCH_CAP=1 SEEDS=0 OUT_NAME=..._smoke.jsonl
@@ -59,6 +64,8 @@ STREAM = REPO / "datasets" / "dmir" / "data" / "stream"
 KEEP = REPO / "datasets" / "dmir" / "data" / "stream_train"
 OUT = REPO / "datasets" / "dmir" / "results" / "seeds" / os.environ.get("OUT_NAME", "stream_windows.jsonl")
 SUMMARY = REPO / "datasets" / "dmir" / "results" / "hil" / "stream_windows.json"
+SIX = OUT.with_name(OUT.stem + "_six_test_drivers.jsonl")
+COPIED = ("user25",)                 # its session files hold the drive of training user 9
 TASK, W, BOUND, FPS = "classification", 50, 4.0, 10
 ARMS = ("A", "A22", "B", "C", "B36")
 
@@ -127,10 +134,10 @@ def drive_outputs(tf, icc, tfl: bytes, z, x):
     return np.concatenate(outs), np.concatenate(last), scale
 
 
-def drive_measures(z, outs, last, scale):
+def drive_measures(z, outs, last, scale, keep=lambda name: True):
     ref = {"seq_lens": z["seq_lens"], "names": z["names"], "window_last_frame": last, "events": z["events"],
            "feats": z["feats"], "ttlc": z["ttlc"], "direction": z["direction"], "out_scale": scale}
-    sessions = dr.sessions_of(ref, outs)
+    sessions = [s for s in dr.sessions_of(ref, outs) if keep(s["name"])]
     acc = {}
     for key, pick in (("all", lambda n: True), ("lane_change_sessions", lambda n: n.endswith("LC")),
                       ("baseline_sessions", lambda n: n.endswith("N"))):
@@ -246,6 +253,41 @@ def run(arms):
                   flush=True)
 
 
+def rescore():
+    """The kept networks of every arm on the six test drivers that are not a copy of a training drive."""
+    sys.path.insert(0, str(Path(__file__).resolve().parent))
+    import input_clip_check as icc
+    import input_scaling_check as isc
+
+    tf, sv = isc.tf, isc.sv
+    os.environ["DMIR_SCALE"] = ""
+    _, model = isc.CHOICES[TASK]
+    first = {(r["arm"], r["seed"]): r for r in map(json.loads, OUT.read_text().splitlines())}
+    done = {(r["arm"], r["seed"]) for r in map(json.loads, SIX.read_text().splitlines())} if SIX.exists() else set()
+    xte, yte = sv.DMIR_Dataset(task=TASK)._data["test"]
+    rows = np.load(STREAM / f"{TASK}_rows_by_drive.npz")["test_drive"] != 9      # not cut from the copied drive
+    z, fx = frames("test")
+    for (arm, seed), r in sorted(first.items(), key=lambda kv: (ARMS.index(kv[0][0]), kv[0][1])):
+        if (arm, seed) in done:
+            continue
+        tfl = (KEEP / f"{arm}_{model}_seed{seed}_int8_io.tflite").read_bytes()
+        outs, last, scale = drive_outputs(tf, icc, tfl, z, fx)
+        sessions, acc, after = drive_measures(z, outs, last, scale, lambda name: not name.startswith(COPIED))
+        sel = r["selected_rule"]
+        rule = (sel["theta"], sel["hold_off_frames"], sel["persistence_frames"])
+        rec = {"arm": arm, "seed": seed, "left_out": list(COPIED), "selected_rule": sel,
+               "lab_test_pickle_accuracy_int8": round(isc.metric(icc.predict_int8(tf, tfl, xte[rows])[0], yte[rows],
+                                                                 True)["acc"], 5),
+               "lab_test_pickle_windows": int(rows.sum()),
+               "test_drivers": {"raw_output": dr.score(sessions, dr.RAW), "selected": dr.score(sessions, rule),
+                                "frame_accuracy": acc, "output_after_a_lane_change": after,
+                                "baseline_sessions_raw_output": dr.score(sessions, dr.RAW, lambda n: n.endswith("N"))},
+               "utc": datetime.now(timezone.utc).isoformat(timespec="seconds")}
+        with open(SIX, "a") as f:
+            f.write(json.dumps(rec) + "\n")
+        print(f"arm {arm} seed {seed}: scored on {len(sessions)} sessions", flush=True)
+
+
 def report():
     rows = [json.loads(line) for line in OUT.read_text().splitlines()]
     seeds = sorted({r["seed"] for r in rows})
@@ -297,7 +339,40 @@ def report():
                         "B_against_A": against("B", "A"), "B36_against_A_equal_drivers": against("B36", "A"),
                         "B_against_A22_for_information": against("B", "A22"),
                         "C_against_A_for_information": against("C", "A")}
+    if SIX.exists():                                         # the six test drivers that are not a copy (post hoc)
+        six = [json.loads(line) for line in SIX.read_text().splitlines()]
+
+        def six_summary(arm):
+            rs = sorted((r for r in six if r["arm"] == arm), key=lambda r: r["seed"])
+            if not rs:
+                return None
+            ts = [r["test_drivers"] for r in rs]
+            keys = ("timely_share", "false_alarms_per_hour", "false_alarms_of_0.5_s_or_more_per_hour",
+                    "median_lead_s", "free_frames_in_alarm", "missed_share")
+            return {"seeds": [r["seed"] for r in rs],
+                    "lab_test_pickle_accuracy_int8": mean_std([r["lab_test_pickle_accuracy_int8"] for r in rs]),
+                    "raw_output": {m: mean_std([t["raw_output"][m] for t in ts]) for m in keys},
+                    "selected": {m: mean_std([t["selected"][m] for t in ts]) for m in keys},
+                    "frame_accuracy": {k: mean_std([t["frame_accuracy"][k] for t in ts])
+                                       for k in ("all", "lane_change_sessions", "baseline_sessions")},
+                    "output_after_a_lane_change": {k: mean_std([t["output_after_a_lane_change"][k] for t in ts])
+                                                   for k in ("free driving", "the completed direction",
+                                                             "the opposite direction")},
+                    "baseline_sessions_false_alarms_per_hour_raw_output": mean_std(
+                        [t["baseline_sessions_raw_output"]["false_alarms_per_hour"] for t in ts])}
+        res["six_test_drivers_not_seen_in_training"] = {
+            "note": "user 25's session files hold the drive of training user 9 (datasets/dmir/duplicate_sessions.py); "
+                    "the same networks scored without them, after the study: post hoc, the criterion is not judged again",
+            "arms": {a: s for a in ARMS if (s := six_summary(a))}}
     SUMMARY.write_text(json.dumps(res, indent=1))
+    for a, s in res.get("six_test_drivers_not_seen_in_training", {}).get("arms", {}).items():
+        r, c = s["raw_output"], s["selected"]
+        print(f"{a:4s} six test drivers: raw timely {r['timely_share']['mean']:.3f}, "
+              f"{r['false_alarms_per_hour']['mean']:.1f}/h; with rule {c['timely_share']['mean']:.3f}, "
+              f"{c['false_alarms_per_hour']['mean']:.1f}/h; frame accuracy {s['frame_accuracy']['all']['mean']:.3f} "
+              f"(sessions with lane changes {s['frame_accuracy']['lane_change_sessions']['mean']:.3f}); opposite "
+              f"{s['output_after_a_lane_change']['the opposite direction']['mean']:.3f}; lab test set "
+              f"{s['lab_test_pickle_accuracy_int8']['mean']:.4f}")
     for a, s in res["arms"].items():
         for key in ("validation_drivers", "test_drivers"):
             r, c = s[key]["raw_output"], s[key]["selected"]
@@ -314,5 +389,7 @@ def report():
 if __name__ == "__main__":
     if "--report" in sys.argv:
         report()
+    elif "--six" in sys.argv:
+        rescore()
     else:
         run([a for a in sys.argv[1:] if a in ARMS] or list(ARMS))

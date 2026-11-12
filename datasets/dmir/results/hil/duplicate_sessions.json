@@ -1,0 +1,599 @@
+{
+ "utc": "2026-11-12T14:10:24+00:00",
+ "copies": {
+  "user25": "holds the drive of user9",
+  "user24": "holds the drive of user23"
+ },
+ "note": "found on 2026-11-12, not looked for; nothing here was fixed beforehand",
+ "sessions_with_identical_signals": [
+  {
+   "first_frame": "2024-09-25 15:40:42",
+   "frames": 9386,
+   "files": [
+    {
+     "file": "user9LC.h5",
+     "written": "26-Sep-2024 10:40:30"
+    },
+    {
+     "file": "user25LC.h5",
+     "written": "21-Oct-2024 16:05:41"
+    }
+   ],
+   "files_byte_identical": false
+  },
+  {
+   "first_frame": "2024-09-25 16:04:37",
+   "frames": 6073,
+   "files": [
+    {
+     "file": "user9N.h5",
+     "written": "26-Sep-2024 10:35:10"
+    },
+    {
+     "file": "user25N.h5",
+     "written": "21-Oct-2024 16:06:55"
+    }
+   ],
+   "files_byte_identical": false
+  },
+  {
+   "first_frame": "2024-10-10 13:47:08",
+   "frames": 9294,
+   "files": [
+    {
+     "file": "user23LC.h5",
+     "written": "10-Oct-2024 14:59:49"
+    },
+    {
+     "file": "user24LC.h5",
+     "written": "10-Oct-2024 15:01:55"
+    }
+   ],
+   "files_byte_identical": false
+  }
+ ],
+ "tasks": {
+  "classification": {
+   "test_set": {
+    "test_rows": 19722,
+    "rows_located_in_exactly_one_session": 19722,
+    "rows_per_test_driver": {
+     "user2": 4111,
+     "user7": 2403,
+     "user13": 2136,
+     "user18": 3102,
+     "user25": 3750,
+     "user31": 1373,
+     "user36": 2847
+    },
+    "rows_from_the_copied_drive": 3750,
+    "share_of_the_test_set": 0.1901,
+    "of_them_bit_identical_to_a_training_row": 2425,
+    "test_rows_bit_identical_to_a_training_row": 2425,
+    "of_them_from_the_six_other_drivers": 0
+   },
+   "deployed_networks_on_the_board": {
+    "searched on raw inputs": {
+     "all_seven_test_drivers": {
+      "windows": 19722,
+      "accuracy": 0.9126
+     },
+     "six_drivers_not_seen_in_training": {
+      "windows": 15972,
+      "accuracy": 0.9063
+     },
+     "the_copied_drive_only": {
+      "windows": 3750,
+      "accuracy": 0.9397
+     },
+     "per_driver": {
+      "user2": {
+       "windows": 4111,
+       "accuracy": 0.8421
+      },
+      "user7": {
+       "windows": 2403,
+       "accuracy": 0.9263
+      },
+      "user13": {
+       "windows": 2136,
+       "accuracy": 0.8699
+      },
+      "user18": {
+       "windows": 3102,
+       "accuracy": 0.9523
+      },
+      "user25": {
+       "windows": 3750,
+       "accuracy": 0.9397
+      },
+      "user31": {
+       "windows": 1373,
+       "accuracy": 0.9148
+      },
+      "user36": {
+       "windows": 2847,
+       "accuracy": 0.955
+      }
+     }
+    },
+    "searched on scaled inputs": {
+     "all_seven_test_drivers": {
+      "windows": 19722,
+      "accuracy": 0.8791
+     },
+     "six_drivers_not_seen_in_training": {
+      "windows": 15972,
+      "accuracy": 0.8783
+     },
+     "the_copied_drive_only": {
+      "windows": 3750,
+      "accuracy": 0.8824
+     },
+     "per_driver": {
+      "user2": {
+       "windows": 4111,
+       "accuracy": 0.7923
+      },
+      "user7": {
+       "windows": 2403,
+       "accuracy": 0.9238
+      },
+      "user13": {
+       "windows": 2136,
+       "accuracy": 0.8684
+      },
+      "user18": {
+       "windows": 3102,
+       "accuracy": 0.9504
+      },
+      "user25": {
+       "windows": 3750,
+       "accuracy": 0.8824
+      },
+      "user31": {
+       "windows": 1373,
+       "accuracy": 0.8638
+      },
+      "user36": {
+       "windows": 2847,
+       "accuracy": 0.9002
+      }
+     }
+    }
+   }
+  },
+  "regression_lcr": {
+   "test_set": {
+    "test_rows": 7073,
+    "rows_located_in_exactly_one_session": 7073,
+    "rows_per_test_driver": {
+     "user2": 1558,
+     "user7": 661,
+     "user13": 792,
+     "user18": 1381,
+     "user25": 1066,
+     "user31": 152,
+     "user36": 1463
+    },
+    "rows_from_the_copied_drive": 1066,
+    "share_of_the_test_set": 0.1507,
+    "of_them_bit_identical_to_a_training_row": 1066,
+    "test_rows_bit_identical_to_a_training_row": 1066,
+    "of_them_from_the_six_other_drivers": 0
+   },
+   "deployed_networks_on_the_board": {
+    "searched on raw inputs": {
+     "all_seven_test_drivers": {
+      "windows": 7073,
+      "rmse_s": 0.4502
+     },
+     "six_drivers_not_seen_in_training": {
+      "windows": 6007,
+      "rmse_s": 0.4624
+     },
+     "the_copied_drive_only": {
+      "windows": 1066,
+      "rmse_s": 0.3737
+     },
+     "per_driver": {
+      "user2": {
+       "windows": 1558,
+       "rmse_s": 0.4143
+      },
+      "user7": {
+       "windows": 661,
+       "rmse_s": 0.3634
+      },
+      "user13": {
+       "windows": 792,
+       "rmse_s": 0.5119
+      },
+      "user18": {
+       "windows": 1381,
+       "rmse_s": 0.4206
+      },
+      "user25": {
+       "windows": 1066,
+       "rmse_s": 0.3737
+      },
+      "user31": {
+       "windows": 152,
+       "rmse_s": 0.7197
+      },
+      "user36": {
+       "windows": 1463,
+       "rmse_s": 0.5224
+      }
+     }
+    },
+    "searched on scaled inputs": {
+     "all_seven_test_drivers": {
+      "windows": 7073,
+      "rmse_s": 0.4593
+     },
+     "six_drivers_not_seen_in_training": {
+      "windows": 6007,
+      "rmse_s": 0.4752
+     },
+     "the_copied_drive_only": {
+      "windows": 1066,
+      "rmse_s": 0.3564
+     },
+     "per_driver": {
+      "user2": {
+       "windows": 1558,
+       "rmse_s": 0.4711
+      },
+      "user7": {
+       "windows": 661,
+       "rmse_s": 0.3225
+      },
+      "user13": {
+       "windows": 792,
+       "rmse_s": 0.5153
+      },
+      "user18": {
+       "windows": 1381,
+       "rmse_s": 0.4134
+      },
+      "user25": {
+       "windows": 1066,
+       "rmse_s": 0.3564
+      },
+      "user31": {
+       "windows": 152,
+       "rmse_s": 0.7284
+      },
+      "user36": {
+       "windows": 1463,
+       "rmse_s": 0.5325
+      }
+     }
+    }
+   }
+  },
+  "regression_lcl": {
+   "test_set": {
+    "test_rows": 8097,
+    "rows_located_in_exactly_one_session": 8097,
+    "rows_per_test_driver": {
+     "user2": 1640,
+     "user7": 779,
+     "user13": 898,
+     "user18": 1473,
+     "user25": 1066,
+     "user31": 847,
+     "user36": 1394
+    },
+    "rows_from_the_copied_drive": 1066,
+    "share_of_the_test_set": 0.1317,
+    "of_them_bit_identical_to_a_training_row": 1066,
+    "test_rows_bit_identical_to_a_training_row": 1066,
+    "of_them_from_the_six_other_drivers": 0
+   },
+   "deployed_networks_on_the_board": {
+    "searched on raw inputs": {
+     "all_seven_test_drivers": {
+      "windows": 8097,
+      "rmse_s": 0.4328
+     },
+     "six_drivers_not_seen_in_training": {
+      "windows": 7031,
+      "rmse_s": 0.4447
+     },
+     "the_copied_drive_only": {
+      "windows": 1066,
+      "rmse_s": 0.344
+     },
+     "per_driver": {
+      "user2": {
+       "windows": 1640,
+       "rmse_s": 0.4273
+      },
+      "user7": {
+       "windows": 779,
+       "rmse_s": 0.4439
+      },
+      "user13": {
+       "windows": 898,
+       "rmse_s": 0.4589
+      },
+      "user18": {
+       "windows": 1473,
+       "rmse_s": 0.3097
+      },
+      "user25": {
+       "windows": 1066,
+       "rmse_s": 0.344
+      },
+      "user31": {
+       "windows": 847,
+       "rmse_s": 0.5934
+      },
+      "user36": {
+       "windows": 1394,
+       "rmse_s": 0.4708
+      }
+     }
+    },
+    "searched on scaled inputs": {
+     "all_seven_test_drivers": {
+      "windows": 8097,
+      "rmse_s": 0.4671
+     },
+     "six_drivers_not_seen_in_training": {
+      "windows": 7031,
+      "rmse_s": 0.4825
+     },
+     "the_copied_drive_only": {
+      "windows": 1066,
+      "rmse_s": 0.349
+     },
+     "per_driver": {
+      "user2": {
+       "windows": 1640,
+       "rmse_s": 0.4737
+      },
+      "user7": {
+       "windows": 779,
+       "rmse_s": 0.4594
+      },
+      "user13": {
+       "windows": 898,
+       "rmse_s": 0.534
+      },
+      "user18": {
+       "windows": 1473,
+       "rmse_s": 0.3176
+      },
+      "user25": {
+       "windows": 1066,
+       "rmse_s": 0.349
+      },
+      "user31": {
+       "windows": 847,
+       "rmse_s": 0.6526
+      },
+      "user36": {
+       "windows": 1394,
+       "rmse_s": 0.4933
+      }
+     }
+    }
+   }
+  }
+ },
+ "whole_drives_of_the_test_drivers": {
+  "intention, searched on raw inputs": {
+   "outputs_from": "board",
+   "all_seven_test_drivers": {
+    "sessions": 14,
+    "frames_correct": 0.7977,
+    "frames_correct_in_sessions_with_lane_changes": 0.6813,
+    "raw_output": {
+     "lane_changes": 543,
+     "false_alarms": 640,
+     "free_driving_hours": 2.125,
+     "false_alarms_per_hour": 301.1,
+     "false_alarms_of_0.5_s_or_more_per_hour": 139.7,
+     "free_frames_in_alarm": 0.2363,
+     "timely": 491,
+     "timely_share": 0.9042,
+     "median_lead_s": 5.0,
+     "missed_share": 0.0239
+    },
+    "rule_chosen_on_the_validation_drivers": {
+     "theta": 0.0,
+     "hold_off_frames": 0,
+     "persistence_frames": 5,
+     "lane_changes": 543,
+     "false_alarms": 424,
+     "free_driving_hours": 2.125,
+     "false_alarms_per_hour": 199.5,
+     "false_alarms_of_0.5_s_or_more_per_hour": 149.6,
+     "free_frames_in_alarm": 0.2068,
+     "timely": 477,
+     "timely_share": 0.8785,
+     "median_lead_s": 4.6,
+     "missed_share": 0.035
+    },
+    "false_alarms_at_least_halved": false,
+    "timely_share_within_5_points": true
+   },
+   "six_drivers_not_seen_in_training": {
+    "sessions": 12,
+    "frames_correct": 0.7871,
+    "frames_correct_in_sessions_with_lane_changes": 0.6673,
+    "raw_output": {
+     "lane_changes": 491,
+     "false_alarms": 564,
+     "free_driving_hours": 1.78,
+     "false_alarms_per_hour": 316.9,
+     "false_alarms_of_0.5_s_or_more_per_hour": 148.9,
+     "free_frames_in_alarm": 0.2522,
+     "timely": 439,
+     "timely_share": 0.8941,
+     "median_lead_s": 5.0,
+     "missed_share": 0.0265
+    },
+    "rule_chosen_on_the_validation_drivers": {
+     "theta": 0.0,
+     "hold_off_frames": 0,
+     "persistence_frames": 5,
+     "lane_changes": 491,
+     "false_alarms": 387,
+     "free_driving_hours": 1.78,
+     "false_alarms_per_hour": 217.5,
+     "false_alarms_of_0.5_s_or_more_per_hour": 161.3,
+     "free_frames_in_alarm": 0.2195,
+     "timely": 426,
+     "timely_share": 0.8676,
+     "median_lead_s": 4.6,
+     "missed_share": 0.0387
+    },
+    "false_alarms_at_least_halved": false,
+    "timely_share_within_5_points": true
+   },
+   "the_copied_drive_only": {
+    "sessions": 2,
+    "frames_correct": 0.8585,
+    "frames_correct_in_sessions_with_lane_changes": 0.7589,
+    "raw_output": {
+     "lane_changes": 52,
+     "false_alarms": 76,
+     "free_driving_hours": 0.346,
+     "false_alarms_per_hour": 219.8,
+     "false_alarms_of_0.5_s_or_more_per_hour": 92.5,
+     "free_frames_in_alarm": 0.1545,
+     "timely": 52,
+     "timely_share": 1.0,
+     "median_lead_s": 4.7,
+     "missed_share": 0.0
+    },
+    "rule_chosen_on_the_validation_drivers": {
+     "theta": 0.0,
+     "hold_off_frames": 0,
+     "persistence_frames": 5,
+     "lane_changes": 52,
+     "false_alarms": 37,
+     "free_driving_hours": 0.346,
+     "false_alarms_per_hour": 107.0,
+     "false_alarms_of_0.5_s_or_more_per_hour": 89.6,
+     "free_frames_in_alarm": 0.1415,
+     "timely": 51,
+     "timely_share": 0.9808,
+     "median_lead_s": 4.3,
+     "missed_share": 0.0
+    },
+    "false_alarms_at_least_halved": true,
+    "timely_share_within_5_points": true
+   }
+  },
+  "intention, searched on scaled inputs": {
+   "outputs_from": "board",
+   "all_seven_test_drivers": {
+    "sessions": 14,
+    "frames_correct": 0.8266,
+    "frames_correct_in_sessions_with_lane_changes": 0.7229,
+    "raw_output": {
+     "lane_changes": 543,
+     "false_alarms": 1341,
+     "free_driving_hours": 2.125,
+     "false_alarms_per_hour": 631.0,
+     "false_alarms_of_0.5_s_or_more_per_hour": 183.5,
+     "free_frames_in_alarm": 0.1785,
+     "timely": 462,
+     "timely_share": 0.8508,
+     "median_lead_s": 3.3,
+     "missed_share": 0.0387
+    },
+    "rule_chosen_on_the_validation_drivers": {
+     "theta": 0.0,
+     "hold_off_frames": 0,
+     "persistence_frames": 3,
+     "lane_changes": 543,
+     "false_alarms": 604,
+     "free_driving_hours": 2.125,
+     "false_alarms_per_hour": 284.2,
+     "false_alarms_of_0.5_s_or_more_per_hour": 182.6,
+     "free_frames_in_alarm": 0.1422,
+     "timely": 439,
+     "timely_share": 0.8085,
+     "median_lead_s": 3.1,
+     "missed_share": 0.0387
+    },
+    "false_alarms_at_least_halved": true,
+    "timely_share_within_5_points": true
+   },
+   "six_drivers_not_seen_in_training": {
+    "sessions": 12,
+    "frames_correct": 0.8206,
+    "frames_correct_in_sessions_with_lane_changes": 0.715,
+    "raw_output": {
+     "lane_changes": 491,
+     "false_alarms": 1201,
+     "free_driving_hours": 1.78,
+     "false_alarms_per_hour": 674.9,
+     "false_alarms_of_0.5_s_or_more_per_hour": 194.4,
+     "free_frames_in_alarm": 0.1882,
+     "timely": 413,
+     "timely_share": 0.8411,
+     "median_lead_s": 3.4,
+     "missed_share": 0.0428
+    },
+    "rule_chosen_on_the_validation_drivers": {
+     "theta": 0.0,
+     "hold_off_frames": 0,
+     "persistence_frames": 3,
+     "lane_changes": 491,
+     "false_alarms": 546,
+     "free_driving_hours": 1.78,
+     "false_alarms_per_hour": 306.8,
+     "false_alarms_of_0.5_s_or_more_per_hour": 195.0,
+     "free_frames_in_alarm": 0.1488,
+     "timely": 392,
+     "timely_share": 0.7984,
+     "median_lead_s": 3.2,
+     "missed_share": 0.0428
+    },
+    "false_alarms_at_least_halved": true,
+    "timely_share_within_5_points": true
+   },
+   "the_copied_drive_only": {
+    "sessions": 2,
+    "frames_correct": 0.8608,
+    "frames_correct_in_sessions_with_lane_changes": 0.7665,
+    "raw_output": {
+     "lane_changes": 52,
+     "false_alarms": 140,
+     "free_driving_hours": 0.346,
+     "false_alarms_per_hour": 404.9,
+     "false_alarms_of_0.5_s_or_more_per_hour": 127.2,
+     "free_frames_in_alarm": 0.1287,
+     "timely": 49,
+     "timely_share": 0.9423,
+     "median_lead_s": 3.05,
+     "missed_share": 0.0
+    },
+    "rule_chosen_on_the_validation_drivers": {
+     "theta": 0.0,
+     "hold_off_frames": 0,
+     "persistence_frames": 3,
+     "lane_changes": 52,
+     "false_alarms": 58,
+     "free_driving_hours": 0.346,
+     "false_alarms_per_hour": 167.7,
+     "false_alarms_of_0.5_s_or_more_per_hour": 118.6,
+     "free_frames_in_alarm": 0.1084,
+     "timely": 47,
+     "timely_share": 0.9038,
+     "median_lead_s": 2.85,
+     "missed_share": 0.0
+    },
+    "false_alarms_at_least_halved": true,
+    "timely_share_within_5_points": true
+   }
+  }
+ }
+}

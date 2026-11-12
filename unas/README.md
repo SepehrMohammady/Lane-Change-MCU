@@ -381,6 +381,31 @@ windows; none of these is within 5 points of the 89.6%. The networks trained on 
 reason. Per seed: `datasets/dmir/results/seeds/stream_windows.jsonl`; means and the criterion:
 `datasets/dmir/results/hil/stream_windows.json`.
 
+One of the seven test drivers is a copy of a training drive (2026-11-12, `datasets/dmir/duplicate_sessions.py`;
+found while scanning the raw sessions, not looked for). The session files of user 25 hold, in every signal of
+every frame, the sessions of user 9, and the session with lane changes of user 24 holds that of user 23; the
+public record shows the same (one checksum for `user9LC.csv` and `user25LC.csv`, one for `user23LC.csv` and
+`user24LC.csv`). The dataset has 48 different drives with lane changes. User 25 is an official test driver,
+user 9 a training driver: 19.0% of the intention test windows and 15.1% / 13.2% of the LCR / LCL test windows
+come from a drive that is in the training sets (details in `datasets/dmir/docs/DATA.md`). All numbers above
+were measured on the official seven; on the six test drivers that are not in the training set:
+
+| | official seven test drivers | six drivers not in the training set |
+|---|---|---|
+| deployed networks on the board: intention accuracy; LCR, LCL RMSE (test sets) | 91.26%; 0.450 s, 0.433 s | 90.63%; 0.462 s, 0.445 s |
+| deployed intention network, whole drives: announced 2 s early, false alarms per hour | 90.4%, 301 | 89.4%, 317 |
+| the same with the rule chosen on the validation drivers | 87.8%, 200 | 86.8%, 218 |
+| correct frames on whole drives: lab's windows (36 drivers) against windows from whole drives (36 drivers), five seeds | 80.1% against 90.5% | 79.1% against 89.8% |
+| the same, sessions with lane changes only | 68.9% against 85.8% | 67.6% against 85.0% |
+| frames after a lane change on which the opposite one is announced | 74.8% against 21.5% | 73.6% against 20.7% |
+| false alarms per hour, raw output | 301 against 322 | 321 against 346 |
+| accuracy on the lab's balanced test set, int8 | 91.25% against 90.70% | 90.50% against 89.66% |
+
+The six-driver numbers were computed after the studies (`stream_train_check.py --six`,
+`datasets/dmir/results/seeds/stream_windows_six_test_drivers.jsonl`); the pre-set criteria were judged on the
+official seven and stay as reported. Nothing changes in what the comparisons say; the absolute numbers on the
+official split are 0.6 points and 0.012 s better than on drivers the networks have not seen.
+
 The dataset's simulator as the source of the frames (2026-11-12). The simulator behind LCIR is public
 (LC-Intention-Framework: a packaged CARLA 0.9.15 with the dataset's road, the driving client and the data
 preparation). On the development laptop the unmodified client drove one minute on autopilot, the simulator's

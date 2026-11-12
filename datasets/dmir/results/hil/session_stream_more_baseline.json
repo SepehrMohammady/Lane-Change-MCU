@@ -1,0 +1,132 @@
+{
+ "sessions": {
+  "user37N": {
+   "frames": 5498,
+   "minutes": 9.2,
+   "lane_changes_right": 0,
+   "lane_changes_left": 0
+  },
+  "user38N": {
+   "frames": 5338,
+   "minutes": 8.9,
+   "lane_changes_right": 0,
+   "lane_changes_left": 0
+  },
+  "user39N": {
+   "frames": 5225,
+   "minutes": 8.7,
+   "lane_changes_right": 0,
+   "lane_changes_left": 0
+  },
+  "user40N": {
+   "frames": 5138,
+   "minutes": 8.6,
+   "lane_changes_right": 0,
+   "lane_changes_left": 0
+  },
+  "user41N": {
+   "frames": 5301,
+   "minutes": 8.8,
+   "lane_changes_right": 0,
+   "lane_changes_left": 0
+  },
+  "user42N": {
+   "frames": 5196,
+   "minutes": 8.7,
+   "lane_changes_right": 0,
+   "lane_changes_left": 0
+  },
+  "user43N": {
+   "frames": 5979,
+   "minutes": 10.0,
+   "lane_changes_right": 3,
+   "lane_changes_left": 3
+  },
+  "user44N": {
+   "frames": 5265,
+   "minutes": 8.8,
+   "lane_changes_right": 1,
+   "lane_changes_left": 1
+  },
+  "user45N": {
+   "frames": 5297,
+   "minutes": 8.8,
+   "lane_changes_right": 0,
+   "lane_changes_left": 0
+  },
+  "user46N": {
+   "frames": 5236,
+   "minutes": 8.7,
+   "lane_changes_right": 0,
+   "lane_changes_left": 0
+  }
+ },
+ "tasks": {
+  "classification": {
+   "more_baseline_pickle_windows": 94620,
+   "located_in_the_sessions": 0,
+   "map": "recovered on the test drivers, applied unchanged",
+   "sessions_the_pickle_was_cut_from": [],
+   "look_alike_windows_elsewhere": {
+    "user37N": 2
+   },
+   "look_alike_matches_not_counted": 0,
+   "max_abs_error_of_the_map": 0.0,
+   "worst_channel": "latAcceleration",
+   "max_abs_error_per_driver": {},
+   "recovered": true,
+   "share_of_located_windows_with_another_class": 0.0,
+   "unscaled_channels": [
+    "leftDirectionIndicator",
+    "rightDirectionIndicator",
+    "car2Present"
+   ],
+   "constant_channels": [
+    "egoLaneWidth"
+   ]
+  },
+  "regression_lcr": {
+   "more_baseline_pickle_windows": 33201,
+   "located_in_the_sessions": 0,
+   "map": "recovered on the test drivers, applied unchanged",
+   "sessions_the_pickle_was_cut_from": [],
+   "look_alike_windows_elsewhere": {},
+   "look_alike_matches_not_counted": 0,
+   "max_abs_error_of_the_map": 0.0,
+   "worst_channel": "latAcceleration",
+   "max_abs_error_per_driver": {},
+   "recovered": true,
+   "max_abs_difference_to_the_pickle_target_s": 0.0,
+   "unscaled_channels": [
+    "leftDirectionIndicator",
+    "rightDirectionIndicator",
+    "car2Present"
+   ],
+   "constant_channels": [
+    "egoLaneWidth"
+   ]
+  },
+  "regression_lcl": {
+   "more_baseline_pickle_windows": 39313,
+   "located_in_the_sessions": 0,
+   "map": "recovered on the test drivers, applied unchanged",
+   "sessions_the_pickle_was_cut_from": [],
+   "look_alike_windows_elsewhere": {},
+   "look_alike_matches_not_counted": 0,
+   "max_abs_error_of_the_map": 0.0,
+   "worst_channel": "latAcceleration",
+   "max_abs_error_per_driver": {},
+   "recovered": true,
+   "max_abs_difference_to_the_pickle_target_s": 0.0,
+   "unscaled_channels": [
+    "leftDirectionIndicator",
+    "rightDirectionIndicator",
+    "car2Present"
+   ],
+   "constant_channels": [
+    "egoLaneWidth"
+   ]
+  }
+ },
+ "lane_changes_held_by_the_more_baseline_pickles": {}
+}
