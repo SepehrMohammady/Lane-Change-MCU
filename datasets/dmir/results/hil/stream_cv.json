@@ -1,0 +1,2577 @@
+{
+ "utc": "2026-11-12T15:33:54+00:00",
+ "records": 60,
+ "records_expected": 60,
+ "seeds": {
+  "L": [
+   100,
+   101,
+   102,
+   103,
+   104
+  ],
+  "D": [
+   100,
+   101,
+   102,
+   103,
+   104
+  ]
+ },
+ "folds": [
+  {
+   "fold": 0,
+   "held_out": [
+    5,
+    6,
+    7,
+    11,
+    17,
+    32,
+    36,
+    44
+   ],
+   "early_stopping": [
+    3,
+    4,
+    15,
+    19,
+    28,
+    38,
+    45,
+    48
+   ]
+  },
+  {
+   "fold": 1,
+   "held_out": [
+    3,
+    4,
+    15,
+    19,
+    28,
+    38,
+    45,
+    48
+   ],
+   "early_stopping": [
+    1,
+    8,
+    16,
+    22,
+    23,
+    26,
+    37,
+    47
+   ]
+  },
+  {
+   "fold": 2,
+   "held_out": [
+    1,
+    8,
+    16,
+    22,
+    23,
+    26,
+    37,
+    47
+   ],
+   "early_stopping": [
+    12,
+    14,
+    20,
+    31,
+    34,
+    39,
+    46,
+    50
+   ]
+  },
+  {
+   "fold": 3,
+   "held_out": [
+    12,
+    14,
+    20,
+    31,
+    34,
+    39,
+    46,
+    50
+   ],
+   "early_stopping": [
+    9,
+    13,
+    18,
+    29,
+    30,
+    33,
+    41,
+    42
+   ]
+  },
+  {
+   "fold": 4,
+   "held_out": [
+    9,
+    13,
+    18,
+    29,
+    30,
+    33,
+    41,
+    42
+   ],
+   "early_stopping": [
+    2,
+    10,
+    21,
+    27,
+    35,
+    40,
+    43,
+    49
+   ]
+  },
+  {
+   "fold": 5,
+   "held_out": [
+    2,
+    10,
+    21,
+    27,
+    35,
+    40,
+    43,
+    49
+   ],
+   "early_stopping": [
+    5,
+    6,
+    7,
+    11,
+    17,
+    32,
+    36,
+    44
+   ]
+  }
+ ],
+ "training_windows": {
+  "L": [
+   79828,
+   83406,
+   84382,
+   84536,
+   84545,
+   87951
+  ],
+  "D": [
+   124164,
+   127287,
+   130194,
+   130455,
+   130608,
+   133164
+  ]
+ },
+ "epochs_run_mean": {
+  "L": 39.5,
+  "D": 44.4
+ },
+ "criterion": {
+  "rule": "on the 34 drives not looked at before: (a) mean of D minus L in frames correct at least 8 points, (b) D above L for at least 30 drives, (c) D's mean accuracy on the lab's windows at most 2 points below L's",
+  "a_gain": 0.1612,
+  "a_met": true,
+  "b_drives_with_D_above_L": 34,
+  "b_met": true,
+  "c_cost_on_the_labs_windows": -0.007,
+  "c_met": true,
+  "met": true
+ },
+ "drives_not_looked_at_before": {
+  "drives": 34,
+  "frames_correct": {
+   "drives_with_a_value": 34,
+   "L": 0.697,
+   "D": 0.8582,
+   "D_minus_L": 0.1612,
+   "D_above_L_in": 34,
+   "D_minus_L_95_interval_over_drives": [
+    0.1444,
+    0.1772
+   ],
+   "smallest_and_largest_gain": [
+    0.0494,
+    0.2295
+   ]
+  },
+  "accuracy_on_the_labs_windows": {
+   "drives_with_a_value": 34,
+   "L": 0.9079,
+   "D": 0.9009,
+   "D_minus_L": -0.007,
+   "D_above_L_in": 12
+  },
+  "opposite_announced_after_a_lane_change": {
+   "drives_with_a_value": 34,
+   "L": 0.7091,
+   "D": 0.2013,
+   "D_minus_L": -0.5078,
+   "D_above_L_in": 0
+  },
+  "timely_share": {
+   "drives_with_a_value": 34,
+   "L": 0.8891,
+   "D": 0.8736,
+   "D_minus_L": -0.0155,
+   "D_above_L_in": 11
+  },
+  "alarm_runs_per_hour": {
+   "drives_with_a_value": 34,
+   "L": 525.4371,
+   "D": 482.4382,
+   "D_minus_L": -42.9988,
+   "D_above_L_in": 11
+  },
+  "alarm_runs_of_0.5_s_or_more_per_hour": {
+   "drives_with_a_value": 34,
+   "L": 248.0076,
+   "D": 101.3953,
+   "D_minus_L": -146.6124,
+   "D_above_L_in": 0
+  },
+  "free_frames_in_alarm": {
+   "drives_with_a_value": 34,
+   "L": 0.4387,
+   "D": 0.1741,
+   "D_minus_L": -0.2646,
+   "D_above_L_in": 0
+  },
+  "baseline_session_frames_correct": {
+   "drives_with_a_value": 30,
+   "L": 0.937,
+   "D": 0.9496,
+   "D_minus_L": 0.0126,
+   "D_above_L_in": 22
+  },
+  "baseline_session_alarm_runs_per_hour": {
+   "drives_with_a_value": 30,
+   "L": 175.7293,
+   "D": 168.0827,
+   "D_minus_L": -7.6467,
+   "D_above_L_in": 12
+  }
+ },
+ "drives_looked_at_before": {
+  "drives": 14,
+  "frames_correct": {
+   "drives_with_a_value": 14,
+   "L": 0.6959,
+   "D": 0.8747,
+   "D_minus_L": 0.1788,
+   "D_above_L_in": 14,
+   "D_minus_L_95_interval_over_drives": [
+    0.1627,
+    0.1947
+   ],
+   "smallest_and_largest_gain": [
+    0.1277,
+    0.2237
+   ]
+  },
+  "accuracy_on_the_labs_windows": {
+   "drives_with_a_value": 14,
+   "L": 0.9157,
+   "D": 0.918,
+   "D_minus_L": 0.0023,
+   "D_above_L_in": 7
+  },
+  "opposite_announced_after_a_lane_change": {
+   "drives_with_a_value": 14,
+   "L": 0.7155,
+   "D": 0.1844,
+   "D_minus_L": -0.5311,
+   "D_above_L_in": 0
+  },
+  "timely_share": {
+   "drives_with_a_value": 14,
+   "L": 0.9253,
+   "D": 0.916,
+   "D_minus_L": -0.0092,
+   "D_above_L_in": 5
+  },
+  "alarm_runs_per_hour": {
+   "drives_with_a_value": 14,
+   "L": 533.1143,
+   "D": 504.2029,
+   "D_minus_L": -28.9114,
+   "D_above_L_in": 5
+  },
+  "alarm_runs_of_0.5_s_or_more_per_hour": {
+   "drives_with_a_value": 14,
+   "L": 251.9429,
+   "D": 88.7186,
+   "D_minus_L": -163.2243,
+   "D_above_L_in": 0
+  },
+  "free_frames_in_alarm": {
+   "drives_with_a_value": 14,
+   "L": 0.4611,
+   "D": 0.1653,
+   "D_minus_L": -0.2958,
+   "D_above_L_in": 0
+  },
+  "baseline_session_frames_correct": {
+   "drives_with_a_value": 14,
+   "L": 0.9328,
+   "D": 0.9556,
+   "D_minus_L": 0.0228,
+   "D_above_L_in": 8
+  },
+  "baseline_session_alarm_runs_per_hour": {
+   "drives_with_a_value": 14,
+   "L": 220.3829,
+   "D": 214.3814,
+   "D_minus_L": -6.0014,
+   "D_above_L_in": 6
+  }
+ },
+ "all_drives": {
+  "drives": 48,
+  "frames_correct": {
+   "drives_with_a_value": 48,
+   "L": 0.6967,
+   "D": 0.863,
+   "D_minus_L": 0.1663,
+   "D_above_L_in": 48,
+   "D_minus_L_95_interval_over_drives": [
+    0.1533,
+    0.1784
+   ],
+   "smallest_and_largest_gain": [
+    0.0494,
+    0.2295
+   ]
+  },
+  "accuracy_on_the_labs_windows": {
+   "drives_with_a_value": 48,
+   "L": 0.9102,
+   "D": 0.9059,
+   "D_minus_L": -0.0043,
+   "D_above_L_in": 19
+  },
+  "opposite_announced_after_a_lane_change": {
+   "drives_with_a_value": 48,
+   "L": 0.711,
+   "D": 0.1964,
+   "D_minus_L": -0.5146,
+   "D_above_L_in": 0
+  },
+  "timely_share": {
+   "drives_with_a_value": 48,
+   "L": 0.8996,
+   "D": 0.886,
+   "D_minus_L": -0.0137,
+   "D_above_L_in": 16
+  },
+  "alarm_runs_per_hour": {
+   "drives_with_a_value": 48,
+   "L": 527.6762,
+   "D": 488.7862,
+   "D_minus_L": -38.89,
+   "D_above_L_in": 16
+  },
+  "alarm_runs_of_0.5_s_or_more_per_hour": {
+   "drives_with_a_value": 48,
+   "L": 249.1554,
+   "D": 97.6979,
+   "D_minus_L": -151.4575,
+   "D_above_L_in": 0
+  },
+  "free_frames_in_alarm": {
+   "drives_with_a_value": 48,
+   "L": 0.4453,
+   "D": 0.1715,
+   "D_minus_L": -0.2737,
+   "D_above_L_in": 0
+  },
+  "baseline_session_frames_correct": {
+   "drives_with_a_value": 44,
+   "L": 0.9357,
+   "D": 0.9515,
+   "D_minus_L": 0.0158,
+   "D_above_L_in": 30
+  },
+  "baseline_session_alarm_runs_per_hour": {
+   "drives_with_a_value": 44,
+   "L": 189.9373,
+   "D": 182.8141,
+   "D_minus_L": -7.1232,
+   "D_above_L_in": 18
+  }
+ },
+ "per_drive": [
+  {
+   "drive": "user1",
+   "fold": 2,
+   "looked_at_before": false,
+   "seeds": [
+    5,
+    5
+   ],
+   "frames_correct": {
+    "L": 0.8367,
+    "D": 0.9296
+   },
+   "accuracy_on_the_labs_windows": {
+    "L": 0.9293,
+    "D": 0.9395
+   },
+   "opposite_announced_after_a_lane_change": {
+    "L": 0.6655,
+    "D": 0.1374
+   },
+   "timely_share": {
+    "L": 0.8871,
+    "D": 0.8452
+   },
+   "alarm_runs_per_hour": {
+    "L": 228.16,
+    "D": 163.06
+   },
+   "alarm_runs_of_0.5_s_or_more_per_hour": {
+    "L": 112.66,
+    "D": 28.86
+   },
+   "free_frames_in_alarm": {
+    "L": 0.1723,
+    "D": 0.0609
+   },
+   "baseline_session_frames_correct": {
+    "L": 0.9747,
+    "D": 0.9856
+   },
+   "baseline_session_alarm_runs_per_hour": {
+    "L": 40.42,
+    "D": 38.68
+   }
+  },
+  {
+   "drive": "user2",
+   "fold": 5,
+   "looked_at_before": true,
+   "seeds": [
+    5,
+    5
+   ],
+   "frames_correct": {
+    "L": 0.5985,
+    "D": 0.7788
+   },
+   "accuracy_on_the_labs_windows": {
+    "L": 0.8155,
+    "D": 0.8032
+   },
+   "opposite_announced_after_a_lane_change": {
+    "L": 0.8026,
+    "D": 0.2407
+   },
+   "timely_share": {
+    "L": 0.9262,
+    "D": 0.9096
+   },
+   "alarm_runs_per_hour": {
+    "L": 670.86,
+    "D": 612.62
+   },
+   "alarm_runs_of_0.5_s_or_more_per_hour": {
+    "L": 319.2,
+    "D": 129.92
+   },
+   "free_frames_in_alarm": {
+    "L": 0.5244,
+    "D": 0.2496
+   },
+   "baseline_session_frames_correct": {
+    "L": 0.9644,
+    "D": 0.9811
+   },
+   "baseline_session_alarm_runs_per_hour": {
+    "L": 58.28,
+    "D": 45.78
+   }
+  },
+  {
+   "drive": "user3",
+   "fold": 1,
+   "looked_at_before": false,
+   "seeds": [
+    5,
+    5
+   ],
+   "frames_correct": {
+    "L": 0.6719,
+    "D": 0.8594
+   },
+   "accuracy_on_the_labs_windows": {
+    "L": 0.8979,
+    "D": 0.916
+   },
+   "opposite_announced_after_a_lane_change": {
+    "L": 0.7047,
+    "D": 0.2059
+   },
+   "timely_share": {
+    "L": 0.9842,
+    "D": 0.9947
+   },
+   "alarm_runs_per_hour": {
+    "L": 687.48,
+    "D": 446.02
+   },
+   "alarm_runs_of_0.5_s_or_more_per_hour": {
+    "L": 290.52,
+    "D": 81.86
+   },
+   "free_frames_in_alarm": {
+    "L": 0.4312,
+    "D": 0.1728
+   },
+   "baseline_session_frames_correct": {
+    "L": 0.9647,
+    "D": 0.9425
+   },
+   "baseline_session_alarm_runs_per_hour": {
+    "L": 205.4,
+    "D": 413.74
+   }
+  },
+  {
+   "drive": "user4",
+   "fold": 1,
+   "looked_at_before": false,
+   "seeds": [
+    5,
+    5
+   ],
+   "frames_correct": {
+    "L": 0.645,
+    "D": 0.8446
+   },
+   "accuracy_on_the_labs_windows": {
+    "L": 0.9659,
+    "D": 0.9484
+   },
+   "opposite_announced_after_a_lane_change": {
+    "L": 0.827,
+    "D": 0.2774
+   },
+   "timely_share": {
+    "L": 0.9552,
+    "D": 0.9397
+   },
+   "alarm_runs_per_hour": {
+    "L": 613.62,
+    "D": 433.32
+   },
+   "alarm_runs_of_0.5_s_or_more_per_hour": {
+    "L": 275.76,
+    "D": 53.04
+   },
+   "free_frames_in_alarm": {
+    "L": 0.6734,
+    "D": 0.2616
+   },
+   "baseline_session_frames_correct": {
+    "L": 0.9785,
+    "D": 0.9718
+   },
+   "baseline_session_alarm_runs_per_hour": {
+    "L": 149.38,
+    "D": 209.12
+   }
+  },
+  {
+   "drive": "user5",
+   "fold": 0,
+   "looked_at_before": true,
+   "seeds": [
+    5,
+    5
+   ],
+   "frames_correct": {
+    "L": 0.7259,
+    "D": 0.8824
+   },
+   "accuracy_on_the_labs_windows": {
+    "L": 0.9586,
+    "D": 0.9313
+   },
+   "opposite_announced_after_a_lane_change": {
+    "L": 0.8058,
+    "D": 0.2518
+   },
+   "timely_share": {
+    "L": 0.9914,
+    "D": 1.0
+   },
+   "alarm_runs_per_hour": {
+    "L": 528.52,
+    "D": 387.88
+   },
+   "alarm_runs_of_0.5_s_or_more_per_hour": {
+    "L": 230.26,
+    "D": 40.18
+   },
+   "free_frames_in_alarm": {
+    "L": 0.4185,
+    "D": 0.1441
+   },
+   "baseline_session_frames_correct": {
+    "L": 0.994,
+    "D": 0.9936
+   },
+   "baseline_session_alarm_runs_per_hour": {
+    "L": 82.6,
+    "D": 90.74
+   }
+  },
+  {
+   "drive": "user6",
+   "fold": 0,
+   "looked_at_before": false,
+   "seeds": [
+    5,
+    5
+   ],
+   "frames_correct": {
+    "L": 0.7923,
+    "D": 0.9021
+   },
+   "accuracy_on_the_labs_windows": {
+    "L": 0.9216,
+    "D": 0.917
+   },
+   "opposite_announced_after_a_lane_change": {
+    "L": 0.7045,
+    "D": 0.2128
+   },
+   "timely_share": {
+    "L": 0.9407,
+    "D": 0.9518
+   },
+   "alarm_runs_per_hour": {
+    "L": 456.1,
+    "D": 353.9
+   },
+   "alarm_runs_of_0.5_s_or_more_per_hour": {
+    "L": 180.24,
+    "D": 69.22
+   },
+   "free_frames_in_alarm": {
+    "L": 0.2489,
+    "D": 0.108
+   },
+   "baseline_session_frames_correct": {
+    "L": 0.974,
+    "D": 0.9603
+   },
+   "baseline_session_alarm_runs_per_hour": {
+    "L": 72.82,
+    "D": 97.8
+   }
+  },
+  {
+   "drive": "user7",
+   "fold": 0,
+   "looked_at_before": true,
+   "seeds": [
+    5,
+    5
+   ],
+   "frames_correct": {
+    "L": 0.7875,
+    "D": 0.9152
+   },
+   "accuracy_on_the_labs_windows": {
+    "L": 0.9281,
+    "D": 0.9214
+   },
+   "opposite_announced_after_a_lane_change": {
+    "L": 0.7192,
+    "D": 0.1413
+   },
+   "timely_share": {
+    "L": 0.9369,
+    "D": 0.9369
+   },
+   "alarm_runs_per_hour": {
+    "L": 466.22,
+    "D": 299.72
+   },
+   "alarm_runs_of_0.5_s_or_more_per_hour": {
+    "L": 213.82,
+    "D": 73.64
+   },
+   "free_frames_in_alarm": {
+    "L": 0.2599,
+    "D": 0.0893
+   },
+   "baseline_session_frames_correct": {
+    "L": 0.9932,
+    "D": 0.9876
+   },
+   "baseline_session_alarm_runs_per_hour": {
+    "L": 51.02,
+    "D": 99.6
+   }
+  },
+  {
+   "drive": "user8",
+   "fold": 2,
+   "looked_at_before": true,
+   "seeds": [
+    5,
+    5
+   ],
+   "frames_correct": {
+    "L": 0.7443,
+    "D": 0.8884
+   },
+   "accuracy_on_the_labs_windows": {
+    "L": 0.8997,
+    "D": 0.9218
+   },
+   "opposite_announced_after_a_lane_change": {
+    "L": 0.6235,
+    "D": 0.1654
+   },
+   "timely_share": {
+    "L": 0.83,
+    "D": 0.76
+   },
+   "alarm_runs_per_hour": {
+    "L": 369.16,
+    "D": 344.08
+   },
+   "alarm_runs_of_0.5_s_or_more_per_hour": {
+    "L": 180.02,
+    "D": 88.88
+   },
+   "free_frames_in_alarm": {
+    "L": 0.3091,
+    "D": 0.1164
+   },
+   "baseline_session_frames_correct": {
+    "L": 0.9109,
+    "D": 0.968
+   },
+   "baseline_session_alarm_runs_per_hour": {
+    "L": 368.3,
+    "D": 128.96
+   }
+  },
+  {
+   "drive": "user9",
+   "fold": 4,
+   "looked_at_before": true,
+   "seeds": [
+    5,
+    5
+   ],
+   "frames_correct": {
+    "L": 0.7482,
+    "D": 0.8937
+   },
+   "accuracy_on_the_labs_windows": {
+    "L": 0.9193,
+    "D": 0.9352
+   },
+   "opposite_announced_after_a_lane_change": {
+    "L": 0.8122,
+    "D": 0.2622
+   },
+   "timely_share": {
+    "L": 0.9923,
+    "D": 0.9885
+   },
+   "alarm_runs_per_hour": {
+    "L": 368.72,
+    "D": 499.78
+   },
+   "alarm_runs_of_0.5_s_or_more_per_hour": {
+    "L": 172.58,
+    "D": 63.84
+   },
+   "free_frames_in_alarm": {
+    "L": 0.3073,
+    "D": 0.1195
+   },
+   "baseline_session_frames_correct": {
+    "L": 0.9957,
+    "D": 0.9994
+   },
+   "baseline_session_alarm_runs_per_hour": {
+    "L": 22.7,
+    "D": 17.94
+   }
+  },
+  {
+   "drive": "user10",
+   "fold": 5,
+   "looked_at_before": true,
+   "seeds": [
+    5,
+    5
+   ],
+   "frames_correct": {
+    "L": 0.7271,
+    "D": 0.9128
+   },
+   "accuracy_on_the_labs_windows": {
+    "L": 0.9663,
+    "D": 0.9574
+   },
+   "opposite_announced_after_a_lane_change": {
+    "L": 0.6638,
+    "D": 0.0795
+   },
+   "timely_share": {
+    "L": 0.9978,
+    "D": 0.9933
+   },
+   "alarm_runs_per_hour": {
+    "L": 685.96,
+    "D": 478.74
+   },
+   "alarm_runs_of_0.5_s_or_more_per_hour": {
+    "L": 285.94,
+    "D": 54.64
+   },
+   "free_frames_in_alarm": {
+    "L": 0.4926,
+    "D": 0.15
+   },
+   "baseline_session_frames_correct": {
+    "L": 0.9709,
+    "D": 0.9698
+   },
+   "baseline_session_alarm_runs_per_hour": {
+    "L": 229.48,
+    "D": 241.3
+   }
+  },
+  {
+   "drive": "user11",
+   "fold": 0,
+   "looked_at_before": false,
+   "seeds": [
+    5,
+    5
+   ],
+   "frames_correct": {
+    "L": 0.7794,
+    "D": 0.9035
+   },
+   "accuracy_on_the_labs_windows": {
+    "L": 0.9414,
+    "D": 0.9339
+   },
+   "opposite_announced_after_a_lane_change": {
+    "L": 0.8118,
+    "D": 0.228
+   },
+   "timely_share": {
+    "L": 0.9947,
+    "D": 1.0
+   },
+   "alarm_runs_per_hour": {
+    "L": 404.14,
+    "D": 395.08
+   },
+   "alarm_runs_of_0.5_s_or_more_per_hour": {
+    "L": 172.16,
+    "D": 68.84
+   },
+   "free_frames_in_alarm": {
+    "L": 0.2841,
+    "D": 0.1102
+   },
+   "baseline_session_frames_correct": {
+    "L": 0.9697,
+    "D": 0.956
+   },
+   "baseline_session_alarm_runs_per_hour": {
+    "L": 64.76,
+    "D": 100.3
+   }
+  },
+  {
+   "drive": "user12",
+   "fold": 3,
+   "looked_at_before": true,
+   "seeds": [
+    5,
+    5
+   ],
+   "frames_correct": {
+    "L": 0.6267,
+    "D": 0.8281
+   },
+   "accuracy_on_the_labs_windows": {
+    "L": 0.9179,
+    "D": 0.943
+   },
+   "opposite_announced_after_a_lane_change": {
+    "L": 0.7744,
+    "D": 0.2991
+   },
+   "timely_share": {
+    "L": 0.9,
+    "D": 0.8666
+   },
+   "alarm_runs_per_hour": {
+    "L": 396.44,
+    "D": 575.56
+   },
+   "alarm_runs_of_0.5_s_or_more_per_hour": {
+    "L": 221.7,
+    "D": 146.82
+   },
+   "free_frames_in_alarm": {
+    "L": 0.5921,
+    "D": 0.2533
+   },
+   "baseline_session_frames_correct": {
+    "L": 0.8864,
+    "D": 0.8954
+   },
+   "baseline_session_alarm_runs_per_hour": {
+    "L": 346.24,
+    "D": 308.8
+   }
+  },
+  {
+   "drive": "user13",
+   "fold": 4,
+   "looked_at_before": true,
+   "seeds": [
+    5,
+    5
+   ],
+   "frames_correct": {
+    "L": 0.598,
+    "D": 0.8143
+   },
+   "accuracy_on_the_labs_windows": {
+    "L": 0.8709,
+    "D": 0.8861
+   },
+   "opposite_announced_after_a_lane_change": {
+    "L": 0.7534,
+    "D": 0.2454
+   },
+   "timely_share": {
+    "L": 0.9125,
+    "D": 0.89
+   },
+   "alarm_runs_per_hour": {
+    "L": 438.92,
+    "D": 548.32
+   },
+   "alarm_runs_of_0.5_s_or_more_per_hour": {
+    "L": 213.42,
+    "D": 122.9
+   },
+   "free_frames_in_alarm": {
+    "L": 0.608,
+    "D": 0.2572
+   },
+   "baseline_session_frames_correct": {
+    "L": 0.7572,
+    "D": 0.8906
+   },
+   "baseline_session_alarm_runs_per_hour": {
+    "L": 631.7,
+    "D": 620.7
+   }
+  },
+  {
+   "drive": "user14",
+   "fold": 3,
+   "looked_at_before": false,
+   "seeds": [
+    5,
+    5
+   ],
+   "frames_correct": {
+    "L": 0.6412,
+    "D": 0.8072
+   },
+   "accuracy_on_the_labs_windows": {
+    "L": 0.8963,
+    "D": 0.913
+   },
+   "opposite_announced_after_a_lane_change": {
+    "L": 0.7933,
+    "D": 0.3701
+   },
+   "timely_share": {
+    "L": 0.97,
+    "D": 1.0
+   },
+   "alarm_runs_per_hour": {
+    "L": 625.92,
+    "D": 597.88
+   },
+   "alarm_runs_of_0.5_s_or_more_per_hour": {
+    "L": 276.64,
+    "D": 132.58
+   },
+   "free_frames_in_alarm": {
+    "L": 0.49,
+    "D": 0.2561
+   },
+   "baseline_session_frames_correct": {
+    "L": 0.964,
+    "D": 0.9587
+   },
+   "baseline_session_alarm_runs_per_hour": {
+    "L": 122.62,
+    "D": 99.38
+   }
+  },
+  {
+   "drive": "user15",
+   "fold": 1,
+   "looked_at_before": false,
+   "seeds": [
+    5,
+    5
+   ],
+   "frames_correct": {
+    "L": 0.7013,
+    "D": 0.8397
+   },
+   "accuracy_on_the_labs_windows": {
+    "L": 0.8054,
+    "D": 0.7973
+   },
+   "opposite_announced_after_a_lane_change": {
+    "L": 0.5689,
+    "D": 0.0627
+   },
+   "timely_share": {
+    "L": 0.4682,
+    "D": 0.4114
+   },
+   "alarm_runs_per_hour": {
+    "L": 438.62,
+    "D": 372.3
+   },
+   "alarm_runs_of_0.5_s_or_more_per_hour": {
+    "L": 218.24,
+    "D": 75.94
+   },
+   "free_frames_in_alarm": {
+    "L": 0.323,
+    "D": 0.1058
+   },
+   "baseline_session_frames_correct": {
+    "L": 0.7948,
+    "D": 0.8359
+   },
+   "baseline_session_alarm_runs_per_hour": {
+    "L": 287.24,
+    "D": 84.06
+   }
+  },
+  {
+   "drive": "user16",
+   "fold": 2,
+   "looked_at_before": true,
+   "seeds": [
+    5,
+    5
+   ],
+   "frames_correct": {
+    "L": 0.7747,
+    "D": 0.9118
+   },
+   "accuracy_on_the_labs_windows": {
+    "L": 0.9495,
+    "D": 0.9292
+   },
+   "opposite_announced_after_a_lane_change": {
+    "L": 0.7236,
+    "D": 0.1166
+   },
+   "timely_share": {
+    "L": 0.9697,
+    "D": 0.9848
+   },
+   "alarm_runs_per_hour": {
+    "L": 542.36,
+    "D": 310.48
+   },
+   "alarm_runs_of_0.5_s_or_more_per_hour": {
+    "L": 237.18,
+    "D": 40.0
+   },
+   "free_frames_in_alarm": {
+    "L": 0.3199,
+    "D": 0.1136
+   },
+   "baseline_session_frames_correct": {
+    "L": 0.9529,
+    "D": 0.9517
+   },
+   "baseline_session_alarm_runs_per_hour": {
+    "L": 243.76,
+    "D": 381.32
+   }
+  },
+  {
+   "drive": "user17",
+   "fold": 0,
+   "looked_at_before": false,
+   "seeds": [
+    5,
+    5
+   ],
+   "frames_correct": {
+    "L": 0.6668,
+    "D": 0.8263
+   },
+   "accuracy_on_the_labs_windows": {
+    "L": 0.9172,
+    "D": 0.8869
+   },
+   "opposite_announced_after_a_lane_change": {
+    "L": 0.6858,
+    "D": 0.2286
+   },
+   "timely_share": {
+    "L": 0.9333,
+    "D": 0.9128
+   },
+   "alarm_runs_per_hour": {
+    "L": 712.32,
+    "D": 575.48
+   },
+   "alarm_runs_of_0.5_s_or_more_per_hour": {
+    "L": 305.04,
+    "D": 132.08
+   },
+   "free_frames_in_alarm": {
+    "L": 0.512,
+    "D": 0.2065
+   },
+   "baseline_session_frames_correct": {
+    "L": 0.9507,
+    "D": 0.9615
+   },
+   "baseline_session_alarm_runs_per_hour": {
+    "L": 77.44,
+    "D": 47.9
+   }
+  },
+  {
+   "drive": "user18",
+   "fold": 4,
+   "looked_at_before": true,
+   "seeds": [
+    5,
+    5
+   ],
+   "frames_correct": {
+    "L": 0.6885,
+    "D": 0.9083
+   },
+   "accuracy_on_the_labs_windows": {
+    "L": 0.9397,
+    "D": 0.9514
+   },
+   "opposite_announced_after_a_lane_change": {
+    "L": 0.7207,
+    "D": 0.1247
+   },
+   "timely_share": {
+    "L": 1.0,
+    "D": 0.9974
+   },
+   "alarm_runs_per_hour": {
+    "L": 554.64,
+    "D": 454.26
+   },
+   "alarm_runs_of_0.5_s_or_more_per_hour": {
+    "L": 256.9,
+    "D": 27.22
+   },
+   "free_frames_in_alarm": {
+    "L": 0.5372,
+    "D": 0.149
+   },
+   "baseline_session_frames_correct": {
+    "L": 0.8971,
+    "D": 0.9698
+   },
+   "baseline_session_alarm_runs_per_hour": {
+    "L": 239.98,
+    "D": 184.5
+   }
+  },
+  {
+   "drive": "user19",
+   "fold": 1,
+   "looked_at_before": true,
+   "seeds": [
+    5,
+    5
+   ],
+   "frames_correct": {
+    "L": 0.722,
+    "D": 0.9072
+   },
+   "accuracy_on_the_labs_windows": {
+    "L": 0.9116,
+    "D": 0.924
+   },
+   "opposite_announced_after_a_lane_change": {
+    "L": 0.7025,
+    "D": 0.129
+   },
+   "timely_share": {
+    "L": 0.94,
+    "D": 0.95
+   },
+   "alarm_runs_per_hour": {
+    "L": 610.64,
+    "D": 464.84
+   },
+   "alarm_runs_of_0.5_s_or_more_per_hour": {
+    "L": 278.64,
+    "D": 74.52
+   },
+   "free_frames_in_alarm": {
+    "L": 0.4472,
+    "D": 0.138
+   },
+   "baseline_session_frames_correct": {
+    "L": 0.9988,
+    "D": 0.9979
+   },
+   "baseline_session_alarm_runs_per_hour": {
+    "L": 18.96,
+    "D": 29.8
+   }
+  },
+  {
+   "drive": "user20",
+   "fold": 3,
+   "looked_at_before": false,
+   "seeds": [
+    5,
+    5
+   ],
+   "frames_correct": {
+    "L": 0.6311,
+    "D": 0.8212
+   },
+   "accuracy_on_the_labs_windows": {
+    "L": 0.9149,
+    "D": 0.9293
+   },
+   "opposite_announced_after_a_lane_change": {
+    "L": 0.7769,
+    "D": 0.296
+   },
+   "timely_share": {
+    "L": 0.9429,
+    "D": 0.9486
+   },
+   "alarm_runs_per_hour": {
+    "L": 612.28,
+    "D": 574.76
+   },
+   "alarm_runs_of_0.5_s_or_more_per_hour": {
+    "L": 292.92,
+    "D": 118.02
+   },
+   "free_frames_in_alarm": {
+    "L": 0.5412,
+    "D": 0.2547
+   },
+   "baseline_session_frames_correct": {
+    "L": 0.9632,
+    "D": 0.9834
+   },
+   "baseline_session_alarm_runs_per_hour": {
+    "L": 128.64,
+    "D": 102.34
+   }
+  },
+  {
+   "drive": "user21",
+   "fold": 5,
+   "looked_at_before": false,
+   "seeds": [
+    5,
+    5
+   ],
+   "frames_correct": {
+    "L": 0.6997,
+    "D": 0.8631
+   },
+   "accuracy_on_the_labs_windows": {
+    "L": 0.8986,
+    "D": 0.8493
+   },
+   "opposite_announced_after_a_lane_change": {
+    "L": 0.6267,
+    "D": 0.1329
+   },
+   "timely_share": {
+    "L": 0.705,
+    "D": 0.69
+   },
+   "alarm_runs_per_hour": {
+    "L": 459.08,
+    "D": 521.86
+   },
+   "alarm_runs_of_0.5_s_or_more_per_hour": {
+    "L": 259.72,
+    "D": 131.66
+   },
+   "free_frames_in_alarm": {
+    "L": 0.403,
+    "D": 0.1387
+   },
+   "baseline_session_frames_correct": {
+    "L": 0.9607,
+    "D": 0.9727
+   },
+   "baseline_session_alarm_runs_per_hour": {
+    "L": 138.6,
+    "D": 108.24
+   }
+  },
+  {
+   "drive": "user22",
+   "fold": 2,
+   "looked_at_before": false,
+   "seeds": [
+    5,
+    5
+   ],
+   "frames_correct": {
+    "L": 0.6246,
+    "D": 0.786
+   },
+   "accuracy_on_the_labs_windows": {
+    "L": 0.8739,
+    "D": 0.886
+   },
+   "opposite_announced_after_a_lane_change": {
+    "L": 0.7717,
+    "D": 0.3114
+   },
+   "timely_share": {
+    "L": 0.9028,
+    "D": 0.8917
+   },
+   "alarm_runs_per_hour": {
+    "L": 639.06,
+    "D": 558.82
+   },
+   "alarm_runs_of_0.5_s_or_more_per_hour": {
+    "L": 320.94,
+    "D": 145.0
+   },
+   "free_frames_in_alarm": {
+    "L": 0.5255,
+    "D": 0.2847
+   },
+   "baseline_session_frames_correct": {
+    "L": 0.7925,
+    "D": 0.838
+   },
+   "baseline_session_alarm_runs_per_hour": {
+    "L": 639.18,
+    "D": 457.72
+   }
+  },
+  {
+   "drive": "user23",
+   "fold": 2,
+   "looked_at_before": false,
+   "seeds": [
+    5,
+    5
+   ],
+   "frames_correct": {
+    "L": 0.7299,
+    "D": 0.8333
+   },
+   "accuracy_on_the_labs_windows": {
+    "L": 0.8865,
+    "D": 0.8892
+   },
+   "opposite_announced_after_a_lane_change": {
+    "L": 0.7007,
+    "D": 0.2976
+   },
+   "timely_share": {
+    "L": 0.9538,
+    "D": 0.95
+   },
+   "alarm_runs_per_hour": {
+    "L": 507.44,
+    "D": 311.9
+   },
+   "alarm_runs_of_0.5_s_or_more_per_hour": {
+    "L": 201.18,
+    "D": 75.74
+   },
+   "free_frames_in_alarm": {
+    "L": 0.3399,
+    "D": 0.2056
+   },
+   "baseline_session_frames_correct": {
+    "L": 0.9881,
+    "D": 0.9932
+   },
+   "baseline_session_alarm_runs_per_hour": {
+    "L": 35.98,
+    "D": 20.74
+   }
+  },
+  {
+   "drive": "user26",
+   "fold": 2,
+   "looked_at_before": false,
+   "seeds": [
+    5,
+    5
+   ],
+   "frames_correct": {
+    "L": 0.8546,
+    "D": 0.9086
+   },
+   "accuracy_on_the_labs_windows": {
+    "L": 0.9208,
+    "D": 0.8989
+   },
+   "opposite_announced_after_a_lane_change": {
+    "L": 0.562,
+    "D": 0.0939
+   },
+   "timely_share": {
+    "L": 0.7933,
+    "D": 0.7467
+   },
+   "alarm_runs_per_hour": {
+    "L": 316.9,
+    "D": 242.66
+   },
+   "alarm_runs_of_0.5_s_or_more_per_hour": {
+    "L": 142.36,
+    "D": 74.26
+   },
+   "free_frames_in_alarm": {
+    "L": 0.156,
+    "D": 0.0872
+   },
+   "baseline_session_frames_correct": {
+    "L": 0.9619,
+    "D": 0.9845
+   },
+   "baseline_session_alarm_runs_per_hour": {
+    "L": 220.58,
+    "D": 128.46
+   }
+  },
+  {
+   "drive": "user27",
+   "fold": 5,
+   "looked_at_before": true,
+   "seeds": [
+    5,
+    5
+   ],
+   "frames_correct": {
+    "L": 0.6695,
+    "D": 0.8712
+   },
+   "accuracy_on_the_labs_windows": {
+    "L": 0.919,
+    "D": 0.9034
+   },
+   "opposite_announced_after_a_lane_change": {
+    "L": 0.6144,
+    "D": 0.1213
+   },
+   "timely_share": {
+    "L": 0.8955,
+    "D": 0.9136
+   },
+   "alarm_runs_per_hour": {
+    "L": 426.6,
+    "D": 732.68
+   },
+   "alarm_runs_of_0.5_s_or_more_per_hour": {
+    "L": 241.06,
+    "D": 126.88
+   },
+   "free_frames_in_alarm": {
+    "L": 0.5374,
+    "D": 0.2054
+   },
+   "baseline_session_frames_correct": {
+    "L": 0.8514,
+    "D": 0.8387
+   },
+   "baseline_session_alarm_runs_per_hour": {
+    "L": 528.38,
+    "D": 664.7
+   }
+  },
+  {
+   "drive": "user28",
+   "fold": 1,
+   "looked_at_before": false,
+   "seeds": [
+    5,
+    5
+   ],
+   "frames_correct": {
+    "L": 0.683,
+    "D": 0.8605
+   },
+   "accuracy_on_the_labs_windows": {
+    "L": 0.9086,
+    "D": 0.9176
+   },
+   "opposite_announced_after_a_lane_change": {
+    "L": 0.7059,
+    "D": 0.1706
+   },
+   "timely_share": {
+    "L": 0.9383,
+    "D": 0.9647
+   },
+   "alarm_runs_per_hour": {
+    "L": 523.3,
+    "D": 416.42
+   },
+   "alarm_runs_of_0.5_s_or_more_per_hour": {
+    "L": 259.58,
+    "D": 83.26
+   },
+   "free_frames_in_alarm": {
+    "L": 0.4599,
+    "D": 0.1915
+   },
+   "baseline_session_frames_correct": {
+    "L": 0.8177,
+    "D": 0.8213
+   },
+   "baseline_session_alarm_runs_per_hour": {
+    "L": 511.88,
+    "D": 640.22
+   }
+  },
+  {
+   "drive": "user29",
+   "fold": 4,
+   "looked_at_before": false,
+   "seeds": [
+    5,
+    5
+   ],
+   "frames_correct": {
+    "L": 0.6852,
+    "D": 0.905
+   },
+   "accuracy_on_the_labs_windows": {
+    "L": 0.9447,
+    "D": 0.9194
+   },
+   "opposite_announced_after_a_lane_change": {
+    "L": 0.7718,
+    "D": 0.1179
+   },
+   "timely_share": {
+    "L": 0.9868,
+    "D": 0.9842
+   },
+   "alarm_runs_per_hour": {
+    "L": 441.32,
+    "D": 518.92
+   },
+   "alarm_runs_of_0.5_s_or_more_per_hour": {
+    "L": 232.78,
+    "D": 66.3
+   },
+   "free_frames_in_alarm": {
+    "L": 0.5181,
+    "D": 0.1088
+   },
+   "baseline_session_frames_correct": {
+    "L": 0.9421,
+    "D": 0.9791
+   },
+   "baseline_session_alarm_runs_per_hour": {
+    "L": 154.8,
+    "D": 186.0
+   }
+  },
+  {
+   "drive": "user30",
+   "fold": 4,
+   "looked_at_before": false,
+   "seeds": [
+    5,
+    5
+   ],
+   "frames_correct": {
+    "L": 0.7229,
+    "D": 0.8846
+   },
+   "accuracy_on_the_labs_windows": {
+    "L": 0.9429,
+    "D": 0.9336
+   },
+   "opposite_announced_after_a_lane_change": {
+    "L": 0.6527,
+    "D": 0.0886
+   },
+   "timely_share": {
+    "L": 0.9941,
+    "D": 0.9677
+   },
+   "alarm_runs_per_hour": {
+    "L": 516.82,
+    "D": 435.28
+   },
+   "alarm_runs_of_0.5_s_or_more_per_hour": {
+    "L": 238.02,
+    "D": 101.26
+   },
+   "free_frames_in_alarm": {
+    "L": 0.4036,
+    "D": 0.149
+   },
+   "baseline_session_frames_correct": {
+    "L": 0.9856,
+    "D": 0.9941
+   },
+   "baseline_session_alarm_runs_per_hour": {
+    "L": 50.52,
+    "D": 73.84
+   }
+  },
+  {
+   "drive": "user31",
+   "fold": 3,
+   "looked_at_before": true,
+   "seeds": [
+    5,
+    5
+   ],
+   "frames_correct": {
+    "L": 0.6562,
+    "D": 0.8799
+   },
+   "accuracy_on_the_labs_windows": {
+    "L": 0.8854,
+    "D": 0.9106
+   },
+   "opposite_announced_after_a_lane_change": {
+    "L": 0.5689,
+    "D": 0.1241
+   },
+   "timely_share": {
+    "L": 0.7352,
+    "D": 0.6883
+   },
+   "alarm_runs_per_hour": {
+    "L": 547.76,
+    "D": 745.86
+   },
+   "alarm_runs_of_0.5_s_or_more_per_hour": {
+    "L": 341.96,
+    "D": 157.84
+   },
+   "free_frames_in_alarm": {
+    "L": 0.5474,
+    "D": 0.1152
+   },
+   "baseline_session_frames_correct": {
+    "L": 0.9108,
+    "D": 0.9471
+   },
+   "baseline_session_alarm_runs_per_hour": {
+    "L": 180.18,
+    "D": 118.74
+   }
+  },
+  {
+   "drive": "user32",
+   "fold": 0,
+   "looked_at_before": false,
+   "seeds": [
+    5,
+    5
+   ],
+   "frames_correct": {
+    "L": 0.6919,
+    "D": 0.9035
+   },
+   "accuracy_on_the_labs_windows": {
+    "L": 0.934,
+    "D": 0.9427
+   },
+   "opposite_announced_after_a_lane_change": {
+    "L": 0.5968,
+    "D": 0.0895
+   },
+   "timely_share": {
+    "L": 0.9619,
+    "D": 0.9691
+   },
+   "alarm_runs_per_hour": {
+    "L": 729.64,
+    "D": 379.2
+   },
+   "alarm_runs_of_0.5_s_or_more_per_hour": {
+    "L": 328.42,
+    "D": 62.64
+   },
+   "free_frames_in_alarm": {
+    "L": 0.5161,
+    "D": 0.1425
+   },
+   "baseline_session_frames_correct": {
+    "L": 0.8985,
+    "D": 0.905
+   },
+   "baseline_session_alarm_runs_per_hour": {
+    "L": 308.9,
+    "D": 422.62
+   }
+  },
+  {
+   "drive": "user33",
+   "fold": 4,
+   "looked_at_before": false,
+   "seeds": [
+    5,
+    5
+   ],
+   "frames_correct": {
+    "L": 0.8019,
+    "D": 0.8887
+   },
+   "accuracy_on_the_labs_windows": {
+    "L": 0.9011,
+    "D": 0.9077
+   },
+   "opposite_announced_after_a_lane_change": {
+    "L": 0.6367,
+    "D": 0.2059
+   },
+   "timely_share": {
+    "L": 0.7637,
+    "D": 0.7045
+   },
+   "alarm_runs_per_hour": {
+    "L": 403.56,
+    "D": 429.74
+   },
+   "alarm_runs_of_0.5_s_or_more_per_hour": {
+    "L": 177.86,
+    "D": 101.14
+   },
+   "free_frames_in_alarm": {
+    "L": 0.2133,
+    "D": 0.1087
+   },
+   "baseline_session_frames_correct": {
+    "L": 0.9501,
+    "D": 0.9796
+   },
+   "baseline_session_alarm_runs_per_hour": {
+    "L": 140.18,
+    "D": 81.76
+   }
+  },
+  {
+   "drive": "user34",
+   "fold": 3,
+   "looked_at_before": false,
+   "seeds": [
+    5,
+    5
+   ],
+   "frames_correct": {
+    "L": 0.5853,
+    "D": 0.792
+   },
+   "accuracy_on_the_labs_windows": {
+    "L": 0.8066,
+    "D": 0.7943
+   },
+   "opposite_announced_after_a_lane_change": {
+    "L": 0.5816,
+    "D": 0.1694
+   },
+   "timely_share": {
+    "L": 0.6235,
+    "D": 0.5647
+   },
+   "alarm_runs_per_hour": {
+    "L": 577.9,
+    "D": 703.36
+   },
+   "alarm_runs_of_0.5_s_or_more_per_hour": {
+    "L": 307.26,
+    "D": 181.82
+   },
+   "free_frames_in_alarm": {
+    "L": 0.58,
+    "D": 0.2158
+   },
+   "baseline_session_frames_correct": {
+    "L": 0.7494,
+    "D": 0.8322
+   },
+   "baseline_session_alarm_runs_per_hour": {
+    "L": 527.58,
+    "D": 365.62
+   }
+  },
+  {
+   "drive": "user35",
+   "fold": 5,
+   "looked_at_before": false,
+   "seeds": [
+    5,
+    5
+   ],
+   "frames_correct": {
+    "L": 0.6543,
+    "D": 0.7578
+   },
+   "accuracy_on_the_labs_windows": {
+    "L": 0.8817,
+    "D": 0.8683
+   },
+   "opposite_announced_after_a_lane_change": {
+    "L": 0.8281,
+    "D": 0.4578
+   },
+   "timely_share": {
+    "L": 0.98,
+    "D": 0.996
+   },
+   "alarm_runs_per_hour": {
+    "L": 596.0,
+    "D": 643.98
+   },
+   "alarm_runs_of_0.5_s_or_more_per_hour": {
+    "L": 263.38,
+    "D": 181.92
+   },
+   "free_frames_in_alarm": {
+    "L": 0.4244,
+    "D": 0.2873
+   },
+   "baseline_session_frames_correct": {
+    "L": 0.9646,
+    "D": 0.9619
+   },
+   "baseline_session_alarm_runs_per_hour": {
+    "L": 119.4,
+    "D": 179.12
+   }
+  },
+  {
+   "drive": "user36",
+   "fold": 0,
+   "looked_at_before": true,
+   "seeds": [
+    5,
+    5
+   ],
+   "frames_correct": {
+    "L": 0.6761,
+    "D": 0.854
+   },
+   "accuracy_on_the_labs_windows": {
+    "L": 0.9381,
+    "D": 0.9345
+   },
+   "opposite_announced_after_a_lane_change": {
+    "L": 0.7321,
+    "D": 0.2809
+   },
+   "timely_share": {
+    "L": 0.9262,
+    "D": 0.9453
+   },
+   "alarm_runs_per_hour": {
+    "L": 856.8,
+    "D": 604.02
+   },
+   "alarm_runs_of_0.5_s_or_more_per_hour": {
+    "L": 334.52,
+    "D": 94.78
+   },
+   "free_frames_in_alarm": {
+    "L": 0.5548,
+    "D": 0.2141
+   },
+   "baseline_session_frames_correct": {
+    "L": 0.976,
+    "D": 0.9877
+   },
+   "baseline_session_alarm_runs_per_hour": {
+    "L": 83.78,
+    "D": 68.46
+   }
+  },
+  {
+   "drive": "user37",
+   "fold": 2,
+   "looked_at_before": false,
+   "seeds": [
+    5,
+    5
+   ],
+   "frames_correct": {
+    "L": 0.8729,
+    "D": 0.9223
+   },
+   "accuracy_on_the_labs_windows": {
+    "L": 0.9198,
+    "D": 0.9131
+   },
+   "opposite_announced_after_a_lane_change": {
+    "L": 0.6742,
+    "D": 0.1251
+   },
+   "timely_share": {
+    "L": 0.9833,
+    "D": 0.9833
+   },
+   "alarm_runs_per_hour": {
+    "L": 261.12,
+    "D": 139.02
+   },
+   "alarm_runs_of_0.5_s_or_more_per_hour": {
+    "L": 111.38,
+    "D": 27.64
+   },
+   "free_frames_in_alarm": {
+    "L": 0.1225,
+    "D": 0.0732
+   },
+   "baseline_session_frames_correct": {
+    "L": 0.9949,
+    "D": 0.9988
+   },
+   "baseline_session_alarm_runs_per_hour": {
+    "L": 14.52,
+    "D": 13.2
+   }
+  },
+  {
+   "drive": "user38",
+   "fold": 1,
+   "looked_at_before": false,
+   "seeds": [
+    5,
+    5
+   ],
+   "frames_correct": {
+    "L": 0.6304,
+    "D": 0.8122
+   },
+   "accuracy_on_the_labs_windows": {
+    "L": 0.9242,
+    "D": 0.8998
+   },
+   "opposite_announced_after_a_lane_change": {
+    "L": 0.8154,
+    "D": 0.2907
+   },
+   "timely_share": {
+    "L": 0.9875,
+    "D": 0.9656
+   },
+   "alarm_runs_per_hour": {
+    "L": 523.24,
+    "D": 540.52
+   },
+   "alarm_runs_of_0.5_s_or_more_per_hour": {
+    "L": 273.88,
+    "D": 105.22
+   },
+   "free_frames_in_alarm": {
+    "L": 0.5387,
+    "D": 0.2501
+   },
+   "baseline_session_frames_correct": {
+    "L": 0.9918,
+    "D": 0.9852
+   },
+   "baseline_session_alarm_runs_per_hour": {
+    "L": 43.54,
+    "D": 38.08
+   }
+  },
+  {
+   "drive": "user39",
+   "fold": 3,
+   "looked_at_before": false,
+   "seeds": [
+    5,
+    5
+   ],
+   "frames_correct": {
+    "L": 0.6133,
+    "D": 0.7913
+   },
+   "accuracy_on_the_labs_windows": {
+    "L": 0.9354,
+    "D": 0.9252
+   },
+   "opposite_announced_after_a_lane_change": {
+    "L": 0.7787,
+    "D": 0.3146
+   },
+   "timely_share": {
+    "L": 0.8234,
+    "D": 0.7702
+   },
+   "alarm_runs_per_hour": {
+    "L": 626.48,
+    "D": 824.22
+   },
+   "alarm_runs_of_0.5_s_or_more_per_hour": {
+    "L": 280.9,
+    "D": 170.0
+   },
+   "free_frames_in_alarm": {
+    "L": 0.6686,
+    "D": 0.3132
+   },
+   "baseline_session_frames_correct": {
+    "L": 0.9242,
+    "D": 0.9537
+   },
+   "baseline_session_alarm_runs_per_hour": {
+    "L": 248.98,
+    "D": 165.56
+   }
+  },
+  {
+   "drive": "user40",
+   "fold": 5,
+   "looked_at_before": false,
+   "seeds": [
+    5,
+    5
+   ],
+   "frames_correct": {
+    "L": 0.5919,
+    "D": 0.8214
+   },
+   "accuracy_on_the_labs_windows": {
+    "L": 0.8859,
+    "D": 0.8759
+   },
+   "opposite_announced_after_a_lane_change": {
+    "L": 0.7515,
+    "D": 0.2013
+   },
+   "timely_share": {
+    "L": 0.8341,
+    "D": 0.8227
+   },
+   "alarm_runs_per_hour": {
+    "L": 535.1,
+    "D": 897.5
+   },
+   "alarm_runs_of_0.5_s_or_more_per_hour": {
+    "L": 320.74,
+    "D": 234.4
+   },
+   "free_frames_in_alarm": {
+    "L": 0.6482,
+    "D": 0.2477
+   },
+   "baseline_session_frames_correct": {
+    "L": 0.9333,
+    "D": 0.954
+   },
+   "baseline_session_alarm_runs_per_hour": {
+    "L": 188.16,
+    "D": 151.38
+   }
+  },
+  {
+   "drive": "user41",
+   "fold": 4,
+   "looked_at_before": false,
+   "seeds": [
+    5,
+    5
+   ],
+   "frames_correct": {
+    "L": 0.6186,
+    "D": 0.8456
+   },
+   "accuracy_on_the_labs_windows": {
+    "L": 0.9374,
+    "D": 0.9303
+   },
+   "opposite_announced_after_a_lane_change": {
+    "L": 0.8128,
+    "D": 0.2815
+   },
+   "timely_share": {
+    "L": 0.9494,
+    "D": 0.919
+   },
+   "alarm_runs_per_hour": {
+    "L": 530.06,
+    "D": 571.96
+   },
+   "alarm_runs_of_0.5_s_or_more_per_hour": {
+    "L": 238.44,
+    "D": 83.78
+   },
+   "free_frames_in_alarm": {
+    "L": 0.6229,
+    "D": 0.2159
+   },
+   "baseline_session_frames_correct": {
+    "L": 0.934,
+    "D": 0.9716
+   },
+   "baseline_session_alarm_runs_per_hour": {
+    "L": 148.04,
+    "D": 137.08
+   }
+  },
+  {
+   "drive": "user42",
+   "fold": 4,
+   "looked_at_before": false,
+   "seeds": [
+    5,
+    5
+   ],
+   "frames_correct": {
+    "L": 0.7266,
+    "D": 0.9202
+   },
+   "accuracy_on_the_labs_windows": {
+    "L": 0.9016,
+    "D": 0.9155
+   },
+   "opposite_announced_after_a_lane_change": {
+    "L": 0.7489,
+    "D": 0.0923
+   },
+   "timely_share": {
+    "L": 0.9451,
+    "D": 0.949
+   },
+   "alarm_runs_per_hour": {
+    "L": 465.78,
+    "D": 385.88
+   },
+   "alarm_runs_of_0.5_s_or_more_per_hour": {
+    "L": 229.2,
+    "D": 55.72
+   },
+   "free_frames_in_alarm": {
+    "L": 0.3162,
+    "D": 0.0634
+   },
+   "baseline_session_frames_correct": {
+    "L": 0.9727,
+    "D": 0.9982
+   },
+   "baseline_session_alarm_runs_per_hour": {
+    "L": 92.32,
+    "D": 32.18
+   }
+  },
+  {
+   "drive": "user43",
+   "fold": 5,
+   "looked_at_before": false,
+   "seeds": [
+    5,
+    5
+   ],
+   "frames_correct": {
+    "L": 0.8204,
+    "D": 0.9102
+   },
+   "accuracy_on_the_labs_windows": {
+    "L": 0.8611,
+    "D": 0.8698
+   },
+   "opposite_announced_after_a_lane_change": {
+    "L": 0.5917,
+    "D": 0.0779
+   },
+   "timely_share": {
+    "L": 0.6429,
+    "D": 0.5714
+   },
+   "alarm_runs_per_hour": {
+    "L": 337.86,
+    "D": 268.7
+   },
+   "alarm_runs_of_0.5_s_or_more_per_hour": {
+    "L": 154.9,
+    "D": 75.26
+   },
+   "free_frames_in_alarm": {
+    "L": 0.1678,
+    "D": 0.0568
+   },
+   "baseline_session_frames_correct": {
+    "L": 0.9623,
+    "D": 0.963
+   },
+   "baseline_session_alarm_runs_per_hour": {
+    "L": 90.26,
+    "D": 101.54
+   }
+  },
+  {
+   "drive": "user44",
+   "fold": 0,
+   "looked_at_before": false,
+   "seeds": [
+    5,
+    5
+   ],
+   "frames_correct": {
+    "L": 0.6822,
+    "D": 0.8427
+   },
+   "accuracy_on_the_labs_windows": {
+    "L": 0.8894,
+    "D": 0.8705
+   },
+   "opposite_announced_after_a_lane_change": {
+    "L": 0.6289,
+    "D": 0.1737
+   },
+   "timely_share": {
+    "L": 0.8791,
+    "D": 0.8326
+   },
+   "alarm_runs_per_hour": {
+    "L": 900.0,
+    "D": 648.5
+   },
+   "alarm_runs_of_0.5_s_or_more_per_hour": {
+    "L": 328.78,
+    "D": 153.04
+   },
+   "free_frames_in_alarm": {
+    "L": 0.4995,
+    "D": 0.217
+   },
+   "baseline_session_frames_correct": {
+    "L": 0.9406,
+    "D": 0.9484
+   },
+   "baseline_session_alarm_runs_per_hour": {
+    "L": 146.78,
+    "D": 142.6
+   }
+  },
+  {
+   "drive": "user45",
+   "fold": 1,
+   "looked_at_before": false,
+   "seeds": [
+    5,
+    5
+   ],
+   "frames_correct": {
+    "L": 0.7044,
+    "D": 0.8869
+   },
+   "accuracy_on_the_labs_windows": {
+    "L": 0.9345,
+    "D": 0.911
+   },
+   "opposite_announced_after_a_lane_change": {
+    "L": 0.681,
+    "D": 0.1875
+   },
+   "timely_share": {
+    "L": 0.9326,
+    "D": 0.9283
+   },
+   "alarm_runs_per_hour": {
+    "L": 561.4,
+    "D": 493.48
+   },
+   "alarm_runs_of_0.5_s_or_more_per_hour": {
+    "L": 278.94,
+    "D": 75.1
+   },
+   "free_frames_in_alarm": {
+    "L": 0.5245,
+    "D": 0.1624
+   },
+   "baseline_session_frames_correct": {
+    "L": 0.9788,
+    "D": 0.9615
+   },
+   "baseline_session_alarm_runs_per_hour": {
+    "L": 86.42,
+    "D": 182.48
+   }
+  },
+  {
+   "drive": "user46",
+   "fold": 3,
+   "looked_at_before": false,
+   "seeds": [
+    5,
+    5
+   ],
+   "frames_correct": {
+    "L": 0.7036,
+    "D": 0.8963
+   },
+   "accuracy_on_the_labs_windows": {
+    "L": 0.9256,
+    "D": 0.9416
+   },
+   "opposite_announced_after_a_lane_change": {
+    "L": 0.6957,
+    "D": 0.1308
+   },
+   "timely_share": {
+    "L": 0.95,
+    "D": 0.9559
+   },
+   "alarm_runs_per_hour": {
+    "L": 538.14,
+    "D": 420.3
+   },
+   "alarm_runs_of_0.5_s_or_more_per_hour": {
+    "L": 269.72,
+    "D": 73.32
+   },
+   "free_frames_in_alarm": {
+    "L": 0.4156,
+    "D": 0.1345
+   },
+   "baseline_session_frames_correct": {
+    "L": 0.9333,
+    "D": 0.9378
+   },
+   "baseline_session_alarm_runs_per_hour": {
+    "L": 216.54,
+    "D": 220.72
+   }
+  },
+  {
+   "drive": "user47",
+   "fold": 2,
+   "looked_at_before": false,
+   "seeds": [
+    5,
+    5
+   ],
+   "frames_correct": {
+    "L": 0.6648,
+    "D": 0.8341
+   },
+   "accuracy_on_the_labs_windows": {
+    "L": 0.8877,
+    "D": 0.8851
+   },
+   "opposite_announced_after_a_lane_change": {
+    "L": 0.7054,
+    "D": 0.291
+   },
+   "timely_share": {
+    "L": 0.8844,
+    "D": 0.875
+   },
+   "alarm_runs_per_hour": {
+    "L": 519.82,
+    "D": 443.7
+   },
+   "alarm_runs_of_0.5_s_or_more_per_hour": {
+    "L": 229.9,
+    "D": 106.9
+   },
+   "free_frames_in_alarm": {
+    "L": 0.4706,
+    "D": 0.2092
+   },
+   "baseline_session_frames_correct": {
+    "L": null,
+    "D": null
+   },
+   "baseline_session_alarm_runs_per_hour": {
+    "L": null,
+    "D": null
+   }
+  },
+  {
+   "drive": "user48",
+   "fold": 1,
+   "looked_at_before": false,
+   "seeds": [
+    5,
+    5
+   ],
+   "frames_correct": {
+    "L": 0.6852,
+    "D": 0.8842
+   },
+   "accuracy_on_the_labs_windows": {
+    "L": 0.937,
+    "D": 0.8981
+   },
+   "opposite_announced_after_a_lane_change": {
+    "L": 0.7693,
+    "D": 0.1414
+   },
+   "timely_share": {
+    "L": 0.9305,
+    "D": 0.8989
+   },
+   "alarm_runs_per_hour": {
+    "L": 521.58,
+    "D": 453.62
+   },
+   "alarm_runs_of_0.5_s_or_more_per_hour": {
+    "L": 299.74,
+    "D": 49.98
+   },
+   "free_frames_in_alarm": {
+    "L": 0.5638,
+    "D": 0.1341
+   },
+   "baseline_session_frames_correct": {
+    "L": null,
+    "D": null
+   },
+   "baseline_session_alarm_runs_per_hour": {
+    "L": null,
+    "D": null
+   }
+  },
+  {
+   "drive": "user49",
+   "fold": 5,
+   "looked_at_before": false,
+   "seeds": [
+    5,
+    5
+   ],
+   "frames_correct": {
+    "L": 0.6108,
+    "D": 0.8142
+   },
+   "accuracy_on_the_labs_windows": {
+    "L": 0.9045,
+    "D": 0.8706
+   },
+   "opposite_announced_after_a_lane_change": {
+    "L": 0.8152,
+    "D": 0.2585
+   },
+   "timely_share": {
+    "L": 0.9757,
+    "D": 0.9622
+   },
+   "alarm_runs_per_hour": {
+    "L": 554.34,
+    "D": 611.0
+   },
+   "alarm_runs_of_0.5_s_or_more_per_hour": {
+    "L": 288.18,
+    "D": 160.64
+   },
+   "free_frames_in_alarm": {
+    "L": 0.6035,
+    "D": 0.2354
+   },
+   "baseline_session_frames_correct": {
+    "L": null,
+    "D": null
+   },
+   "baseline_session_alarm_runs_per_hour": {
+    "L": null,
+    "D": null
+   }
+  },
+  {
+   "drive": "user50",
+   "fold": 3,
+   "looked_at_before": false,
+   "seeds": [
+    5,
+    5
+   ],
+   "frames_correct": {
+    "L": 0.6752,
+    "D": 0.8803
+   },
+   "accuracy_on_the_labs_windows": {
+    "L": 0.9363,
+    "D": 0.9362
+   },
+   "opposite_announced_after_a_lane_change": {
+    "L": 0.6691,
+    "D": 0.1242
+   },
+   "timely_share": {
+    "L": 0.8313,
+    "D": 0.8354
+   },
+   "alarm_runs_per_hour": {
+    "L": 500.28,
+    "D": 630.56
+   },
+   "alarm_runs_of_0.5_s_or_more_per_hour": {
+    "L": 271.88,
+    "D": 111.0
+   },
+   "free_frames_in_alarm": {
+    "L": 0.5382,
+    "D": 0.1495
+   },
+   "baseline_session_frames_correct": {
+    "L": null,
+    "D": null
+   },
+   "baseline_session_alarm_runs_per_hour": {
+    "L": null,
+    "D": null
+   }
+  }
+ ]
+}

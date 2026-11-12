@@ -110,7 +110,8 @@ the model's own Keras; `path_check.py` compares the fork's trainer with `select_
 | `run_mm_searches.sh` | the three corrected seed-42 LCIR searches again on min-max scaled inputs (runs named `*_mm*`; `DMIR_SCALE=minmax` in `dmir_dataset.py`, set from the name by the runners, `select_by_seeds.py` and `final_eval.py`), their selections, then float and int8 scores on fresh seeds 100-104 for the new and the raw-input choices | `datasets/dmir/results/seeds/input_scaling_mm.jsonl` |
 | `input_clip_check.py [task ...]` | trains the corrected LCIR choices with five seeds on raw inputs and converts every run to full int8 (int8 I/O) with the calibration windows as they are and clipped to [-B, B] for eight bounds B: the features are standardized with rare extremes of several hundred, which set the int8 input range; `--report` picks B per head on validation and applies the rule on test | `datasets/dmir/results/seeds/input_clip.jsonl` |
 | `input_equalize_check.py` | the hand-designed exiD classifier of seeds 0-4 (bundles of `scripts/export_hand_cnn.py exid5`) with a per-feature input gain folded into the first convolution, exact in float, for five strengths; full int8 (int8 I/O) on validation and test; `--report` picks the strength on validation and applies the rule on test | `datasets/exid/results/seeds/input_equalize.jsonl` |
-| `stream_train_check.py [arm ...]` | the LCIR intention network of the raw-input search trained with five seeds on the lab's windows and on windows taken from the whole drives of the training drivers (`datasets/dmir/session_stream.py build train`, `build more`), converted to int8 as deployed and scored on the whole drives of the validation and test drivers with the measures of `datasets/dmir/decision_rule.py`; `--report` gives the means and the criterion (see Hardware in the loop) |
+| `stream_train_check.py [arm ...]` | the LCIR intention network of the raw-input search trained with five seeds on the lab's windows and on windows taken from the whole drives of the training drivers (`datasets/dmir/session_stream.py build train`, `build more`), converted to int8 as deployed and scored on the whole drives of the validation and test drivers with the measures of `datasets/dmir/decision_rule.py`; `--report` gives the means and the criterion (see Hardware in the loop); `--six` scores the kept networks again on the six test drivers that are not a copy of a training drive | `datasets/dmir/results/seeds/stream_windows.jsonl`, `stream_windows_six_test_drivers.jsonl`, `datasets/dmir/results/hil/stream_windows.json` |
+| `stream_cv_check.py [L] [D]` | the same comparison as a cross-validation over the 48 different LCIR drives, six folds of eight: the lab's windows of the training drives against windows taken from their whole drives, five seeds, int8 as deployed, every held-out drive scored on its whole session; criterion fixed beforehand on the 34 drives that were never a test or validation drive; `--report` gives the per-drive table and the criterion | `datasets/dmir/results/seeds/stream_cv.jsonl`, `datasets/dmir/results/hil/stream_cv.json` |
 | `resource_bias.py [search ...]` | for every evaluated candidate of a search: the fork's stored peak memory, size and MACs against the Keras model's weights and MACs and the faithful graph (CPU, from the fork's state files) | `datasets/highd/results/resource_bias.json` |
 
 Outcome of `run_mm_searches.sh` (2026-11-11, test, fresh seeds 100-104): searched on scaled inputs, the LCR and
@@ -405,6 +406,35 @@ The six-driver numbers were computed after the studies (`stream_train_check.py -
 `datasets/dmir/results/seeds/stream_windows_six_test_drivers.jsonl`); the pre-set criteria were judged on the
 official seven and stay as reported. Nothing changes in what the comparisons say; the absolute numbers on the
 official split are 0.6 points and 0.012 s better than on drivers the networks have not seen.
+
+Windows from whole drives on drivers nobody had looked at (2026-11-12, `unas/stream_cv_check.py`). The rise in
+correct frames above was a listed measure of a study whose criterion failed, on test drivers that had been
+looked at several times. This is the test with the measure fixed first: a cross-validation over the 48
+different drives, six folds of eight (eight held out, eight for early stopping, 32 for training), the same
+architecture, recipe and five seeds in both arms, int8 as deployed. Arm L trains on the lab's prepared windows of
+the training drives (`session_stream.py rows` gives the drive of every prepared window), arm D on windows taken
+from their whole sessions with lane changes. The criterion was written down before the script existed, for the
+34 drives that had never been a test or validation drive: D at least 8 points above L in the share of correct
+frames of the held-out sessions with lane changes, above L for at least 30 of the 34 drives, and at most 2
+points below L on the lab's own windows of those drives.
+
+| per held-out drive, mean over drives | lab's windows (L) | windows from whole drives (D) | |
+|---|---|---|---|
+| correct frames, sessions with lane changes, 34 drives not looked at before | 69.7% | 85.8% | +16.1 points (95% interval over drives 14.4 to 17.7), D above L in 34 of 34 |
+| the same, all 48 drives | 69.7% | 86.3% | +16.6 points, 48 of 48 |
+| accuracy on the lab's windows of the held-out drives, 34 drives | 90.79% | 90.09% | -0.70 points |
+| frames after a lane change on which the opposite one is announced | 70.9% | 20.1% | lower in 34 of 34 |
+| lane changes announced over the whole last 2 s | 88.9% | 87.4% | |
+| alarm runs of 0.5 s or more per hour of free driving | 248 | 101 | lower in 34 of 34 |
+| alarm runs of any length per hour of free driving | 525 | 482 | |
+| free-driving frames in alarm | 43.9% | 17.4% | lower in 34 of 34 |
+| correct frames in the baseline session (30 of the 34 drives have one here) | 93.7% | 95.0% | |
+
+The criterion is met in all three parts. The smallest gain of a drive is 4.9 points and the largest 23.0.
+The event rates are per hour of free driving inside the sessions with lane changes and were reported without
+a criterion; the two earlier criteria on the number of alarm runs of any length stay failed. Per fold, arm
+and seed: `datasets/dmir/results/seeds/stream_cv.jsonl`; per drive and the criterion:
+`datasets/dmir/results/hil/stream_cv.json`.
 
 The dataset's simulator as the source of the frames (2026-11-12). The simulator behind LCIR is public
 (LC-Intention-Framework: a packaged CARLA 0.9.15 with the dataset's road, the driving client and the data
