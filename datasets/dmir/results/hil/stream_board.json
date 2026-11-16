@@ -1,0 +1,1884 @@
+{
+ "utc": "2026-11-16T17:26:34+00:00",
+ "board": "STM32H7B3I-DK",
+ "sessions": 14,
+ "frames": 104974,
+ "decisions_per_network": 104288,
+ "rule": {
+  "agreement": {
+   "least_identical_share": 0.999799,
+   "differing_windows_of_all": [
+    43,
+    1042880
+   ],
+   "decisions_differing": 0,
+   "max_abs_lsb": 1,
+   "met": true
+  },
+  "numbers": {
+   "largest_difference_of_a_share_board_against_tflite": 0.0,
+   "largest_relative_difference_of_alarm_runs_per_hour": 0.0,
+   "largest_difference_of_an_arm_mean_against_the_study_record": 0.0,
+   "met": true
+  },
+  "cost": {
+   "flash_B": [
+    35716
+   ],
+   "ram_static_B": [
+    13808
+   ],
+   "network_ms_per_frame": [
+    0.5096,
+    0.5196,
+    0.5208
+   ],
+   "largest_relative_spread": {
+    "flash": 0.0,
+    "ram": 0.0,
+    "time": 0.01928
+   },
+   "met": true
+  },
+  "met": true
+ },
+ "trained_on": {
+  "lab_windows": {
+   "study_arm": "A",
+   "seeds": [
+    100,
+    101,
+    102,
+    103,
+    104
+   ],
+   "network_ms_per_frame": {
+    "mean": 0.51848,
+    "std": 0.00496,
+    "values": [
+     0.5207,
+     0.5207,
+     0.5207,
+     0.5096,
+     0.5207
+    ]
+   },
+   "firmware_flash_B": [
+    35716
+   ],
+   "firmware_ram_static_B": [
+    13808
+   ],
+   "seven_test_drivers": {
+    "board": {
+     "frames_correct": {
+      "mean": 0.80138,
+      "std": 0.00587,
+      "values": [
+       0.8061,
+       0.8007,
+       0.7915,
+       0.8038,
+       0.8048
+      ]
+     },
+     "frames_correct_sessions_with_lane_changes": {
+      "mean": 0.68936,
+      "std": 0.00786,
+      "values": [
+       0.6929,
+       0.691,
+       0.6763,
+       0.6894,
+       0.6972
+      ]
+     },
+     "frames_correct_baseline_sessions": {
+      "mean": 0.95,
+      "std": 0.00552,
+      "values": [
+       0.9563,
+       0.9461,
+       0.9444,
+       0.9555,
+       0.9477
+      ]
+     },
+     "opposite_announced_after_a_lane_change": {
+      "mean": 0.7483,
+      "std": 0.01982,
+      "values": [
+       0.754,
+       0.726,
+       0.779,
+       0.7411,
+       0.7414
+      ]
+     },
+     "announced_2_s_early": {
+      "mean": 0.89576,
+      "std": 0.00764,
+      "values": [
+       0.884,
+       0.8987,
+       0.9042,
+       0.8932,
+       0.8987
+      ]
+     },
+     "free_frames_in_alarm": {
+      "mean": 0.22836,
+      "std": 0.00864,
+      "values": [
+       0.2217,
+       0.2306,
+       0.2424,
+       0.2253,
+       0.2218
+      ]
+     },
+     "with_the_rule_announced_2_s_early": {
+      "mean": 0.8339,
+      "std": 0.00972,
+      "values": [
+       0.8232,
+       0.8435,
+       0.8343,
+       0.8435,
+       0.825
+      ]
+     },
+     "accuracy_on_the_frames_of_the_lab_test_windows": {
+      "mean": 0.91253,
+      "std": 0.00346,
+      "values": [
+       0.91385,
+       0.91618,
+       0.91132,
+       0.91416,
+       0.90716
+      ]
+     },
+     "alarm_runs_per_hour": {
+      "mean": 301.22,
+      "std": 39.01803,
+      "values": [
+       248.0,
+       334.5,
+       275.7,
+       339.2,
+       308.7
+      ]
+     },
+     "alarm_runs_of_0.5_s_or_more_per_hour": {
+      "mean": 144.56,
+      "std": 7.91915,
+      "values": [
+       141.2,
+       143.5,
+       142.6,
+       137.4,
+       158.1
+      ]
+     },
+     "with_the_rule_alarm_runs_per_hour": {
+      "mean": 178.32,
+      "std": 4.35741,
+      "values": [
+       173.6,
+       184.4,
+       179.7,
+       179.3,
+       174.6
+      ]
+     }
+    },
+    "study_record_pc": {
+     "frames_correct_sessions_with_lane_changes": {
+      "mean": 0.68936,
+      "std": 0.00786,
+      "values": [
+       0.6929,
+       0.691,
+       0.6763,
+       0.6894,
+       0.6972
+      ]
+     },
+     "frames_correct": {
+      "mean": 0.80138,
+      "std": 0.00587,
+      "values": [
+       0.8061,
+       0.8007,
+       0.7915,
+       0.8038,
+       0.8048
+      ]
+     },
+     "lab_test_set_accuracy": {
+      "mean": 0.91253,
+      "std": 0.00346,
+      "values": [
+       0.91385,
+       0.91618,
+       0.91132,
+       0.91416,
+       0.90716
+      ]
+     }
+    }
+   },
+   "six_test_drivers_not_in_the_training_set": {
+    "board": {
+     "frames_correct": {
+      "mean": 0.79092,
+      "std": 0.00589,
+      "values": [
+       0.7961,
+       0.7895,
+       0.7813,
+       0.7934,
+       0.7943
+      ]
+     },
+     "frames_correct_sessions_with_lane_changes": {
+      "mean": 0.67602,
+      "std": 0.00744,
+      "values": [
+       0.6795,
+       0.677,
+       0.664,
+       0.6756,
+       0.684
+      ]
+     },
+     "frames_correct_baseline_sessions": {
+      "mean": 0.94162,
+      "std": 0.00638,
+      "values": [
+       0.9489,
+       0.9371,
+       0.9352,
+       0.948,
+       0.9389
+      ]
+     },
+     "opposite_announced_after_a_lane_change": {
+      "mean": 0.73638,
+      "std": 0.02032,
+      "values": [
+       0.7401,
+       0.7126,
+       0.768,
+       0.7323,
+       0.7289
+      ]
+     },
+     "announced_2_s_early": {
+      "mean": 0.88474,
+      "std": 0.00847,
+      "values": [
+       0.8717,
+       0.888,
+       0.8941,
+       0.8819,
+       0.888
+      ]
+     },
+     "free_frames_in_alarm": {
+      "mean": 0.2433,
+      "std": 0.00912,
+      "values": [
+       0.2358,
+       0.2466,
+       0.2577,
+       0.24,
+       0.2364
+      ]
+     },
+     "with_the_rule_announced_2_s_early": {
+      "mean": 0.82038,
+      "std": 0.00948,
+      "values": [
+       0.8086,
+       0.831,
+       0.8187,
+       0.8289,
+       0.8147
+      ]
+     },
+     "accuracy_on_the_frames_of_the_lab_test_windows": {
+      "mean": 0.90505,
+      "std": 0.00456,
+      "values": [
+       0.90527,
+       0.90859,
+       0.90659,
+       0.90759,
+       0.8972
+      ]
+     },
+     "alarm_runs_per_hour": {
+      "mean": 321.2,
+      "std": 39.5365,
+      "values": [
+       273.7,
+       364.1,
+       286.0,
+       349.0,
+       333.2
+      ]
+     },
+     "alarm_runs_of_0.5_s_or_more_per_hour": {
+      "mean": 154.84,
+      "std": 9.61265,
+      "values": [
+       152.8,
+       155.1,
+       150.0,
+       145.5,
+       170.8
+      ]
+     },
+     "with_the_rule_alarm_runs_per_hour": {
+      "mean": 193.2,
+      "std": 4.08656,
+      "values": [
+       189.9,
+       200.1,
+       193.3,
+       192.2,
+       190.5
+      ]
+     }
+    },
+    "study_record_pc": {
+     "frames_correct_sessions_with_lane_changes": {
+      "mean": 0.67602,
+      "std": 0.00744,
+      "values": [
+       0.6795,
+       0.677,
+       0.664,
+       0.6756,
+       0.684
+      ]
+     },
+     "frames_correct": {
+      "mean": 0.79092,
+      "std": 0.00589,
+      "values": [
+       0.7961,
+       0.7895,
+       0.7813,
+       0.7934,
+       0.7943
+      ]
+     },
+     "lab_test_set_accuracy": {
+      "mean": 0.90505,
+      "std": 0.00456,
+      "values": [
+       0.90527,
+       0.90859,
+       0.90659,
+       0.90759,
+       0.8972
+      ]
+     }
+    }
+   }
+  },
+  "drive_windows": {
+   "study_arm": "B36",
+   "seeds": [
+    100,
+    101,
+    102,
+    103,
+    104
+   ],
+   "network_ms_per_frame": {
+    "mean": 0.52076,
+    "std": 5e-05,
+    "values": [
+     0.5208,
+     0.5207,
+     0.5208,
+     0.5207,
+     0.5208
+    ]
+   },
+   "firmware_flash_B": [
+    35716
+   ],
+   "firmware_ram_static_B": [
+    13808
+   ],
+   "seven_test_drivers": {
+    "board": {
+     "frames_correct": {
+      "mean": 0.9046,
+      "std": 0.00745,
+      "values": [
+       0.9078,
+       0.9011,
+       0.9025,
+       0.896,
+       0.9156
+      ]
+     },
+     "frames_correct_sessions_with_lane_changes": {
+      "mean": 0.85758,
+      "std": 0.00851,
+      "values": [
+       0.8605,
+       0.8613,
+       0.8512,
+       0.8468,
+       0.8681
+      ]
+     },
+     "frames_correct_baseline_sessions": {
+      "mean": 0.96696,
+      "std": 0.0096,
+      "values": [
+       0.9705,
+       0.9538,
+       0.9707,
+       0.9612,
+       0.9786
+      ]
+     },
+     "opposite_announced_after_a_lane_change": {
+      "mean": 0.21544,
+      "std": 0.022,
+      "values": [
+       0.2098,
+       0.1956,
+       0.22,
+       0.2511,
+       0.2007
+      ]
+     },
+     "announced_2_s_early": {
+      "mean": 0.87108,
+      "std": 0.00539,
+      "values": [
+       0.8729,
+       0.8637,
+       0.8785,
+       0.8692,
+       0.8711
+      ]
+     },
+     "free_frames_in_alarm": {
+      "mean": 0.09442,
+      "std": 0.00983,
+      "values": [
+       0.0876,
+       0.0995,
+       0.1004,
+       0.1039,
+       0.0807
+      ]
+     },
+     "with_the_rule_announced_2_s_early": {
+      "mean": 0.81914,
+      "std": 0.02445,
+      "values": [
+       0.8379,
+       0.8122,
+       0.8232,
+       0.7808,
+       0.8416
+      ]
+     },
+     "accuracy_on_the_frames_of_the_lab_test_windows": {
+      "mean": 0.90704,
+      "std": 0.004,
+      "values": [
+       0.90503,
+       0.90412,
+       0.9067,
+       0.90533,
+       0.914
+      ]
+     },
+     "alarm_runs_per_hour": {
+      "mean": 321.64,
+      "std": 48.69002,
+      "values": [
+       295.5,
+       382.1,
+       295.5,
+       364.6,
+       270.5
+      ]
+     },
+     "alarm_runs_of_0.5_s_or_more_per_hour": {
+      "mean": 70.2,
+      "std": 19.60319,
+      "values": [
+       63.0,
+       88.5,
+       66.8,
+       89.9,
+       42.8
+      ]
+     },
+     "with_the_rule_alarm_runs_per_hour": {
+      "mean": 86.64,
+      "std": 13.04274,
+      "values": [
+       87.0,
+       88.9,
+       71.0,
+       106.3,
+       80.0
+      ]
+     }
+    },
+    "study_record_pc": {
+     "frames_correct_sessions_with_lane_changes": {
+      "mean": 0.85758,
+      "std": 0.00851,
+      "values": [
+       0.8605,
+       0.8613,
+       0.8512,
+       0.8468,
+       0.8681
+      ]
+     },
+     "frames_correct": {
+      "mean": 0.9046,
+      "std": 0.00745,
+      "values": [
+       0.9078,
+       0.9011,
+       0.9025,
+       0.896,
+       0.9156
+      ]
+     },
+     "lab_test_set_accuracy": {
+      "mean": 0.90704,
+      "std": 0.004,
+      "values": [
+       0.90503,
+       0.90412,
+       0.9067,
+       0.90533,
+       0.914
+      ]
+     }
+    }
+   },
+   "six_test_drivers_not_in_the_training_set": {
+    "board": {
+     "frames_correct": {
+      "mean": 0.89832,
+      "std": 0.00867,
+      "values": [
+       0.901,
+       0.8951,
+       0.8952,
+       0.8886,
+       0.9117
+      ]
+     },
+     "frames_correct_sessions_with_lane_changes": {
+      "mean": 0.85014,
+      "std": 0.01041,
+      "values": [
+       0.8517,
+       0.8562,
+       0.8414,
+       0.8381,
+       0.8633
+      ]
+     },
+     "frames_correct_baseline_sessions": {
+      "mean": 0.9615,
+      "std": 0.0112,
+      "values": [
+       0.9656,
+       0.9462,
+       0.9659,
+       0.9547,
+       0.9751
+      ]
+     },
+     "opposite_announced_after_a_lane_change": {
+      "mean": 0.2067,
+      "std": 0.02327,
+      "values": [
+       0.2043,
+       0.1851,
+       0.2149,
+       0.242,
+       0.1872
+      ]
+     },
+     "announced_2_s_early": {
+      "mean": 0.85744,
+      "std": 0.00594,
+      "values": [
+       0.8595,
+       0.8493,
+       0.8656,
+       0.8554,
+       0.8574
+      ]
+     },
+     "free_frames_in_alarm": {
+      "mean": 0.10074,
+      "std": 0.01149,
+      "values": [
+       0.0947,
+       0.1052,
+       0.1081,
+       0.112,
+       0.0837
+      ]
+     },
+     "with_the_rule_announced_2_s_early": {
+      "mean": 0.80124,
+      "std": 0.02596,
+      "values": [
+       0.8208,
+       0.7923,
+       0.8045,
+       0.7617,
+       0.8269
+      ]
+     },
+     "accuracy_on_the_frames_of_the_lab_test_windows": {
+      "mean": 0.89658,
+      "std": 0.00484,
+      "values": [
+       0.89356,
+       0.8955,
+       0.89457,
+       0.89413,
+       0.90515
+      ]
+     },
+     "alarm_runs_per_hour": {
+      "mean": 345.92,
+      "std": 52.03972,
+      "values": [
+       321.4,
+       405.7,
+       314.1,
+       397.3,
+       291.1
+      ]
+     },
+     "alarm_runs_of_0.5_s_or_more_per_hour": {
+      "mean": 79.22,
+      "std": 21.51609,
+      "values": [
+       70.2,
+       97.8,
+       75.3,
+       102.8,
+       50.0
+      ]
+     },
+     "with_the_rule_alarm_runs_per_hour": {
+      "mean": 95.32,
+      "std": 12.39,
+      "values": [
+       96.1,
+       96.7,
+       80.4,
+       114.1,
+       89.3
+      ]
+     }
+    },
+    "study_record_pc": {
+     "frames_correct_sessions_with_lane_changes": {
+      "mean": 0.85014,
+      "std": 0.01041,
+      "values": [
+       0.8517,
+       0.8562,
+       0.8414,
+       0.8381,
+       0.8633
+      ]
+     },
+     "frames_correct": {
+      "mean": 0.89832,
+      "std": 0.00867,
+      "values": [
+       0.901,
+       0.8951,
+       0.8952,
+       0.8886,
+       0.9117
+      ]
+     },
+     "lab_test_set_accuracy": {
+      "mean": 0.89658,
+      "std": 0.00484,
+      "values": [
+       0.89356,
+       0.8955,
+       0.89457,
+       0.89413,
+       0.90515
+      ]
+     }
+    }
+   }
+  }
+ },
+ "drive_windows_minus_lab_windows_board": {
+  "seven_test_drivers": {
+   "frames_correct": 0.10322,
+   "frames_correct_sessions_with_lane_changes": 0.16822,
+   "frames_correct_baseline_sessions": 0.01696,
+   "opposite_announced_after_a_lane_change": -0.53286,
+   "announced_2_s_early": -0.02468,
+   "free_frames_in_alarm": -0.13394,
+   "with_the_rule_announced_2_s_early": -0.01476,
+   "accuracy_on_the_frames_of_the_lab_test_windows": -0.00549,
+   "alarm_runs_per_hour": 20.42,
+   "alarm_runs_of_0.5_s_or_more_per_hour": -74.36,
+   "with_the_rule_alarm_runs_per_hour": -91.68
+  },
+  "six_test_drivers_not_in_the_training_set": {
+   "frames_correct": 0.1074,
+   "frames_correct_sessions_with_lane_changes": 0.17412,
+   "frames_correct_baseline_sessions": 0.01988,
+   "opposite_announced_after_a_lane_change": -0.52968,
+   "announced_2_s_early": -0.0273,
+   "free_frames_in_alarm": -0.14256,
+   "with_the_rule_announced_2_s_early": -0.01914,
+   "accuracy_on_the_frames_of_the_lab_test_windows": -0.00847,
+   "alarm_runs_per_hour": 24.72,
+   "alarm_runs_of_0.5_s_or_more_per_hour": -75.62,
+   "with_the_rule_alarm_runs_per_hour": -97.88
+  }
+ },
+ "networks": [
+  {
+   "arm": "A",
+   "trained_on": "lab_windows",
+   "seed": 100,
+   "file": "lab_windows_seed100_int8_io.tflite",
+   "bytes": 12112,
+   "sha256": "12229fbc0acdcba093d3b6b11d7e99155c6c21c58cbc53d06710e2c312807bd0",
+   "rule_selected_in_the_study": {
+    "theta": 0.6,
+    "hold_off_frames": 0,
+    "persistence_frames": 5
+   },
+   "windows": 104288,
+   "agreement": {
+    "identical_windows": 1.0,
+    "differing_windows": 0,
+    "max_abs_lsb": 0,
+    "decisions_differing": 0
+   },
+   "firmware": {
+    "flash_B": 35716,
+    "ram_static_B": 13808
+   },
+   "network_ms_per_frame": 0.5207,
+   "network_cycles_per_frame": 145808.6,
+   "preprocessing_cycles_per_frame": 5547.3,
+   "host_round_trip_ms": 2.479,
+   "replayed_utc": "2026-11-16T16:30:20+00:00",
+   "seven_test_drivers": {
+    "board": {
+     "frames_correct": 0.8061,
+     "frames_correct_sessions_with_lane_changes": 0.6929,
+     "frames_correct_baseline_sessions": 0.9563,
+     "opposite_announced_after_a_lane_change": 0.754,
+     "announced_2_s_early": 0.884,
+     "lane_changes": 543,
+     "alarm_runs_per_hour": 248.0,
+     "alarm_runs_of_0.5_s_or_more_per_hour": 141.2,
+     "free_frames_in_alarm": 0.2217,
+     "free_driving_hours": 2.125,
+     "with_the_rule_announced_2_s_early": 0.8232,
+     "with_the_rule_alarm_runs_per_hour": 173.6,
+     "accuracy_on_the_frames_of_the_lab_test_windows": 0.91385,
+     "frames_of_the_lab_test_windows": 19722
+    },
+    "tflite": {
+     "frames_correct": 0.8061,
+     "frames_correct_sessions_with_lane_changes": 0.6929,
+     "frames_correct_baseline_sessions": 0.9563,
+     "opposite_announced_after_a_lane_change": 0.754,
+     "announced_2_s_early": 0.884,
+     "lane_changes": 543,
+     "alarm_runs_per_hour": 248.0,
+     "alarm_runs_of_0.5_s_or_more_per_hour": 141.2,
+     "free_frames_in_alarm": 0.2217,
+     "free_driving_hours": 2.125,
+     "with_the_rule_announced_2_s_early": 0.8232,
+     "with_the_rule_alarm_runs_per_hour": 173.6,
+     "accuracy_on_the_frames_of_the_lab_test_windows": 0.91385,
+     "frames_of_the_lab_test_windows": 19722
+    }
+   },
+   "six_test_drivers_not_in_the_training_set": {
+    "board": {
+     "frames_correct": 0.7961,
+     "frames_correct_sessions_with_lane_changes": 0.6795,
+     "frames_correct_baseline_sessions": 0.9489,
+     "opposite_announced_after_a_lane_change": 0.7401,
+     "announced_2_s_early": 0.8717,
+     "lane_changes": 491,
+     "alarm_runs_per_hour": 273.7,
+     "alarm_runs_of_0.5_s_or_more_per_hour": 152.8,
+     "free_frames_in_alarm": 0.2358,
+     "free_driving_hours": 1.78,
+     "with_the_rule_announced_2_s_early": 0.8086,
+     "with_the_rule_alarm_runs_per_hour": 189.9,
+     "accuracy_on_the_frames_of_the_lab_test_windows": 0.90527,
+     "frames_of_the_lab_test_windows": 15972
+    },
+    "tflite": {
+     "frames_correct": 0.7961,
+     "frames_correct_sessions_with_lane_changes": 0.6795,
+     "frames_correct_baseline_sessions": 0.9489,
+     "opposite_announced_after_a_lane_change": 0.7401,
+     "announced_2_s_early": 0.8717,
+     "lane_changes": 491,
+     "alarm_runs_per_hour": 273.7,
+     "alarm_runs_of_0.5_s_or_more_per_hour": 152.8,
+     "free_frames_in_alarm": 0.2358,
+     "free_driving_hours": 1.78,
+     "with_the_rule_announced_2_s_early": 0.8086,
+     "with_the_rule_alarm_runs_per_hour": 189.9,
+     "accuracy_on_the_frames_of_the_lab_test_windows": 0.90527,
+     "frames_of_the_lab_test_windows": 15972
+    }
+   },
+   "study_record_pc": {
+    "seven_test_drivers": {
+     "frames_correct_sessions_with_lane_changes": 0.6929,
+     "frames_correct": 0.8061,
+     "lab_test_set_accuracy": 0.91385
+    },
+    "six_test_drivers_not_in_the_training_set": {
+     "frames_correct_sessions_with_lane_changes": 0.6795,
+     "frames_correct": 0.7961,
+     "lab_test_set_accuracy": 0.90527
+    }
+   }
+  },
+  {
+   "arm": "A",
+   "trained_on": "lab_windows",
+   "seed": 101,
+   "file": "lab_windows_seed101_int8_io.tflite",
+   "bytes": 12112,
+   "sha256": "a5df7b3fbdf89a69bccd049205694e8be9d0bbf16e0364f0581f5b8cd17f0e3d",
+   "rule_selected_in_the_study": {
+    "theta": 0.6,
+    "hold_off_frames": 0,
+    "persistence_frames": 5
+   },
+   "windows": 104288,
+   "agreement": {
+    "identical_windows": 1.0,
+    "differing_windows": 0,
+    "max_abs_lsb": 0,
+    "decisions_differing": 0
+   },
+   "firmware": {
+    "flash_B": 35716,
+    "ram_static_B": 13808
+   },
+   "network_ms_per_frame": 0.5207,
+   "network_cycles_per_frame": 145808.2,
+   "preprocessing_cycles_per_frame": 5547.3,
+   "host_round_trip_ms": 2.446,
+   "replayed_utc": "2026-11-16T16:34:48+00:00",
+   "seven_test_drivers": {
+    "board": {
+     "frames_correct": 0.8007,
+     "frames_correct_sessions_with_lane_changes": 0.691,
+     "frames_correct_baseline_sessions": 0.9461,
+     "opposite_announced_after_a_lane_change": 0.726,
+     "announced_2_s_early": 0.8987,
+     "lane_changes": 543,
+     "alarm_runs_per_hour": 334.5,
+     "alarm_runs_of_0.5_s_or_more_per_hour": 143.5,
+     "free_frames_in_alarm": 0.2306,
+     "free_driving_hours": 2.125,
+     "with_the_rule_announced_2_s_early": 0.8435,
+     "with_the_rule_alarm_runs_per_hour": 184.4,
+     "accuracy_on_the_frames_of_the_lab_test_windows": 0.91618,
+     "frames_of_the_lab_test_windows": 19722
+    },
+    "tflite": {
+     "frames_correct": 0.8007,
+     "frames_correct_sessions_with_lane_changes": 0.691,
+     "frames_correct_baseline_sessions": 0.9461,
+     "opposite_announced_after_a_lane_change": 0.726,
+     "announced_2_s_early": 0.8987,
+     "lane_changes": 543,
+     "alarm_runs_per_hour": 334.5,
+     "alarm_runs_of_0.5_s_or_more_per_hour": 143.5,
+     "free_frames_in_alarm": 0.2306,
+     "free_driving_hours": 2.125,
+     "with_the_rule_announced_2_s_early": 0.8435,
+     "with_the_rule_alarm_runs_per_hour": 184.4,
+     "accuracy_on_the_frames_of_the_lab_test_windows": 0.91618,
+     "frames_of_the_lab_test_windows": 19722
+    }
+   },
+   "six_test_drivers_not_in_the_training_set": {
+    "board": {
+     "frames_correct": 0.7895,
+     "frames_correct_sessions_with_lane_changes": 0.677,
+     "frames_correct_baseline_sessions": 0.9371,
+     "opposite_announced_after_a_lane_change": 0.7126,
+     "announced_2_s_early": 0.888,
+     "lane_changes": 491,
+     "alarm_runs_per_hour": 364.1,
+     "alarm_runs_of_0.5_s_or_more_per_hour": 155.1,
+     "free_frames_in_alarm": 0.2466,
+     "free_driving_hours": 1.78,
+     "with_the_rule_announced_2_s_early": 0.831,
+     "with_the_rule_alarm_runs_per_hour": 200.1,
+     "accuracy_on_the_frames_of_the_lab_test_windows": 0.90859,
+     "frames_of_the_lab_test_windows": 15972
+    },
+    "tflite": {
+     "frames_correct": 0.7895,
+     "frames_correct_sessions_with_lane_changes": 0.677,
+     "frames_correct_baseline_sessions": 0.9371,
+     "opposite_announced_after_a_lane_change": 0.7126,
+     "announced_2_s_early": 0.888,
+     "lane_changes": 491,
+     "alarm_runs_per_hour": 364.1,
+     "alarm_runs_of_0.5_s_or_more_per_hour": 155.1,
+     "free_frames_in_alarm": 0.2466,
+     "free_driving_hours": 1.78,
+     "with_the_rule_announced_2_s_early": 0.831,
+     "with_the_rule_alarm_runs_per_hour": 200.1,
+     "accuracy_on_the_frames_of_the_lab_test_windows": 0.90859,
+     "frames_of_the_lab_test_windows": 15972
+    }
+   },
+   "study_record_pc": {
+    "seven_test_drivers": {
+     "frames_correct_sessions_with_lane_changes": 0.691,
+     "frames_correct": 0.8007,
+     "lab_test_set_accuracy": 0.91618
+    },
+    "six_test_drivers_not_in_the_training_set": {
+     "frames_correct_sessions_with_lane_changes": 0.677,
+     "frames_correct": 0.7895,
+     "lab_test_set_accuracy": 0.90859
+    }
+   }
+  },
+  {
+   "arm": "A",
+   "trained_on": "lab_windows",
+   "seed": 102,
+   "file": "lab_windows_seed102_int8_io.tflite",
+   "bytes": 12112,
+   "sha256": "0fb73a8a16a73f038332fe6d704d41390ef11d6ab02cd68673751a7cef9d89ad",
+   "rule_selected_in_the_study": {
+    "theta": 0.6,
+    "hold_off_frames": 0,
+    "persistence_frames": 5
+   },
+   "windows": 104288,
+   "agreement": {
+    "identical_windows": 0.999799,
+    "differing_windows": 21,
+    "max_abs_lsb": 1,
+    "decisions_differing": 0
+   },
+   "firmware": {
+    "flash_B": 35716,
+    "ram_static_B": 13808
+   },
+   "network_ms_per_frame": 0.5207,
+   "network_cycles_per_frame": 145809.1,
+   "preprocessing_cycles_per_frame": 5547.4,
+   "host_round_trip_ms": 2.446,
+   "replayed_utc": "2026-11-16T16:39:16+00:00",
+   "seven_test_drivers": {
+    "board": {
+     "frames_correct": 0.7915,
+     "frames_correct_sessions_with_lane_changes": 0.6763,
+     "frames_correct_baseline_sessions": 0.9444,
+     "opposite_announced_after_a_lane_change": 0.779,
+     "announced_2_s_early": 0.9042,
+     "lane_changes": 543,
+     "alarm_runs_per_hour": 275.7,
+     "alarm_runs_of_0.5_s_or_more_per_hour": 142.6,
+     "free_frames_in_alarm": 0.2424,
+     "free_driving_hours": 2.125,
+     "with_the_rule_announced_2_s_early": 0.8343,
+     "with_the_rule_alarm_runs_per_hour": 179.7,
+     "accuracy_on_the_frames_of_the_lab_test_windows": 0.91132,
+     "frames_of_the_lab_test_windows": 19722
+    },
+    "tflite": {
+     "frames_correct": 0.7915,
+     "frames_correct_sessions_with_lane_changes": 0.6763,
+     "frames_correct_baseline_sessions": 0.9444,
+     "opposite_announced_after_a_lane_change": 0.779,
+     "announced_2_s_early": 0.9042,
+     "lane_changes": 543,
+     "alarm_runs_per_hour": 275.7,
+     "alarm_runs_of_0.5_s_or_more_per_hour": 142.6,
+     "free_frames_in_alarm": 0.2424,
+     "free_driving_hours": 2.125,
+     "with_the_rule_announced_2_s_early": 0.8343,
+     "with_the_rule_alarm_runs_per_hour": 179.7,
+     "accuracy_on_the_frames_of_the_lab_test_windows": 0.91132,
+     "frames_of_the_lab_test_windows": 19722
+    }
+   },
+   "six_test_drivers_not_in_the_training_set": {
+    "board": {
+     "frames_correct": 0.7813,
+     "frames_correct_sessions_with_lane_changes": 0.664,
+     "frames_correct_baseline_sessions": 0.9352,
+     "opposite_announced_after_a_lane_change": 0.768,
+     "announced_2_s_early": 0.8941,
+     "lane_changes": 491,
+     "alarm_runs_per_hour": 286.0,
+     "alarm_runs_of_0.5_s_or_more_per_hour": 150.0,
+     "free_frames_in_alarm": 0.2577,
+     "free_driving_hours": 1.78,
+     "with_the_rule_announced_2_s_early": 0.8187,
+     "with_the_rule_alarm_runs_per_hour": 193.3,
+     "accuracy_on_the_frames_of_the_lab_test_windows": 0.90659,
+     "frames_of_the_lab_test_windows": 15972
+    },
+    "tflite": {
+     "frames_correct": 0.7813,
+     "frames_correct_sessions_with_lane_changes": 0.664,
+     "frames_correct_baseline_sessions": 0.9352,
+     "opposite_announced_after_a_lane_change": 0.768,
+     "announced_2_s_early": 0.8941,
+     "lane_changes": 491,
+     "alarm_runs_per_hour": 286.0,
+     "alarm_runs_of_0.5_s_or_more_per_hour": 150.0,
+     "free_frames_in_alarm": 0.2577,
+     "free_driving_hours": 1.78,
+     "with_the_rule_announced_2_s_early": 0.8187,
+     "with_the_rule_alarm_runs_per_hour": 193.3,
+     "accuracy_on_the_frames_of_the_lab_test_windows": 0.90659,
+     "frames_of_the_lab_test_windows": 15972
+    }
+   },
+   "study_record_pc": {
+    "seven_test_drivers": {
+     "frames_correct_sessions_with_lane_changes": 0.6763,
+     "frames_correct": 0.7915,
+     "lab_test_set_accuracy": 0.91132
+    },
+    "six_test_drivers_not_in_the_training_set": {
+     "frames_correct_sessions_with_lane_changes": 0.664,
+     "frames_correct": 0.7813,
+     "lab_test_set_accuracy": 0.90659
+    }
+   }
+  },
+  {
+   "arm": "A",
+   "trained_on": "lab_windows",
+   "seed": 103,
+   "file": "lab_windows_seed103_int8_io.tflite",
+   "bytes": 12112,
+   "sha256": "fcc526ed5d9934034c28d82e316c8a8040b402388438f52f95d0b2b17e744182",
+   "rule_selected_in_the_study": {
+    "theta": 0.0,
+    "hold_off_frames": 0,
+    "persistence_frames": 5
+   },
+   "windows": 104288,
+   "agreement": {
+    "identical_windows": 1.0,
+    "differing_windows": 0,
+    "max_abs_lsb": 0,
+    "decisions_differing": 0
+   },
+   "firmware": {
+    "flash_B": 35716,
+    "ram_static_B": 13808
+   },
+   "network_ms_per_frame": 0.5096,
+   "network_cycles_per_frame": 142697.0,
+   "preprocessing_cycles_per_frame": 5547.3,
+   "host_round_trip_ms": 2.431,
+   "replayed_utc": "2026-11-16T16:43:43+00:00",
+   "seven_test_drivers": {
+    "board": {
+     "frames_correct": 0.8038,
+     "frames_correct_sessions_with_lane_changes": 0.6894,
+     "frames_correct_baseline_sessions": 0.9555,
+     "opposite_announced_after_a_lane_change": 0.7411,
+     "announced_2_s_early": 0.8932,
+     "lane_changes": 543,
+     "alarm_runs_per_hour": 339.2,
+     "alarm_runs_of_0.5_s_or_more_per_hour": 137.4,
+     "free_frames_in_alarm": 0.2253,
+     "free_driving_hours": 2.125,
+     "with_the_rule_announced_2_s_early": 0.8435,
+     "with_the_rule_alarm_runs_per_hour": 179.3,
+     "accuracy_on_the_frames_of_the_lab_test_windows": 0.91416,
+     "frames_of_the_lab_test_windows": 19722
+    },
+    "tflite": {
+     "frames_correct": 0.8038,
+     "frames_correct_sessions_with_lane_changes": 0.6894,
+     "frames_correct_baseline_sessions": 0.9555,
+     "opposite_announced_after_a_lane_change": 0.7411,
+     "announced_2_s_early": 0.8932,
+     "lane_changes": 543,
+     "alarm_runs_per_hour": 339.2,
+     "alarm_runs_of_0.5_s_or_more_per_hour": 137.4,
+     "free_frames_in_alarm": 0.2253,
+     "free_driving_hours": 2.125,
+     "with_the_rule_announced_2_s_early": 0.8435,
+     "with_the_rule_alarm_runs_per_hour": 179.3,
+     "accuracy_on_the_frames_of_the_lab_test_windows": 0.91416,
+     "frames_of_the_lab_test_windows": 19722
+    }
+   },
+   "six_test_drivers_not_in_the_training_set": {
+    "board": {
+     "frames_correct": 0.7934,
+     "frames_correct_sessions_with_lane_changes": 0.6756,
+     "frames_correct_baseline_sessions": 0.948,
+     "opposite_announced_after_a_lane_change": 0.7323,
+     "announced_2_s_early": 0.8819,
+     "lane_changes": 491,
+     "alarm_runs_per_hour": 349.0,
+     "alarm_runs_of_0.5_s_or_more_per_hour": 145.5,
+     "free_frames_in_alarm": 0.24,
+     "free_driving_hours": 1.78,
+     "with_the_rule_announced_2_s_early": 0.8289,
+     "with_the_rule_alarm_runs_per_hour": 192.2,
+     "accuracy_on_the_frames_of_the_lab_test_windows": 0.90759,
+     "frames_of_the_lab_test_windows": 15972
+    },
+    "tflite": {
+     "frames_correct": 0.7934,
+     "frames_correct_sessions_with_lane_changes": 0.6756,
+     "frames_correct_baseline_sessions": 0.948,
+     "opposite_announced_after_a_lane_change": 0.7323,
+     "announced_2_s_early": 0.8819,
+     "lane_changes": 491,
+     "alarm_runs_per_hour": 349.0,
+     "alarm_runs_of_0.5_s_or_more_per_hour": 145.5,
+     "free_frames_in_alarm": 0.24,
+     "free_driving_hours": 1.78,
+     "with_the_rule_announced_2_s_early": 0.8289,
+     "with_the_rule_alarm_runs_per_hour": 192.2,
+     "accuracy_on_the_frames_of_the_lab_test_windows": 0.90759,
+     "frames_of_the_lab_test_windows": 15972
+    }
+   },
+   "study_record_pc": {
+    "seven_test_drivers": {
+     "frames_correct_sessions_with_lane_changes": 0.6894,
+     "frames_correct": 0.8038,
+     "lab_test_set_accuracy": 0.91416
+    },
+    "six_test_drivers_not_in_the_training_set": {
+     "frames_correct_sessions_with_lane_changes": 0.6756,
+     "frames_correct": 0.7934,
+     "lab_test_set_accuracy": 0.90759
+    }
+   }
+  },
+  {
+   "arm": "A",
+   "trained_on": "lab_windows",
+   "seed": 104,
+   "file": "lab_windows_seed104_int8_io.tflite",
+   "bytes": 12112,
+   "sha256": "7301d3496d466b85c71edeabbb654854cf129c82c8d37ef92df6db7311673fdd",
+   "rule_selected_in_the_study": {
+    "theta": 0.6,
+    "hold_off_frames": 0,
+    "persistence_frames": 5
+   },
+   "windows": 104288,
+   "agreement": {
+    "identical_windows": 0.999827,
+    "differing_windows": 18,
+    "max_abs_lsb": 1,
+    "decisions_differing": 0
+   },
+   "firmware": {
+    "flash_B": 35716,
+    "ram_static_B": 13808
+   },
+   "network_ms_per_frame": 0.5207,
+   "network_cycles_per_frame": 145809.5,
+   "preprocessing_cycles_per_frame": 5547.4,
+   "host_round_trip_ms": 2.446,
+   "replayed_utc": "2026-11-16T16:48:10+00:00",
+   "seven_test_drivers": {
+    "board": {
+     "frames_correct": 0.8048,
+     "frames_correct_sessions_with_lane_changes": 0.6972,
+     "frames_correct_baseline_sessions": 0.9477,
+     "opposite_announced_after_a_lane_change": 0.7414,
+     "announced_2_s_early": 0.8987,
+     "lane_changes": 543,
+     "alarm_runs_per_hour": 308.7,
+     "alarm_runs_of_0.5_s_or_more_per_hour": 158.1,
+     "free_frames_in_alarm": 0.2218,
+     "free_driving_hours": 2.125,
+     "with_the_rule_announced_2_s_early": 0.825,
+     "with_the_rule_alarm_runs_per_hour": 174.6,
+     "accuracy_on_the_frames_of_the_lab_test_windows": 0.90716,
+     "frames_of_the_lab_test_windows": 19722
+    },
+    "tflite": {
+     "frames_correct": 0.8048,
+     "frames_correct_sessions_with_lane_changes": 0.6972,
+     "frames_correct_baseline_sessions": 0.9477,
+     "opposite_announced_after_a_lane_change": 0.7414,
+     "announced_2_s_early": 0.8987,
+     "lane_changes": 543,
+     "alarm_runs_per_hour": 308.7,
+     "alarm_runs_of_0.5_s_or_more_per_hour": 158.1,
+     "free_frames_in_alarm": 0.2218,
+     "free_driving_hours": 2.125,
+     "with_the_rule_announced_2_s_early": 0.825,
+     "with_the_rule_alarm_runs_per_hour": 174.6,
+     "accuracy_on_the_frames_of_the_lab_test_windows": 0.90716,
+     "frames_of_the_lab_test_windows": 19722
+    }
+   },
+   "six_test_drivers_not_in_the_training_set": {
+    "board": {
+     "frames_correct": 0.7943,
+     "frames_correct_sessions_with_lane_changes": 0.684,
+     "frames_correct_baseline_sessions": 0.9389,
+     "opposite_announced_after_a_lane_change": 0.7289,
+     "announced_2_s_early": 0.888,
+     "lane_changes": 491,
+     "alarm_runs_per_hour": 333.2,
+     "alarm_runs_of_0.5_s_or_more_per_hour": 170.8,
+     "free_frames_in_alarm": 0.2364,
+     "free_driving_hours": 1.78,
+     "with_the_rule_announced_2_s_early": 0.8147,
+     "with_the_rule_alarm_runs_per_hour": 190.5,
+     "accuracy_on_the_frames_of_the_lab_test_windows": 0.8972,
+     "frames_of_the_lab_test_windows": 15972
+    },
+    "tflite": {
+     "frames_correct": 0.7943,
+     "frames_correct_sessions_with_lane_changes": 0.684,
+     "frames_correct_baseline_sessions": 0.9389,
+     "opposite_announced_after_a_lane_change": 0.7289,
+     "announced_2_s_early": 0.888,
+     "lane_changes": 491,
+     "alarm_runs_per_hour": 333.2,
+     "alarm_runs_of_0.5_s_or_more_per_hour": 170.8,
+     "free_frames_in_alarm": 0.2364,
+     "free_driving_hours": 1.78,
+     "with_the_rule_announced_2_s_early": 0.8147,
+     "with_the_rule_alarm_runs_per_hour": 190.5,
+     "accuracy_on_the_frames_of_the_lab_test_windows": 0.8972,
+     "frames_of_the_lab_test_windows": 15972
+    }
+   },
+   "study_record_pc": {
+    "seven_test_drivers": {
+     "frames_correct_sessions_with_lane_changes": 0.6972,
+     "frames_correct": 0.8048,
+     "lab_test_set_accuracy": 0.90716
+    },
+    "six_test_drivers_not_in_the_training_set": {
+     "frames_correct_sessions_with_lane_changes": 0.684,
+     "frames_correct": 0.7943,
+     "lab_test_set_accuracy": 0.8972
+    }
+   }
+  },
+  {
+   "arm": "B36",
+   "trained_on": "drive_windows",
+   "seed": 100,
+   "file": "drive_windows_seed100_int8_io.tflite",
+   "bytes": 12112,
+   "sha256": "3fc44ddb2a4342d30960c032cbcbfb1d62253355e39b8c315f64cd6b8aefb6df",
+   "rule_selected_in_the_study": {
+    "theta": 0.0,
+    "hold_off_frames": 0,
+    "persistence_frames": 5
+   },
+   "windows": 104288,
+   "agreement": {
+    "identical_windows": 0.99999,
+    "differing_windows": 1,
+    "max_abs_lsb": 1,
+    "decisions_differing": 0
+   },
+   "firmware": {
+    "flash_B": 35716,
+    "ram_static_B": 13808
+   },
+   "network_ms_per_frame": 0.5208,
+   "network_cycles_per_frame": 145810.2,
+   "preprocessing_cycles_per_frame": 5547.3,
+   "host_round_trip_ms": 2.445,
+   "replayed_utc": "2026-11-16T16:52:38+00:00",
+   "seven_test_drivers": {
+    "board": {
+     "frames_correct": 0.9078,
+     "frames_correct_sessions_with_lane_changes": 0.8605,
+     "frames_correct_baseline_sessions": 0.9705,
+     "opposite_announced_after_a_lane_change": 0.2098,
+     "announced_2_s_early": 0.8729,
+     "lane_changes": 543,
+     "alarm_runs_per_hour": 295.5,
+     "alarm_runs_of_0.5_s_or_more_per_hour": 63.0,
+     "free_frames_in_alarm": 0.0876,
+     "free_driving_hours": 2.125,
+     "with_the_rule_announced_2_s_early": 0.8379,
+     "with_the_rule_alarm_runs_per_hour": 87.0,
+     "accuracy_on_the_frames_of_the_lab_test_windows": 0.90503,
+     "frames_of_the_lab_test_windows": 19722
+    },
+    "tflite": {
+     "frames_correct": 0.9078,
+     "frames_correct_sessions_with_lane_changes": 0.8605,
+     "frames_correct_baseline_sessions": 0.9705,
+     "opposite_announced_after_a_lane_change": 0.2098,
+     "announced_2_s_early": 0.8729,
+     "lane_changes": 543,
+     "alarm_runs_per_hour": 295.5,
+     "alarm_runs_of_0.5_s_or_more_per_hour": 63.0,
+     "free_frames_in_alarm": 0.0876,
+     "free_driving_hours": 2.125,
+     "with_the_rule_announced_2_s_early": 0.8379,
+     "with_the_rule_alarm_runs_per_hour": 87.0,
+     "accuracy_on_the_frames_of_the_lab_test_windows": 0.90503,
+     "frames_of_the_lab_test_windows": 19722
+    }
+   },
+   "six_test_drivers_not_in_the_training_set": {
+    "board": {
+     "frames_correct": 0.901,
+     "frames_correct_sessions_with_lane_changes": 0.8517,
+     "frames_correct_baseline_sessions": 0.9656,
+     "opposite_announced_after_a_lane_change": 0.2043,
+     "announced_2_s_early": 0.8595,
+     "lane_changes": 491,
+     "alarm_runs_per_hour": 321.4,
+     "alarm_runs_of_0.5_s_or_more_per_hour": 70.2,
+     "free_frames_in_alarm": 0.0947,
+     "free_driving_hours": 1.78,
+     "with_the_rule_announced_2_s_early": 0.8208,
+     "with_the_rule_alarm_runs_per_hour": 96.1,
+     "accuracy_on_the_frames_of_the_lab_test_windows": 0.89356,
+     "frames_of_the_lab_test_windows": 15972
+    },
+    "tflite": {
+     "frames_correct": 0.901,
+     "frames_correct_sessions_with_lane_changes": 0.8517,
+     "frames_correct_baseline_sessions": 0.9656,
+     "opposite_announced_after_a_lane_change": 0.2043,
+     "announced_2_s_early": 0.8595,
+     "lane_changes": 491,
+     "alarm_runs_per_hour": 321.4,
+     "alarm_runs_of_0.5_s_or_more_per_hour": 70.2,
+     "free_frames_in_alarm": 0.0947,
+     "free_driving_hours": 1.78,
+     "with_the_rule_announced_2_s_early": 0.8208,
+     "with_the_rule_alarm_runs_per_hour": 96.1,
+     "accuracy_on_the_frames_of_the_lab_test_windows": 0.89356,
+     "frames_of_the_lab_test_windows": 15972
+    }
+   },
+   "study_record_pc": {
+    "seven_test_drivers": {
+     "frames_correct_sessions_with_lane_changes": 0.8605,
+     "frames_correct": 0.9078,
+     "lab_test_set_accuracy": 0.90503
+    },
+    "six_test_drivers_not_in_the_training_set": {
+     "frames_correct_sessions_with_lane_changes": 0.8517,
+     "frames_correct": 0.901,
+     "lab_test_set_accuracy": 0.89356
+    }
+   }
+  },
+  {
+   "arm": "B36",
+   "trained_on": "drive_windows",
+   "seed": 101,
+   "file": "drive_windows_seed101_int8_io.tflite",
+   "bytes": 12112,
+   "sha256": "4447a1ca3546092f6c559f56b073b0c7a3cab17016a10981c6d83fe9bafd95e1",
+   "rule_selected_in_the_study": {
+    "theta": 0.6,
+    "hold_off_frames": 0,
+    "persistence_frames": 5
+   },
+   "windows": 104288,
+   "agreement": {
+    "identical_windows": 1.0,
+    "differing_windows": 0,
+    "max_abs_lsb": 0,
+    "decisions_differing": 0
+   },
+   "firmware": {
+    "flash_B": 35716,
+    "ram_static_B": 13808
+   },
+   "network_ms_per_frame": 0.5207,
+   "network_cycles_per_frame": 145809.3,
+   "preprocessing_cycles_per_frame": 5547.2,
+   "host_round_trip_ms": 2.442,
+   "replayed_utc": "2026-11-16T16:57:05+00:00",
+   "seven_test_drivers": {
+    "board": {
+     "frames_correct": 0.9011,
+     "frames_correct_sessions_with_lane_changes": 0.8613,
+     "frames_correct_baseline_sessions": 0.9538,
+     "opposite_announced_after_a_lane_change": 0.1956,
+     "announced_2_s_early": 0.8637,
+     "lane_changes": 543,
+     "alarm_runs_per_hour": 382.1,
+     "alarm_runs_of_0.5_s_or_more_per_hour": 88.5,
+     "free_frames_in_alarm": 0.0995,
+     "free_driving_hours": 2.125,
+     "with_the_rule_announced_2_s_early": 0.8122,
+     "with_the_rule_alarm_runs_per_hour": 88.9,
+     "accuracy_on_the_frames_of_the_lab_test_windows": 0.90412,
+     "frames_of_the_lab_test_windows": 19722
+    },
+    "tflite": {
+     "frames_correct": 0.9011,
+     "frames_correct_sessions_with_lane_changes": 0.8613,
+     "frames_correct_baseline_sessions": 0.9538,
+     "opposite_announced_after_a_lane_change": 0.1956,
+     "announced_2_s_early": 0.8637,
+     "lane_changes": 543,
+     "alarm_runs_per_hour": 382.1,
+     "alarm_runs_of_0.5_s_or_more_per_hour": 88.5,
+     "free_frames_in_alarm": 0.0995,
+     "free_driving_hours": 2.125,
+     "with_the_rule_announced_2_s_early": 0.8122,
+     "with_the_rule_alarm_runs_per_hour": 88.9,
+     "accuracy_on_the_frames_of_the_lab_test_windows": 0.90412,
+     "frames_of_the_lab_test_windows": 19722
+    }
+   },
+   "six_test_drivers_not_in_the_training_set": {
+    "board": {
+     "frames_correct": 0.8951,
+     "frames_correct_sessions_with_lane_changes": 0.8562,
+     "frames_correct_baseline_sessions": 0.9462,
+     "opposite_announced_after_a_lane_change": 0.1851,
+     "announced_2_s_early": 0.8493,
+     "lane_changes": 491,
+     "alarm_runs_per_hour": 405.7,
+     "alarm_runs_of_0.5_s_or_more_per_hour": 97.8,
+     "free_frames_in_alarm": 0.1052,
+     "free_driving_hours": 1.78,
+     "with_the_rule_announced_2_s_early": 0.7923,
+     "with_the_rule_alarm_runs_per_hour": 96.7,
+     "accuracy_on_the_frames_of_the_lab_test_windows": 0.8955,
+     "frames_of_the_lab_test_windows": 15972
+    },
+    "tflite": {
+     "frames_correct": 0.8951,
+     "frames_correct_sessions_with_lane_changes": 0.8562,
+     "frames_correct_baseline_sessions": 0.9462,
+     "opposite_announced_after_a_lane_change": 0.1851,
+     "announced_2_s_early": 0.8493,
+     "lane_changes": 491,
+     "alarm_runs_per_hour": 405.7,
+     "alarm_runs_of_0.5_s_or_more_per_hour": 97.8,
+     "free_frames_in_alarm": 0.1052,
+     "free_driving_hours": 1.78,
+     "with_the_rule_announced_2_s_early": 0.7923,
+     "with_the_rule_alarm_runs_per_hour": 96.7,
+     "accuracy_on_the_frames_of_the_lab_test_windows": 0.8955,
+     "frames_of_the_lab_test_windows": 15972
+    }
+   },
+   "study_record_pc": {
+    "seven_test_drivers": {
+     "frames_correct_sessions_with_lane_changes": 0.8613,
+     "frames_correct": 0.9011,
+     "lab_test_set_accuracy": 0.90412
+    },
+    "six_test_drivers_not_in_the_training_set": {
+     "frames_correct_sessions_with_lane_changes": 0.8562,
+     "frames_correct": 0.8951,
+     "lab_test_set_accuracy": 0.8955
+    }
+   }
+  },
+  {
+   "arm": "B36",
+   "trained_on": "drive_windows",
+   "seed": 102,
+   "file": "drive_windows_seed102_int8_io.tflite",
+   "bytes": 12112,
+   "sha256": "8518ae6e7b3c70f8c7ca7e57f2cf944022e0c400dc55bd02314e9d5fd69337c7",
+   "rule_selected_in_the_study": {
+    "theta": 0.6,
+    "hold_off_frames": 0,
+    "persistence_frames": 5
+   },
+   "windows": 104288,
+   "agreement": {
+    "identical_windows": 1.0,
+    "differing_windows": 0,
+    "max_abs_lsb": 0,
+    "decisions_differing": 0
+   },
+   "firmware": {
+    "flash_B": 35716,
+    "ram_static_B": 13808
+   },
+   "network_ms_per_frame": 0.5208,
+   "network_cycles_per_frame": 145810.1,
+   "preprocessing_cycles_per_frame": 5547.3,
+   "host_round_trip_ms": 2.442,
+   "replayed_utc": "2026-11-16T17:01:32+00:00",
+   "seven_test_drivers": {
+    "board": {
+     "frames_correct": 0.9025,
+     "frames_correct_sessions_with_lane_changes": 0.8512,
+     "frames_correct_baseline_sessions": 0.9707,
+     "opposite_announced_after_a_lane_change": 0.22,
+     "announced_2_s_early": 0.8785,
+     "lane_changes": 543,
+     "alarm_runs_per_hour": 295.5,
+     "alarm_runs_of_0.5_s_or_more_per_hour": 66.8,
+     "free_frames_in_alarm": 0.1004,
+     "free_driving_hours": 2.125,
+     "with_the_rule_announced_2_s_early": 0.8232,
+     "with_the_rule_alarm_runs_per_hour": 71.0,
+     "accuracy_on_the_frames_of_the_lab_test_windows": 0.9067,
+     "frames_of_the_lab_test_windows": 19722
+    },
+    "tflite": {
+     "frames_correct": 0.9025,
+     "frames_correct_sessions_with_lane_changes": 0.8512,
+     "frames_correct_baseline_sessions": 0.9707,
+     "opposite_announced_after_a_lane_change": 0.22,
+     "announced_2_s_early": 0.8785,
+     "lane_changes": 543,
+     "alarm_runs_per_hour": 295.5,
+     "alarm_runs_of_0.5_s_or_more_per_hour": 66.8,
+     "free_frames_in_alarm": 0.1004,
+     "free_driving_hours": 2.125,
+     "with_the_rule_announced_2_s_early": 0.8232,
+     "with_the_rule_alarm_runs_per_hour": 71.0,
+     "accuracy_on_the_frames_of_the_lab_test_windows": 0.9067,
+     "frames_of_the_lab_test_windows": 19722
+    }
+   },
+   "six_test_drivers_not_in_the_training_set": {
+    "board": {
+     "frames_correct": 0.8952,
+     "frames_correct_sessions_with_lane_changes": 0.8414,
+     "frames_correct_baseline_sessions": 0.9659,
+     "opposite_announced_after_a_lane_change": 0.2149,
+     "announced_2_s_early": 0.8656,
+     "lane_changes": 491,
+     "alarm_runs_per_hour": 314.1,
+     "alarm_runs_of_0.5_s_or_more_per_hour": 75.3,
+     "free_frames_in_alarm": 0.1081,
+     "free_driving_hours": 1.78,
+     "with_the_rule_announced_2_s_early": 0.8045,
+     "with_the_rule_alarm_runs_per_hour": 80.4,
+     "accuracy_on_the_frames_of_the_lab_test_windows": 0.89457,
+     "frames_of_the_lab_test_windows": 15972
+    },
+    "tflite": {
+     "frames_correct": 0.8952,
+     "frames_correct_sessions_with_lane_changes": 0.8414,
+     "frames_correct_baseline_sessions": 0.9659,
+     "opposite_announced_after_a_lane_change": 0.2149,
+     "announced_2_s_early": 0.8656,
+     "lane_changes": 491,
+     "alarm_runs_per_hour": 314.1,
+     "alarm_runs_of_0.5_s_or_more_per_hour": 75.3,
+     "free_frames_in_alarm": 0.1081,
+     "free_driving_hours": 1.78,
+     "with_the_rule_announced_2_s_early": 0.8045,
+     "with_the_rule_alarm_runs_per_hour": 80.4,
+     "accuracy_on_the_frames_of_the_lab_test_windows": 0.89457,
+     "frames_of_the_lab_test_windows": 15972
+    }
+   },
+   "study_record_pc": {
+    "seven_test_drivers": {
+     "frames_correct_sessions_with_lane_changes": 0.8512,
+     "frames_correct": 0.9025,
+     "lab_test_set_accuracy": 0.9067
+    },
+    "six_test_drivers_not_in_the_training_set": {
+     "frames_correct_sessions_with_lane_changes": 0.8414,
+     "frames_correct": 0.8952,
+     "lab_test_set_accuracy": 0.89457
+    }
+   }
+  },
+  {
+   "arm": "B36",
+   "trained_on": "drive_windows",
+   "seed": 103,
+   "file": "drive_windows_seed103_int8_io.tflite",
+   "bytes": 12112,
+   "sha256": "930fd3da9a3127769ae678e9f8eed626ab5b76b771c204c27c255d48063c1fe4",
+   "rule_selected_in_the_study": {
+    "theta": 0.6,
+    "hold_off_frames": 0,
+    "persistence_frames": 5
+   },
+   "windows": 104288,
+   "agreement": {
+    "identical_windows": 1.0,
+    "differing_windows": 0,
+    "max_abs_lsb": 0,
+    "decisions_differing": 0
+   },
+   "firmware": {
+    "flash_B": 35716,
+    "ram_static_B": 13808
+   },
+   "network_ms_per_frame": 0.5207,
+   "network_cycles_per_frame": 145809.8,
+   "preprocessing_cycles_per_frame": 5547.3,
+   "host_round_trip_ms": 2.441,
+   "replayed_utc": "2026-11-16T17:05:59+00:00",
+   "seven_test_drivers": {
+    "board": {
+     "frames_correct": 0.896,
+     "frames_correct_sessions_with_lane_changes": 0.8468,
+     "frames_correct_baseline_sessions": 0.9612,
+     "opposite_announced_after_a_lane_change": 0.2511,
+     "announced_2_s_early": 0.8692,
+     "lane_changes": 543,
+     "alarm_runs_per_hour": 364.6,
+     "alarm_runs_of_0.5_s_or_more_per_hour": 89.9,
+     "free_frames_in_alarm": 0.1039,
+     "free_driving_hours": 2.125,
+     "with_the_rule_announced_2_s_early": 0.7808,
+     "with_the_rule_alarm_runs_per_hour": 106.3,
+     "accuracy_on_the_frames_of_the_lab_test_windows": 0.90533,
+     "frames_of_the_lab_test_windows": 19722
+    },
+    "tflite": {
+     "frames_correct": 0.896,
+     "frames_correct_sessions_with_lane_changes": 0.8468,
+     "frames_correct_baseline_sessions": 0.9612,
+     "opposite_announced_after_a_lane_change": 0.2511,
+     "announced_2_s_early": 0.8692,
+     "lane_changes": 543,
+     "alarm_runs_per_hour": 364.6,
+     "alarm_runs_of_0.5_s_or_more_per_hour": 89.9,
+     "free_frames_in_alarm": 0.1039,
+     "free_driving_hours": 2.125,
+     "with_the_rule_announced_2_s_early": 0.7808,
+     "with_the_rule_alarm_runs_per_hour": 106.3,
+     "accuracy_on_the_frames_of_the_lab_test_windows": 0.90533,
+     "frames_of_the_lab_test_windows": 19722
+    }
+   },
+   "six_test_drivers_not_in_the_training_set": {
+    "board": {
+     "frames_correct": 0.8886,
+     "frames_correct_sessions_with_lane_changes": 0.8381,
+     "frames_correct_baseline_sessions": 0.9547,
+     "opposite_announced_after_a_lane_change": 0.242,
+     "announced_2_s_early": 0.8554,
+     "lane_changes": 491,
+     "alarm_runs_per_hour": 397.3,
+     "alarm_runs_of_0.5_s_or_more_per_hour": 102.8,
+     "free_frames_in_alarm": 0.112,
+     "free_driving_hours": 1.78,
+     "with_the_rule_announced_2_s_early": 0.7617,
+     "with_the_rule_alarm_runs_per_hour": 114.1,
+     "accuracy_on_the_frames_of_the_lab_test_windows": 0.89413,
+     "frames_of_the_lab_test_windows": 15972
+    },
+    "tflite": {
+     "frames_correct": 0.8886,
+     "frames_correct_sessions_with_lane_changes": 0.8381,
+     "frames_correct_baseline_sessions": 0.9547,
+     "opposite_announced_after_a_lane_change": 0.242,
+     "announced_2_s_early": 0.8554,
+     "lane_changes": 491,
+     "alarm_runs_per_hour": 397.3,
+     "alarm_runs_of_0.5_s_or_more_per_hour": 102.8,
+     "free_frames_in_alarm": 0.112,
+     "free_driving_hours": 1.78,
+     "with_the_rule_announced_2_s_early": 0.7617,
+     "with_the_rule_alarm_runs_per_hour": 114.1,
+     "accuracy_on_the_frames_of_the_lab_test_windows": 0.89413,
+     "frames_of_the_lab_test_windows": 15972
+    }
+   },
+   "study_record_pc": {
+    "seven_test_drivers": {
+     "frames_correct_sessions_with_lane_changes": 0.8468,
+     "frames_correct": 0.896,
+     "lab_test_set_accuracy": 0.90533
+    },
+    "six_test_drivers_not_in_the_training_set": {
+     "frames_correct_sessions_with_lane_changes": 0.8381,
+     "frames_correct": 0.8886,
+     "lab_test_set_accuracy": 0.89413
+    }
+   }
+  },
+  {
+   "arm": "B36",
+   "trained_on": "drive_windows",
+   "seed": 104,
+   "file": "drive_windows_seed104_int8_io.tflite",
+   "bytes": 12112,
+   "sha256": "ae35d379d8ace9c97c86bae3926fc22e27165372de4783ca21ed14b566e98650",
+   "rule_selected_in_the_study": {
+    "theta": 0.6,
+    "hold_off_frames": 0,
+    "persistence_frames": 3
+   },
+   "windows": 104288,
+   "agreement": {
+    "identical_windows": 0.999971,
+    "differing_windows": 3,
+    "max_abs_lsb": 1,
+    "decisions_differing": 0
+   },
+   "firmware": {
+    "flash_B": 35716,
+    "ram_static_B": 13808
+   },
+   "network_ms_per_frame": 0.5208,
+   "network_cycles_per_frame": 145810.8,
+   "preprocessing_cycles_per_frame": 5547.4,
+   "host_round_trip_ms": 2.442,
+   "replayed_utc": "2026-11-16T17:10:26+00:00",
+   "seven_test_drivers": {
+    "board": {
+     "frames_correct": 0.9156,
+     "frames_correct_sessions_with_lane_changes": 0.8681,
+     "frames_correct_baseline_sessions": 0.9786,
+     "opposite_announced_after_a_lane_change": 0.2007,
+     "announced_2_s_early": 0.8711,
+     "lane_changes": 543,
+     "alarm_runs_per_hour": 270.5,
+     "alarm_runs_of_0.5_s_or_more_per_hour": 42.8,
+     "free_frames_in_alarm": 0.0807,
+     "free_driving_hours": 2.125,
+     "with_the_rule_announced_2_s_early": 0.8416,
+     "with_the_rule_alarm_runs_per_hour": 80.0,
+     "accuracy_on_the_frames_of_the_lab_test_windows": 0.914,
+     "frames_of_the_lab_test_windows": 19722
+    },
+    "tflite": {
+     "frames_correct": 0.9156,
+     "frames_correct_sessions_with_lane_changes": 0.8681,
+     "frames_correct_baseline_sessions": 0.9786,
+     "opposite_announced_after_a_lane_change": 0.2007,
+     "announced_2_s_early": 0.8711,
+     "lane_changes": 543,
+     "alarm_runs_per_hour": 270.5,
+     "alarm_runs_of_0.5_s_or_more_per_hour": 42.8,
+     "free_frames_in_alarm": 0.0807,
+     "free_driving_hours": 2.125,
+     "with_the_rule_announced_2_s_early": 0.8416,
+     "with_the_rule_alarm_runs_per_hour": 80.0,
+     "accuracy_on_the_frames_of_the_lab_test_windows": 0.914,
+     "frames_of_the_lab_test_windows": 19722
+    }
+   },
+   "six_test_drivers_not_in_the_training_set": {
+    "board": {
+     "frames_correct": 0.9117,
+     "frames_correct_sessions_with_lane_changes": 0.8633,
+     "frames_correct_baseline_sessions": 0.9751,
+     "opposite_announced_after_a_lane_change": 0.1872,
+     "announced_2_s_early": 0.8574,
+     "lane_changes": 491,
+     "alarm_runs_per_hour": 291.1,
+     "alarm_runs_of_0.5_s_or_more_per_hour": 50.0,
+     "free_frames_in_alarm": 0.0837,
+     "free_driving_hours": 1.78,
+     "with_the_rule_announced_2_s_early": 0.8269,
+     "with_the_rule_alarm_runs_per_hour": 89.3,
+     "accuracy_on_the_frames_of_the_lab_test_windows": 0.90515,
+     "frames_of_the_lab_test_windows": 15972
+    },
+    "tflite": {
+     "frames_correct": 0.9117,
+     "frames_correct_sessions_with_lane_changes": 0.8633,
+     "frames_correct_baseline_sessions": 0.9751,
+     "opposite_announced_after_a_lane_change": 0.1872,
+     "announced_2_s_early": 0.8574,
+     "lane_changes": 491,
+     "alarm_runs_per_hour": 291.1,
+     "alarm_runs_of_0.5_s_or_more_per_hour": 50.0,
+     "free_frames_in_alarm": 0.0837,
+     "free_driving_hours": 1.78,
+     "with_the_rule_announced_2_s_early": 0.8269,
+     "with_the_rule_alarm_runs_per_hour": 89.3,
+     "accuracy_on_the_frames_of_the_lab_test_windows": 0.90515,
+     "frames_of_the_lab_test_windows": 15972
+    }
+   },
+   "study_record_pc": {
+    "seven_test_drivers": {
+     "frames_correct_sessions_with_lane_changes": 0.8681,
+     "frames_correct": 0.9156,
+     "lab_test_set_accuracy": 0.914
+    },
+    "six_test_drivers_not_in_the_training_set": {
+     "frames_correct_sessions_with_lane_changes": 0.8633,
+     "frames_correct": 0.9117,
+     "lab_test_set_accuracy": 0.90515
+    }
+   }
+  }
+ ],
+ "real_time": {
+  "file": "drive_windows_seed104_int8_io.tflite",
+  "chosen_on": "validation drivers, study records",
+  "session": [
+   "user13LC"
+  ],
+  "rate_hz": 10.0,
+  "frames": 9422,
+  "decisions": 9373,
+  "agreement": {
+   "identical_windows": 1.0,
+   "differing_windows": 0,
+   "max_abs_lsb": 0
+  },
+  "share_of_the_frame_period_computing": 0.00540596,
+  "frame_lateness_ms": {
+   "mean": 0.525,
+   "p50": 0.515,
+   "p99": 1.043,
+   "max": 2.488
+  },
+  "network_ms_per_frame": 0.5208
+ }
+}

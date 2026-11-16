@@ -132,7 +132,8 @@ def main():
     tfl = (ROOT / a.tflite).resolve()
     ds = tfl.relative_to(ROOT).parts[1]
     elf = build(tfl)
-    print(f"built {elf.relative_to(ROOT).as_posix()}: {lb.elf_size(elf)}")
+    size = lb.elf_size(elf)
+    print(f"built {elf.relative_to(ROOT).as_posix()}: {size}")
     if a.build_only:
         return
     folder = lb.FW / "build" / "stream" / (tfl.stem + (f"_{a.split}" if a.split else ""))
@@ -182,7 +183,7 @@ def main():
     so, zo = float(ref["out_scale"]), int(ref["out_zp"])
     deq = (outs.astype(np.float32) - zo) * so
     rec = {"model": tfl.name, "board": "STM32H7B3I-DK", "core_hz": hz, "baud": BAUD,
-           "rate_hz": a.rate, "scenarios": S,
+           "rate_hz": a.rate, "scenarios": S, "firmware": size,
            "frames": int(seq_len if drives else S * seq_len), "windows": int(n_slides if drives else S * n_slides),
            "agreement": {"identical_windows": round(float((outs == want).all(-1).mean()), 6),
                          "differing_windows": int((outs != want).any(-1).sum()),

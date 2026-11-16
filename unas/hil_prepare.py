@@ -25,7 +25,8 @@ normalization (recovered per task, pickle = a * raw + b), followed by the networ
 if it has one, and the training range in raw units. With LCIR_SPLIT=val in the environment the sessions
 of the official validation drivers are taken instead (2026-11-12, for choices that must not be made on
 the test drivers); their files go to firmware/build/stream/<stem>_val/. LCIR_SPLIT=own takes sessions of one's own
-(datasets/dmir/session_stream.py own, e.g. recorded with the lab's simulator) the same way.
+(datasets/dmir/session_stream.py own, e.g. recorded with the lab's simulator) the same way. A raw-input network
+that has no deploy record (the networks kept by a study, unas/stream_board_check.py) needs LCIR_TASK=<task>.
 
 Simulated traffic (a copy of a highD network's file under datasets/carla/, scenarios of
 datasets/carla/prepare_carla.py): the scaling uses highD's training statistics, as the deployed network does.
@@ -143,7 +144,13 @@ def lcir_sessions(tfl: Path) -> None:
     split = os.environ.get("LCIR_SPLIT", "test")
     tag = "" if split == "test" else f"_{split}"
     deploy = tfl.stem[len("sessions_"):].rsplit("_int8_io", 1)[0]
-    rec = json.loads((ROOT / "datasets" / "dmir" / "results" / "deploy" / f"{deploy}_deploy.json").read_text())
+    record = ROOT / "datasets" / "dmir" / "results" / "deploy" / f"{deploy}_deploy.json"
+    if record.exists():
+        rec = json.loads(record.read_text())
+    elif os.environ.get("LCIR_TASK"):                        # a network kept by a study: no deploy record, raw inputs
+        rec = {"task": os.environ["LCIR_TASK"], "input_scaling": "raw", "variants": {"int8_io": None}}
+    else:
+        sys.exit(f"{record.name} not found; for a raw-input network without a deploy record set LCIR_TASK")
     task = rec["task"]
     base = ROOT / "datasets" / "dmir" / "data" / "stream"
     norm = json.loads((base / f"{task}_norm.json").read_text())

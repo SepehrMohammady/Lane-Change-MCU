@@ -113,6 +113,7 @@ the model's own Keras; `path_check.py` compares the fork's trainer with `select_
 | `stream_train_check.py [arm ...]` | the LCIR intention network of the raw-input search trained with five seeds on the lab's windows and on windows taken from the whole drives of the training drivers (`datasets/dmir/session_stream.py build train`, `build more`), converted to int8 as deployed and scored on the whole drives of the validation and test drivers with the measures of `datasets/dmir/decision_rule.py`; `--report` gives the means and the criterion (see Hardware in the loop); `--six` scores the kept networks again on the six test drivers that are not a copy of a training drive | `datasets/dmir/results/seeds/stream_windows.jsonl`, `stream_windows_six_test_drivers.jsonl`, `datasets/dmir/results/hil/stream_windows.json` |
 | `stream_cv_check.py [L] [D]` | the same comparison as a cross-validation over the 48 different LCIR drives, six folds of eight: the lab's windows of the training drives against windows taken from their whole drives, five seeds, int8 as deployed, every held-out drive scored on its whole session; criterion fixed beforehand on the 34 drives that were never a test or validation drive; `--report` gives the per-drive table and the criterion | `datasets/dmir/results/seeds/stream_cv.jsonl`, `datasets/dmir/results/hil/stream_cv.json` |
 | `stream_arch_check.py [index ...]` | nine existing LCIR intention networks (seven from the searches' shortlists, 14k to 152k MACs, and two hand-designed references of 84k and 441k parameters) trained with five seeds on windows from the whole drives of the training drivers and scored on the whole drives of the validation drivers: a check, with its rule fixed beforehand, of whether a search under that measure has anything to select on; `--report` gives the table and the rule | `datasets/dmir/results/seeds/stream_arch.jsonl`, `datasets/dmir/results/hil/stream_arch.json` |
+| `stream_board_check.py prepare` / `replay` / `realtime` / `--report` | the ten int8 networks of `stream_train_check.py` that were trained on the lab's windows and on windows from the whole drives of the same training files (five seeds each, kept as replayed in `datasets/dmir/results/hil/stream_board/`) through the STM32H7B3I-DK on the whole drives of the test drivers: `prepare` (WSL) makes the headers and host references, `replay` builds, flashes and replays each network at top speed, `realtime` sends one drive at 10 Hz to the network chosen on the validation drivers, `--report` computes every measure of the study from the board's outputs and judges the tolerances fixed beforehand for agreement, numbers and cost | `datasets/dmir/results/hil/stream_board.jsonl`, `datasets/dmir/results/hil/stream_board.json` |
 | `resource_bias.py [search ...]` | for every evaluated candidate of a search: the fork's stored peak memory, size and MACs against the Keras model's weights and MACs and the faithful graph (CPU, from the fork's state files) | `datasets/highd/results/resource_bias.json` |
 
 Outcome of `run_mm_searches.sh` (2026-11-11, test, fresh seeds 100-104): searched on scaled inputs, the LCR and
@@ -463,6 +464,62 @@ rule): no search is started. A network with 190 times the parameters of the depl
 it. Together with the cross-validation above: on this task the training windows move the share of correct
 frames by 16 points, the architecture by about one. Numbers: `datasets/dmir/results/seeds/stream_arch.jsonl`,
 `datasets/dmir/results/hil/stream_arch.json`.
+
+The two kinds of training windows on the board (2026-11-16, `unas/stream_board_check.py`). The comparisons
+of training windows above were computed as int8 on the PC. Ten int8 files of `stream_train_check.py` (the
+intention network trained on the lab's windows and on windows from the whole drives of the same 36 training files, five seeds each;
+kept as replayed in `datasets/dmir/results/hil/stream_board/`) went through the STM32H7B3I-DK: the 14
+sessions of the seven official test drivers frame by frame, 104,288 decisions per network, the board
+doing the limiting, the normalization and the quantization itself. Every measure of the study was then
+computed from the board's outputs. This repeats known numbers on the hardware and is no new test of the
+finding; fixed beforehand was how closely the board has to return them: (1) for each network at least
+99.9% of the decisions bit-identical to the TFLite interpreter and no output more than 2 LSB away, (2) every
+share within 0.1 point and the alarm runs per hour within 2% of the values from the TFLite outputs, and the
+means per kind of window within 0.2 points of the study's records, (3) flash and static RAM of the ten
+firmware images equal to within 1% and the network time per frame within 2% of the mean of the ten.
+
+| from the board's outputs, mean ± spread over five seeds | trained on the lab's windows | trained on windows from whole drives |
+|---|---|---|
+| **six test drivers not in the training set** | | |
+| accuracy on the lab's test windows | 90.50% ± 0.46 | 89.66% ± 0.48 |
+| correct frames, sessions with lane changes | 67.6% ± 0.7 | 85.0% ± 1.0 |
+| correct frames, all sessions | 79.1% ± 0.6 | 89.8% ± 0.9 |
+| frames after a lane change on which the opposite one is announced | 73.6% ± 2.0 | 20.7% ± 2.3 |
+| lane changes announced over the whole last 2 s | 88.5% ± 0.8 | 85.7% ± 0.6 |
+| free-driving frames in alarm | 24.3% ± 0.9 | 10.1% ± 1.1 |
+| alarm runs of 0.5 s or more per hour of free driving | 155 ± 10 | 79 ± 22 |
+| alarm runs of any length per hour of free driving | 321 ± 40 | 346 ± 52 |
+| **official seven test drivers** | | |
+| accuracy on the lab's test windows | 91.25% ± 0.35 | 90.70% ± 0.40 |
+| correct frames, sessions with lane changes | 68.9% ± 0.8 | 85.8% ± 0.9 |
+| correct frames, all sessions | 80.1% ± 0.6 | 90.5% ± 0.7 |
+| frames after a lane change on which the opposite one is announced | 74.8% ± 2.0 | 21.5% ± 2.2 |
+| lane changes announced over the whole last 2 s | 89.6% ± 0.8 | 87.1% ± 0.5 |
+| free-driving frames in alarm | 22.8% ± 0.9 | 9.4% ± 1.0 |
+| alarm runs of 0.5 s or more per hour of free driving | 145 ± 8 | 70 ± 20 |
+| alarm runs of any length per hour of free driving | 301 ± 39 | 322 ± 49 |
+| **cost on the board** | | |
+| firmware image: flash, static RAM | 35,716 B, 13,808 B | 35,716 B, 13,808 B |
+| network time per frame, five seeds | 0.510 to 0.521 ms | 0.521 ms |
+
+All three parts are met. The board returned the interpreter's output in 1,042,837 of 1,042,880 decisions; in
+the other 43 (four of the ten networks) one output is 1 LSB away and the predicted class is the same, so every
+number of the table equals the one computed on the PC. For those 43 windows ST's C model compiled for the PC
+returns the board's value, and the board given the reference's int8 window directly returns its streamed
+value (`hil_host_check.py --board`, run after the replays): the difference is ST's kernel arithmetic against
+the TFLite interpreter, not the board's preprocessing. The ten images have the same size. Nine networks take
+145,808 to 145,811 cycles per frame although all their weights differ; one, trained on the lab's windows, takes
+142,697, 2.1% fewer: it is the only one in which the zero point of the tensor that is padded before the
+second convolution is 0 (found after the result). That leaves part (3) met by a small margin, 1.93%
+against 2%. One drive in real time (user13LC at 10 Hz, 9,422 frames) with the network trained on windows from
+whole drives that is best on the validation drivers: 9,373 decisions, all equal to the reference, the core
+computing for 0.54% of the frame period.
+
+The correction changes what the network says on a drive and nothing of what it costs: +17.4 points of
+correct frames in the sessions with lane changes of drivers it has not seen (+16.8 on the official seven),
+for 0.85 points on the lab's test windows (0.55), in the same 35.7 kB of flash and 0.52 ms per decision.
+Per replay: `datasets/dmir/results/hil/stream_board.jsonl`; per network, per kind of window and the rule:
+`datasets/dmir/results/hil/stream_board.json`.
 
 The dataset's simulator as the source of the frames (2026-11-12). The simulator behind LCIR is public
 (LC-Intention-Framework: a packaged CARLA 0.9.15 with the dataset's road, the driving client and the data
