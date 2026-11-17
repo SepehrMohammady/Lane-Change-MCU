@@ -121,3 +121,18 @@ change, and on lane keepers outside the protocol's scenarios (`results/hil/track
 (`results/hil/track_windows.json`); `critical_gap_probe.py` checks that a scripted close follower in the target
 lane does not remove the prediction. Numbers and reading: `unas/README.md`, section "Hardware in the loop".
 The track features and network outputs stay in `firmware/build/probe/` (not versioned: licensed data).
+
+## Closed loop with an ACC (2026-11-17)
+
+```bash
+python datasets/highd/acc_loop.py build     # scenes and episodes of the test recordings (pandas)
+python datasets/highd/acc_loop.py check     # the loop's features against the prepared scenarios
+python datasets/highd/acc_loop.py step1     # reactive and oracle arms over the grid of scripted cut-ins
+python datasets/highd/acc_loop.py run       # TensorFlow: the networks of unas/track_train_check.py in the loop
+python datasets/highd/acc_loop.py --report
+```
+
+An ACC (Kesting, Treiber and Helbing 2010) drives a simulated car through the replayed test recordings. The
+lane-change predictor decides when it anticipates a neighbouring vehicle. The loop runs over scripted critical cut-ins around recorded human lane changes
+and over recorded cut-outs (`results/hil/acc_loop.json`); `unas/acc_loop_board.py` puts the board in the loop.
+Design, criterion and results: `unas/README.md`, section "Hardware in the loop".

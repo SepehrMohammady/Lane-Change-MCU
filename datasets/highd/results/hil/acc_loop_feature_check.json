@@ -1,0 +1,25 @@
+{
+ "scenarios": 463,
+ "frames": 16205,
+ "equal_share": {
+  "lat_velocity": 1.0,
+  "long_velocity": 1.0,
+  "lat_acceleration": 1.0,
+  "long_acceleration": 1.0,
+  "lat_pos_left_marking": 1.0,
+  "rel_velo_pv": 0.99932,
+  "dist_pv": 0.99932,
+  "rel_velo_fv": 0.99951,
+  "dist_fv": 0.99944,
+  "dist_rpv": 0.99858,
+  "dist_rv": 0.99944,
+  "dist_rfv": 0.99877,
+  "dist_lpv": 0.99914,
+  "dist_lv": 0.99938,
+  "dist_lfv": 0.99907,
+  "left_lane_exists": 1.0,
+  "right_lane_exists": 1.0,
+  "lane_width": 1.0
+ },
+ "all_values_equal_share": 0.99955
+}

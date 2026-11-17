@@ -115,6 +115,7 @@ the model's own Keras; `path_check.py` compares the fork's trainer with `select_
 | `stream_arch_check.py [index ...]` | nine existing LCIR intention networks (seven from the searches' shortlists, 14k to 152k MACs, and two hand-designed references of 84k and 441k parameters) trained with five seeds on windows from the whole drives of the training drivers and scored on the whole drives of the validation drivers: a check, with its rule fixed beforehand, of whether a search under that measure has anything to select on; `--report` gives the table and the rule | `datasets/dmir/results/seeds/stream_arch.jsonl`, `datasets/dmir/results/hil/stream_arch.json` |
 | `stream_board_check.py prepare` / `replay` / `realtime` / `--report` | the ten int8 networks of `stream_train_check.py` that were trained on the lab's windows and on windows from the whole drives of the same training files (five seeds each, kept as replayed in `datasets/dmir/results/hil/stream_board/`) through the STM32H7B3I-DK on the whole drives of the test drivers: `prepare` (WSL) makes the headers and host references, `replay` builds, flashes and replays each network at top speed, `realtime` sends one drive at 10 Hz to the network chosen on the validation drivers, `--report` computes every measure of the study from the board's outputs and judges the tolerances fixed beforehand for agreement, numbers and cost | `datasets/dmir/results/hil/stream_board.jsonl`, `datasets/dmir/results/hil/stream_board.json` |
 | `track_train_check.py [P] [T] [K]`, `--rescore` | highD: the searched classifier trained with five seeds on the protocol's windows and on windows from the complete tracks of the training recordings, all of them (T) or those whose label is known (K) (`datasets/highd/track_stream.py build train`, `build val`, `build`), int8 as deployed, scored on the protocol's test windows and on every window of every track of the test recordings with the measures of `datasets/highd/track_stream.py`; `--rescore` scores kept networks again after a change of those measures; `--report` gives the means and the criteria fixed beforehand (see Hardware in the loop) | `datasets/highd/results/seeds/track_windows.jsonl`, `track_windows_rescored.jsonl`, `datasets/highd/results/hil/track_windows.json` |
+| `acc_loop_board.py prepare` / `run` / `realtime` / `--report` | closed loop A with the STM32H7B3I-DK as the lane-change predictor: the stream firmware gets the neighbouring vehicle's features every 5th frame from the loop of `datasets/highd/acc_loop.py` and its outputs drive the ACC's anticipation; `run` at top speed for one network of each kind, `realtime` for 20 episodes at 25 Hz; `--report` compares every decision with the same loop on the PC | `datasets/highd/results/hil/acc_loop_board.jsonl`, `acc_loop_board.json` |
 | `resource_bias.py [search ...]` | for every evaluated candidate of a search: the fork's stored peak memory, size and MACs against the Keras model's weights and MACs and the faithful graph (CPU, from the fork's state files) | `datasets/highd/results/resource_bias.json` |
 
 Outcome of `run_mm_searches.sh` (2026-11-11, test, fresh seeds 100-104): searched on scaled inputs, the LCR and
@@ -615,6 +616,45 @@ in every cell up to 30 m, lane-keeping calls up by less than 10 points). Met: th
 lane change 2 s before the crossing in 100% of the scenarios in every cell (unchanged: 100%), with τ_c 4.67 to
 4.70 s (unchanged 4.78 s) and 7.7% to 8.2% of the lane-keeping windows called a lane change (unchanged 9.4%).
 The networks hardly use that input. Result: `datasets/highd/results/hil/critical_gap_probe.json`.
+
+Closed loop A: the predictor in the loop of an ACC (2026-11-17, `datasets/highd/acc_loop.py`; the board as the
+predictor: `unas/acc_loop_board.py`). A replay sends recorded frames through the board, but the board's output acts
+on nothing. Here the ego is a simulated car (point mass, 25 Hz) on highD's test recordings, with every recorded
+vehicle replayed. An ACC drives it: the ACC model of Kesting, Treiber and Helbing (2010); a command below -3.5 m/s²
+exceeds its authority (ISO 15622). Every 5th frame the 18 features of one neighbouring vehicle are computed
+from the replayed vehicles and the ego. The features are computed geometrically; with no ego they equal the
+prepared test scenarios in 99.96% of the values. The predictor receives them. While its latest class says that this vehicle moves into the
+ego's lane, the ACC treats it as a second leader with braking bounded at 1.5 m/s². The ego's response changes the
+next features. Part C scripts critical cut-ins around the recorded human lane changes of the protocol's test
+scenarios: the ego approaches in the target lane on a path relative to the cutting-in vehicle, at gap g and
+closing speed dv at the crossing, and the ACC takes over 3 s before the crossing. Part O replaces the follower of
+every vehicle that leaves the ego's lane (recorded cut-outs, 278 episodes). Arms: reactive (no anticipation);
+oracle (3 s of warning, part C only); and the five networks trained on the protocol's windows (P) and on
+complete tracks with labels known (K), int8 with the board's arithmetic. Fixed beforehand, with two amendments
+made before any network ran. First, part O was widened when only 10 episodes met the first windows. Second, the
+first controller, a linear gap law, called any cut-in closer than about 40 m an authority overrun, even at equal
+speed; a check with the reactive and oracle arms showed this, and the controller was replaced by the cut-in-aware
+model. The cells kept by that check are those where the reactive ACC fails in at least 20% of the episodes:
+5 m at 3 m/s, 5 m at 6 m/s, 10 m at 6 m/s.
+
+| closed loop, PC, means over the networks | reactive | oracle | P: protocol's windows | K: complete tracks |
+|---|--:|--:|--:|--:|
+| part C, 653 critical cut-ins: collision or ACC authority exceeded | 27.1% | 3.5% | 3.5% | 3.6% |
+| part C: mean peak deceleration, m/s² | 3.30 | 2.28 | 2.28 | 2.28 |
+| part C: 10th percentile of the minimum TTC, s | 1.6 | 7.0 | 7.0 | 7.0 |
+| part O, 278 cut-outs: unnecessary braking (anticipation binding, -0.5 m/s² or below, no return) | - | - | 19.5% | 10.8% |
+| part O: anticipation of a return that does not come, s per cut-out | - | - | 1.94 | 0.48 |
+| part O: speed 3 s after the crossing, m/s | 30.32 | - | 29.80 | 30.23 |
+
+Criterion, fixed beforehand. In part O, unnecessary braking with K at most half of P: 10.8% against
+19.5%, not met. In part C, K at most 2 points above P and both at least 25% below reactive: met.
+So the criterion is not met as a whole. In the loop the prediction is worth what a 3 s warning is worth: every
+network names the cut-in before the ACC takes over, and the critical cut-ins the ACC cannot handle within its
+authority fall from 27.1% to 3.5%. The shortcut has a cost in the loop. After a vehicle leaves the ego's lane, the
+protocol-trained networks expect it back for about 2 s and brake for it in one cut-out in five; trained on complete
+tracks, about 0.5 s and one in nine. The collisions, 7 to 9 per arm, are replayed vehicles merging into the ego,
+which they cannot see; they do not depend on the arm. Only aggregates are versioned
+(`datasets/highd/results/hil/acc_loop*.json*`). The same loops with the board as the predictor follow.
 
 ## Thresholds (first pass, in `dmir_config.py`)
 
