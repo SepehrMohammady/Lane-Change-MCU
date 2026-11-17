@@ -111,6 +111,35 @@ window is accounted for: classification 60,969 + 33,651 = 94,620, LCR 20,599 + 1
 rule gives another class than the pickle for 12 of the 60,969 local classification windows: frames
 between two lane-line jumps 5 to 8 frames apart, where the car straddles the line.
 
+## Where the prepared sets come from (found 2026-11-17)
+
+The three prepared sets we received (classification, LCR, LCL; 31 channels with `car2Present`) are the data of
+a public M.Sc. thesis of the lab: M. Ghiglia and D. Giardini, "Optimizing a Deployment-Oriented Simulation
+Framework for Deep Learning-based Lane Change Prediction", University of Genoa, October 2026, code and thesis
+at github.com/Elios-Lab/LCIR (commit b4afa05 read). Its dataset table gives 31,540 / 5,444 / 6,574 windows per
+class for the 36 / 7 / 7 training, validation and test drivers: 94,620, 16,332 and 19,722 windows, the sizes
+of our classification sets. Its README and thesis report the results we had as the internal reference
+(balanced accuracy 0.915; TTLC RMSE 0.437 s left and 0.423 s right). Its notebooks answer the open questions of
+the sections above:
+
+- Labels (`source/labelling/labelling.ipynb`): the time to the lane change is 0.0 on the last frame before the
+  lane lines swap, counted back 0.1 to 4.0 s; up to 10 frames after the crossing are marked "-"; FLW / LCL /
+  LCR from those values. This is the rule our frame streams reproduce.
+- Kinematic filter (`source/infeasible-check/`): the 50 frames before each lane change are dropped if at least
+  two of seven checks fail (steering rate above 225 deg/s, |yaw rate| above 0.25 rad/s, |lateral acceleration|
+  above 3.25 m/s2, |yaw rate x speed - lateral acceleration| above 1.5 m/s2, lateral jerk above 4 m/s3,
+  longitudinal jerk above 6.5 m/s3, steering jerk above 225 deg/s2); free-driving windows with stricter limits.
+  The notebook's printout: 377 left and 481 right lane changes and 1,028 free-driving windows flagged. This is
+  the selection we saw from outside (abrupt lane changes and quick successions missing).
+- Windows (`source/data-preparation/`): no window ending in the first or last minute of a file; a lane-change
+  window is kept if its last row is labelled LCL or LCR with a time of at most 4.0 s, whatever the window
+  contains; a free-driving window only if all 50 rows are FLW and none is "-" (the pairing shortcut); the
+  classes are then subsampled at random to the smallest one, without a fixed seed, so the exact sets cannot be
+  drawn again from the code (the sets we hold are the ones drawn).
+- The thesis does not mention the copied drives below; its split is the official one, so its test set holds
+  the copy of training driver 9 as user 25, as ours does. Its deployment figures are float32 estimates of ST's
+  cloud tool, not board measurements (CNN1D classifier: 1.69 MiB flash, 38.6 KiB RAM, 33.7 ms on the H7B3).
+
 ## Two drivers' files hold another driver's drive (found 2026-11-12)
 
 `datasets/dmir/duplicate_sessions.py`, results `datasets/dmir/results/hil/duplicate_sessions.json`. Found
@@ -208,5 +237,4 @@ paper with the regression + deployment story. Details in feature-map.md.
 - [x] Exact identity of all 31 classification channels, including the two
       neighbour-car blocks: recovered and verified against the pickle on
       2026-09-09 (feature-map.md, last section).
-- [ ] Provenance of the internal 92%/0.42/0.44 reference results (model,
-      spike handling) — needed only for the paper's "internal reference" row.
+- [x] Provenance of the internal 92%/0.42/0.44 reference results: the M.Sc. thesis above (2026-11-17).
