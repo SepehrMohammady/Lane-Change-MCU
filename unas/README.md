@@ -654,7 +654,9 @@ authority fall from 27.1% to 3.5%. The shortcut has a cost in the loop. After a 
 protocol-trained networks expect it back for about 2 s and brake for it in one cut-out in five; trained on complete
 tracks, about 0.5 s and one in nine. The collisions, 7 to 9 per arm, are replayed vehicles merging into the ego,
 which they cannot see; they do not depend on the arm. Only aggregates are versioned
-(`datasets/highd/results/hil/acc_loop*.json*`). The same loops with the board as the predictor follow.
+(`datasets/highd/results/hil/acc_loop*.json*`).
+
+The same loops with the board as the predictor (2026-11-17, `unas/acc_loop_board.py`): the stream firmware of one network of each kind (seed 100, fixed beforehand; 30,412 B flash, 11,984 B static RAM) gets the neighbouring vehicle's 18 raw features every 5th frame over the ST-LINK virtual COM port and returns its int8 outputs, which decide the ACC's anticipation. In all 931 episodes of each network every decision equals the PC loop's (38,023 per network, every int8 output identical), so the outcomes in the table above are the board's as well. The network takes 0.1851 ms per decision on the H7B3; the host's round trip is 1.732 ms (99th percentile 2.032 ms). In real time (20 part-C episodes, the ego at 25 Hz, the board at 5 Hz) the steps were late by 0.334 ms on average and 1.309 ms at most against a period of 40 ms, and none of the 20 episodes failed. Results: `datasets/highd/results/hil/acc_loop_board.json(l)`.
 
 ## Thresholds (first pass, in `dmir_config.py`)
 
