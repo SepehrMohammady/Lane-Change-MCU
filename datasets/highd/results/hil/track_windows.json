@@ -1,0 +1,975 @@
+{
+ "utc": "2026-11-17T10:57:40+00:00",
+ "records": 15,
+ "arms": {
+  "P": {
+   "trained_on": "the protocol's windows",
+   "seeds": [
+    100,
+    101,
+    102,
+    103,
+    104
+   ],
+   "training_windows": 194662,
+   "track_windows_per_class_before_balancing": null,
+   "epochs_run": [
+    38,
+    37,
+    49,
+    27,
+    50
+   ],
+   "protocol_test_accuracy_int8": {
+    "mean": 0.92952,
+    "std": 0.00174,
+    "values": [
+     0.93051,
+     0.92641,
+     0.93013,
+     0.93035,
+     0.93018
+    ]
+   },
+   "free_windows_called_a_lane_change": {
+    "mean": 0.20268,
+    "std": 0.02947,
+    "values": [
+     0.2191,
+     0.2211,
+     0.1895,
+     0.1568,
+     0.2269
+    ]
+   },
+   "free_windows_called_a_lane_change_tracks_without_a_lane_change": {
+    "mean": 0.1888,
+    "std": 0.02898,
+    "values": [
+     0.2043,
+     0.207,
+     0.1765,
+     0.1434,
+     0.2128
+    ]
+   },
+   "opposite_called_in_windows_holding_a_completed_lane_change": {
+    "mean": 0.80482,
+    "std": 0.03206,
+    "values": [
+     0.7835,
+     0.7871,
+     0.8108,
+     0.8585,
+     0.7842
+    ]
+   },
+   "correct_2_s_before_the_crossing": {
+    "mean": 1.0,
+    "std": 0.0,
+    "values": [
+     1.0,
+     1.0,
+     1.0,
+     1.0,
+     1.0
+    ]
+   },
+   "correct_1_s_before": {
+    "mean": 0.99974,
+    "std": 0.00058,
+    "values": [
+     1.0,
+     0.9987,
+     1.0,
+     1.0,
+     1.0
+    ]
+   },
+   "correct_3_s_before": {
+    "mean": 0.9977,
+    "std": 0.00082,
+    "values": [
+     0.9971,
+     0.9971,
+     0.9986,
+     0.9971,
+     0.9986
+    ]
+   },
+   "correct_4_s_before": {
+    "mean": 0.94026,
+    "std": 0.01113,
+    "values": [
+     0.9505,
+     0.93,
+     0.9283,
+     0.9403,
+     0.9522
+    ]
+   },
+   "correct_5_s_before": {
+    "mean": 0.62798,
+    "std": 0.03449,
+    "values": [
+     0.678,
+     0.5953,
+     0.6208,
+     0.5996,
+     0.6462
+    ]
+   },
+   "windows_before_a_crossing_correct": {
+    "mean": 0.95246,
+    "std": 0.0053,
+    "values": [
+     0.9578,
+     0.9481,
+     0.949,
+     0.9487,
+     0.9587
+    ]
+   },
+   "early_windows_called_a_lane_change": {
+    "mean": 0.3102,
+    "std": 0.0282,
+    "values": [
+     0.3344,
+     0.3011,
+     0.283,
+     0.2871,
+     0.3454
+    ]
+   },
+   "free_windows_1.8_to_5_s_after_a_crossing_opposite": {
+    "mean": 0.32794,
+    "std": 0.03039,
+    "values": [
+     0.3748,
+     0.3201,
+     0.2903,
+     0.3304,
+     0.3241
+    ]
+   },
+   "free_windows_1.8_to_5_s_after_a_crossing_completed": {
+    "mean": 0.16274,
+    "std": 0.03594,
+    "values": [
+     0.1555,
+     0.1969,
+     0.1661,
+     0.1059,
+     0.1893
+    ]
+   },
+   "runs_per_vehicle_hour": {
+    "mean": 841.36,
+    "std": 115.93995,
+    "values": [
+     861.6,
+     849.0,
+     853.9,
+     659.4,
+     982.9
+    ]
+   },
+   "runs_of_0.6_s_or_more_per_vehicle_hour": {
+    "mean": 342.66,
+    "std": 31.9414,
+    "values": [
+     369.4,
+     354.3,
+     332.3,
+     291.7,
+     365.6
+    ]
+   },
+   "windows_correct_on_complete_tracks": {
+    "mean": 0.78746,
+    "std": 0.0267,
+    "values": [
+     0.773,
+     0.7705,
+     0.7994,
+     0.829,
+     0.7654
+    ]
+   }
+  },
+  "T": {
+   "trained_on": "windows from complete tracks",
+   "seeds": [
+    100,
+    101,
+    102,
+    103,
+    104
+   ],
+   "training_windows": 258753,
+   "track_windows_per_class_before_balancing": [
+    5710204,
+    105911,
+    86251
+   ],
+   "epochs_run": [
+    43,
+    44,
+    39,
+    33,
+    48
+   ],
+   "protocol_test_accuracy_int8": {
+    "mean": 0.91057,
+    "std": 0.0032,
+    "values": [
+     0.91619,
+     0.90892,
+     0.90942,
+     0.91003,
+     0.90831
+    ]
+   },
+   "free_windows_called_a_lane_change": {
+    "mean": 0.08566,
+    "std": 0.01303,
+    "values": [
+     0.0902,
+     0.0959,
+     0.0875,
+     0.063,
+     0.0917
+    ]
+   },
+   "free_windows_called_a_lane_change_tracks_without_a_lane_change": {
+    "mean": 0.08348,
+    "std": 0.01293,
+    "values": [
+     0.0875,
+     0.0937,
+     0.0855,
+     0.061,
+     0.0897
+    ]
+   },
+   "opposite_called_in_windows_holding_a_completed_lane_change": {
+    "mean": 0.141,
+    "std": 0.02882,
+    "values": [
+     0.1582,
+     0.135,
+     0.1153,
+     0.1149,
+     0.1816
+    ]
+   },
+   "correct_2_s_before_the_crossing": {
+    "mean": 0.99844,
+    "std": 0.00214,
+    "values": [
+     1.0,
+     0.9948,
+     0.9987,
+     1.0,
+     0.9987
+    ]
+   },
+   "correct_1_s_before": {
+    "mean": 0.99714,
+    "std": 0.00109,
+    "values": [
+     0.9987,
+     0.9961,
+     0.9974,
+     0.9974,
+     0.9961
+    ]
+   },
+   "correct_3_s_before": {
+    "mean": 0.99306,
+    "std": 0.00277,
+    "values": [
+     0.9971,
+     0.9899,
+     0.9942,
+     0.9913,
+     0.9928
+    ]
+   },
+   "correct_4_s_before": {
+    "mean": 0.90716,
+    "std": 0.02107,
+    "values": [
+     0.9266,
+     0.8908,
+     0.9181,
+     0.8788,
+     0.9215
+    ]
+   },
+   "correct_5_s_before": {
+    "mean": 0.62754,
+    "std": 0.03208,
+    "values": [
+     0.6504,
+     0.6525,
+     0.6377,
+     0.5742,
+     0.6229
+    ]
+   },
+   "windows_before_a_crossing_correct": {
+    "mean": 0.94438,
+    "std": 0.00641,
+    "values": [
+     0.9506,
+     0.9425,
+     0.9481,
+     0.9342,
+     0.9465
+    ]
+   },
+   "early_windows_called_a_lane_change": {
+    "mean": 0.34082,
+    "std": 0.02635,
+    "values": [
+     0.3452,
+     0.3525,
+     0.3489,
+     0.2951,
+     0.3624
+    ]
+   },
+   "free_windows_1.8_to_5_s_after_a_crossing_opposite": {
+    "mean": 0.10042,
+    "std": 0.01591,
+    "values": [
+     0.1213,
+     0.1107,
+     0.091,
+     0.081,
+     0.0981
+    ]
+   },
+   "free_windows_1.8_to_5_s_after_a_crossing_completed": {
+    "mean": 0.0212,
+    "std": 0.00639,
+    "values": [
+     0.0207,
+     0.0243,
+     0.0266,
+     0.0104,
+     0.024
+    ]
+   },
+   "runs_per_vehicle_hour": {
+    "mean": 545.1,
+    "std": 108.95176,
+    "values": [
+     553.3,
+     592.1,
+     584.7,
+     357.8,
+     637.6
+    ]
+   },
+   "runs_of_0.6_s_or_more_per_vehicle_hour": {
+    "mean": 168.66,
+    "std": 26.18326,
+    "values": [
+     178.5,
+     190.1,
+     170.6,
+     123.5,
+     180.6
+    ]
+   },
+   "windows_correct_on_complete_tracks": {
+    "mean": 0.90856,
+    "std": 0.01273,
+    "values": [
+     0.9045,
+     0.8988,
+     0.9068,
+     0.9307,
+     0.902
+    ]
+   }
+  },
+  "K": {
+   "trained_on": "windows from complete tracks whose label is known",
+   "seeds": [
+    100,
+    101,
+    102,
+    103,
+    104
+   ],
+   "training_windows": 258753,
+   "track_windows_per_class_before_balancing": [
+    3375333,
+    105911,
+    86251
+   ],
+   "epochs_run": [
+    34,
+    38,
+    43,
+    45,
+    50
+   ],
+   "protocol_test_accuracy_int8": {
+    "mean": 0.92127,
+    "std": 0.00201,
+    "values": [
+     0.92219,
+     0.91997,
+     0.92224,
+     0.92347,
+     0.91847
+    ]
+   },
+   "free_windows_called_a_lane_change": {
+    "mean": 0.12876,
+    "std": 0.01076,
+    "values": [
+     0.1342,
+     0.122,
+     0.1157,
+     0.1435,
+     0.1284
+    ]
+   },
+   "free_windows_called_a_lane_change_tracks_without_a_lane_change": {
+    "mean": 0.12154,
+    "std": 0.01042,
+    "values": [
+     0.127,
+     0.1147,
+     0.109,
+     0.1357,
+     0.1213
+    ]
+   },
+   "opposite_called_in_windows_holding_a_completed_lane_change": {
+    "mean": 0.14374,
+    "std": 0.02825,
+    "values": [
+     0.1507,
+     0.114,
+     0.1243,
+     0.1871,
+     0.1426
+    ]
+   },
+   "correct_2_s_before_the_crossing": {
+    "mean": 0.99974,
+    "std": 0.00058,
+    "values": [
+     1.0,
+     0.9987,
+     1.0,
+     1.0,
+     1.0
+    ]
+   },
+   "correct_1_s_before": {
+    "mean": 0.99818,
+    "std": 0.00148,
+    "values": [
+     0.9987,
+     0.9961,
+     0.9987,
+     1.0,
+     0.9974
+    ]
+   },
+   "correct_3_s_before": {
+    "mean": 0.9977,
+    "std": 0.00082,
+    "values": [
+     0.9986,
+     0.9971,
+     0.9971,
+     0.9986,
+     0.9971
+    ]
+   },
+   "correct_4_s_before": {
+    "mean": 0.9256,
+    "std": 0.01527,
+    "values": [
+     0.9147,
+     0.9147,
+     0.93,
+     0.9505,
+     0.9181
+    ]
+   },
+   "correct_5_s_before": {
+    "mean": 0.58686,
+    "std": 0.03229,
+    "values": [
+     0.5699,
+     0.5572,
+     0.5742,
+     0.6398,
+     0.5932
+    ]
+   },
+   "windows_before_a_crossing_correct": {
+    "mean": 0.94636,
+    "std": 0.00579,
+    "values": [
+     0.9439,
+     0.9394,
+     0.9458,
+     0.9552,
+     0.9475
+    ]
+   },
+   "early_windows_called_a_lane_change": {
+    "mean": 0.25962,
+    "std": 0.02901,
+    "values": [
+     0.2504,
+     0.2272,
+     0.2403,
+     0.2903,
+     0.2899
+    ]
+   },
+   "free_windows_1.8_to_5_s_after_a_crossing_opposite": {
+    "mean": 0.1708,
+    "std": 0.01085,
+    "values": [
+     0.1757,
+     0.1608,
+     0.1576,
+     0.1815,
+     0.1784
+    ]
+   },
+   "free_windows_1.8_to_5_s_after_a_crossing_completed": {
+    "mean": 0.0487,
+    "std": 0.01075,
+    "values": [
+     0.0489,
+     0.0482,
+     0.0412,
+     0.0663,
+     0.0389
+    ]
+   },
+   "runs_per_vehicle_hour": {
+    "mean": 662.82,
+    "std": 66.63608,
+    "values": [
+     636.7,
+     596.0,
+     613.7,
+     726.4,
+     741.3
+    ]
+   },
+   "runs_of_0.6_s_or_more_per_vehicle_hour": {
+    "mean": 248.22,
+    "std": 19.65864,
+    "values": [
+     254.7,
+     238.2,
+     226.6,
+     278.4,
+     243.2
+    ]
+   },
+   "windows_correct_on_complete_tracks": {
+    "mean": 0.86934,
+    "std": 0.01044,
+    "values": [
+     0.8645,
+     0.876,
+     0.8821,
+     0.855,
+     0.8691
+    ]
+   }
+  }
+ },
+ "criterion": {
+  "rule": "means over the seeds: (a) free windows called a lane change, T at most half of P; (b) the opposite direction called in windows holding a completed lane change, T at most half of P; (c) correct 2 s before the crossing, T at most 5 points below P; (d) accuracy on the protocol's test windows, T at most 3 points below P",
+  "a_free_windows_called_a_lane_change_P_T": [
+   0.20268,
+   0.08566
+  ],
+  "a_met": true,
+  "b_opposite_after_a_lane_change_P_T": [
+   0.80482,
+   0.141
+  ],
+  "b_met": true,
+  "c_correct_2_s_before_P_T": [
+   1.0,
+   0.99844
+  ],
+  "c_met": true,
+  "d_protocol_test_accuracy_P_T": [
+   0.92952,
+   0.91057
+  ],
+  "d_met": true,
+  "met": true
+ },
+ "label_known": {
+  "note": "windows whose label is known only (correction of 11:47); K was trained after the correction, P and T are the kept networks scored again",
+  "arms": {
+   "P": {
+    "seeds": [
+     100,
+     101,
+     102,
+     103,
+     104
+    ],
+    "protocol_test_accuracy_int8": {
+     "mean": 0.92952,
+     "std": 0.00174,
+     "values": [
+      0.93051,
+      0.92641,
+      0.93013,
+      0.93035,
+      0.93018
+     ]
+    },
+    "lane_keeping_from_6_s_called": {
+     "mean": 0.04738,
+     "std": 0.00902,
+     "values": [
+      0.054,
+      0.0507,
+      0.0396,
+      0.0361,
+      0.0565
+     ]
+    },
+    "lane_keeping_first_6_s_called": {
+     "mean": 0.1928,
+     "std": 0.03234,
+     "values": [
+      0.2177,
+      0.2059,
+      0.1771,
+      0.1436,
+      0.2197
+     ]
+    },
+    "lane_keeping_called": {
+     "mean": 0.1366,
+     "std": 0.0232,
+     "values": [
+      0.1544,
+      0.1459,
+      0.124,
+      0.1021,
+      0.1566
+     ]
+    },
+    "lane_keeping_tracks_without_a_lane_change_from_6_s_called": {
+     "mean": 0.03976,
+     "std": 0.00865,
+     "values": [
+      0.0453,
+      0.0433,
+      0.0325,
+      0.0288,
+      0.0489
+     ]
+    },
+    "opposite_without_a_return": {
+     "mean": 0.79742,
+     "std": 0.03374,
+     "values": [
+      0.781,
+      0.785,
+      0.8008,
+      0.8537,
+      0.7666
+     ]
+    },
+    "windows_correct_label_known": {
+     "mean": 0.85456,
+     "std": 0.02006,
+     "values": [
+      0.8395,
+      0.8458,
+      0.8653,
+      0.8846,
+      0.8376
+     ]
+    },
+    "correct_2_s_before_the_crossing": {
+     "mean": 1.0,
+     "std": 0.0,
+     "values": [
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0
+     ]
+    },
+    "correct_4_s_before": {
+     "mean": 0.94026,
+     "std": 0.01113,
+     "values": [
+      0.9505,
+      0.93,
+      0.9283,
+      0.9403,
+      0.9522
+     ]
+    }
+   },
+   "T": {
+    "seeds": [
+     100,
+     101,
+     102,
+     103,
+     104
+    ],
+    "protocol_test_accuracy_int8": {
+     "mean": 0.91057,
+     "std": 0.0032,
+     "values": [
+      0.91619,
+      0.90892,
+      0.90942,
+      0.91003,
+      0.90831
+     ]
+    },
+    "lane_keeping_from_6_s_called": {
+     "mean": 0.05036,
+     "std": 0.00912,
+     "values": [
+      0.0504,
+      0.0536,
+      0.0567,
+      0.0347,
+      0.0564
+     ]
+    },
+    "lane_keeping_first_6_s_called": {
+     "mean": 0.1254,
+     "std": 0.02052,
+     "values": [
+      0.1335,
+      0.1419,
+      0.1278,
+      0.0898,
+      0.134
+     ]
+    },
+    "lane_keeping_called": {
+     "mean": 0.09638,
+     "std": 0.01585,
+     "values": [
+      0.1013,
+      0.1078,
+      0.1003,
+      0.0685,
+      0.104
+     ]
+    },
+    "lane_keeping_tracks_without_a_lane_change_from_6_s_called": {
+     "mean": 0.04674,
+     "std": 0.00859,
+     "values": [
+      0.0465,
+      0.0496,
+      0.0527,
+      0.0321,
+      0.0528
+     ]
+    },
+    "opposite_without_a_return": {
+     "mean": 0.16218,
+     "std": 0.03767,
+     "values": [
+      0.1776,
+      0.1507,
+      0.1269,
+      0.1356,
+      0.2201
+     ]
+    },
+    "windows_correct_label_known": {
+     "mean": 0.90288,
+     "std": 0.01454,
+     "values": [
+      0.8989,
+      0.8925,
+      0.8994,
+      0.9284,
+      0.8952
+     ]
+    },
+    "correct_2_s_before_the_crossing": {
+     "mean": 0.99844,
+     "std": 0.00214,
+     "values": [
+      1.0,
+      0.9948,
+      0.9987,
+      1.0,
+      0.9987
+     ]
+    },
+    "correct_4_s_before": {
+     "mean": 0.90716,
+     "std": 0.02107,
+     "values": [
+      0.9266,
+      0.8908,
+      0.9181,
+      0.8788,
+      0.9215
+     ]
+    }
+   },
+   "K": {
+    "seeds": [
+     100,
+     101,
+     102,
+     103,
+     104
+    ],
+    "protocol_test_accuracy_int8": {
+     "mean": 0.92127,
+     "std": 0.00201,
+     "values": [
+      0.92219,
+      0.91997,
+      0.92224,
+      0.92347,
+      0.91847
+     ]
+    },
+    "lane_keeping_from_6_s_called": {
+     "mean": 0.044,
+     "std": 0.00711,
+     "values": [
+      0.0395,
+      0.0376,
+      0.0403,
+      0.0545,
+      0.0481
+     ]
+    },
+    "lane_keeping_first_6_s_called": {
+     "mean": 0.09406,
+     "std": 0.01281,
+     "values": [
+      0.098,
+      0.0806,
+      0.0833,
+      0.1125,
+      0.0959
+     ]
+    },
+    "lane_keeping_called": {
+     "mean": 0.07472,
+     "std": 0.01029,
+     "values": [
+      0.0754,
+      0.064,
+      0.0667,
+      0.0901,
+      0.0774
+     ]
+    },
+    "lane_keeping_tracks_without_a_lane_change_from_6_s_called": {
+     "mean": 0.04028,
+     "std": 0.0067,
+     "values": [
+      0.0362,
+      0.034,
+      0.0369,
+      0.0501,
+      0.0442
+     ]
+    },
+    "opposite_without_a_return": {
+     "mean": 0.10934,
+     "std": 0.02976,
+     "values": [
+      0.1167,
+      0.0818,
+      0.0892,
+      0.157,
+      0.102
+     ]
+    },
+    "windows_correct_label_known": {
+     "mean": 0.9233,
+     "std": 0.0093,
+     "values": [
+      0.9227,
+      0.9327,
+      0.9309,
+      0.9094,
+      0.9208
+     ]
+    },
+    "correct_2_s_before_the_crossing": {
+     "mean": 0.99974,
+     "std": 0.00058,
+     "values": [
+      1.0,
+      0.9987,
+      1.0,
+      1.0,
+      1.0
+     ]
+    },
+    "correct_4_s_before": {
+     "mean": 0.9256,
+     "std": 0.01527,
+     "values": [
+      0.9147,
+      0.9147,
+      0.93,
+      0.9505,
+      0.9181
+     ]
+    }
+   }
+  },
+  "criterion_K_against_P": {
+   "a_lane_keeping_from_6_s_called_P_K": [
+    0.04738,
+    0.044
+   ],
+   "a_met": false,
+   "b_opposite_without_a_return_P_K": [
+    0.79742,
+    0.10934
+   ],
+   "b_met": true,
+   "c_correct_2_s_before_P_K": [
+    1.0,
+    0.99974
+   ],
+   "c_met": true,
+   "d_protocol_test_accuracy_P_K": [
+    0.92952,
+    0.92127
+   ],
+   "d_met": true,
+   "met": false
+  }
+ }
+}

@@ -72,6 +72,9 @@ _ORDER = np.random.default_rng(20261112).permutation(len(DRIVES))
 FOLDS = [sorted(DRIVES[i] for i in _ORDER[8 * k:8 * k + 8]) for k in range(6)]
 ARMS = ("L", "D")
 GAIN, WINS, COST = 0.08, 30, 0.02                            # the criterion
+MEASURES = ("frames_correct", "accuracy_on_the_labs_windows", "opposite_announced_after_a_lane_change",
+            "timely_share", "alarm_runs_per_hour", "alarm_runs_of_0.5_s_or_more_per_hour", "free_frames_in_alarm",
+            "baseline_session_frames_correct", "baseline_session_alarm_runs_per_hour")
 
 
 def sessions_table() -> dict:
@@ -220,8 +223,8 @@ def run(folds, arms):
                 keras.backend.clear_session()
 
 
-def report():
-    rows = [json.loads(line) for line in OUT.read_text().splitlines()]
+def summarize(rows: list) -> dict:
+    """The report over drives of a list of records (one per fold, arm and seed) in the form run() writes."""
     per = {arm: {} for arm in ARMS}                          # arm -> user -> the records of its seeds
     fold_of = {}
     for r in rows:
@@ -247,6 +250,7 @@ def report():
         "baseline_session_alarm_runs_per_hour": lambda d: (d.get("baseline_session", {}).get("raw_output", {})
                                                            .get("false_alarms_per_hour")),
     }
+    assert tuple(measures) == MEASURES
 
     def value(arm, u, f):
         vals = [f(d) for d in per[arm][u]]
@@ -299,12 +303,15 @@ def report():
            "drives_looked_at_before": summary(lambda r: r["looked_at_before"]),
            "all_drives": summary(lambda r: True),
            "per_drive": drive_rows}
-    SUMMARY.write_text(json.dumps(res, indent=1))
-    print(f"{len(rows)} of {res['records_expected']} records; seeds {seeds}")
+    return res
+
+
+def show(res: dict) -> None:
+    print(f"{res['records']} of {res['records_expected']} records; seeds {res['seeds']}")
     for key in ("drives_not_looked_at_before", "drives_looked_at_before", "all_drives"):
         s = res[key]
         print(f"{key} ({s['drives']} drives):")
-        for name in measures:
+        for name in MEASURES:
             if name in s:
                 m = s[name]
                 extra = (f", 95% interval {m['D_minus_L_95_interval_over_drives']}, range {m['smallest_and_largest_gain']}"
@@ -312,6 +319,12 @@ def report():
                 print(f"   {name}: L {m['L']:.4f}, D {m['D']:.4f}, D-L {m['D_minus_L']:+.4f}, D above L in "
                       f"{m['D_above_L_in']} of {m['drives_with_a_value']}{extra}")
     print(json.dumps(res["criterion"], indent=1))
+
+
+def report():
+    res = summarize([json.loads(line) for line in OUT.read_text().splitlines()])
+    SUMMARY.write_text(json.dumps(res, indent=1))
+    show(res)
 
 
 if __name__ == "__main__":

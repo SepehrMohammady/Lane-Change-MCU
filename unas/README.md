@@ -114,6 +114,7 @@ the model's own Keras; `path_check.py` compares the fork's trainer with `select_
 | `stream_cv_check.py [L] [D]` | the same comparison as a cross-validation over the 48 different LCIR drives, six folds of eight: the lab's windows of the training drives against windows taken from their whole drives, five seeds, int8 as deployed, every held-out drive scored on its whole session; criterion fixed beforehand on the 34 drives that were never a test or validation drive; `--report` gives the per-drive table and the criterion | `datasets/dmir/results/seeds/stream_cv.jsonl`, `datasets/dmir/results/hil/stream_cv.json` |
 | `stream_arch_check.py [index ...]` | nine existing LCIR intention networks (seven from the searches' shortlists, 14k to 152k MACs, and two hand-designed references of 84k and 441k parameters) trained with five seeds on windows from the whole drives of the training drivers and scored on the whole drives of the validation drivers: a check, with its rule fixed beforehand, of whether a search under that measure has anything to select on; `--report` gives the table and the rule | `datasets/dmir/results/seeds/stream_arch.jsonl`, `datasets/dmir/results/hil/stream_arch.json` |
 | `stream_board_check.py prepare` / `replay` / `realtime` / `--report` | the ten int8 networks of `stream_train_check.py` that were trained on the lab's windows and on windows from the whole drives of the same training files (five seeds each, kept as replayed in `datasets/dmir/results/hil/stream_board/`) through the STM32H7B3I-DK on the whole drives of the test drivers: `prepare` (WSL) makes the headers and host references, `replay` builds, flashes and replays each network at top speed, `realtime` sends one drive at 10 Hz to the network chosen on the validation drivers, `--report` computes every measure of the study from the board's outputs and judges the tolerances fixed beforehand for agreement, numbers and cost | `datasets/dmir/results/hil/stream_board.jsonl`, `datasets/dmir/results/hil/stream_board.json` |
+| `track_train_check.py [P] [T] [K]`, `--rescore` | highD: the searched classifier trained with five seeds on the protocol's windows and on windows from the complete tracks of the training recordings, all of them (T) or those whose label is known (K) (`datasets/highd/track_stream.py build train`, `build val`, `build`), int8 as deployed, scored on the protocol's test windows and on every window of every track of the test recordings with the measures of `datasets/highd/track_stream.py`; `--rescore` scores kept networks again after a change of those measures; `--report` gives the means and the criteria fixed beforehand (see Hardware in the loop) | `datasets/highd/results/seeds/track_windows.jsonl`, `track_windows_rescored.jsonl`, `datasets/highd/results/hil/track_windows.json` |
 | `resource_bias.py [search ...]` | for every evaluated candidate of a search: the fork's stored peak memory, size and MACs against the Keras model's weights and MACs and the faithful graph (CPU, from the fork's state files) | `datasets/highd/results/resource_bias.json` |
 
 Outcome of `run_mm_searches.sh` (2026-11-11, test, fresh seeds 100-104): searched on scaled inputs, the LCR and
@@ -554,6 +555,66 @@ with at most 10% of the lane-keeping windows called a lane change. Not met: 11.5
 100% and 9.4%). The Traffic Manager's lane changes have no lead-up: no lateral motion until 0.8 s before the
 crossing, then 4.1 m/s sideways against 0.87 m/s on highD. A study of lane-change prediction in CARLA therefore
 needs human drivers or replayed recordings; details in `datasets/carla/README.md`.
+
+highD on complete vehicle tracks (2026-11-17, `datasets/highd/track_stream.py`, `unas/track_train_check.py`). The
+question asked of LCIR's whole drives, asked of the public benchmark. The protocol scores 35-frame scenarios:
+lane-change scenarios that stay in one lane until the crossing and lane-keeping scenarios that end 5 s before a
+crossing or before the end of the track. No window of it holds a completed lane change. `track_stream.py` gives
+the deployed int8 networks every 10-frame window of every track of the five test recordings (6,605 tracks,
+383,362 windows, 24.6 vehicle hours, 1,080 lane changes, of which the protocol scores
+463). A highD track lasts about 13 s and a vehicle may change lanes right after it leaves the recorded
+section, so a window's label is known only if a crossing follows within 5.2 s or the track goes on for 5.2 s more;
+the numbers below count those windows only. (A first version of the measures, fixed beforehand, also counted the
+last 5.2 s of every track; it was corrected before anything was published, and the first criterion that used it is
+reported below with that note.)
+
+The searched highD classifier, 92.76% on the protocol's scenarios, names the lane change 2 s before the crossing
+in 100% of 775 lane changes. In windows that hold a completed lane change and are not followed by a
+crossing back, it announces the opposite lane change in 78.9%: the shortcut found in LCIR's prepared
+windows, on the public benchmark. A lane keeper is called a lane change in 6.5% of its windows from 6 s
+after it entered the section on, but in 23.4% of the windows that end in its first 6 s; the cause of
+that position effect is not known (neither the followers being out of view nor the vehicle's own lateral motion
+explains it), so a false-alarm rate per hour cannot be read off these tracks. The hand-designed CNN behaves the
+same way (`results/hil/track_stream.json`).
+
+`track_train_check.py` repeats the LCIR study with the protocol's split (recordings 1-50 train, 51-55 stop the
+training early, 56-60 test): the same architecture (2,593 parameters) and recipe, five seeds, int8 as deployed,
+scored on the PC, trained on the protocol's windows (P) or on every 10-frame window of the complete training
+tracks, class = the direction of the next crossing if it comes within 5.2 s, classes balanced by subsampling
+(T: all windows; K: windows whose label is known, the construction to use).
+
+| complete tracks of recordings 56-60, windows whose label is known, mean of five seeds | P: protocol's windows | T: complete tracks | K: complete tracks, label known |
+|---|--:|--:|--:|
+| accuracy on the protocol's test windows | 92.95% ± 0.17 | 91.06% ± 0.32 | 92.13% ± 0.20 |
+| windows correct | 85.5% ± 2.0 | 90.3% ± 1.5 | 92.3% ± 0.9 |
+| opposite lane change called after a lane change (no crossing back) | 79.7% ± 3.4 | 16.2% ± 3.8 | 10.9% ± 3.0 |
+| lane keeping called a lane change, from 6 s after the section's entry | 4.7% ± 0.9 | 5.0% ± 0.9 | 4.4% ± 0.7 |
+| lane keeping called a lane change, first 6 s | 19.3% ± 3.2 | 12.5% ± 2.1 | 9.4% ± 1.3 |
+| correct class 2 s before the crossing | 100.00% ± 0.00 | 99.84% ± 0.21 | 99.97% ± 0.06 |
+| correct class 4 s before the crossing | 94.0% ± 1.1 | 90.7% ± 2.1 | 92.6% ± 1.5 |
+
+Criterion for K against P, fixed before K existed (after P and T were known): lane keeping from 6 s on called a
+lane change at most half, the opposite call after a lane change at most half, the correct class 2 s before the
+crossing at most 5 points lower, the protocol's test windows at most 3 points lower. Met for the opposite call
+(79.7% to 10.9%), the early detection and the protocol's windows (92.95% to
+92.13%); not met for lane keepers (4.74% to 4.40%): so not met as a whole. The first
+criterion (T against P, free windows including the last 5.2 s of every track) was met (20.3% to
+8.6% free windows called, 80.5% to 14.1% opposite calls), but its first part counted windows whose label is
+unknown. What carries over from LCIR to highD is the shortcut after a lane change and its correction by the
+training windows, at under 1 point of the benchmark's own windows; on highD the protocol-trained network rarely
+calls a lane keeper a lane change away from the section's entry, and the complete tracks do not lower that.
+Results: `datasets/highd/results/seeds/track_windows*.jsonl`, `datasets/highd/results/hil/track_windows.json`.
+
+A critical gap behind does not remove the prediction (2026-11-17, `datasets/highd/critical_gap_probe.py`). A closed
+loop that is to show what an early prediction is worth needs a scripted critical gap around a recorded lane
+change, because the recordings hold no conflict (above), and such gaps are outside the training data. The probe
+replaces, in the 463 lane-change test scenarios, the distance to the follower in the target lane by a gap of 5 to 50 m
+at the crossing with a closing speed of 0 to 10 m/s (15 cells), and does the same on one side of the
+230 lane-keeping scenarios; rule fixed before the run (at least 0.8 of the unchanged share 2 s before the crossing
+in every cell up to 30 m, lane-keeping calls up by less than 10 points). Met: the searched classifier names the
+lane change 2 s before the crossing in 100% of the scenarios in every cell (unchanged: 100%), with τ_c 4.67 to
+4.70 s (unchanged 4.78 s) and 7.7% to 8.2% of the lane-keeping windows called a lane change (unchanged 9.4%).
+The networks hardly use that input. Result: `datasets/highd/results/hil/critical_gap_probe.json`.
 
 ## Thresholds (first pass, in `dmir_config.py`)
 

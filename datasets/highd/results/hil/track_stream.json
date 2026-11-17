@@ -1,0 +1,293 @@
+{
+ "utc": "2026-11-17T10:46:27+00:00",
+ "recordings": [
+  56,
+  57,
+  58,
+  59,
+  60
+ ],
+ "tracks": 6605,
+ "tracks_with_a_lane_change": 1004,
+ "tracks_left_out": {
+  "shorter_than_a_window": 12,
+  "with_an_invalid_frame": 0
+ },
+ "frames": 442807,
+ "windows": 383362,
+ "vehicle_hours": 24.6,
+ "lane_changes": 1080,
+ "lane_change_scenarios_of_the_protocol": 463,
+ "networks": {
+  "searched (the paper's choice)": {
+   "windows_correct_with_the_labels_above": 0.7554,
+   "lane_changes_with_19_frames_in_one_lane_before": 775,
+   "of_them_with_35_frames_in_one_lane_before": 463,
+   "correct_class_in_the_window_ending_before_the_crossing": {
+    "1_s": {
+     "share": 0.9987,
+     "lane_changes": 775
+    },
+    "2_s": {
+     "share": 1.0,
+     "lane_changes": 775
+    },
+    "3_s": {
+     "share": 1.0,
+     "lane_changes": 693
+    },
+    "4_s": {
+     "share": 0.9488,
+     "lane_changes": 586
+    },
+    "5_s": {
+     "share": 0.6716,
+     "lane_changes": 472
+    }
+   },
+   "windows_before_a_crossing_correct": {
+    "share": 0.9567,
+    "windows": 18410
+   },
+   "free_windows_called_a_lane_change": {
+    "share": 0.2376,
+    "windows": 350789
+   },
+   "free_windows_called_a_lane_change_tracks_without_a_lane_change": {
+    "share": 0.2224,
+    "windows": 327480
+   },
+   "early_windows_called_a_lane_change": {
+    "share": 0.3349,
+    "the_coming_direction": 0.3135,
+    "windows": 5643
+   },
+   "windows_holding_a_completed_lane_change": {
+    "called_the_completed_direction": 0.1121,
+    "called_the_opposite_direction": 0.7961,
+    "windows": 8520,
+    "by_time_since_the_crossing_s": {
+     "0": {
+      "completed": 0.5021,
+      "opposite": 0.2969,
+      "windows": 960
+     },
+     "0.2": {
+      "completed": 0.0168,
+      "opposite": 0.9821,
+      "windows": 951
+     },
+     "0.4": {
+      "completed": 0.0,
+      "opposite": 1.0,
+      "windows": 949
+     },
+     "0.6": {
+      "completed": 0.0,
+      "opposite": 0.9989,
+      "windows": 950
+     },
+     "0.8": {
+      "completed": 0.0011,
+      "opposite": 0.9936,
+      "windows": 941
+     },
+     "1": {
+      "completed": 0.0171,
+      "opposite": 0.9434,
+      "windows": 937
+     },
+     "1.2": {
+      "completed": 0.0403,
+      "opposite": 0.9014,
+      "windows": 943
+     },
+     "1.4": {
+      "completed": 0.1185,
+      "opposite": 0.7132,
+      "windows": 945
+     },
+     "1.6": {
+      "completed": 0.3072,
+      "opposite": 0.3422,
+      "windows": 944
+     }
+    }
+   },
+   "free_windows_1.8_to_5_s_after_a_crossing": {
+    "called_the_completed_direction": 0.1815,
+    "called_the_opposite_direction": 0.3629,
+    "windows": 12198
+   },
+   "runs_of_free_windows_called_a_lane_change_per_vehicle_hour": {
+    "any_length": 917.8,
+    "0.6_s_or_more": 377.5,
+    "free_vehicle_hours": 19.49
+   },
+   "label_known": {
+    "note": "windows whose label is known: a crossing follows within 26 frames or the track goes on for 26 more frames",
+    "windows_correct": 0.8264,
+    "windows": 218438,
+    "lane_keeping_windows_called_a_lane_change": {
+     "share": 0.1686,
+     "windows": 195405
+    },
+    "lane_keeping_first_6_s_windows_called_a_lane_change": {
+     "share": 0.2338,
+     "windows": 119877
+    },
+    "lane_keeping_from_6_s_windows_called_a_lane_change": {
+     "share": 0.0653,
+     "windows": 75528
+    },
+    "lane_keeping_tracks_without_a_lane_change_windows_called_a_lane_change": {
+     "share": 0.1576,
+     "windows": 183145
+    },
+    "lane_keeping_tracks_without_a_lane_change_from_6_s_windows_called_a_lane_change": {
+     "share": 0.0569,
+     "windows": 71180
+    },
+    "windows_holding_a_completed_lane_change_opposite_called_without_a_return": {
+     "share": 0.7888,
+     "windows": 4498
+    }
+   }
+  },
+  "hand-designed CNN": {
+   "windows_correct_with_the_labels_above": 0.6964,
+   "lane_changes_with_19_frames_in_one_lane_before": 775,
+   "of_them_with_35_frames_in_one_lane_before": 463,
+   "correct_class_in_the_window_ending_before_the_crossing": {
+    "1_s": {
+     "share": 0.9961,
+     "lane_changes": 775
+    },
+    "2_s": {
+     "share": 0.9974,
+     "lane_changes": 775
+    },
+    "3_s": {
+     "share": 0.9957,
+     "lane_changes": 693
+    },
+    "4_s": {
+     "share": 0.9369,
+     "lane_changes": 586
+    },
+    "5_s": {
+     "share": 0.6292,
+     "lane_changes": 472
+    }
+   },
+   "windows_before_a_crossing_correct": {
+    "share": 0.9499,
+    "windows": 18410
+   },
+   "free_windows_called_a_lane_change": {
+    "share": 0.2996,
+    "windows": 350789
+   },
+   "free_windows_called_a_lane_change_tracks_without_a_lane_change": {
+    "share": 0.2826,
+    "windows": 327480
+   },
+   "early_windows_called_a_lane_change": {
+    "share": 0.3916,
+    "the_coming_direction": 0.3638,
+    "windows": 5643
+   },
+   "windows_holding_a_completed_lane_change": {
+    "called_the_completed_direction": 0.2036,
+    "called_the_opposite_direction": 0.7506,
+    "windows": 8520,
+    "by_time_since_the_crossing_s": {
+     "0": {
+      "completed": 0.8479,
+      "opposite": 0.101,
+      "windows": 960
+     },
+     "0.2": {
+      "completed": 0.0368,
+      "opposite": 0.9527,
+      "windows": 951
+     },
+     "0.4": {
+      "completed": 0.0032,
+      "opposite": 0.9958,
+      "windows": 949
+     },
+     "0.6": {
+      "completed": 0.0179,
+      "opposite": 0.98,
+      "windows": 950
+     },
+     "0.8": {
+      "completed": 0.0361,
+      "opposite": 0.9628,
+      "windows": 941
+     },
+     "1": {
+      "completed": 0.2711,
+      "opposite": 0.7097,
+      "windows": 937
+     },
+     "1.2": {
+      "completed": 0.2853,
+      "opposite": 0.6288,
+      "windows": 943
+     },
+     "1.4": {
+      "completed": 0.1513,
+      "opposite": 0.7471,
+      "windows": 945
+     },
+     "1.6": {
+      "completed": 0.1758,
+      "opposite": 0.6843,
+      "windows": 944
+     }
+    }
+   },
+   "free_windows_1.8_to_5_s_after_a_crossing": {
+    "called_the_completed_direction": 0.1859,
+    "called_the_opposite_direction": 0.4884,
+    "windows": 12198
+   },
+   "runs_of_free_windows_called_a_lane_change_per_vehicle_hour": {
+    "any_length": 724.8,
+    "0.6_s_or_more": 364.2,
+    "free_vehicle_hours": 19.49
+   },
+   "label_known": {
+    "note": "windows whose label is known: a crossing follows within 26 frames or the track goes on for 26 more frames",
+    "windows_correct": 0.7638,
+    "windows": 218438,
+    "lane_keeping_windows_called_a_lane_change": {
+     "share": 0.2368,
+     "windows": 195405
+    },
+    "lane_keeping_first_6_s_windows_called_a_lane_change": {
+     "share": 0.3171,
+     "windows": 119877
+    },
+    "lane_keeping_from_6_s_windows_called_a_lane_change": {
+     "share": 0.1095,
+     "windows": 75528
+    },
+    "lane_keeping_tracks_without_a_lane_change_windows_called_a_lane_change": {
+     "share": 0.2239,
+     "windows": 183145
+    },
+    "lane_keeping_tracks_without_a_lane_change_from_6_s_windows_called_a_lane_change": {
+     "share": 0.0969,
+     "windows": 71180
+    },
+    "windows_holding_a_completed_lane_change_opposite_called_without_a_return": {
+     "share": 0.7563,
+     "windows": 4498
+    }
+   }
+  }
+ }
+}

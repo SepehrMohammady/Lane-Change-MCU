@@ -104,3 +104,20 @@ Repeatability: two artifacts were measured both by hand through the web UI and
 again through the API; the two paths agreed to +0.35% and +0.09%.
 
 Full commentary, caveats and negative results: `docs/baseline-results.md`.
+
+## Complete tracks instead of scenarios (2026-11-17)
+
+```bash
+python datasets/highd/track_stream.py build          # features of every track of the test recordings
+python datasets/highd/track_stream.py run            # TensorFlow: the deployed int8 networks on every window
+python datasets/highd/track_stream.py --report
+```
+
+Scores what the protocol's scenarios leave out: the network's output in the windows that hold a completed lane
+change, and on lane keepers outside the protocol's scenarios (`results/hil/track_stream.json`; the measures under
+`label_known` count only windows whose label is known, i.e. not the last 5.2 s of a track).
+`unas/track_train_check.py` trains the same network on windows taken from complete tracks (`build train` and
+`build val` first) and compares it with the protocol's windows under criteria fixed beforehand
+(`results/hil/track_windows.json`); `critical_gap_probe.py` checks that a scripted close follower in the target
+lane does not remove the prediction. Numbers and reading: `unas/README.md`, section "Hardware in the loop".
+The track features and network outputs stay in `firmware/build/probe/` (not versioned: licensed data).

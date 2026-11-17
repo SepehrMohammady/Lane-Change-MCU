@@ -138,9 +138,11 @@ def lcir(tfl: Path) -> None:
     print(f"wrote {dest / 'stream_cfg.h'} and {dest / 'reference.npz'}")
 
 
-def lcir_sessions(tfl: Path) -> None:
+def lcir_sessions(tfl: Path, sessions=None) -> None:
     """Whole drives of the LCIR test drivers, frame by frame, for one network. LCIR_SPLIT=val takes the
-    validation drivers' sessions (session_stream.py build val) and writes to <stem>_val."""
+    validation drivers' sessions (session_stream.py build val) and writes to <stem>_val. sessions: a set of
+    sessions of the caller's choice in the form of the session files (feats, seq_lens, names, ttlc,
+    direction, events), e.g. the drives a cross-validation fold holds out (unas/stream_cv_board.py)."""
     split = os.environ.get("LCIR_SPLIT", "test")
     tag = "" if split == "test" else f"_{split}"
     deploy = tfl.stem[len("sessions_"):].rsplit("_int8_io", 1)[0]
@@ -154,7 +156,7 @@ def lcir_sessions(tfl: Path) -> None:
     task = rec["task"]
     base = ROOT / "datasets" / "dmir" / "data" / "stream"
     norm = json.loads((base / f"{task}_norm.json").read_text())
-    z = np.load(base / f"{task}_sessions{tag}.npz")
+    z = sessions if sessions is not None else np.load(base / f"{task}_sessions{tag}.npz")
     feats, lens = z["feats"].astype(np.float32), z["seq_lens"].astype(np.int64)
     n_feat, in_len, big = feats.shape[1], 50, 1e30
     a, b = np.array(norm["a"]), np.array(norm["b"])

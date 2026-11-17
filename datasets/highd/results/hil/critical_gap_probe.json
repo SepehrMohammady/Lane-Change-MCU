@@ -1,0 +1,359 @@
+{
+ "utc": "2026-11-17T10:11:13+00:00",
+ "scenarios": {
+  "lane_keeping": 230,
+  "right": 230,
+  "left": 233
+ },
+ "recorded_follower_distance_m_5_50_95_percentile_and_share_without_one": {
+  "right lane changes, dist_rfv at the last frame": [
+   54.1,
+   105.2,
+   220.4,
+   0.1
+  ],
+  "left lane changes, dist_lfv at the last frame": [
+   70.2,
+   158.7,
+   314.8,
+   0.73
+  ]
+ },
+ "scripted": "dist to the target-lane follower = gap + 4.6 m + closing speed * time to the crossing, capped at 400 m",
+ "rule": "survives if, for the paper's network, in every cell with gap <= 30 m the share correct 2 s before the crossing is at least 0.8 of the unchanged value and the lane-keeping false-alarm share rises by less than 10 points",
+ "networks": {
+  "searched (the paper's choice)": {
+   "file": "highd_cls_model_1793711684616882545_453917_int8_io.tflite",
+   "unchanged": {
+    "lane_changes_correct_2_s_before": 1.0,
+    "right_correct_2_s_before": 1.0,
+    "left_correct_2_s_before": 1.0,
+    "lane_keeping_windows_called_a_lane_change": 0.0941,
+    "accuracy": 0.9276,
+    "tau_c_s": 4.776
+   },
+   "cells": [
+    {
+     "gap_m": 5.0,
+     "closing_m_s": 0.0,
+     "lane_changes_correct_2_s_before": 1.0,
+     "right_correct_2_s_before": 1.0,
+     "left_correct_2_s_before": 1.0,
+     "lane_keeping_windows_called_a_lane_change": 0.0769,
+     "accuracy": 0.9204,
+     "tau_c_s": 4.67
+    },
+    {
+     "gap_m": 5.0,
+     "closing_m_s": 5.0,
+     "lane_changes_correct_2_s_before": 1.0,
+     "right_correct_2_s_before": 1.0,
+     "left_correct_2_s_before": 1.0,
+     "lane_keeping_windows_called_a_lane_change": 0.0811,
+     "accuracy": 0.9195,
+     "tau_c_s": 4.685
+    },
+    {
+     "gap_m": 5.0,
+     "closing_m_s": 10.0,
+     "lane_changes_correct_2_s_before": 1.0,
+     "right_correct_2_s_before": 1.0,
+     "left_correct_2_s_before": 1.0,
+     "lane_keeping_windows_called_a_lane_change": 0.0793,
+     "accuracy": 0.9201,
+     "tau_c_s": 4.687
+    },
+    {
+     "gap_m": 10.0,
+     "closing_m_s": 0.0,
+     "lane_changes_correct_2_s_before": 1.0,
+     "right_correct_2_s_before": 1.0,
+     "left_correct_2_s_before": 1.0,
+     "lane_keeping_windows_called_a_lane_change": 0.0778,
+     "accuracy": 0.9195,
+     "tau_c_s": 4.669
+    },
+    {
+     "gap_m": 10.0,
+     "closing_m_s": 5.0,
+     "lane_changes_correct_2_s_before": 1.0,
+     "right_correct_2_s_before": 1.0,
+     "left_correct_2_s_before": 1.0,
+     "lane_keeping_windows_called_a_lane_change": 0.0798,
+     "accuracy": 0.9204,
+     "tau_c_s": 4.688
+    },
+    {
+     "gap_m": 10.0,
+     "closing_m_s": 10.0,
+     "lane_changes_correct_2_s_before": 1.0,
+     "right_correct_2_s_before": 1.0,
+     "left_correct_2_s_before": 1.0,
+     "lane_keeping_windows_called_a_lane_change": 0.0796,
+     "accuracy": 0.9211,
+     "tau_c_s": 4.699
+    },
+    {
+     "gap_m": 20.0,
+     "closing_m_s": 0.0,
+     "lane_changes_correct_2_s_before": 1.0,
+     "right_correct_2_s_before": 1.0,
+     "left_correct_2_s_before": 1.0,
+     "lane_keeping_windows_called_a_lane_change": 0.0778,
+     "accuracy": 0.9199,
+     "tau_c_s": 4.678
+    },
+    {
+     "gap_m": 20.0,
+     "closing_m_s": 5.0,
+     "lane_changes_correct_2_s_before": 1.0,
+     "right_correct_2_s_before": 1.0,
+     "left_correct_2_s_before": 1.0,
+     "lane_keeping_windows_called_a_lane_change": 0.0808,
+     "accuracy": 0.9204,
+     "tau_c_s": 4.692
+    },
+    {
+     "gap_m": 20.0,
+     "closing_m_s": 10.0,
+     "lane_changes_correct_2_s_before": 1.0,
+     "right_correct_2_s_before": 1.0,
+     "left_correct_2_s_before": 1.0,
+     "lane_keeping_windows_called_a_lane_change": 0.0803,
+     "accuracy": 0.9207,
+     "tau_c_s": 4.686
+    },
+    {
+     "gap_m": 30.0,
+     "closing_m_s": 0.0,
+     "lane_changes_correct_2_s_before": 1.0,
+     "right_correct_2_s_before": 1.0,
+     "left_correct_2_s_before": 1.0,
+     "lane_keeping_windows_called_a_lane_change": 0.0794,
+     "accuracy": 0.9199,
+     "tau_c_s": 4.686
+    },
+    {
+     "gap_m": 30.0,
+     "closing_m_s": 5.0,
+     "lane_changes_correct_2_s_before": 1.0,
+     "right_correct_2_s_before": 1.0,
+     "left_correct_2_s_before": 1.0,
+     "lane_keeping_windows_called_a_lane_change": 0.0818,
+     "accuracy": 0.9201,
+     "tau_c_s": 4.696
+    },
+    {
+     "gap_m": 30.0,
+     "closing_m_s": 10.0,
+     "lane_changes_correct_2_s_before": 1.0,
+     "right_correct_2_s_before": 1.0,
+     "left_correct_2_s_before": 1.0,
+     "lane_keeping_windows_called_a_lane_change": 0.0818,
+     "accuracy": 0.9204,
+     "tau_c_s": 4.691
+    },
+    {
+     "gap_m": 50.0,
+     "closing_m_s": 0.0,
+     "lane_changes_correct_2_s_before": 1.0,
+     "right_correct_2_s_before": 1.0,
+     "left_correct_2_s_before": 1.0,
+     "lane_keeping_windows_called_a_lane_change": 0.0801,
+     "accuracy": 0.9207,
+     "tau_c_s": 4.695
+    },
+    {
+     "gap_m": 50.0,
+     "closing_m_s": 5.0,
+     "lane_changes_correct_2_s_before": 1.0,
+     "right_correct_2_s_before": 1.0,
+     "left_correct_2_s_before": 1.0,
+     "lane_keeping_windows_called_a_lane_change": 0.0794,
+     "accuracy": 0.9212,
+     "tau_c_s": 4.689
+    },
+    {
+     "gap_m": 50.0,
+     "closing_m_s": 10.0,
+     "lane_changes_correct_2_s_before": 1.0,
+     "right_correct_2_s_before": 1.0,
+     "left_correct_2_s_before": 1.0,
+     "lane_keeping_windows_called_a_lane_change": 0.0789,
+     "accuracy": 0.9224,
+     "tau_c_s": 4.697
+    }
+   ],
+   "lowest_share_correct_2_s_before_in_critical_cells": 1.0,
+   "largest_rise_of_lane_keeping_false_alarms": -0.0123,
+   "survives": true
+  },
+  "hand-designed CNN": {
+   "file": "highd_dscnn_cls_int8_io.tflite",
+   "unchanged": {
+    "lane_changes_correct_2_s_before": 1.0,
+    "right_correct_2_s_before": 1.0,
+    "left_correct_2_s_before": 1.0,
+    "lane_keeping_windows_called_a_lane_change": 0.1319,
+    "accuracy": 0.9088,
+    "tau_c_s": 4.722
+   },
+   "cells": [
+    {
+     "gap_m": 5.0,
+     "closing_m_s": 0.0,
+     "lane_changes_correct_2_s_before": 0.9957,
+     "right_correct_2_s_before": 1.0,
+     "left_correct_2_s_before": 0.9914,
+     "lane_keeping_windows_called_a_lane_change": 0.1355,
+     "accuracy": 0.8902,
+     "tau_c_s": 4.568
+    },
+    {
+     "gap_m": 5.0,
+     "closing_m_s": 5.0,
+     "lane_changes_correct_2_s_before": 0.9957,
+     "right_correct_2_s_before": 1.0,
+     "left_correct_2_s_before": 0.9914,
+     "lane_keeping_windows_called_a_lane_change": 0.1346,
+     "accuracy": 0.8931,
+     "tau_c_s": 4.591
+    },
+    {
+     "gap_m": 5.0,
+     "closing_m_s": 10.0,
+     "lane_changes_correct_2_s_before": 0.9957,
+     "right_correct_2_s_before": 1.0,
+     "left_correct_2_s_before": 0.9914,
+     "lane_keeping_windows_called_a_lane_change": 0.1368,
+     "accuracy": 0.8943,
+     "tau_c_s": 4.594
+    },
+    {
+     "gap_m": 10.0,
+     "closing_m_s": 0.0,
+     "lane_changes_correct_2_s_before": 0.9957,
+     "right_correct_2_s_before": 1.0,
+     "left_correct_2_s_before": 0.9914,
+     "lane_keeping_windows_called_a_lane_change": 0.1355,
+     "accuracy": 0.8911,
+     "tau_c_s": 4.566
+    },
+    {
+     "gap_m": 10.0,
+     "closing_m_s": 5.0,
+     "lane_changes_correct_2_s_before": 0.9957,
+     "right_correct_2_s_before": 1.0,
+     "left_correct_2_s_before": 0.9914,
+     "lane_keeping_windows_called_a_lane_change": 0.1349,
+     "accuracy": 0.8941,
+     "tau_c_s": 4.595
+    },
+    {
+     "gap_m": 10.0,
+     "closing_m_s": 10.0,
+     "lane_changes_correct_2_s_before": 0.9957,
+     "right_correct_2_s_before": 1.0,
+     "left_correct_2_s_before": 0.9914,
+     "lane_keeping_windows_called_a_lane_change": 0.1346,
+     "accuracy": 0.8949,
+     "tau_c_s": 4.596
+    },
+    {
+     "gap_m": 20.0,
+     "closing_m_s": 0.0,
+     "lane_changes_correct_2_s_before": 0.9957,
+     "right_correct_2_s_before": 1.0,
+     "left_correct_2_s_before": 0.9914,
+     "lane_keeping_windows_called_a_lane_change": 0.1338,
+     "accuracy": 0.8927,
+     "tau_c_s": 4.583
+    },
+    {
+     "gap_m": 20.0,
+     "closing_m_s": 5.0,
+     "lane_changes_correct_2_s_before": 0.9957,
+     "right_correct_2_s_before": 1.0,
+     "left_correct_2_s_before": 0.9914,
+     "lane_keeping_windows_called_a_lane_change": 0.1346,
+     "accuracy": 0.8942,
+     "tau_c_s": 4.594
+    },
+    {
+     "gap_m": 20.0,
+     "closing_m_s": 10.0,
+     "lane_changes_correct_2_s_before": 0.9957,
+     "right_correct_2_s_before": 1.0,
+     "left_correct_2_s_before": 0.9914,
+     "lane_keeping_windows_called_a_lane_change": 0.1338,
+     "accuracy": 0.8965,
+     "tau_c_s": 4.612
+    },
+    {
+     "gap_m": 30.0,
+     "closing_m_s": 0.0,
+     "lane_changes_correct_2_s_before": 0.9957,
+     "right_correct_2_s_before": 1.0,
+     "left_correct_2_s_before": 0.9914,
+     "lane_keeping_windows_called_a_lane_change": 0.1339,
+     "accuracy": 0.8931,
+     "tau_c_s": 4.578
+    },
+    {
+     "gap_m": 30.0,
+     "closing_m_s": 5.0,
+     "lane_changes_correct_2_s_before": 0.9978,
+     "right_correct_2_s_before": 1.0,
+     "left_correct_2_s_before": 0.9957,
+     "lane_keeping_windows_called_a_lane_change": 0.1341,
+     "accuracy": 0.8955,
+     "tau_c_s": 4.598
+    },
+    {
+     "gap_m": 30.0,
+     "closing_m_s": 10.0,
+     "lane_changes_correct_2_s_before": 0.9957,
+     "right_correct_2_s_before": 1.0,
+     "left_correct_2_s_before": 0.9914,
+     "lane_keeping_windows_called_a_lane_change": 0.1333,
+     "accuracy": 0.8976,
+     "tau_c_s": 4.612
+    },
+    {
+     "gap_m": 50.0,
+     "closing_m_s": 0.0,
+     "lane_changes_correct_2_s_before": 0.9957,
+     "right_correct_2_s_before": 1.0,
+     "left_correct_2_s_before": 0.9914,
+     "lane_keeping_windows_called_a_lane_change": 0.1323,
+     "accuracy": 0.895,
+     "tau_c_s": 4.59
+    },
+    {
+     "gap_m": 50.0,
+     "closing_m_s": 5.0,
+     "lane_changes_correct_2_s_before": 0.9957,
+     "right_correct_2_s_before": 1.0,
+     "left_correct_2_s_before": 0.9914,
+     "lane_keeping_windows_called_a_lane_change": 0.1319,
+     "accuracy": 0.8974,
+     "tau_c_s": 4.606
+    },
+    {
+     "gap_m": 50.0,
+     "closing_m_s": 10.0,
+     "lane_changes_correct_2_s_before": 0.9957,
+     "right_correct_2_s_before": 1.0,
+     "left_correct_2_s_before": 0.9914,
+     "lane_keeping_windows_called_a_lane_change": 0.1346,
+     "accuracy": 0.8982,
+     "tau_c_s": 4.626
+    }
+   ],
+   "lowest_share_correct_2_s_before_in_critical_cells": 0.9957,
+   "largest_rise_of_lane_keeping_false_alarms": 0.0049,
+   "survives": true
+  }
+ },
+ "survives": true
+}
