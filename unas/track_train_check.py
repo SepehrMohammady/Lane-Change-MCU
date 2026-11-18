@@ -43,6 +43,17 @@ Needs datasets/highd/track_stream.py build train / val / test (Windows). Run in 
 Output: datasets/highd/results/seeds/track_windows.jsonl (one line per arm and seed; resumable) and
 datasets/highd/results/hil/track_windows.json (the report). The networks are kept in
 datasets/highd/data/track_train/ (not versioned).
+
+exiD (2026-11-18, local notes 16:30): TRACK_DATASET=exid runs arms P and K on exiD's own split, with the complete
+tracks of datasets/exid/track_stream_exid.py and HIGHD_DATA_ROOT pointing at datasets/exid/data/prepared; same
+architecture, recipe, seeds and int8 conversion. Criterion, all four: (1) arm P calls the opposite direction in at
+least half of the windows that hold a completed lane change not followed by a crossing back; (2) K at most half of
+P there; (3) K correct 2 s before the crossing at most 5 points below P; (4) K accuracy on the protocol's test
+windows at most 3 points below P. Files under datasets/exid/ instead of datasets/highd/; the class of every test
+window is kept next to the networks for the listing by kind of lane change.
+  TRACK_DATASET=exid HIGHD_DATA_ROOT=/mnt/c/Projects/PhD/DIMIR/datasets/exid/data/prepared SEEDS=100,101,102,103,104 \\
+    ~/dmir_nas/bin/python /mnt/c/Projects/PhD/DIMIR/unas/track_train_check.py
+  TRACK_DATASET=exid .venv\\Scripts\\python unas/track_train_check.py --report
 """
 from __future__ import annotations
 
@@ -60,21 +71,33 @@ REPO = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(REPO / "datasets" / "highd"))
 import track_stream as ts                                    # noqa: E402  (numpy only)
 
-KEEP = REPO / "datasets" / "highd" / "data" / "track_train"
-OUT = REPO / "datasets" / "highd" / "results" / "seeds" / os.environ.get("OUT_NAME", "track_windows.jsonl")
-RESCORED = OUT.with_name(OUT.stem + "_rescored.jsonl")
-SUMMARY = REPO / "datasets" / "highd" / "results" / "hil" / "track_windows.json"
-SEARCH, MODEL = "highd_cls_v4_k3_single_s42", "model_1793711684616882545_453917"
-H5 = REPO / "datasets" / "highd" / "results" / "nas-v2" / SEARCH / f"{MODEL}.h5"
+DATASET = os.environ.get("TRACK_DATASET", "highd")
 ARMS = {"P": "the protocol's windows", "T": "windows from complete tracks",
         "K": "windows from complete tracks whose label is known"}
+if DATASET == "exid":
+    sys.path.insert(0, str(REPO / "datasets" / "exid"))
+    import track_stream_exid as tsx                          # noqa: E402  (numpy only)
+    tracks_file, PREP = tsx.tracks_file, tsx.PREP
+    ARMS = {a: ARMS[a] for a in ("P", "K")}
+elif DATASET == "highd":
+    tracks_file, PREP = ts.tracks_file, ts.PREP
+else:
+    sys.exit(f"TRACK_DATASET must be highd or exid, not {DATASET!r}")
+BASE = REPO / "datasets" / DATASET
+KEEP = BASE / "data" / "track_train"
+OUT = BASE / "results" / "seeds" / os.environ.get("OUT_NAME", "track_windows.jsonl")
+RESCORED = OUT.with_name(OUT.stem + "_rescored.jsonl")
+SUMMARY = BASE / "results" / "hil" / "track_windows.json"
+SEARCH, MODEL = "highd_cls_v4_k3_single_s42", "model_1793711684616882545_453917"
+H5 = REPO / "datasets" / "highd" / "results" / "nas-v2" / SEARCH / f"{MODEL}.h5"
 HALF, EARLY, PROTOCOL = 0.5, 0.05, 0.03                      # the criterion
+EXISTS = 0.5                                                 # exiD part (1): the shortcut exists in arm P
 
 
 def track_windows(split: str, lo, span, rng, known_only: bool = False):
     """The balanced windows of a split's complete tracks, scaled: x, class, counts per class before balancing.
     known_only: only windows whose label is known (a crossing within 26 frames, or 26 more frames of the track)."""
-    z = np.load(ts.tracks_file(split))
+    z = np.load(tracks_file(split))
     feats = ((z["feats"] - lo) / span).astype(np.float32)
     lens = z["lens"].astype(np.int64)
     starts = np.concatenate([[0], np.cumsum(lens)[:-1]])
@@ -121,14 +144,14 @@ def classes_int8(tf, tfl: bytes, x: np.ndarray) -> np.ndarray:
 
 
 def scaling():
-    raw = np.load(ts.PREP / "train.npz")["feats"].astype(np.float32)
+    raw = np.load(PREP / "train.npz")["feats"].astype(np.float32)
     lo = raw.reshape(-1, raw.shape[-1]).min(0)
     return lo, raw.reshape(-1, raw.shape[-1]).max(0) - lo + 1e-12
 
 
 def test_tracks(lo, span):
     """Every window of every test track, scaled, in track order."""
-    z = np.load(ts.tracks_file("test"))
+    z = np.load(tracks_file("test"))
     lens, cross = z["lens"].astype(np.int64), json.loads(str(z["cross"]))
     tracks = ((z["feats"] - lo) / span).astype(np.float32)
     w_first = np.concatenate([a + np.arange(n - ts.IN_LEN + 1) for a, n in zip(np.concatenate([[0], np.cumsum(lens)[:-1]]), lens)])
@@ -162,6 +185,9 @@ def run(arms):
     done = {(r["arm"], r["seed"]) for r in map(json.loads, OUT.read_text().splitlines())} if OUT.exists() else set()
     smoke = "_smoke" if sv.EPOCH_CAP else ""
 
+    root = os.environ.get("HIGHD_DATA_ROOT", "")
+    if ("exid" in root) != (DATASET == "exid"):
+        sys.exit(f"HIGHD_DATA_ROOT ({root!r}) does not match TRACK_DATASET={DATASET}")
     ds = sv.HighD_Dataset(task="highd_cls")                  # the protocol's windows, scaled, training set permuted once
     lo, span = scaling()
     xte, yte = ds._data["test"]
@@ -186,12 +212,15 @@ def run(arms):
                 net.save(str(kept))
             tfl = isc.convert_int8_io(net, x)
             (KEEP / f"{arm}_{MODEL}_seed{seed}{smoke}_int8_io.tflite").write_bytes(tfl)
+            cls_tracks = classes_int8(tf, tfl, track_x)
+            if DATASET == "exid":                            # kept for the listing by kind of lane change
+                np.savez_compressed(KEEP / f"{arm}_{MODEL}_seed{seed}{smoke}_test_tracks.npz", cls=cls_tracks.astype(np.int8))
             rec = {"arm": arm, "trained_on": ARMS[arm], "seed": seed, "training_windows": int(len(x)),
                    "track_windows_per_class_before_balancing": counts, "early_stopping_windows": int(len(val[0])),
                    "epochs_run": epochs, "params": int(net.count_params()), "int8_io_bytes": len(tfl),
                    "protocol_test_windows": int(len(xte)),
                    "protocol_test_accuracy_int8": round(float((classes_int8(tf, tfl, xte) == yte).mean()), 5),
-                   "complete_tracks_test": ts.measures_of(classes_int8(tf, tfl, track_x), lens, cross),
+                   "complete_tracks_test": ts.measures_of(cls_tracks, lens, cross),
                    "wall_s": round(time.perf_counter() - t0, 1),
                    "utc": datetime.now(timezone.utc).isoformat(timespec="seconds")}
             with open(OUT, "a") as f:
@@ -311,9 +340,103 @@ def report():
     print(json.dumps(res.get("criterion"), indent=1))
 
 
+def opposite_by_kind(pred_all: np.ndarray, lens: np.ndarray, cross: list, kinds: list) -> dict:
+    """exiD: the opposite direction called in windows that hold a completed lane change not followed by a crossing
+    back (the "label_known" measure of track_stream.measures_of), split by the kind of the completed lane change."""
+    w_starts = np.concatenate([[0], np.cumsum(lens - ts.IN_LEN + 1)[:-1]])
+    acc = np.zeros((len(tsx.KIND_NAMES), 2), np.int64)
+    for t, (n, cr, kd) in enumerate(zip(lens, cross, kinds)):
+        if not cr:
+            continue
+        k, phase, _, to_next, next_dir, since, prev_dir = ts.phases(int(n), cr)
+        pred = pred_all[w_starts[t]:w_starts[t] + len(k)]
+        known = (to_next <= ts.HORIZON) | ((int(n) - 1) - k >= ts.HORIZON)
+        back = (to_next <= ts.HORIZON) & (next_dir == 3 - prev_dir)
+        m = (phase == 3) & known & ~back
+        if not m.any():
+            continue
+        prev = np.searchsorted(np.array([c for c, _ in cr]), k, side="right") - 1
+        kind = np.array(kd)[np.clip(prev, 0, None)]
+        opposite = (pred != 0) & (pred != prev_dir)
+        for kk in range(len(tsx.KIND_NAMES)):
+            mm = m & (kind == kk)
+            acc[kk] += (int((opposite & mm).sum()), int(mm.sum()))
+    return {tsx.KIND_NAMES[kk]: {"share": ts.share(*acc[kk]), "windows": int(acc[kk][1])} for kk in range(len(tsx.KIND_NAMES))}
+
+
+def report_exid():
+    rows = [json.loads(line) for line in OUT.read_text().splitlines()]
+    z = np.load(tracks_file("test"))
+    lens = z["lens"].astype(np.int64)
+    cross, kinds = json.loads(str(z["cross"])), json.loads(str(z["kinds"]))
+
+    def mean_std(vals):
+        vals = [v for v in vals if v is not None]
+        if not vals:
+            return None
+        return {"mean": round(st.mean(vals), 5), "std": round(st.stdev(vals), 5) if len(vals) > 1 else None,
+                "values": [round(v, 5) for v in vals]}
+    listed = {"runs_per_vehicle_hour": MEASURES["runs_per_vehicle_hour"],
+              "runs_of_0.6_s_or_more_per_vehicle_hour": MEASURES["runs_of_0.6_s_or_more_per_vehicle_hour"],
+              "correct_1_s_before": MEASURES["correct_1_s_before"], "correct_3_s_before": MEASURES["correct_3_s_before"],
+              "correct_5_s_before": MEASURES["correct_5_s_before"]}
+    arms = {}
+    for arm in ARMS:
+        rs = sorted((r for r in rows if r["arm"] == arm), key=lambda r: r["seed"])
+        if not rs:
+            continue
+        kinds_by_seed = [opposite_by_kind(np.load(KEEP / f"{arm}_{MODEL}_seed{r['seed']}_test_tracks.npz")["cls"].astype(np.int64),
+                                          lens, cross, kinds) for r in rs]
+        arms[arm] = {"trained_on": ARMS[arm], "seeds": [r["seed"] for r in rs], "training_windows": rs[0]["training_windows"],
+                     "track_windows_per_class_before_balancing": rs[0]["track_windows_per_class_before_balancing"],
+                     "epochs_run": [r["epochs_run"] for r in rs],
+                     "protocol_test_accuracy_int8": mean_std([r["protocol_test_accuracy_int8"] for r in rs]),
+                     **{name: mean_std([f(r["complete_tracks_test"]) for r in rs]) for name, f in KNOWN.items()},
+                     **{name: mean_std([f(r["complete_tracks_test"]) for r in rs]) for name, f in listed.items()},
+                     "opposite_without_a_return_by_kind_of_the_completed_lane_change": {
+                         name: {"share": mean_std([b[name]["share"] for b in kinds_by_seed]), "windows": kinds_by_seed[0][name]["windows"]}
+                         for name in tsx.KIND_NAMES[1:]}}
+    d = np.array([dd for c in cross for _, dd in c])
+    k = np.array([kk for ks in kinds for kk in ks])
+    res = {"utc": datetime.now(timezone.utc).isoformat(timespec="seconds"), "dataset": "exiD", "records": len(rows),
+           "test_tracks": {"segments": int(len(lens)), "frames": int(lens.sum()), "vehicle_hours": round(float(lens.sum()) / ts.FPS / 3600, 2),
+                           "recordings": sorted({int(r) for r in z["rec"]}), "crossings": int(len(d)),
+                           "right": int((d == 1).sum()), "left": int((d == 2).sum()),
+                           "by_kind": {tsx.KIND_NAMES[kk]: int((k == kk).sum()) for kk in range(1, len(tsx.KIND_NAMES))}},
+           "arms": arms}
+    if "P" in arms and "K" in arms:
+        p, kk_ = arms["P"], arms["K"]
+        v = lambda a, key: a[key]["mean"]                    # noqa: E731
+        one = v(p, "opposite_without_a_return") >= EXISTS - 1e-12
+        two = v(kk_, "opposite_without_a_return") <= HALF * v(p, "opposite_without_a_return") + 1e-12
+        three = v(kk_, "correct_2_s_before_the_crossing") >= v(p, "correct_2_s_before_the_crossing") - EARLY - 1e-12
+        four = v(kk_, "protocol_test_accuracy_int8") >= v(p, "protocol_test_accuracy_int8") - PROTOCOL - 1e-12
+        res["criterion"] = {
+            "rule": "means over the seeds, fixed 2026-11-18 16:30: (1) P calls the opposite direction in at least half of the "
+                    "windows that hold a completed lane change not followed by a crossing back; (2) K at most half of P there; "
+                    "(3) K correct 2 s before the crossing at most 5 points below P; (4) K accuracy on the protocol's test windows "
+                    "at most 3 points below P",
+            "1_opposite_without_a_return_P": v(p, "opposite_without_a_return"), "1_met": bool(one),
+            "2_opposite_without_a_return_P_K": [v(p, "opposite_without_a_return"), v(kk_, "opposite_without_a_return")], "2_met": bool(two),
+            "3_correct_2_s_before_P_K": [v(p, "correct_2_s_before_the_crossing"), v(kk_, "correct_2_s_before_the_crossing")], "3_met": bool(three),
+            "4_protocol_test_accuracy_P_K": [v(p, "protocol_test_accuracy_int8"), v(kk_, "protocol_test_accuracy_int8")], "4_met": bool(four),
+            "met": bool(one and two and three and four)}
+    SUMMARY.parent.mkdir(parents=True, exist_ok=True)
+    SUMMARY.write_text(json.dumps(res, indent=1))
+    print(json.dumps(res["test_tracks"]))
+    for arm, a in arms.items():
+        print(f"arm {arm} ({a['trained_on']}), seeds {a['seeds']}, {a['training_windows']} training windows, epochs {a['epochs_run']}")
+        for name in ("protocol_test_accuracy_int8", *KNOWN, *listed):
+            m = a[name]
+            print(f"   {name:66s} {m['mean']:10.4f} +- {m['std']}" if m else f"   {name:66s} -")
+        for name, b in a["opposite_without_a_return_by_kind_of_the_completed_lane_change"].items():
+            print(f"   opposite without a return, after {name:28s} {b['share']['mean'] if b['share'] else float('nan'):10.4f} ({b['windows']} windows)")
+    print(json.dumps(res.get("criterion"), indent=1))
+
+
 if __name__ == "__main__":
     if "--report" in sys.argv:
-        report()
+        report_exid() if DATASET == "exid" else report()
     elif "--rescore" in sys.argv:
         rescore()
     else:
