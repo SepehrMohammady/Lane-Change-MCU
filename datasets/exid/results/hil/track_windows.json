@@ -1,0 +1,524 @@
+{
+ "utc": "2026-11-18T16:14:44+00:00",
+ "dataset": "exiD",
+ "records": 10,
+ "test_tracks": {
+  "segments": 6086,
+  "frames": 445523,
+  "vehicle_hours": 24.75,
+  "recordings": [
+   15,
+   16,
+   17,
+   18,
+   37,
+   38,
+   51,
+   52,
+   60,
+   70,
+   71,
+   72,
+   77,
+   92
+  ],
+  "crossings": 2324,
+  "right": 947,
+  "left": 1377,
+  "by_kind": {
+   "main carriageway": 1310,
+   "merge from on-ramp": 515,
+   "exit to off-ramp": 418,
+   "on a ramp": 81
+  }
+ },
+ "arms": {
+  "P": {
+   "trained_on": "the protocol's windows",
+   "seeds": [
+    100,
+    101,
+    102,
+    103,
+    104
+   ],
+   "training_windows": 427596,
+   "track_windows_per_class_before_balancing": null,
+   "epochs_run": [
+    41,
+    50,
+    42,
+    40,
+    50
+   ],
+   "protocol_test_accuracy_int8": {
+    "mean": 0.86942,
+    "std": 0.00279,
+    "values": [
+     0.86651,
+     0.86905,
+     0.87196,
+     0.86699,
+     0.8726
+    ]
+   },
+   "lane_keeping_from_6_s_called": {
+    "mean": 0.15146,
+    "std": 0.01945,
+    "values": [
+     0.1742,
+     0.1646,
+     0.1355,
+     0.1551,
+     0.1279
+    ]
+   },
+   "lane_keeping_first_6_s_called": {
+    "mean": 0.23202,
+    "std": 0.02823,
+    "values": [
+     0.2597,
+     0.2637,
+     0.2034,
+     0.2246,
+     0.2087
+    ]
+   },
+   "lane_keeping_called": {
+    "mean": 0.19296,
+    "std": 0.02353,
+    "values": [
+     0.2183,
+     0.2156,
+     0.1705,
+     0.1909,
+     0.1695
+    ]
+   },
+   "lane_keeping_tracks_without_a_lane_change_from_6_s_called": {
+    "mean": 0.08978,
+    "std": 0.01718,
+    "values": [
+     0.1093,
+     0.0997,
+     0.082,
+     0.0932,
+     0.0647
+    ]
+   },
+   "opposite_without_a_return": {
+    "mean": 0.51976,
+    "std": 0.07215,
+    "values": [
+     0.5438,
+     0.4761,
+     0.5722,
+     0.5901,
+     0.4166
+    ]
+   },
+   "windows_correct_label_known": {
+    "mean": 0.80368,
+    "std": 0.01903,
+    "values": [
+     0.7839,
+     0.7864,
+     0.8186,
+     0.8027,
+     0.8268
+    ]
+   },
+   "correct_2_s_before_the_crossing": {
+    "mean": 0.99842,
+    "std": 0.00082,
+    "values": [
+     0.9994,
+     0.9989,
+     0.9972,
+     0.9983,
+     0.9983
+    ]
+   },
+   "correct_4_s_before": {
+    "mean": 0.81366,
+    "std": 0.0227,
+    "values": [
+     0.8374,
+     0.8395,
+     0.7962,
+     0.7955,
+     0.7997
+    ]
+   },
+   "runs_per_vehicle_hour": {
+    "mean": 966.9,
+    "std": 88.8854,
+    "values": [
+     1098.8,
+     1018.9,
+     908.1,
+     914.8,
+     893.9
+    ]
+   },
+   "runs_of_0.6_s_or_more_per_vehicle_hour": {
+    "mean": 417.5,
+    "std": 39.41237,
+    "values": [
+     474.1,
+     439.6,
+     394.8,
+     404.3,
+     374.7
+    ]
+   },
+   "correct_1_s_before": {
+    "mean": 0.99832,
+    "std": 0.00039,
+    "values": [
+     0.9989,
+     0.9983,
+     0.9983,
+     0.9978,
+     0.9983
+    ]
+   },
+   "correct_3_s_before": {
+    "mean": 0.96634,
+    "std": 0.00567,
+    "values": [
+     0.9709,
+     0.9722,
+     0.961,
+     0.9678,
+     0.9598
+    ]
+   },
+   "correct_5_s_before": {
+    "mean": 0.62082,
+    "std": 0.02596,
+    "values": [
+     0.639,
+     0.6505,
+     0.5923,
+     0.5956,
+     0.6267
+    ]
+   },
+   "opposite_without_a_return_by_kind_of_the_completed_lane_change": {
+    "main carriageway": {
+     "share": {
+      "mean": 0.63046,
+      "std": 0.05815,
+      "values": [
+       0.6488,
+       0.6019,
+       0.6697,
+       0.6881,
+       0.5438
+      ]
+     },
+     "windows": 6749
+    },
+    "merge from on-ramp": {
+     "share": {
+      "mean": 0.3127,
+      "std": 0.11756,
+      "values": [
+       0.3392,
+       0.2437,
+       0.4128,
+       0.422,
+       0.1458
+      ]
+     },
+     "windows": 2839
+    },
+    "exit to off-ramp": {
+     "share": {
+      "mean": 0.51676,
+      "std": 0.04739,
+      "values": [
+       0.5674,
+       0.457,
+       0.5304,
+       0.5509,
+       0.4781
+      ]
+     },
+     "windows": 1757
+    },
+    "on a ramp": {
+     "share": {
+      "mean": 0.29682,
+      "std": 0.11502,
+      "values": [
+       0.2986,
+       0.2507,
+       0.3812,
+       0.4232,
+       0.1304
+      ]
+     },
+     "windows": 690
+    }
+   }
+  },
+  "K": {
+   "trained_on": "windows from complete tracks whose label is known",
+   "seeds": [
+    100,
+    101,
+    102,
+    103,
+    104
+   ],
+   "training_windows": 428997,
+   "track_windows_per_class_before_balancing": [
+    1948334,
+    142999,
+    262310
+   ],
+   "epochs_run": [
+    50,
+    50,
+    50,
+    50,
+    50
+   ],
+   "protocol_test_accuracy_int8": {
+    "mean": 0.85349,
+    "std": 0.003,
+    "values": [
+     0.84963,
+     0.85482,
+     0.85119,
+     0.8548,
+     0.85699
+    ]
+   },
+   "lane_keeping_from_6_s_called": {
+    "mean": 0.11544,
+    "std": 0.0178,
+    "values": [
+     0.1379,
+     0.0943,
+     0.1291,
+     0.1109,
+     0.105
+    ]
+   },
+   "lane_keeping_first_6_s_called": {
+    "mean": 0.14006,
+    "std": 0.01733,
+    "values": [
+     0.1558,
+     0.1156,
+     0.1548,
+     0.1448,
+     0.1293
+    ]
+   },
+   "lane_keeping_called": {
+    "mean": 0.1281,
+    "std": 0.01728,
+    "values": [
+     0.1471,
+     0.1053,
+     0.1423,
+     0.1283,
+     0.1175
+    ]
+   },
+   "lane_keeping_tracks_without_a_lane_change_from_6_s_called": {
+    "mean": 0.08924,
+    "std": 0.01562,
+    "values": [
+     0.102,
+     0.0689,
+     0.1076,
+     0.0853,
+     0.0824
+    ]
+   },
+   "opposite_without_a_return": {
+    "mean": 0.04436,
+    "std": 0.00981,
+    "values": [
+     0.0466,
+     0.0307,
+     0.0567,
+     0.0394,
+     0.0484
+    ]
+   },
+   "windows_correct_label_known": {
+    "mean": 0.87324,
+    "std": 0.01284,
+    "values": [
+     0.8598,
+     0.8906,
+     0.862,
+     0.8734,
+     0.8804
+    ]
+   },
+   "correct_2_s_before_the_crossing": {
+    "mean": 0.99788,
+    "std": 0.00045,
+    "values": [
+     0.9983,
+     0.9972,
+     0.9978,
+     0.9978,
+     0.9983
+    ]
+   },
+   "correct_4_s_before": {
+    "mean": 0.82554,
+    "std": 0.01449,
+    "values": [
+     0.8451,
+     0.8081,
+     0.8255,
+     0.8332,
+     0.8158
+    ]
+   },
+   "runs_per_vehicle_hour": {
+    "mean": 820.86,
+    "std": 95.77277,
+    "values": [
+     939.5,
+     691.0,
+     886.2,
+     790.9,
+     796.7
+    ]
+   },
+   "runs_of_0.6_s_or_more_per_vehicle_hour": {
+    "mean": 313.44,
+    "std": 40.3676,
+    "values": [
+     357.0,
+     252.0,
+     341.3,
+     311.6,
+     305.3
+    ]
+   },
+   "correct_1_s_before": {
+    "mean": 0.99722,
+    "std": 0.00087,
+    "values": [
+     0.9983,
+     0.9961,
+     0.9967,
+     0.9972,
+     0.9978
+    ]
+   },
+   "correct_3_s_before": {
+    "mean": 0.96636,
+    "std": 0.0059,
+    "values": [
+     0.9722,
+     0.9567,
+     0.9697,
+     0.966,
+     0.9672
+    ]
+   },
+   "correct_5_s_before": {
+    "mean": 0.66676,
+    "std": 0.02963,
+    "values": [
+     0.7129,
+     0.6448,
+     0.6628,
+     0.6751,
+     0.6382
+    ]
+   },
+   "opposite_without_a_return_by_kind_of_the_completed_lane_change": {
+    "main carriageway": {
+     "share": {
+      "mean": 0.0663,
+      "std": 0.01625,
+      "values": [
+       0.0662,
+       0.0433,
+       0.0877,
+       0.0613,
+       0.073
+      ]
+     },
+     "windows": 6749
+    },
+    "merge from on-ramp": {
+     "share": {
+      "mean": 0.00592,
+      "std": 0.00246,
+      "values": [
+       0.0049,
+       0.0039,
+       0.0095,
+       0.0039,
+       0.0074
+      ]
+     },
+     "windows": 2839
+    },
+    "exit to off-ramp": {
+     "share": {
+      "mean": 0.03664,
+      "std": 0.01152,
+      "values": [
+       0.0558,
+       0.037,
+       0.0307,
+       0.0256,
+       0.0341
+      ]
+     },
+     "windows": 1757
+    },
+    "on a ramp": {
+     "share": {
+      "mean": 0.00722,
+      "std": 0.00551,
+      "values": [
+       0.0029,
+       0.0014,
+       0.013,
+       0.0058,
+       0.013
+      ]
+     },
+     "windows": 690
+    }
+   }
+  }
+ },
+ "criterion": {
+  "rule": "means over the seeds, fixed 2026-11-18 16:30: (1) P calls the opposite direction in at least half of the windows that hold a completed lane change not followed by a crossing back; (2) K at most half of P there; (3) K correct 2 s before the crossing at most 5 points below P; (4) K accuracy on the protocol's test windows at most 3 points below P",
+  "1_opposite_without_a_return_P": 0.51976,
+  "1_met": true,
+  "2_opposite_without_a_return_P_K": [
+   0.51976,
+   0.04436
+  ],
+  "2_met": true,
+  "3_correct_2_s_before_P_K": [
+   0.99842,
+   0.99788
+  ],
+  "3_met": true,
+  "4_protocol_test_accuracy_P_K": [
+   0.86942,
+   0.85349
+  ],
+  "4_met": true,
+  "met": true
+ }
+}

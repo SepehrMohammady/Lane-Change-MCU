@@ -95,3 +95,24 @@ exiD uses the highD input (10 × 18) and the same networks, so every build has
 the latency, flash and RAM measured for highD in
 `datasets/highd/results/deploy/`; board cost depends on the graph, not on the
 weights.
+
+## 5. Complete tracks instead of scenarios (2026-11-18)
+
+```bash
+python datasets/exid/track_stream_exid.py build       # features of every track: test, val, train (about 1 min)
+# WSL, TensorFlow: arms P and K, five seeds
+TRACK_DATASET=exid HIGHD_DATA_ROOT=/mnt/c/Projects/PhD/DIMIR/datasets/exid/data/prepared \
+  ~/dmir_nas/bin/python unas/track_train_check.py
+TRACK_DATASET=exid python unas/track_train_check.py --report
+```
+
+The highD study of complete tracks (`datasets/highd/README.md`) repeated on exiD. Every exiD track gets the
+features of `prepare_exid.py` frame by frame; a track is cut where a frame has no valid features (hard shoulder,
+no lanelet), and every piece of at least 10 frames counts as a track. The highD network of 2,593 parameters is
+trained with five seeds on the protocol's windows (P) or on the windows of the complete training tracks whose
+label is known (K), converted to int8 as deployed and scored on the 14 test recordings (6,086 tracks, 24.75
+vehicle hours, 2,324 lane changes). After a completed lane change, P calls the opposite one in 52.0% of the
+windows and K in 4.4%, at 1.6 points of the protocol's test accuracy (86.94% to 85.35%); the criterion fixed
+before the run was met in all four parts. Table and reading: `unas/README.md`, section "Hardware in the loop".
+Results: `results/hil/track_windows.json`. Track features and network outputs stay in `firmware/build/probe/` and
+`data/track_train/` (not versioned: licensed data).

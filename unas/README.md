@@ -115,7 +115,7 @@ the model's own Keras; `path_check.py` compares the fork's trainer with `select_
 | `stream_arch_check.py [index ...]` | nine existing LCIR intention networks (seven from the searches' shortlists, 14k to 152k MACs, and two hand-designed references of 84k and 441k parameters) trained with five seeds on windows from the whole drives of the training drivers and scored on the whole drives of the validation drivers: a check, with its rule fixed beforehand, of whether a search under that measure has anything to select on; `--report` gives the table and the rule | `datasets/dmir/results/seeds/stream_arch.jsonl`, `datasets/dmir/results/hil/stream_arch.json` |
 | `stream_board_check.py prepare` / `replay` / `realtime` / `--report` | the ten int8 networks of `stream_train_check.py` that were trained on the lab's windows and on windows from the whole drives of the same training files (five seeds each, kept as replayed in `datasets/dmir/results/hil/stream_board/`) through the STM32H7B3I-DK on the whole drives of the test drivers: `prepare` (WSL) makes the headers and host references, `replay` builds, flashes and replays each network at top speed, `realtime` sends one drive at 10 Hz to the network chosen on the validation drivers, `--report` computes every measure of the study from the board's outputs and judges the tolerances fixed beforehand for agreement, numbers and cost | `datasets/dmir/results/hil/stream_board.jsonl`, `datasets/dmir/results/hil/stream_board.json` |
 | `stream_cv_board.py prepare` / `smoke` / `replay` / `--report` | the 60 int8 networks of `stream_cv_check.py` through the STM32H7B3I-DK on the whole sessions of the drives their fold holds out (kept as replayed in `datasets/dmir/results/hil/stream_cv_board/`); `--report` computes the study's report from the board's outputs and judges the tolerances fixed beforehand (agreement, numbers including the study's criterion, cost) | `datasets/dmir/results/hil/stream_cv_board.jsonl`, `stream_cv_board.json` |
-| `track_train_check.py [P] [T] [K]`, `--rescore` | highD: the searched classifier trained with five seeds on the protocol's windows and on windows from the complete tracks of the training recordings, all of them (T) or those whose label is known (K) (`datasets/highd/track_stream.py build train`, `build val`, `build`), int8 as deployed, scored on the protocol's test windows and on every window of every track of the test recordings with the measures of `datasets/highd/track_stream.py`; `--rescore` scores kept networks again after a change of those measures; `--report` gives the means and the criteria fixed beforehand (see Hardware in the loop) | `datasets/highd/results/seeds/track_windows.jsonl`, `track_windows_rescored.jsonl`, `datasets/highd/results/hil/track_windows.json` |
+| `track_train_check.py [P] [T] [K]`, `--rescore` | highD: the searched classifier trained with five seeds on the protocol's windows and on windows from the complete tracks of the training recordings, all of them (T) or those whose label is known (K) (`datasets/highd/track_stream.py build train`, `build val`, `build`), int8 as deployed, scored on the protocol's test windows and on every window of every track of the test recordings with the measures of `datasets/highd/track_stream.py`; `--rescore` scores kept networks again after a change of those measures; `--report` gives the means and the criteria fixed beforehand (see Hardware in the loop); `TRACK_DATASET=exid` runs arms P and K on exiD (`datasets/exid/track_stream_exid.py build` first, `HIGHD_DATA_ROOT` at exiD's prepared folder) | `datasets/highd/results/seeds/track_windows.jsonl`, `track_windows_rescored.jsonl`, `datasets/highd/results/hil/track_windows.json`; exiD: the same names under `datasets/exid/results/` |
 | `acc_loop_board.py prepare` / `run` / `realtime` / `--report` | closed loop A with the STM32H7B3I-DK as the lane-change predictor: the stream firmware gets the neighbouring vehicle's features every 5th frame from the loop of `datasets/highd/acc_loop.py` and its outputs drive the ACC's anticipation; `run` at top speed for one network of each kind, `realtime` for 20 episodes at 25 Hz; `--report` compares every decision with the same loop on the PC | `datasets/highd/results/hil/acc_loop_board.jsonl`, `acc_loop_board.json` |
 | `resource_bias.py [search ...]` | for every evaluated candidate of a search: the fork's stored peak memory, size and MACs against the Keras model's weights and MACs and the faithful graph (CPU, from the fork's state files) | `datasets/highd/results/resource_bias.json` |
 
@@ -629,6 +629,31 @@ unknown. What carries over from LCIR to highD is the shortcut after a lane chang
 training windows, at under 1 point of the benchmark's own windows; on highD the protocol-trained network rarely
 calls a lane keeper a lane change away from the section's entry, and the complete tracks do not lower that.
 Results: `datasets/highd/results/seeds/track_windows*.jsonl`, `datasets/highd/results/hil/track_windows.json`.
+
+The same study on exiD (2026-11-18, `datasets/exid/track_stream_exid.py`, `TRACK_DATASET=exid track_train_check.py`),
+with exiD's own split (69 / 10 / 14 recordings), the same network and recipe, arms P and K, and a criterion fixed
+before any exiD track existed: the shortcut must be there (P calls the opposite direction in at least half of the
+windows after a lane change), K at most half of P there, the correct class 2 s before the crossing at most 5 points
+lower, the protocol's test windows at most 3 points lower. Met, all four parts; the first narrowly (52.0% against
+the bound of 50%, spread 7.2 points over the seeds).
+
+| complete tracks of the 14 exiD test recordings, windows whose label is known, mean of five seeds | P: protocol's windows | K: complete tracks, label known |
+|---|--:|--:|
+| accuracy on the protocol's test windows | 86.94% ± 0.28 | 85.35% ± 0.30 |
+| windows correct | 80.4% ± 1.9 | 87.3% ± 1.3 |
+| opposite lane change called after a lane change (no crossing back) | 52.0% ± 7.2 | 4.4% ± 1.0 |
+| the same after a change on the main carriageway / a merge / an exit / on a ramp | 63.1 / 31.3 / 51.7 / 29.7% | 6.6 / 0.6 / 3.7 / 0.7% |
+| lane keeping called a lane change, from 6 s after the track's start | 15.2% ± 1.9 | 11.5% ± 1.8 |
+| lane keeping called a lane change, first 6 s | 23.2% ± 2.8 | 14.0% ± 1.7 |
+| correct class 2 s before the crossing | 99.84% ± 0.08 | 99.79% ± 0.05 |
+| correct class 4 s before the crossing | 81.4% ± 2.3 | 82.6% ± 1.4 |
+
+So on all three datasets the network trained as the benchmark does calls the opposite lane change after a completed
+one (LCIR 70.9%, highD 79.7%, exiD 52.0%), and windows from complete drives or tracks remove most of it (20.1%,
+10.9%, 4.4%) at 0.7, 0.8 and 1.6 points of the benchmark's own windows. As on highD, lane keepers are called a lane
+change less often but not half as often (15.2% to 11.5% from 6 s on), and vehicles that never change lanes no less
+often (9.0% to 8.9%). Results: `datasets/exid/results/seeds/track_windows.jsonl`,
+`datasets/exid/results/hil/track_windows.json`.
 
 A critical gap behind does not remove the prediction (2026-11-17, `datasets/highd/critical_gap_probe.py`). A closed
 loop that is to show what an early prediction is worth needs a scripted critical gap around a recorded lane
