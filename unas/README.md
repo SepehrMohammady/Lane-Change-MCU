@@ -642,8 +642,8 @@ the bound of 50%, spread 7.2 points over the seeds).
 | accuracy on the protocol's test windows | 86.94% ± 0.28 | 85.35% ± 0.30 |
 | windows correct | 80.4% ± 1.9 | 87.3% ± 1.3 |
 | opposite lane change called after a lane change (no crossing back) | 52.0% ± 7.2 | 4.4% ± 1.0 |
-| the same after a change on the main carriageway / a merge / an exit / on a ramp | 63.1 / 31.3 / 51.7 / 29.7% | 6.6 / 0.6 / 3.7 / 0.7% |
-| lane keeping called a lane change, from 6 s after the track's start | 15.2% ± 1.9 | 11.5% ± 1.8 |
+| the same after a change on the main carriageway / a merge / an exit / on a ramp | 63.0 / 31.3 / 51.7 / 29.7% | 6.6 / 0.6 / 3.7 / 0.7% |
+| lane keeping called a lane change, from 6 s after the track's start | 15.1% ± 1.9 | 11.5% ± 1.8 |
 | lane keeping called a lane change, first 6 s | 23.2% ± 2.8 | 14.0% ± 1.7 |
 | correct class 2 s before the crossing | 99.84% ± 0.08 | 99.79% ± 0.05 |
 | correct class 4 s before the crossing | 81.4% ± 2.3 | 82.6% ± 1.4 |
@@ -651,7 +651,7 @@ the bound of 50%, spread 7.2 points over the seeds).
 So on all three datasets the network trained as the benchmark does calls the opposite lane change after a completed
 one (LCIR 70.9%, highD 79.7%, exiD 52.0%), and windows from complete drives or tracks remove most of it (20.1%,
 10.9%, 4.4%) at 0.7, 0.8 and 1.6 points of the benchmark's own windows. As on highD, lane keepers are called a lane
-change less often but not half as often (15.2% to 11.5% from 6 s on), and vehicles that never change lanes no less
+change less often but not half as often (15.1% to 11.5% from 6 s on), and vehicles that never change lanes no less
 often (9.0% to 8.9%). Results: `datasets/exid/results/seeds/track_windows.jsonl`,
 `datasets/exid/results/hil/track_windows.json`.
 
