@@ -1,0 +1,175 @@
+{
+ "utc": "2026-11-19T21:58:07+00:00",
+ "rule": "local notes 2026-11-19 22:05",
+ "selection": {
+  "bias_only": {
+   "cfg": {
+    "eta": 0.01
+   },
+   "qualified": false,
+   "validation": [
+    {
+     "cfg": {
+      "eta": 0.003
+     },
+     "gain": 0.09,
+     "qualifies": false,
+     "windows_correct": 0.50496,
+     "correct_2_s_before": 0.7161,
+     "runs_0.6_s_per_vehicle_hour": 1665.0,
+     "opposite_without_a_return": 0.30944,
+     "lane_keeping_from_6_s_called": 0.48466
+    },
+    {
+     "cfg": {
+      "eta": 0.01
+     },
+     "gain": 0.0903,
+     "qualifies": false,
+     "windows_correct": 0.50534,
+     "correct_2_s_before": 0.7161,
+     "runs_0.6_s_per_vehicle_hour": 1663.48,
+     "opposite_without_a_return": 0.30886,
+     "lane_keeping_from_6_s_called": 0.48446
+    },
+    {
+     "cfg": {
+      "eta": 0.03
+     },
+     "gain": 0.0903,
+     "qualifies": false,
+     "windows_correct": 0.50532,
+     "correct_2_s_before": 0.71802,
+     "runs_0.6_s_per_vehicle_hour": 1662.26,
+     "opposite_without_a_return": 0.30888,
+     "lane_keeping_from_6_s_called": 0.48448
+    }
+   ]
+  },
+  "prior_em": {
+   "cfg": {
+    "alpha": 0.001
+   },
+   "qualified": true,
+   "validation": [
+    {
+     "cfg": {
+      "alpha": 0.0001
+     },
+     "gain": 0.0045,
+     "qualifies": true,
+     "windows_correct": 0.4195,
+     "correct_2_s_before": 0.77414,
+     "runs_0.6_s_per_vehicle_hour": 1829.04,
+     "opposite_without_a_return": 0.36576,
+     "lane_keeping_from_6_s_called": 0.60966
+    },
+    {
+     "cfg": {
+      "alpha": 0.001
+     },
+     "gain": 0.005,
+     "qualifies": true,
+     "windows_correct": 0.42,
+     "correct_2_s_before": 0.77326,
+     "runs_0.6_s_per_vehicle_hour": 1825.92,
+     "opposite_without_a_return": 0.36564,
+     "lane_keeping_from_6_s_called": 0.60868
+    },
+    {
+     "cfg": {
+      "alpha": 0.01
+     },
+     "gain": 0.0043,
+     "qualifies": true,
+     "windows_correct": 0.41928,
+     "correct_2_s_before": 0.77414,
+     "runs_0.6_s_per_vehicle_hour": 1821.24,
+     "opposite_without_a_return": 0.36574,
+     "lane_keeping_from_6_s_called": 0.60922
+    }
+   ]
+  },
+  "prior_labels": {
+   "cfg": {
+    "alpha": 0.001
+   },
+   "qualified": true,
+   "validation": [
+    {
+     "cfg": {
+      "alpha": 0.0001
+     },
+     "gain": 0.0867,
+     "qualifies": true,
+     "windows_correct": 0.50166,
+     "correct_2_s_before": 0.7362,
+     "runs_0.6_s_per_vehicle_hour": 1667.84,
+     "opposite_without_a_return": 0.31448,
+     "lane_keeping_from_6_s_called": 0.49762
+    },
+    {
+     "cfg": {
+      "alpha": 0.001
+     },
+     "gain": 0.0894,
+     "qualifies": true,
+     "windows_correct": 0.50444,
+     "correct_2_s_before": 0.7354,
+     "runs_0.6_s_per_vehicle_hour": 1658.04,
+     "opposite_without_a_return": 0.3125,
+     "lane_keeping_from_6_s_called": 0.49396
+    },
+    {
+     "cfg": {
+      "alpha": 0.01
+     },
+     "gain": 0.116,
+     "qualifies": false,
+     "windows_correct": 0.53104,
+     "correct_2_s_before": 0.7217,
+     "runs_0.6_s_per_vehicle_hour": 1540.64,
+     "opposite_without_a_return": 0.29052,
+     "lane_keeping_from_6_s_called": 0.46032
+    }
+   ]
+  }
+ },
+ "test": {
+  "fixed": {
+   "windows_correct": 0.4312,
+   "correct_2_s_before": 0.7631,
+   "runs_0.6_s_per_vehicle_hour": 1762.92,
+   "opposite_without_a_return": 0.3691,
+   "lane_keeping_from_6_s_called": 0.5888
+  },
+  "ours": {
+   "windows_correct": 0.8451,
+   "correct_2_s_before": 0.9673,
+   "runs_0.6_s_per_vehicle_hour": 304.88,
+   "opposite_without_a_return": 0.0408,
+   "lane_keeping_from_6_s_called": 0.1266
+  },
+  "bias_only": {
+   "windows_correct": 0.51486,
+   "correct_2_s_before": 0.71796,
+   "runs_0.6_s_per_vehicle_hour": 1604.28,
+   "opposite_without_a_return": 0.31318,
+   "lane_keeping_from_6_s_called": 0.47038
+  },
+  "prior_em": {
+   "windows_correct": 0.43694,
+   "correct_2_s_before": 0.76274,
+   "runs_0.6_s_per_vehicle_hour": 1727.98,
+   "opposite_without_a_return": 0.366,
+   "lane_keeping_from_6_s_called": 0.57996
+  },
+  "prior_labels": {
+   "windows_correct": 0.52176,
+   "correct_2_s_before": 0.73168,
+   "runs_0.6_s_per_vehicle_hour": 1572.7,
+   "opposite_without_a_return": 0.31046,
+   "lane_keeping_from_6_s_called": 0.4647
+  }
+ }
+}

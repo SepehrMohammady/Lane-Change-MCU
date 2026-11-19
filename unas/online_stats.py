@@ -1,7 +1,7 @@
 """Paired statistics for on-device learning at exiD sites (analysis added 2026-11-19 after the results; no new claim).
 
 Reads the committed records only: the site pilot's final records (fixed and the selected update, five seeds), the
-comparison's final records and, for the location of each test recording, the board's per-location records. Per test
+comparison's and the addendum's final records and, for the location of each test recording, the board's per-location records. Per test
 recording the measures are averaged over the five seeds; differences are then paired by recording (n = 14) and, as the
 more conservative unit, by location (the mean over a location's test recordings, n = 7): mean difference, bootstrap
 95% interval (10,000 resamples of the units, generator seed 0), units with a gain, and the exact Wilcoxon signed-rank
@@ -27,6 +27,7 @@ OUT = EXID / "hil" / "online_stats.json"
 SETTING = "G_eta0.003_lam0.0"
 MEASURES = ("windows_correct", "correct_2_s_before", "runs_0.6_s_per_vehicle_hour")
 METHODS = ("site_scaling", "entropy", "self_training", "naive", "rls", "instant", "offline_refit")
+ADDENDUM = ("bias_only", "prior_em", "prior_labels")     # unas/online_site_addendum.py (added after the results)
 
 
 def rows(pattern: str) -> list[dict]:
@@ -90,6 +91,13 @@ def main() -> None:
         rs = [r for r in comp if r["method"] == m]
         assert sorted(r["seed"] for r in rs) == [100, 101, 102, 103, 104], m
         out["comparison_method_minus_ours"][m] = block(ours["highD_K"], seed_mean([r["measures"]["per_recording"] for r in rs]), groups)
+    add = [r for r in rows(EXID / "seeds" / "online_addendum*.jsonl") if r["phase"] == "final"]
+    if add:
+        out["addendum_method_minus_ours"] = {}
+        for m in ADDENDUM:
+            rs = [r for r in add if r["method"] == m]
+            assert sorted(r["seed"] for r in rs) == [100, 101, 102, 103, 104], m
+            out["addendum_method_minus_ours"][m] = block(ours["highD_K"], seed_mean([r["measures"]["per_recording"] for r in rs]), groups)
     rev = rows(HIGHD / "seeds" / "online_reverse_s*.jsonl")
     if rev:
         out["reverse"] = {}
@@ -105,6 +113,9 @@ def main() -> None:
         x = out["comparison_method_minus_ours"][m]
         print(f"{m:>14} - ours: windows {json.dumps(x['windows_correct']['by_recording'])}")
         print(f"{'':>14}        2 s before {json.dumps(x['correct_2_s_before']['by_recording'])}")
+    for m in out.get("addendum_method_minus_ours", {}):
+        x = out["addendum_method_minus_ours"][m]
+        print(f"{m:>14} - ours: windows {json.dumps(x['windows_correct']['by_recording'])}")
     print("written", OUT)
 
 
