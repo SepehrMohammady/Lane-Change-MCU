@@ -1,0 +1,1 @@
+{"location": 0, "seed": 100, "training_windows": 413052, "windows_per_class_before_balancing": [1652926, 137684, 225125], "early_stopping_windows": 66786, "epochs_run": 26, "params": 2593, "wall_s": 98.6, "utc": "2026-11-19T21:40:26+00:00"}

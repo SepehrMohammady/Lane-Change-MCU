@@ -1,0 +1,120 @@
+{
+ "utc": "2026-11-19T21:59:13+00:00",
+ "criterion": {
+  "rule": "local notes 2026-11-19 21:56",
+  "networks": 5,
+  "seeds": [
+   100,
+   101,
+   102,
+   103,
+   104
+  ],
+  "exiD_own_K_fixed": 0.87,
+  "left_out_fixed": 0.8337,
+  "left_out_adapted": 0.8584,
+  "gap": 0.0363,
+  "gain": 0.0247,
+  "share_of_gap": 0.6804,
+  "0_gap_exists": true,
+  "a_met": false,
+  "b_recordings_with_a_gain": 9,
+  "b_of": 14,
+  "b_met": false,
+  "c_correct_2_s_before": [
+   0.9797,
+   0.9729
+  ],
+  "d_runs": [
+   358.68,
+   259.9
+  ],
+  "c_met": true,
+  "d_met": true,
+  "complete": true,
+  "met": false
+ },
+ "exiD_own_K_recomputed_here": 0.87,
+ "per_recording_gain": {
+  "15": 0.0649,
+  "16": 0.0697,
+  "17": 0.0795,
+  "18": 0.0787,
+  "37": 0.0325,
+  "38": 0.0259,
+  "51": 0.0097,
+  "52": 0.0314,
+  "60": -0.0146,
+  "70": -0.0407,
+  "71": -0.0459,
+  "72": -0.0652,
+  "77": 0.2164,
+  "92": -0.0062
+ },
+ "per_location": {
+  "0": {
+   "fixed": 0.8042,
+   "adapted": 0.8742,
+   "exiD_own_K": 0.8731,
+   "share_of_gap": 1.016
+  },
+  "1": {
+   "fixed": 0.8311,
+   "adapted": 0.8585,
+   "exiD_own_K": 0.8594,
+   "share_of_gap": 0.9682
+  },
+  "2": {
+   "fixed": 0.8408,
+   "adapted": 0.8553,
+   "exiD_own_K": 0.8753,
+   "share_of_gap": 0.4203
+  },
+  "3": {
+   "fixed": 0.8791,
+   "adapted": 0.8645,
+   "exiD_own_K": 0.8835,
+   "share_of_gap": -3.3182
+  },
+  "4": {
+   "fixed": 0.8985,
+   "adapted": 0.847,
+   "exiD_own_K": 0.8955,
+   "share_of_gap": null
+  },
+  "5": {
+   "fixed": 0.6739,
+   "adapted": 0.8904,
+   "exiD_own_K": 0.8717,
+   "share_of_gap": 1.0945
+  },
+  "6": {
+   "fixed": 0.8471,
+   "adapted": 0.841,
+   "exiD_own_K": 0.8497,
+   "share_of_gap": -2.3462
+  }
+ },
+ "other_measures": {
+  "windows_correct": [
+   0.8337,
+   0.8584
+  ],
+  "correct_2_s_before": [
+   0.9797,
+   0.9729
+  ],
+  "runs_0.6_s_per_vehicle_hour": [
+   358.68,
+   259.9
+  ],
+  "opposite_without_a_return": [
+   0.0556,
+   0.0309
+  ],
+  "lane_keeping_from_6_s_called": [
+   0.1678,
+   0.1177
+  ]
+ }
+}
