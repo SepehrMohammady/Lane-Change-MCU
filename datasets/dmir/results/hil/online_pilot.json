@@ -1,0 +1,3232 @@
+{
+ "utc": "2026-11-19T15:52:08+00:00",
+ "records": 360,
+ "rule": "local notes 2026-11-19 16:35",
+ "selection": {
+  "selected": "G_eta0.003_lam0.01",
+  "complete": true,
+  "qualified": [
+   "G_eta0.003_lam0.0",
+   "G_eta0.003_lam0.01",
+   "G_eta0.01_lam0.0",
+   "G_eta0.01_lam0.01",
+   "G_eta0.03_lam0.0",
+   "G_eta0.03_lam0.01"
+  ]
+ },
+ "tune": {
+  "G_eta0.003_lam0.0": {
+   "drives": 14,
+   "networks_per_drive": [
+    5
+   ],
+   "frames_correct": {
+    "drives_with_a_value": 14,
+    "fixed": 0.873,
+    "adapted": 0.888,
+    "gain": 0.015,
+    "adapted_above_fixed_in": 11,
+    "gain_95_interval_over_drives": [
+     0.0031,
+     0.026
+    ],
+    "smallest_and_largest_gain": [
+     -0.0365,
+     0.0531
+    ]
+   },
+   "second_half_frames_correct": {
+    "drives_with_a_value": 14,
+    "fixed": 0.8696,
+    "adapted": 0.8781,
+    "gain": 0.0085,
+    "adapted_above_fixed_in": 9
+   },
+   "opposite_announced_after_a_lane_change": {
+    "drives_with_a_value": 14,
+    "fixed": 0.1899,
+    "adapted": 0.1391,
+    "gain": -0.0509,
+    "adapted_above_fixed_in": 3
+   },
+   "timely_share": {
+    "drives_with_a_value": 14,
+    "fixed": 0.9204,
+    "adapted": 0.9124,
+    "gain": -0.008,
+    "adapted_above_fixed_in": 3
+   },
+   "alarm_runs_per_hour": {
+    "drives_with_a_value": 14,
+    "fixed": 377.5329,
+    "adapted": 330.7557,
+    "gain": -46.7771,
+    "adapted_above_fixed_in": 4
+   },
+   "alarm_runs_of_0.5_s_or_more_per_hour": {
+    "drives_with_a_value": 14,
+    "fixed": 80.0657,
+    "adapted": 73.4229,
+    "gain": -6.6429,
+    "adapted_above_fixed_in": 5
+   },
+   "baseline_session_frames_correct": {
+    "drives_with_a_value": 14,
+    "fixed": 0.9528,
+    "adapted": 0.9495,
+    "gain": -0.0033,
+    "adapted_above_fixed_in": 7
+   },
+   "baseline_session_alarm_runs_per_hour": {
+    "drives_with_a_value": 14,
+    "fixed": 166.4886,
+    "adapted": 113.5543,
+    "gain": -52.9343,
+    "adapted_above_fixed_in": 6
+   }
+  },
+  "G_eta0.003_lam0.01": {
+   "drives": 14,
+   "networks_per_drive": [
+    5
+   ],
+   "frames_correct": {
+    "drives_with_a_value": 14,
+    "fixed": 0.873,
+    "adapted": 0.8884,
+    "gain": 0.0154,
+    "adapted_above_fixed_in": 11,
+    "gain_95_interval_over_drives": [
+     0.0037,
+     0.0262
+    ],
+    "smallest_and_largest_gain": [
+     -0.0355,
+     0.0518
+    ]
+   },
+   "second_half_frames_correct": {
+    "drives_with_a_value": 14,
+    "fixed": 0.8696,
+    "adapted": 0.879,
+    "gain": 0.0093,
+    "adapted_above_fixed_in": 9
+   },
+   "opposite_announced_after_a_lane_change": {
+    "drives_with_a_value": 14,
+    "fixed": 0.1899,
+    "adapted": 0.1396,
+    "gain": -0.0503,
+    "adapted_above_fixed_in": 3
+   },
+   "timely_share": {
+    "drives_with_a_value": 14,
+    "fixed": 0.9204,
+    "adapted": 0.9127,
+    "gain": -0.0077,
+    "adapted_above_fixed_in": 3
+   },
+   "alarm_runs_per_hour": {
+    "drives_with_a_value": 14,
+    "fixed": 377.5329,
+    "adapted": 329.81,
+    "gain": -47.7229,
+    "adapted_above_fixed_in": 4
+   },
+   "alarm_runs_of_0.5_s_or_more_per_hour": {
+    "drives_with_a_value": 14,
+    "fixed": 80.0657,
+    "adapted": 72.1271,
+    "gain": -7.9386,
+    "adapted_above_fixed_in": 4
+   },
+   "baseline_session_frames_correct": {
+    "drives_with_a_value": 14,
+    "fixed": 0.9528,
+    "adapted": 0.9517,
+    "gain": -0.0011,
+    "adapted_above_fixed_in": 8
+   },
+   "baseline_session_alarm_runs_per_hour": {
+    "drives_with_a_value": 14,
+    "fixed": 166.4886,
+    "adapted": 112.5543,
+    "gain": -53.9343,
+    "adapted_above_fixed_in": 5
+   }
+  },
+  "G_eta0.01_lam0.0": {
+   "drives": 14,
+   "networks_per_drive": [
+    5
+   ],
+   "frames_correct": {
+    "drives_with_a_value": 14,
+    "fixed": 0.873,
+    "adapted": 0.881,
+    "gain": 0.008,
+    "adapted_above_fixed_in": 9,
+    "gain_95_interval_over_drives": [
+     -0.0048,
+     0.0207
+    ],
+    "smallest_and_largest_gain": [
+     -0.0428,
+     0.0564
+    ]
+   },
+   "second_half_frames_correct": {
+    "drives_with_a_value": 14,
+    "fixed": 0.8696,
+    "adapted": 0.8686,
+    "gain": -0.0011,
+    "adapted_above_fixed_in": 6
+   },
+   "opposite_announced_after_a_lane_change": {
+    "drives_with_a_value": 14,
+    "fixed": 0.1899,
+    "adapted": 0.145,
+    "gain": -0.045,
+    "adapted_above_fixed_in": 3
+   },
+   "timely_share": {
+    "drives_with_a_value": 14,
+    "fixed": 0.9204,
+    "adapted": 0.9062,
+    "gain": -0.0142,
+    "adapted_above_fixed_in": 3
+   },
+   "alarm_runs_per_hour": {
+    "drives_with_a_value": 14,
+    "fixed": 377.5329,
+    "adapted": 329.2357,
+    "gain": -48.2971,
+    "adapted_above_fixed_in": 5
+   },
+   "alarm_runs_of_0.5_s_or_more_per_hour": {
+    "drives_with_a_value": 14,
+    "fixed": 80.0657,
+    "adapted": 76.3286,
+    "gain": -3.7371,
+    "adapted_above_fixed_in": 6
+   },
+   "baseline_session_frames_correct": {
+    "drives_with_a_value": 14,
+    "fixed": 0.9528,
+    "adapted": 0.9515,
+    "gain": -0.0013,
+    "adapted_above_fixed_in": 8
+   },
+   "baseline_session_alarm_runs_per_hour": {
+    "drives_with_a_value": 14,
+    "fixed": 166.4886,
+    "adapted": 108.3757,
+    "gain": -58.1129,
+    "adapted_above_fixed_in": 6
+   }
+  },
+  "G_eta0.01_lam0.01": {
+   "drives": 14,
+   "networks_per_drive": [
+    5
+   ],
+   "frames_correct": {
+    "drives_with_a_value": 14,
+    "fixed": 0.873,
+    "adapted": 0.8824,
+    "gain": 0.0094,
+    "adapted_above_fixed_in": 9,
+    "gain_95_interval_over_drives": [
+     -0.0023,
+     0.021
+    ],
+    "smallest_and_largest_gain": [
+     -0.0373,
+     0.0531
+    ]
+   },
+   "second_half_frames_correct": {
+    "drives_with_a_value": 14,
+    "fixed": 0.8696,
+    "adapted": 0.8708,
+    "gain": 0.0011,
+    "adapted_above_fixed_in": 6
+   },
+   "opposite_announced_after_a_lane_change": {
+    "drives_with_a_value": 14,
+    "fixed": 0.1899,
+    "adapted": 0.1459,
+    "gain": -0.0441,
+    "adapted_above_fixed_in": 3
+   },
+   "timely_share": {
+    "drives_with_a_value": 14,
+    "fixed": 0.9204,
+    "adapted": 0.9081,
+    "gain": -0.0123,
+    "adapted_above_fixed_in": 4
+   },
+   "alarm_runs_per_hour": {
+    "drives_with_a_value": 14,
+    "fixed": 377.5329,
+    "adapted": 330.71,
+    "gain": -46.8229,
+    "adapted_above_fixed_in": 4
+   },
+   "alarm_runs_of_0.5_s_or_more_per_hour": {
+    "drives_with_a_value": 14,
+    "fixed": 80.0657,
+    "adapted": 75.0843,
+    "gain": -4.9814,
+    "adapted_above_fixed_in": 4
+   },
+   "baseline_session_frames_correct": {
+    "drives_with_a_value": 14,
+    "fixed": 0.9528,
+    "adapted": 0.9548,
+    "gain": 0.002,
+    "adapted_above_fixed_in": 8
+   },
+   "baseline_session_alarm_runs_per_hour": {
+    "drives_with_a_value": 14,
+    "fixed": 166.4886,
+    "adapted": 104.2814,
+    "gain": -62.2071,
+    "adapted_above_fixed_in": 6
+   }
+  },
+  "G_eta0.03_lam0.0": {
+   "drives": 14,
+   "networks_per_drive": [
+    5
+   ],
+   "frames_correct": {
+    "drives_with_a_value": 14,
+    "fixed": 0.873,
+    "adapted": 0.8731,
+    "gain": 0.0001,
+    "adapted_above_fixed_in": 7,
+    "gain_95_interval_over_drives": [
+     -0.0143,
+     0.0148
+    ],
+    "smallest_and_largest_gain": [
+     -0.0498,
+     0.0579
+    ]
+   },
+   "second_half_frames_correct": {
+    "drives_with_a_value": 14,
+    "fixed": 0.8696,
+    "adapted": 0.8593,
+    "gain": -0.0103,
+    "adapted_above_fixed_in": 5
+   },
+   "opposite_announced_after_a_lane_change": {
+    "drives_with_a_value": 14,
+    "fixed": 0.1899,
+    "adapted": 0.1509,
+    "gain": -0.039,
+    "adapted_above_fixed_in": 4
+   },
+   "timely_share": {
+    "drives_with_a_value": 14,
+    "fixed": 0.9204,
+    "adapted": 0.8986,
+    "gain": -0.0218,
+    "adapted_above_fixed_in": 2
+   },
+   "alarm_runs_per_hour": {
+    "drives_with_a_value": 14,
+    "fixed": 377.5329,
+    "adapted": 347.4614,
+    "gain": -30.0714,
+    "adapted_above_fixed_in": 6
+   },
+   "alarm_runs_of_0.5_s_or_more_per_hour": {
+    "drives_with_a_value": 14,
+    "fixed": 80.0657,
+    "adapted": 78.8871,
+    "gain": -1.1786,
+    "adapted_above_fixed_in": 6
+   },
+   "baseline_session_frames_correct": {
+    "drives_with_a_value": 14,
+    "fixed": 0.9528,
+    "adapted": 0.9514,
+    "gain": -0.0014,
+    "adapted_above_fixed_in": 7
+   },
+   "baseline_session_alarm_runs_per_hour": {
+    "drives_with_a_value": 14,
+    "fixed": 166.4886,
+    "adapted": 121.9271,
+    "gain": -44.5614,
+    "adapted_above_fixed_in": 6
+   }
+  },
+  "G_eta0.03_lam0.01": {
+   "drives": 14,
+   "networks_per_drive": [
+    5
+   ],
+   "frames_correct": {
+    "drives_with_a_value": 14,
+    "fixed": 0.873,
+    "adapted": 0.8745,
+    "gain": 0.0015,
+    "adapted_above_fixed_in": 8,
+    "gain_95_interval_over_drives": [
+     -0.0114,
+     0.0146
+    ],
+    "smallest_and_largest_gain": [
+     -0.0377,
+     0.0499
+    ]
+   },
+   "second_half_frames_correct": {
+    "drives_with_a_value": 14,
+    "fixed": 0.8696,
+    "adapted": 0.8625,
+    "gain": -0.0071,
+    "adapted_above_fixed_in": 6
+   },
+   "opposite_announced_after_a_lane_change": {
+    "drives_with_a_value": 14,
+    "fixed": 0.1899,
+    "adapted": 0.1559,
+    "gain": -0.034,
+    "adapted_above_fixed_in": 4
+   },
+   "timely_share": {
+    "drives_with_a_value": 14,
+    "fixed": 0.9204,
+    "adapted": 0.9036,
+    "gain": -0.0168,
+    "adapted_above_fixed_in": 3
+   },
+   "alarm_runs_per_hour": {
+    "drives_with_a_value": 14,
+    "fixed": 377.5329,
+    "adapted": 341.15,
+    "gain": -36.3829,
+    "adapted_above_fixed_in": 6
+   },
+   "alarm_runs_of_0.5_s_or_more_per_hour": {
+    "drives_with_a_value": 14,
+    "fixed": 80.0657,
+    "adapted": 77.8586,
+    "gain": -2.2071,
+    "adapted_above_fixed_in": 6
+   },
+   "baseline_session_frames_correct": {
+    "drives_with_a_value": 14,
+    "fixed": 0.9528,
+    "adapted": 0.9542,
+    "gain": 0.0014,
+    "adapted_above_fixed_in": 8
+   },
+   "baseline_session_alarm_runs_per_hour": {
+    "drives_with_a_value": 14,
+    "fixed": 166.4886,
+    "adapted": 134.7471,
+    "gain": -31.7414,
+    "adapted_above_fixed_in": 6
+   }
+  },
+  "R_s2_a0.01": {
+   "drives": 14,
+   "networks_per_drive": [
+    5
+   ],
+   "frames_correct": {
+    "drives_with_a_value": 14,
+    "fixed": 0.873,
+    "adapted": 0.8727,
+    "gain": -0.0003,
+    "adapted_above_fixed_in": 7,
+    "gain_95_interval_over_drives": [
+     -0.0062,
+     0.0056
+    ],
+    "smallest_and_largest_gain": [
+     -0.0226,
+     0.0212
+    ]
+   },
+   "second_half_frames_correct": {
+    "drives_with_a_value": 14,
+    "fixed": 0.8696,
+    "adapted": 0.8684,
+    "gain": -0.0013,
+    "adapted_above_fixed_in": 6
+   },
+   "opposite_announced_after_a_lane_change": {
+    "drives_with_a_value": 14,
+    "fixed": 0.1899,
+    "adapted": 0.1875,
+    "gain": -0.0024,
+    "adapted_above_fixed_in": 8
+   },
+   "timely_share": {
+    "drives_with_a_value": 14,
+    "fixed": 0.9204,
+    "adapted": 0.9157,
+    "gain": -0.0047,
+    "adapted_above_fixed_in": 3
+   },
+   "alarm_runs_per_hour": {
+    "drives_with_a_value": 14,
+    "fixed": 377.5329,
+    "adapted": 414.8243,
+    "gain": 37.2914,
+    "adapted_above_fixed_in": 11
+   },
+   "alarm_runs_of_0.5_s_or_more_per_hour": {
+    "drives_with_a_value": 14,
+    "fixed": 80.0657,
+    "adapted": 91.4114,
+    "gain": 11.3457,
+    "adapted_above_fixed_in": 12
+   },
+   "baseline_session_frames_correct": {
+    "drives_with_a_value": 14,
+    "fixed": 0.9528,
+    "adapted": 0.971,
+    "gain": 0.0182,
+    "adapted_above_fixed_in": 9
+   },
+   "baseline_session_alarm_runs_per_hour": {
+    "drives_with_a_value": 14,
+    "fixed": 166.4886,
+    "adapted": 108.3886,
+    "gain": -58.1,
+    "adapted_above_fixed_in": 5
+   }
+  },
+  "R_s2_a0.1": {
+   "drives": 14,
+   "networks_per_drive": [
+    5
+   ],
+   "frames_correct": {
+    "drives_with_a_value": 14,
+    "fixed": 0.873,
+    "adapted": 0.8762,
+    "gain": 0.0032,
+    "adapted_above_fixed_in": 9,
+    "gain_95_interval_over_drives": [
+     0.0007,
+     0.0059
+    ],
+    "smallest_and_largest_gain": [
+     -0.0037,
+     0.015
+    ]
+   },
+   "second_half_frames_correct": {
+    "drives_with_a_value": 14,
+    "fixed": 0.8696,
+    "adapted": 0.8725,
+    "gain": 0.0029,
+    "adapted_above_fixed_in": 9
+   },
+   "opposite_announced_after_a_lane_change": {
+    "drives_with_a_value": 14,
+    "fixed": 0.1899,
+    "adapted": 0.1839,
+    "gain": -0.006,
+    "adapted_above_fixed_in": 5
+   },
+   "timely_share": {
+    "drives_with_a_value": 14,
+    "fixed": 0.9204,
+    "adapted": 0.9194,
+    "gain": -0.001,
+    "adapted_above_fixed_in": 4
+   },
+   "alarm_runs_per_hour": {
+    "drives_with_a_value": 14,
+    "fixed": 377.5329,
+    "adapted": 376.1329,
+    "gain": -1.4,
+    "adapted_above_fixed_in": 7
+   },
+   "alarm_runs_of_0.5_s_or_more_per_hour": {
+    "drives_with_a_value": 14,
+    "fixed": 80.0657,
+    "adapted": 82.8,
+    "gain": 2.7343,
+    "adapted_above_fixed_in": 10
+   },
+   "baseline_session_frames_correct": {
+    "drives_with_a_value": 14,
+    "fixed": 0.9528,
+    "adapted": 0.9666,
+    "gain": 0.0138,
+    "adapted_above_fixed_in": 9
+   },
+   "baseline_session_alarm_runs_per_hour": {
+    "drives_with_a_value": 14,
+    "fixed": 166.4886,
+    "adapted": 136.7729,
+    "gain": -29.7157,
+    "adapted_above_fixed_in": 4
+   }
+  },
+  "R_s8_a0.01": {
+   "drives": 14,
+   "networks_per_drive": [
+    5
+   ],
+   "frames_correct": {
+    "drives_with_a_value": 14,
+    "fixed": 0.873,
+    "adapted": 0.8224,
+    "gain": -0.0506,
+    "adapted_above_fixed_in": 0,
+    "gain_95_interval_over_drives": [
+     -0.073,
+     -0.0301
+    ],
+    "smallest_and_largest_gain": [
+     -0.1412,
+     -0.0012
+    ]
+   },
+   "second_half_frames_correct": {
+    "drives_with_a_value": 14,
+    "fixed": 0.8696,
+    "adapted": 0.8096,
+    "gain": -0.06,
+    "adapted_above_fixed_in": 0
+   },
+   "opposite_announced_after_a_lane_change": {
+    "drives_with_a_value": 14,
+    "fixed": 0.1899,
+    "adapted": 0.2542,
+    "gain": 0.0642,
+    "adapted_above_fixed_in": 9
+   },
+   "timely_share": {
+    "drives_with_a_value": 14,
+    "fixed": 0.9204,
+    "adapted": 0.8756,
+    "gain": -0.0448,
+    "adapted_above_fixed_in": 1
+   },
+   "alarm_runs_per_hour": {
+    "drives_with_a_value": 14,
+    "fixed": 377.5329,
+    "adapted": 490.3043,
+    "gain": 112.7714,
+    "adapted_above_fixed_in": 12
+   },
+   "alarm_runs_of_0.5_s_or_more_per_hour": {
+    "drives_with_a_value": 14,
+    "fixed": 80.0657,
+    "adapted": 133.9771,
+    "gain": 53.9114,
+    "adapted_above_fixed_in": 13
+   },
+   "baseline_session_frames_correct": {
+    "drives_with_a_value": 14,
+    "fixed": 0.9528,
+    "adapted": 0.9466,
+    "gain": -0.0063,
+    "adapted_above_fixed_in": 7
+   },
+   "baseline_session_alarm_runs_per_hour": {
+    "drives_with_a_value": 14,
+    "fixed": 166.4886,
+    "adapted": 123.0857,
+    "gain": -43.4029,
+    "adapted_above_fixed_in": 6
+   }
+  },
+  "R_s8_a0.1": {
+   "drives": 14,
+   "networks_per_drive": [
+    5
+   ],
+   "frames_correct": {
+    "drives_with_a_value": 14,
+    "fixed": 0.873,
+    "adapted": 0.8676,
+    "gain": -0.0054,
+    "adapted_above_fixed_in": 5,
+    "gain_95_interval_over_drives": [
+     -0.0156,
+     0.005
+    ],
+    "smallest_and_largest_gain": [
+     -0.0409,
+     0.0253
+    ]
+   },
+   "second_half_frames_correct": {
+    "drives_with_a_value": 14,
+    "fixed": 0.8696,
+    "adapted": 0.8609,
+    "gain": -0.0087,
+    "adapted_above_fixed_in": 6
+   },
+   "opposite_announced_after_a_lane_change": {
+    "drives_with_a_value": 14,
+    "fixed": 0.1899,
+    "adapted": 0.1843,
+    "gain": -0.0056,
+    "adapted_above_fixed_in": 7
+   },
+   "timely_share": {
+    "drives_with_a_value": 14,
+    "fixed": 0.9204,
+    "adapted": 0.9008,
+    "gain": -0.0196,
+    "adapted_above_fixed_in": 4
+   },
+   "alarm_runs_per_hour": {
+    "drives_with_a_value": 14,
+    "fixed": 377.5329,
+    "adapted": 397.7414,
+    "gain": 20.2086,
+    "adapted_above_fixed_in": 7
+   },
+   "alarm_runs_of_0.5_s_or_more_per_hour": {
+    "drives_with_a_value": 14,
+    "fixed": 80.0657,
+    "adapted": 89.5557,
+    "gain": 9.49,
+    "adapted_above_fixed_in": 10
+   },
+   "baseline_session_frames_correct": {
+    "drives_with_a_value": 14,
+    "fixed": 0.9528,
+    "adapted": 0.9561,
+    "gain": 0.0033,
+    "adapted_above_fixed_in": 8
+   },
+   "baseline_session_alarm_runs_per_hour": {
+    "drives_with_a_value": 14,
+    "fixed": 166.4886,
+    "adapted": 133.4914,
+    "gain": -32.9971,
+    "adapted_above_fixed_in": 5
+   }
+  }
+ },
+ "final": {
+  "G_eta0.003_lam0.01 D": {
+   "drives": 34,
+   "networks_per_drive": [
+    5
+   ],
+   "frames_correct": {
+    "drives_with_a_value": 34,
+    "fixed": 0.8559,
+    "adapted": 0.8597,
+    "gain": 0.0039,
+    "adapted_above_fixed_in": 21,
+    "gain_95_interval_over_drives": [
+     -0.0059,
+     0.0134
+    ],
+    "smallest_and_largest_gain": [
+     -0.0814,
+     0.0738
+    ]
+   },
+   "second_half_frames_correct": {
+    "drives_with_a_value": 34,
+    "fixed": 0.8603,
+    "adapted": 0.8548,
+    "gain": -0.0054,
+    "adapted_above_fixed_in": 18
+   },
+   "opposite_announced_after_a_lane_change": {
+    "drives_with_a_value": 34,
+    "fixed": 0.2106,
+    "adapted": 0.1811,
+    "gain": -0.0295,
+    "adapted_above_fixed_in": 11
+   },
+   "timely_share": {
+    "drives_with_a_value": 34,
+    "fixed": 0.8786,
+    "adapted": 0.8712,
+    "gain": -0.0074,
+    "adapted_above_fixed_in": 10
+   },
+   "alarm_runs_per_hour": {
+    "drives_with_a_value": 34,
+    "fixed": 374.8188,
+    "adapted": 387.4229,
+    "gain": 12.6041,
+    "adapted_above_fixed_in": 20
+   },
+   "alarm_runs_of_0.5_s_or_more_per_hour": {
+    "drives_with_a_value": 34,
+    "fixed": 96.4882,
+    "adapted": 103.9594,
+    "gain": 7.4712,
+    "adapted_above_fixed_in": 20
+   },
+   "baseline_session_frames_correct": {
+    "drives_with_a_value": 30,
+    "fixed": 0.9483,
+    "adapted": 0.9414,
+    "gain": -0.0069,
+    "adapted_above_fixed_in": 12
+   },
+   "baseline_session_alarm_runs_per_hour": {
+    "drives_with_a_value": 30,
+    "fixed": 122.6633,
+    "adapted": 140.2653,
+    "gain": 17.602,
+    "adapted_above_fixed_in": 18
+   }
+  },
+  "G_eta0.003_lam0.01 L": {
+   "drives": 34,
+   "networks_per_drive": [
+    5
+   ],
+   "frames_correct": {
+    "drives_with_a_value": 34,
+    "fixed": 0.6945,
+    "adapted": 0.8108,
+    "gain": 0.1162,
+    "adapted_above_fixed_in": 33,
+    "gain_95_interval_over_drives": [
+     0.099,
+     0.1326
+    ],
+    "smallest_and_largest_gain": [
+     -0.0084,
+     0.2082
+    ]
+   },
+   "second_half_frames_correct": {
+    "drives_with_a_value": 34,
+    "fixed": 0.6923,
+    "adapted": 0.8192,
+    "gain": 0.1269,
+    "adapted_above_fixed_in": 33
+   },
+   "opposite_announced_after_a_lane_change": {
+    "drives_with_a_value": 34,
+    "fixed": 0.7126,
+    "adapted": 0.3274,
+    "gain": -0.3851,
+    "adapted_above_fixed_in": 0
+   },
+   "timely_share": {
+    "drives_with_a_value": 34,
+    "fixed": 0.8909,
+    "adapted": 0.8301,
+    "gain": -0.0608,
+    "adapted_above_fixed_in": 2
+   },
+   "alarm_runs_per_hour": {
+    "drives_with_a_value": 34,
+    "fixed": 490.7488,
+    "adapted": 707.2059,
+    "gain": 216.4571,
+    "adapted_above_fixed_in": 30
+   },
+   "alarm_runs_of_0.5_s_or_more_per_hour": {
+    "drives_with_a_value": 34,
+    "fixed": 244.6765,
+    "adapted": 195.1288,
+    "gain": -49.5476,
+    "adapted_above_fixed_in": 7
+   },
+   "baseline_session_frames_correct": {
+    "drives_with_a_value": 30,
+    "fixed": 0.9343,
+    "adapted": 0.9353,
+    "gain": 0.001,
+    "adapted_above_fixed_in": 16
+   },
+   "baseline_session_alarm_runs_per_hour": {
+    "drives_with_a_value": 30,
+    "fixed": 157.476,
+    "adapted": 131.1887,
+    "gain": -26.2873,
+    "adapted_above_fixed_in": 12
+   }
+  }
+ },
+ "final_per_drive": {
+  "G_eta0.003_lam0.01 D": {
+   "user6": {
+    "networks": 5,
+    "frames_correct": [
+     0.89912,
+     0.891122
+    ],
+    "second_half_frames_correct": [
+     0.890844,
+     0.872256
+    ],
+    "opposite_announced_after_a_lane_change": [
+     0.22019464720194648,
+     0.18491484184914841
+    ],
+    "timely_share": [
+     0.95926,
+     0.9555400000000001
+    ],
+    "alarm_runs_per_hour": [
+     295.64,
+     225.3
+    ],
+    "alarm_runs_of_0.5_s_or_more_per_hour": [
+     65.94,
+     54.96
+    ],
+    "baseline_session_frames_correct": [
+     0.960302,
+     0.986628
+    ],
+    "baseline_session_alarm_runs_per_hour": [
+     70.64,
+     40.2
+    ]
+   },
+   "user11": {
+    "networks": 5,
+    "frames_correct": [
+     0.901572,
+     0.91893
+    ],
+    "second_half_frames_correct": [
+     0.910416,
+     0.904648
+    ],
+    "opposite_announced_after_a_lane_change": [
+     0.24375,
+     0.17291666666666666
+    ],
+    "timely_share": [
+     1.0,
+     1.0
+    ],
+    "alarm_runs_per_hour": [
+     315.34000000000003,
+     195.72
+    ],
+    "alarm_runs_of_0.5_s_or_more_per_hour": [
+     68.88,
+     38.04
+    ],
+    "baseline_session_frames_correct": [
+     0.952214,
+     0.94918
+    ],
+    "baseline_session_alarm_runs_per_hour": [
+     64.74000000000001,
+     85.08
+    ]
+   },
+   "user17": {
+    "networks": 5,
+    "frames_correct": [
+     0.82559,
+     0.814558
+    ],
+    "second_half_frames_correct": [
+     0.812536,
+     0.792008
+    ],
+    "opposite_announced_after_a_lane_change": [
+     0.23243006993006993,
+     0.21101398601398602
+    ],
+    "timely_share": [
+     0.91798,
+     0.89488
+    ],
+    "alarm_runs_per_hour": [
+     507.9,
+     611.66
+    ],
+    "alarm_runs_of_0.5_s_or_more_per_hour": [
+     119.5,
+     133.66
+    ],
+    "baseline_session_frames_correct": [
+     0.961222,
+     0.90959
+    ],
+    "baseline_session_alarm_runs_per_hour": [
+     30.98,
+     147.88
+    ]
+   },
+   "user32": {
+    "networks": 5,
+    "frames_correct": [
+     0.904176,
+     0.924642
+    ],
+    "second_half_frames_correct": [
+     0.924912,
+     0.933228
+    ],
+    "opposite_announced_after_a_lane_change": [
+     0.08999543170397442,
+     0.0704431247144815
+    ],
+    "timely_share": [
+     0.96906,
+     0.94764
+    ],
+    "alarm_runs_per_hour": [
+     308.1,
+     238.72
+    ],
+    "alarm_runs_of_0.5_s_or_more_per_hour": [
+     50.8,
+     35.559999999999995
+    ],
+    "baseline_session_frames_correct": [
+     0.895382,
+     0.979802
+    ],
+    "baseline_session_alarm_runs_per_hour": [
+     328.56,
+     108.12
+    ]
+   },
+   "user44": {
+    "networks": 5,
+    "frames_correct": [
+     0.84222,
+     0.854762
+    ],
+    "second_half_frames_correct": [
+     0.83378,
+     0.822318
+    ],
+    "opposite_announced_after_a_lane_change": [
+     0.17755632582322356,
+     0.13908145580589254
+    ],
+    "timely_share": [
+     0.84186,
+     0.8046599999999999
+    ],
+    "alarm_runs_per_hour": [
+     519.7,
+     356.06
+    ],
+    "alarm_runs_of_0.5_s_or_more_per_hour": [
+     128.78,
+     112.14
+    ],
+    "baseline_session_frames_correct": [
+     0.947278,
+     0.945664
+    ],
+    "baseline_session_alarm_runs_per_hour": [
+     96.48,
+     127.22
+    ]
+   },
+   "user3": {
+    "networks": 5,
+    "frames_correct": [
+     0.851664,
+     0.86736
+    ],
+    "second_half_frames_correct": [
+     0.877864,
+     0.886592
+    ],
+    "opposite_announced_after_a_lane_change": [
+     0.2309067688378033,
+     0.12381864623243934
+    ],
+    "timely_share": [
+     0.99208,
+     0.97894
+    ],
+    "alarm_runs_per_hour": [
+     354.98,
+     279.3
+    ],
+    "alarm_runs_of_0.5_s_or_more_per_hour": [
+     77.74,
+     71.62
+    ],
+    "baseline_session_frames_correct": [
+     0.93281,
+     0.973728
+    ],
+    "baseline_session_alarm_runs_per_hour": [
+     309.08,
+     97.82
+    ]
+   },
+   "user4": {
+    "networks": 5,
+    "frames_correct": [
+     0.837896,
+     0.887154
+    ],
+    "second_half_frames_correct": [
+     0.839162,
+     0.88286
+    ],
+    "opposite_announced_after_a_lane_change": [
+     0.2952889447236181,
+     0.13875628140703516
+    ],
+    "timely_share": [
+     0.9414,
+     0.9224
+    ],
+    "alarm_runs_per_hour": [
+     293.94,
+     359.08
+    ],
+    "alarm_runs_of_0.5_s_or_more_per_hour": [
+     40.9,
+     50.019999999999996
+    ],
+    "baseline_session_frames_correct": [
+     0.968684,
+     0.956676
+    ],
+    "baseline_session_alarm_runs_per_hour": [
+     144.08,
+     118.64
+    ]
+   },
+   "user15": {
+    "networks": 5,
+    "frames_correct": [
+     0.839548,
+     0.758168
+    ],
+    "second_half_frames_correct": [
+     0.850666,
+     0.762248
+    ],
+    "opposite_announced_after_a_lane_change": [
+     0.07391507232851144,
+     0.253196453569762
+    ],
+    "timely_share": [
+     0.42728,
+     0.44772
+    ],
+    "alarm_runs_per_hour": [
+     303.84,
+     598.0600000000001
+    ],
+    "alarm_runs_of_0.5_s_or_more_per_hour": [
+     80.24,
+     192.58
+    ],
+    "baseline_session_frames_correct": [
+     0.83554,
+     0.6320520000000001
+    ],
+    "baseline_session_alarm_runs_per_hour": [
+     57.78,
+     593.74
+    ]
+   },
+   "user28": {
+    "networks": 5,
+    "frames_correct": [
+     0.85661,
+     0.884292
+    ],
+    "second_half_frames_correct": [
+     0.853486,
+     0.88383
+    ],
+    "opposite_announced_after_a_lane_change": [
+     0.17602368031573754,
+     0.1469166255550074
+    ],
+    "timely_share": [
+     0.96766,
+     0.93826
+    ],
+    "alarm_runs_per_hour": [
+     340.08,
+     223.48
+    ],
+    "alarm_runs_of_0.5_s_or_more_per_hour": [
+     86.03999999999999,
+     76.34
+    ],
+    "baseline_session_frames_correct": [
+     0.820188,
+     0.9564900000000001
+    ],
+    "baseline_session_alarm_runs_per_hour": [
+     450.52,
+     157.6
+    ]
+   },
+   "user38": {
+    "networks": 5,
+    "frames_correct": [
+     0.805276,
+     0.827852
+    ],
+    "second_half_frames_correct": [
+     0.817558,
+     0.82742
+    ],
+    "opposite_announced_after_a_lane_change": [
+     0.3136057476425685,
+     0.22029636281993714
+    ],
+    "timely_share": [
+     0.96878,
+     0.93438
+    ],
+    "alarm_runs_per_hour": [
+     435.3,
+     459.79999999999995
+    ],
+    "alarm_runs_of_0.5_s_or_more_per_hour": [
+     100.9,
+     122.52
+    ],
+    "baseline_session_frames_correct": [
+     0.9846860000000001,
+     0.979542
+    ],
+    "baseline_session_alarm_runs_per_hour": [
+     28.56,
+     38.1
+    ]
+   },
+   "user45": {
+    "networks": 5,
+    "frames_correct": [
+     0.883374,
+     0.889496
+    ],
+    "second_half_frames_correct": [
+     0.88995,
+     0.887744
+    ],
+    "opposite_announced_after_a_lane_change": [
+     0.19866539561487132,
+     0.16148713060057196
+    ],
+    "timely_share": [
+     0.93262,
+     0.91954
+    ],
+    "alarm_runs_per_hour": [
+     479.15999999999997,
+     362.94
+    ],
+    "alarm_runs_of_0.5_s_or_more_per_hour": [
+     82.24000000000001,
+     91.18
+    ],
+    "baseline_session_frames_correct": [
+     0.957242,
+     0.979916
+    ],
+    "baseline_session_alarm_runs_per_hour": [
+     111.11999999999999,
+     56.24
+    ]
+   },
+   "user48": {
+    "networks": 5,
+    "frames_correct": [
+     0.880872,
+     0.879794
+    ],
+    "second_half_frames_correct": [
+     0.884396,
+     0.886772
+    ],
+    "opposite_announced_after_a_lane_change": [
+     0.1570409982174688,
+     0.14688057040998218
+    ],
+    "timely_share": [
+     0.90106,
+     0.90318
+    ],
+    "alarm_runs_per_hour": [
+     341.72,
+     511.58
+    ],
+    "alarm_runs_of_0.5_s_or_more_per_hour": [
+     59.96,
+     57.96
+    ],
+    "baseline_session_frames_correct": null,
+    "baseline_session_alarm_runs_per_hour": null
+   },
+   "user1": {
+    "networks": 5,
+    "frames_correct": [
+     0.926728,
+     0.91455
+    ],
+    "second_half_frames_correct": [
+     0.943694,
+     0.916176
+    ],
+    "opposite_announced_after_a_lane_change": [
+     0.1537473233404711,
+     0.2101070663811563
+    ],
+    "timely_share": [
+     0.84516,
+     0.85806
+    ],
+    "alarm_runs_per_hour": [
+     118.9,
+     163.64
+    ],
+    "alarm_runs_of_0.5_s_or_more_per_hour": [
+     30.56,
+     50.38
+    ],
+    "baseline_session_frames_correct": [
+     0.985714,
+     0.955734
+    ],
+    "baseline_session_alarm_runs_per_hour": [
+     22.86,
+     104.92
+    ]
+   },
+   "user22": {
+    "networks": 5,
+    "frames_correct": [
+     0.788032,
+     0.792854
+    ],
+    "second_half_frames_correct": [
+     0.773306,
+     0.77899
+    ],
+    "opposite_announced_after_a_lane_change": [
+     0.31248454882571075,
+     0.23592913061392665
+    ],
+    "timely_share": [
+     0.89446,
+     0.86944
+    ],
+    "alarm_runs_per_hour": [
+     442.0,
+     513.78
+    ],
+    "alarm_runs_of_0.5_s_or_more_per_hour": [
+     150.6,
+     153.42000000000002
+    ],
+    "baseline_session_frames_correct": [
+     0.842502,
+     0.967284
+    ],
+    "baseline_session_alarm_runs_per_hour": [
+     384.88,
+     75.62
+    ]
+   },
+   "user23": {
+    "networks": 5,
+    "frames_correct": [
+     0.831384,
+     0.847348
+    ],
+    "second_half_frames_correct": [
+     0.8668239999999999,
+     0.873234
+    ],
+    "opposite_announced_after_a_lane_change": [
+     0.3041296393099843,
+     0.20052273915316257
+    ],
+    "timely_share": [
+     0.94998,
+     0.88846
+    ],
+    "alarm_runs_per_hour": [
+     253.16,
+     275.74
+    ],
+    "alarm_runs_of_0.5_s_or_more_per_hour": [
+     64.44,
+     76.88
+    ],
+    "baseline_session_frames_correct": [
+     0.992654,
+     0.941834
+    ],
+    "baseline_session_alarm_runs_per_hour": [
+     23.54,
+     96.94
+    ]
+   },
+   "user26": {
+    "networks": 5,
+    "frames_correct": [
+     0.909088,
+     0.920774
+    ],
+    "second_half_frames_correct": [
+     0.88037,
+     0.899906
+    ],
+    "opposite_announced_after_a_lane_change": [
+     0.10356164383561643,
+     0.23378995433789954
+    ],
+    "timely_share": [
+     0.76666,
+     0.81332
+    ],
+    "alarm_runs_per_hour": [
+     183.68,
+     140.82
+    ],
+    "alarm_runs_of_0.5_s_or_more_per_hour": [
+     81.9,
+     52.82
+    ],
+    "baseline_session_frames_correct": [
+     0.986738,
+     0.9877079999999999
+    ],
+    "baseline_session_alarm_runs_per_hour": [
+     101.19999999999999,
+     48.02
+    ]
+   },
+   "user37": {
+    "networks": 5,
+    "frames_correct": [
+     0.920892,
+     0.895598
+    ],
+    "second_half_frames_correct": [
+     0.916718,
+     0.881052
+    ],
+    "opposite_announced_after_a_lane_change": [
+     0.14098360655737704,
+     0.08662640207075065
+    ],
+    "timely_share": [
+     0.98332,
+     1.0
+    ],
+    "alarm_runs_per_hour": [
+     92.18,
+     99.84
+    ],
+    "alarm_runs_of_0.5_s_or_more_per_hour": [
+     25.34,
+     45.3
+    ],
+    "baseline_session_frames_correct": [
+     0.998972,
+     0.982674
+    ],
+    "baseline_session_alarm_runs_per_hour": [
+     10.56,
+     95.12
+    ]
+   },
+   "user47": {
+    "networks": 5,
+    "frames_correct": [
+     0.835132,
+     0.843138
+    ],
+    "second_half_frames_correct": [
+     0.812256,
+     0.819668
+    ],
+    "opposite_announced_after_a_lane_change": [
+     0.2963654223968566,
+     0.21080550098231826
+    ],
+    "timely_share": [
+     0.87812,
+     0.8625200000000001
+    ],
+    "alarm_runs_per_hour": [
+     367.54,
+     511.04
+    ],
+    "alarm_runs_of_0.5_s_or_more_per_hour": [
+     92.26,
+     127.4
+    ],
+    "baseline_session_frames_correct": null,
+    "baseline_session_alarm_runs_per_hour": null
+   },
+   "user14": {
+    "networks": 5,
+    "frames_correct": [
+     0.802218,
+     0.825504
+    ],
+    "second_half_frames_correct": [
+     0.849302,
+     0.858002
+    ],
+    "opposite_announced_after_a_lane_change": [
+     0.3791176470588235,
+     0.24872549019607842
+    ],
+    "timely_share": [
+     1.0,
+     0.96666
+    ],
+    "alarm_runs_per_hour": [
+     443.62,
+     365.86
+    ],
+    "alarm_runs_of_0.5_s_or_more_per_hour": [
+     118.56,
+     94.34
+    ],
+    "baseline_session_frames_correct": [
+     0.956758,
+     0.971066
+    ],
+    "baseline_session_alarm_runs_per_hour": [
+     76.16,
+     131.68
+    ]
+   },
+   "user20": {
+    "networks": 5,
+    "frames_correct": [
+     0.818034,
+     0.8490260000000001
+    ],
+    "second_half_frames_correct": [
+     0.8108960000000001,
+     0.850226
+    ],
+    "opposite_announced_after_a_lane_change": [
+     0.3018134715025907,
+     0.2293609671848014
+    ],
+    "timely_share": [
+     0.9514199999999999,
+     0.93716
+    ],
+    "alarm_runs_per_hour": [
+     434.53999999999996,
+     409.58
+    ],
+    "alarm_runs_of_0.5_s_or_more_per_hour": [
+     99.98,
+     105.5
+    ],
+    "baseline_session_frames_correct": [
+     0.982758,
+     0.9725239999999999
+    ],
+    "baseline_session_alarm_runs_per_hour": [
+     78.84,
+     99.58
+    ]
+   },
+   "user34": {
+    "networks": 5,
+    "frames_correct": [
+     0.790676,
+     0.748976
+    ],
+    "second_half_frames_correct": [
+     0.821546,
+     0.734362
+    ],
+    "opposite_announced_after_a_lane_change": [
+     0.17554451662208637,
+     0.23905235001910585
+    ],
+    "timely_share": [
+     0.57644,
+     0.58822
+    ],
+    "alarm_runs_per_hour": [
+     611.72,
+     704.8
+    ],
+    "alarm_runs_of_0.5_s_or_more_per_hour": [
+     195.92,
+     259.38
+    ],
+    "baseline_session_frames_correct": [
+     0.83422,
+     0.785268
+    ],
+    "baseline_session_alarm_runs_per_hour": [
+     295.06,
+     400.88
+    ]
+   },
+   "user39": {
+    "networks": 5,
+    "frames_correct": [
+     0.7874639999999999,
+     0.802172
+    ],
+    "second_half_frames_correct": [
+     0.764534,
+     0.790922
+    ],
+    "opposite_announced_after_a_lane_change": [
+     0.3274301456119638,
+     0.2109405745769382
+    ],
+    "timely_share": [
+     0.78298,
+     0.77234
+    ],
+    "alarm_runs_per_hour": [
+     663.44,
+     705.96
+    ],
+    "alarm_runs_of_0.5_s_or_more_per_hour": [
+     164.48,
+     162.64000000000001
+    ],
+    "baseline_session_frames_correct": [
+     0.95313,
+     0.955832
+    ],
+    "baseline_session_alarm_runs_per_hour": [
+     119.64,
+     86.24
+    ]
+   },
+   "user46": {
+    "networks": 5,
+    "frames_correct": [
+     0.895022,
+     0.910384
+    ],
+    "second_half_frames_correct": [
+     0.878108,
+     0.895776
+    ],
+    "opposite_announced_after_a_lane_change": [
+     0.1330173775671406,
+     0.15545023696682464
+    ],
+    "timely_share": [
+     0.9559,
+     0.9559
+    ],
+    "alarm_runs_per_hour": [
+     290.68,
+     183.3
+    ],
+    "alarm_runs_of_0.5_s_or_more_per_hour": [
+     75.94,
+     52.379999999999995
+    ],
+    "baseline_session_frames_correct": [
+     0.935264,
+     0.928858
+    ],
+    "baseline_session_alarm_runs_per_hour": [
+     144.36,
+     140.18
+    ]
+   },
+   "user50": {
+    "networks": 5,
+    "frames_correct": [
+     0.878564,
+     0.874558
+    ],
+    "second_half_frames_correct": [
+     0.8716200000000001,
+     0.863442
+    ],
+    "opposite_announced_after_a_lane_change": [
+     0.12476190476190477,
+     0.1680952380952381
+    ],
+    "timely_share": [
+     0.8375,
+     0.83126
+    ],
+    "alarm_runs_per_hour": [
+     519.56,
+     543.7
+    ],
+    "alarm_runs_of_0.5_s_or_more_per_hour": [
+     102.94,
+     115.8
+    ],
+    "baseline_session_frames_correct": null,
+    "baseline_session_alarm_runs_per_hour": null
+   },
+   "user29": {
+    "networks": 5,
+    "frames_correct": [
+     0.910766,
+     0.911164
+    ],
+    "second_half_frames_correct": [
+     0.908952,
+     0.91185
+    ],
+    "opposite_announced_after_a_lane_change": [
+     0.11535135135135136,
+     0.10886486486486487
+    ],
+    "timely_share": [
+     0.9868,
+     0.97894
+    ],
+    "alarm_runs_per_hour": [
+     384.72,
+     370.18
+    ],
+    "alarm_runs_of_0.5_s_or_more_per_hour": [
+     61.440000000000005,
+     63.04
+    ],
+    "baseline_session_frames_correct": [
+     0.98318,
+     0.972054
+    ],
+    "baseline_session_alarm_runs_per_hour": [
+     77.38,
+     107.26
+    ]
+   },
+   "user30": {
+    "networks": 5,
+    "frames_correct": [
+     0.886552,
+     0.926444
+    ],
+    "second_half_frames_correct": [
+     0.875878,
+     0.926338
+    ],
+    "opposite_announced_after_a_lane_change": [
+     0.08705263157894737,
+     0.09210526315789473
+    ],
+    "timely_share": [
+     0.9706,
+     0.97648
+    ],
+    "alarm_runs_per_hour": [
+     231.45999999999998,
+     140.72
+    ],
+    "alarm_runs_of_0.5_s_or_more_per_hour": [
+     76.28,
+     49.980000000000004
+    ],
+    "baseline_session_frames_correct": [
+     0.994026,
+     0.9991
+    ],
+    "baseline_session_alarm_runs_per_hour": [
+     41.44,
+     14.26
+    ]
+   },
+   "user33": {
+    "networks": 5,
+    "frames_correct": [
+     0.88794,
+     0.871224
+    ],
+    "second_half_frames_correct": [
+     0.936252,
+     0.897512
+    ],
+    "opposite_announced_after_a_lane_change": [
+     0.2108916816277678,
+     0.20885697187312985
+    ],
+    "timely_share": [
+     0.73182,
+     0.75456
+    ],
+    "alarm_runs_per_hour": [
+     223.0,
+     294.3
+    ],
+    "alarm_runs_of_0.5_s_or_more_per_hour": [
+     88.48,
+     94.8
+    ],
+    "baseline_session_frames_correct": [
+     0.977808,
+     0.917004
+    ],
+    "baseline_session_alarm_runs_per_hour": [
+     40.199999999999996,
+     185.57999999999998
+    ]
+   },
+   "user41": {
+    "networks": 5,
+    "frames_correct": [
+     0.846208,
+     0.870806
+    ],
+    "second_half_frames_correct": [
+     0.885774,
+     0.895852
+    ],
+    "opposite_announced_after_a_lane_change": [
+     0.29202404809619237,
+     0.1554308617234469
+    ],
+    "timely_share": [
+     0.9190200000000001,
+     0.90634
+    ],
+    "alarm_runs_per_hour": [
+     393.1,
+     410.84
+    ],
+    "alarm_runs_of_0.5_s_or_more_per_hour": [
+     74.1,
+     77.36
+    ],
+    "baseline_session_frames_correct": [
+     0.972126,
+     0.9760099999999999
+    ],
+    "baseline_session_alarm_runs_per_hour": [
+     93.24,
+     139.82
+    ]
+   },
+   "user42": {
+    "networks": 5,
+    "frames_correct": [
+     0.92357,
+     0.895736
+    ],
+    "second_half_frames_correct": [
+     0.9264519999999999,
+     0.885172
+    ],
+    "opposite_announced_after_a_lane_change": [
+     0.09596367305751766,
+     0.12835519677093846
+    ],
+    "timely_share": [
+     0.95688,
+     0.97648
+    ],
+    "alarm_runs_per_hour": [
+     234.48000000000002,
+     250.22
+    ],
+    "alarm_runs_of_0.5_s_or_more_per_hour": [
+     49.42,
+     58.879999999999995
+    ],
+    "baseline_session_frames_correct": [
+     0.998446,
+     0.956324
+    ],
+    "baseline_session_alarm_runs_per_hour": [
+     28.0,
+     183.26000000000002
+    ]
+   },
+   "user21": {
+    "networks": 5,
+    "frames_correct": [
+     0.8592599999999999,
+     0.829862
+    ],
+    "second_half_frames_correct": [
+     0.852208,
+     0.788762
+    ],
+    "opposite_announced_after_a_lane_change": [
+     0.14068337129840547,
+     0.23043280182232348
+    ],
+    "timely_share": [
+     0.695,
+     0.6925
+    ],
+    "alarm_runs_per_hour": [
+     460.28,
+     562.94
+    ],
+    "alarm_runs_of_0.5_s_or_more_per_hour": [
+     123.22,
+     165.48
+    ],
+    "baseline_session_frames_correct": [
+     0.972388,
+     0.965418
+    ],
+    "baseline_session_alarm_runs_per_hour": [
+     96.36,
+     146.52
+    ]
+   },
+   "user35": {
+    "networks": 5,
+    "frames_correct": [
+     0.743866,
+     0.817644
+    ],
+    "second_half_frames_correct": [
+     0.763124,
+     0.805688
+    ],
+    "opposite_announced_after_a_lane_change": [
+     0.4796269023073147,
+     0.23799705449189987
+    ],
+    "timely_share": [
+     1.0,
+     0.988
+    ],
+    "alarm_runs_per_hour": [
+     484.38,
+     515.64
+    ],
+    "alarm_runs_of_0.5_s_or_more_per_hour": [
+     181.92000000000002,
+     175.24
+    ],
+    "baseline_session_frames_correct": [
+     0.9537140000000001,
+     0.9396559999999999
+    ],
+    "baseline_session_alarm_runs_per_hour": [
+     131.64,
+     134.34
+    ]
+   },
+   "user40": {
+    "networks": 5,
+    "frames_correct": [
+     0.816134,
+     0.8299300000000001
+    ],
+    "second_half_frames_correct": [
+     0.793058,
+     0.792704
+    ],
+    "opposite_announced_after_a_lane_change": [
+     0.2107429718875502,
+     0.21676706827309236
+    ],
+    "timely_share": [
+     0.8250000000000001,
+     0.78182
+    ],
+    "alarm_runs_per_hour": [
+     690.86,
+     544.36
+    ],
+    "alarm_runs_of_0.5_s_or_more_per_hour": [
+     231.3,
+     169.62
+    ],
+    "baseline_session_frames_correct": [
+     0.95001,
+     0.975436
+    ],
+    "baseline_session_alarm_runs_per_hour": [
+     132.98,
+     50.92
+    ]
+   },
+   "user43": {
+    "networks": 5,
+    "frames_correct": [
+     0.907216,
+     0.855564
+    ],
+    "second_half_frames_correct": [
+     0.929802,
+     0.882266
+    ],
+    "opposite_announced_after_a_lane_change": [
+     0.0876453488372093,
+     0.17122093023255813
+    ],
+    "timely_share": [
+     0.57616,
+     0.62382
+    ],
+    "alarm_runs_per_hour": [
+     216.20000000000002,
+     432.38
+    ],
+    "alarm_runs_of_0.5_s_or_more_per_hour": [
+     75.26,
+     158.42
+    ],
+    "baseline_session_frames_correct": [
+     0.963432,
+     0.8426859999999999
+    ],
+    "baseline_session_alarm_runs_per_hour": [
+     89.02,
+     396.18
+    ]
+   },
+   "user49": {
+    "networks": 5,
+    "frames_correct": [
+     0.807012,
+     0.800028
+    ],
+    "second_half_frames_correct": [
+     0.8027799999999999,
+     0.774074
+    ],
+    "opposite_announced_after_a_lane_change": [
+     0.2775250227479527,
+     0.20909918107370337
+    ],
+    "timely_share": [
+     0.9703,
+     0.9513199999999999
+    ],
+    "alarm_runs_per_hour": [
+     508.64,
+     611.04
+    ],
+    "alarm_runs_of_0.5_s_or_more_per_hour": [
+     154.34,
+     188.98
+    ],
+    "baseline_session_frames_correct": null,
+    "baseline_session_alarm_runs_per_hour": null
+   }
+  },
+  "G_eta0.003_lam0.01 L": {
+   "user6": {
+    "networks": 5,
+    "frames_correct": [
+     0.7899700000000001,
+     0.844944
+    ],
+    "second_half_frames_correct": [
+     0.7616120000000001,
+     0.8358260000000001
+    ],
+    "opposite_announced_after_a_lane_change": [
+     0.7131386861313869,
+     0.35559610705596106
+    ],
+    "timely_share": [
+     0.94074,
+     0.8741
+    ],
+    "alarm_runs_per_hour": [
+     435.22,
+     484.68
+    ],
+    "alarm_runs_of_0.5_s_or_more_per_hour": [
+     179.16,
+     129.70000000000002
+    ],
+    "baseline_session_frames_correct": [
+     0.973824,
+     0.981224
+    ],
+    "baseline_session_alarm_runs_per_hour": [
+     66.28,
+     56.519999999999996
+    ]
+   },
+   "user11": {
+    "networks": 5,
+    "frames_correct": [
+     0.776026,
+     0.86328
+    ],
+    "second_half_frames_correct": [
+     0.78609,
+     0.873658
+    ],
+    "opposite_announced_after_a_lane_change": [
+     0.81875,
+     0.3940972222222222
+    ],
+    "timely_share": [
+     0.99474,
+     0.98422
+    ],
+    "alarm_runs_per_hour": [
+     369.7,
+     433.09999999999997
+    ],
+    "alarm_runs_of_0.5_s_or_more_per_hour": [
+     179.4,
+     105.12
+    ],
+    "baseline_session_frames_correct": [
+     0.967556,
+     0.973936
+    ],
+    "baseline_session_alarm_runs_per_hour": [
+     53.32,
+     45.68
+    ]
+   },
+   "user17": {
+    "networks": 5,
+    "frames_correct": [
+     0.665454,
+     0.767898
+    ],
+    "second_half_frames_correct": [
+     0.642778,
+     0.7744059999999999
+    ],
+    "opposite_announced_after_a_lane_change": [
+     0.6934440559440559,
+     0.3423951048951049
+    ],
+    "timely_share": [
+     0.93332,
+     0.86924
+    ],
+    "alarm_runs_per_hour": [
+     687.12,
+     910.42
+    ],
+    "alarm_runs_of_0.5_s_or_more_per_hour": [
+     306.64,
+     240.6
+    ],
+    "baseline_session_frames_correct": [
+     0.9484859999999999,
+     0.91128
+    ],
+    "baseline_session_alarm_runs_per_hour": [
+     78.88,
+     88.72
+    ]
+   },
+   "user32": {
+    "networks": 5,
+    "frames_correct": [
+     0.689328,
+     0.858568
+    ],
+    "second_half_frames_correct": [
+     0.713286,
+     0.861456
+    ],
+    "opposite_announced_after_a_lane_change": [
+     0.6038373686614893,
+     0.1840109639104614
+    ],
+    "timely_share": [
+     0.9690599999999999,
+     0.89288
+    ],
+    "alarm_runs_per_hour": [
+     699.18,
+     780.42
+    ],
+    "alarm_runs_of_0.5_s_or_more_per_hour": [
+     316.58,
+     148.98
+    ],
+    "baseline_session_frames_correct": [
+     0.891138,
+     0.971578
+    ],
+    "baseline_session_alarm_runs_per_hour": [
+     269.58,
+     148.82
+    ]
+   },
+   "user44": {
+    "networks": 5,
+    "frames_correct": [
+     0.676302,
+     0.809474
+    ],
+    "second_half_frames_correct": [
+     0.678668,
+     0.810552
+    ],
+    "opposite_announced_after_a_lane_change": [
+     0.635528596187175,
+     0.2574523396880416
+    ],
+    "timely_share": [
+     0.87904,
+     0.76048
+    ],
+    "alarm_runs_per_hour": [
+     821.22,
+     680.28
+    ],
+    "alarm_runs_of_0.5_s_or_more_per_hour": [
+     331.82,
+     207.56
+    ],
+    "baseline_session_frames_correct": [
+     0.93974,
+     0.964006
+    ],
+    "baseline_session_alarm_runs_per_hour": [
+     121.64,
+     100.66000000000001
+    ]
+   },
+   "user3": {
+    "networks": 5,
+    "frames_correct": [
+     0.669766,
+     0.80199
+    ],
+    "second_half_frames_correct": [
+     0.691892,
+     0.83254
+    ],
+    "opposite_announced_after_a_lane_change": [
+     0.7094508301404853,
+     0.2568326947637293
+    ],
+    "timely_share": [
+     0.98684,
+     0.9605
+    ],
+    "alarm_runs_per_hour": [
+     648.58,
+     851.1600000000001
+    ],
+    "alarm_runs_of_0.5_s_or_more_per_hour": [
+     278.26,
+     192.3
+    ],
+    "baseline_session_frames_correct": [
+     0.962612,
+     0.976254
+    ],
+    "baseline_session_alarm_runs_per_hour": [
+     200.51999999999998,
+     46.94
+    ]
+   },
+   "user4": {
+    "networks": 5,
+    "frames_correct": [
+     0.640596,
+     0.8195760000000001
+    ],
+    "second_half_frames_correct": [
+     0.621932,
+     0.8223619999999999
+    ],
+    "opposite_announced_after_a_lane_change": [
+     0.8307160804020101,
+     0.25753768844221103
+    ],
+    "timely_share": [
+     0.95174,
+     0.89312
+    ],
+    "alarm_runs_per_hour": [
+     575.76,
+     1096.98
+    ],
+    "alarm_runs_of_0.5_s_or_more_per_hour": [
+     275.76,
+     165.14
+    ],
+    "baseline_session_frames_correct": [
+     0.9766159999999999,
+     0.96424
+    ],
+    "baseline_session_alarm_runs_per_hour": [
+     131.82,
+     103.66
+    ]
+   },
+   "user15": {
+    "networks": 5,
+    "frames_correct": [
+     0.701206,
+     0.734942
+    ],
+    "second_half_frames_correct": [
+     0.70314,
+     0.725096
+    ],
+    "opposite_announced_after_a_lane_change": [
+     0.5673355109659356,
+     0.4029864675688287
+    ],
+    "timely_share": [
+     0.46816,
+     0.4091
+    ],
+    "alarm_runs_per_hour": [
+     417.24,
+     693.24
+    ],
+    "alarm_runs_of_0.5_s_or_more_per_hour": [
+     210.76,
+     264.24
+    ],
+    "baseline_session_frames_correct": [
+     0.794358,
+     0.59271
+    ],
+    "baseline_session_alarm_runs_per_hour": [
+     274.98,
+     698.82
+    ]
+   },
+   "user28": {
+    "networks": 5,
+    "frames_correct": [
+     0.680574,
+     0.840934
+    ],
+    "second_half_frames_correct": [
+     0.67578,
+     0.847936
+    ],
+    "opposite_announced_after_a_lane_change": [
+     0.710014800197336,
+     0.23522446965959545
+    ],
+    "timely_share": [
+     0.94708,
+     0.87058
+    ],
+    "alarm_runs_per_hour": [
+     485.84,
+     641.28
+    ],
+    "alarm_runs_of_0.5_s_or_more_per_hour": [
+     256.82,
+     155.48
+    ],
+    "baseline_session_frames_correct": [
+     0.809182,
+     0.949206
+    ],
+    "baseline_session_alarm_runs_per_hour": [
+     474.26,
+     143.68
+    ]
+   },
+   "user38": {
+    "networks": 5,
+    "frames_correct": [
+     0.627956,
+     0.77291
+    ],
+    "second_half_frames_correct": [
+     0.62897,
+     0.775626
+    ],
+    "opposite_announced_after_a_lane_change": [
+     0.8185900314324203,
+     0.36838796587337225
+    ],
+    "timely_share": [
+     0.9875200000000001,
+     0.90938
+    ],
+    "alarm_runs_per_hour": [
+     492.97999999999996,
+     857.64
+    ],
+    "alarm_runs_of_0.5_s_or_more_per_hour": [
+     273.9,
+     279.64
+    ],
+    "baseline_session_frames_correct": [
+     0.991832,
+     0.980072
+    ],
+    "baseline_session_alarm_runs_per_hour": [
+     35.379999999999995,
+     28.56
+    ]
+   },
+   "user45": {
+    "networks": 5,
+    "frames_correct": [
+     0.7015,
+     0.826346
+    ],
+    "second_half_frames_correct": [
+     0.69831,
+     0.8382580000000001
+    ],
+    "opposite_announced_after_a_lane_change": [
+     0.6829361296472831,
+     0.2862726406101048
+    ],
+    "timely_share": [
+     0.93262,
+     0.8326199999999999
+    ],
+    "alarm_runs_per_hour": [
+     561.42,
+     682.96
+    ],
+    "alarm_runs_of_0.5_s_or_more_per_hour": [
+     282.5,
+     191.3
+    ],
+    "baseline_session_frames_correct": [
+     0.97763,
+     0.990282
+    ],
+    "baseline_session_alarm_runs_per_hour": [
+     80.94,
+     35.66
+    ]
+   },
+   "user48": {
+    "networks": 5,
+    "frames_correct": [
+     0.683832,
+     0.788882
+    ],
+    "second_half_frames_correct": [
+     0.6926019999999999,
+     0.836228
+    ],
+    "opposite_announced_after_a_lane_change": [
+     0.7727272727272727,
+     0.31853832442067737
+    ],
+    "timely_share": [
+     0.9284,
+     0.8779
+    ],
+    "alarm_runs_per_hour": [
+     499.6,
+     1143.06
+    ],
+    "alarm_runs_of_0.5_s_or_more_per_hour": [
+     297.74,
+     221.8
+    ],
+    "baseline_session_frames_correct": null,
+    "baseline_session_alarm_runs_per_hour": null
+   },
+   "user1": {
+    "networks": 5,
+    "frames_correct": [
+     0.835642,
+     0.87875
+    ],
+    "second_half_frames_correct": [
+     0.861926,
+     0.894036
+    ],
+    "opposite_announced_after_a_lane_change": [
+     0.6692077087794432,
+     0.3829550321199144
+    ],
+    "timely_share": [
+     0.89032,
+     0.84516
+    ],
+    "alarm_runs_per_hour": [
+     219.68,
+     327.24
+    ],
+    "alarm_runs_of_0.5_s_or_more_per_hour": [
+     110.98,
+     104.72
+    ],
+    "baseline_session_frames_correct": [
+     0.971988,
+     0.929244
+    ],
+    "baseline_session_alarm_runs_per_hour": [
+     42.8,
+     99.04
+    ]
+   },
+   "user22": {
+    "networks": 5,
+    "frames_correct": [
+     0.621158,
+     0.7505379999999999
+    ],
+    "second_half_frames_correct": [
+     0.599292,
+     0.750064
+    ],
+    "opposite_announced_after_a_lane_change": [
+     0.7755253399258344,
+     0.3503914297486609
+    ],
+    "timely_share": [
+     0.89724,
+     0.84444
+    ],
+    "alarm_runs_per_hour": [
+     601.0600000000001,
+     958.6
+    ],
+    "alarm_runs_of_0.5_s_or_more_per_hour": [
+     332.18,
+     282.94
+    ],
+    "baseline_session_frames_correct": [
+     0.76411,
+     0.960898
+    ],
+    "baseline_session_alarm_runs_per_hour": [
+     548.44,
+     74.24
+    ]
+   },
+   "user23": {
+    "networks": 5,
+    "frames_correct": [
+     0.727156,
+     0.8085720000000001
+    ],
+    "second_half_frames_correct": [
+     0.76425,
+     0.859804
+    ],
+    "opposite_announced_after_a_lane_change": [
+     0.7043387349712493,
+     0.36048092002090953
+    ],
+    "timely_share": [
+     0.95382,
+     0.87308
+    ],
+    "alarm_runs_per_hour": [
+     482.56,
+     656.62
+    ],
+    "alarm_runs_of_0.5_s_or_more_per_hour": [
+     200.02,
+     174.04000000000002
+    ],
+    "baseline_session_frames_correct": [
+     0.9871139999999999,
+     0.926446
+    ],
+    "baseline_session_alarm_runs_per_hour": [
+     33.22,
+     88.62
+    ]
+   },
+   "user26": {
+    "networks": 5,
+    "frames_correct": [
+     0.850466,
+     0.906052
+    ],
+    "second_half_frames_correct": [
+     0.814794,
+     0.887388
+    ],
+    "opposite_announced_after_a_lane_change": [
+     0.5636529680365296,
+     0.3567123287671233
+    ],
+    "timely_share": [
+     0.8,
+     0.78668
+    ],
+    "alarm_runs_per_hour": [
+     310.0,
+     218.92
+    ],
+    "alarm_runs_of_0.5_s_or_more_per_hour": [
+     144.68,
+     99.52
+    ],
+    "baseline_session_frames_correct": [
+     0.953902,
+     0.99719
+    ],
+    "baseline_session_alarm_runs_per_hour": [
+     230.95999999999998,
+     19.48
+    ]
+   },
+   "user37": {
+    "networks": 5,
+    "frames_correct": [
+     0.872274,
+     0.8638520000000001
+    ],
+    "second_half_frames_correct": [
+     0.86418,
+     0.84877
+    ],
+    "opposite_announced_after_a_lane_change": [
+     0.6788610871440898,
+     0.41432269197584126
+    ],
+    "timely_share": [
+     0.99166,
+     0.98332
+    ],
+    "alarm_runs_per_hour": [
+     235.8,
+     291.86
+    ],
+    "alarm_runs_of_0.5_s_or_more_per_hour": [
+     109.84,
+     102.92
+    ],
+    "baseline_session_frames_correct": [
+     0.99453,
+     0.952726
+    ],
+    "baseline_session_alarm_runs_per_hour": [
+     15.84,
+     75.32
+    ]
+   },
+   "user47": {
+    "networks": 5,
+    "frames_correct": [
+     0.6624140000000001,
+     0.793124
+    ],
+    "second_half_frames_correct": [
+     0.624842,
+     0.761208
+    ],
+    "opposite_announced_after_a_lane_change": [
+     0.7081532416502947,
+     0.318664047151277
+    ],
+    "timely_share": [
+     0.8874799999999999,
+     0.76248
+    ],
+    "alarm_runs_per_hour": [
+     512.52,
+     805.38
+    ],
+    "alarm_runs_of_0.5_s_or_more_per_hour": [
+     231.38,
+     224.04000000000002
+    ],
+    "baseline_session_frames_correct": null,
+    "baseline_session_alarm_runs_per_hour": null
+   },
+   "user14": {
+    "networks": 5,
+    "frames_correct": [
+     0.6399859999999999,
+     0.760162
+    ],
+    "second_half_frames_correct": [
+     0.681212,
+     0.799756
+    ],
+    "opposite_announced_after_a_lane_change": [
+     0.7956862745098039,
+     0.4007843137254902
+    ],
+    "timely_share": [
+     0.97,
+     0.88
+    ],
+    "alarm_runs_per_hour": [
+     539.24,
+     646.3199999999999
+    ],
+    "alarm_runs_of_0.5_s_or_more_per_hour": [
+     268.98,
+     216.72
+    ],
+    "baseline_session_frames_correct": [
+     0.965506,
+     0.95113
+    ],
+    "baseline_session_alarm_runs_per_hour": [
+     108.44,
+     134.24
+    ]
+   },
+   "user20": {
+    "networks": 5,
+    "frames_correct": [
+     0.63014,
+     0.784502
+    ],
+    "second_half_frames_correct": [
+     0.61969,
+     0.808944
+    ],
+    "opposite_announced_after_a_lane_change": [
+     0.7783246977547496,
+     0.35975820379965456
+    ],
+    "timely_share": [
+     0.9457,
+     0.85712
+    ],
+    "alarm_runs_per_hour": [
+     562.28,
+     685.84
+    ],
+    "alarm_runs_of_0.5_s_or_more_per_hour": [
+     276.26,
+     179.1
+    ],
+    "baseline_session_frames_correct": [
+     0.963652,
+     0.91391
+    ],
+    "baseline_session_alarm_runs_per_hour": [
+     103.74,
+     179.78
+    ]
+   },
+   "user34": {
+    "networks": 5,
+    "frames_correct": [
+     0.584718,
+     0.698188
+    ],
+    "second_half_frames_correct": [
+     0.60318,
+     0.718604
+    ],
+    "opposite_announced_after_a_lane_change": [
+     0.5833397019487964,
+     0.33465800534963697
+    ],
+    "timely_share": [
+     0.62942,
+     0.52352
+    ],
+    "alarm_runs_per_hour": [
+     493.36,
+     775.26
+    ],
+    "alarm_runs_of_0.5_s_or_more_per_hour": [
+     293.2,
+     308.68
+    ],
+    "baseline_session_frames_correct": [
+     0.751406,
+     0.806378
+    ],
+    "baseline_session_alarm_runs_per_hour": [
+     484.28000000000003,
+     368.84
+    ]
+   },
+   "user39": {
+    "networks": 5,
+    "frames_correct": [
+     0.612806,
+     0.726416
+    ],
+    "second_half_frames_correct": [
+     0.601644,
+     0.730236
+    ],
+    "opposite_announced_after_a_lane_change": [
+     0.781267217630854,
+     0.39527744982290436
+    ],
+    "timely_share": [
+     0.8298,
+     0.71702
+    ],
+    "alarm_runs_per_hour": [
+     578.4200000000001,
+     1216.02
+    ],
+    "alarm_runs_of_0.5_s_or_more_per_hour": [
+     275.34,
+     291.98
+    ],
+    "baseline_session_frames_correct": [
+     0.925424,
+     0.93748
+    ],
+    "baseline_session_alarm_runs_per_hour": [
+     196.14,
+     125.18
+    ]
+   },
+   "user46": {
+    "networks": 5,
+    "frames_correct": [
+     0.700404,
+     0.851102
+    ],
+    "second_half_frames_correct": [
+     0.720684,
+     0.84871
+    ],
+    "opposite_announced_after_a_lane_change": [
+     0.6996313849394418,
+     0.2451816745655608
+    ],
+    "timely_share": [
+     0.94708,
+     0.9000199999999999
+    ],
+    "alarm_runs_per_hour": [
+     484.46,
+     479.22
+    ],
+    "alarm_runs_of_0.5_s_or_more_per_hour": [
+     271.04,
+     147.94
+    ],
+    "baseline_session_frames_correct": [
+     0.933642,
+     0.88263
+    ],
+    "baseline_session_alarm_runs_per_hour": [
+     172.14000000000001,
+     177.7
+    ]
+   },
+   "user50": {
+    "networks": 5,
+    "frames_correct": [
+     0.673314,
+     0.818396
+    ],
+    "second_half_frames_correct": [
+     0.623592,
+     0.800946
+    ],
+    "opposite_announced_after_a_lane_change": [
+     0.6700952380952381,
+     0.2661904761904762
+    ],
+    "timely_share": [
+     0.83334,
+     0.7583
+    ],
+    "alarm_runs_per_hour": [
+     485.78,
+     657.9
+    ],
+    "alarm_runs_of_0.5_s_or_more_per_hour": [
+     267.02,
+     180.16
+    ],
+    "baseline_session_frames_correct": null,
+    "baseline_session_alarm_runs_per_hour": null
+   },
+   "user29": {
+    "networks": 5,
+    "frames_correct": [
+     0.683518,
+     0.865044
+    ],
+    "second_half_frames_correct": [
+     0.659546,
+     0.882982
+    ],
+    "opposite_announced_after_a_lane_change": [
+     0.7731891891891892,
+     0.2707027027027027
+    ],
+    "timely_share": [
+     0.9868,
+     0.96052
+    ],
+    "alarm_runs_per_hour": [
+     384.74,
+     703.18
+    ],
+    "alarm_runs_of_0.5_s_or_more_per_hour": [
+     224.72,
+     156.82
+    ],
+    "baseline_session_frames_correct": [
+     0.940148,
+     0.969112
+    ],
+    "baseline_session_alarm_runs_per_hour": [
+     129.0,
+     90.96000000000001
+    ]
+   },
+   "user30": {
+    "networks": 5,
+    "frames_correct": [
+     0.719606,
+     0.890704
+    ],
+    "second_half_frames_correct": [
+     0.6728459999999999,
+     0.895764
+    ],
+    "opposite_announced_after_a_lane_change": [
+     0.6524210526315789,
+     0.19905263157894737
+    ],
+    "timely_share": [
+     0.99118,
+     0.97648
+    ],
+    "alarm_runs_per_hour": [
+     461.58,
+     447.09999999999997
+    ],
+    "alarm_runs_of_0.5_s_or_more_per_hour": [
+     231.45999999999998,
+     103.88
+    ],
+    "baseline_session_frames_correct": [
+     0.983916,
+     0.998488
+    ],
+    "baseline_session_alarm_runs_per_hour": [
+     45.36,
+     7.779999999999999
+    ]
+   },
+   "user33": {
+    "networks": 5,
+    "frames_correct": [
+     0.800608,
+     0.850568
+    ],
+    "second_half_frames_correct": [
+     0.860806,
+     0.8931560000000001
+    ],
+    "opposite_announced_after_a_lane_change": [
+     0.6361460203470976,
+     0.4120885697187313
+    ],
+    "timely_share": [
+     0.7682,
+     0.7227399999999999
+    ],
+    "alarm_runs_per_hour": [
+     361.12,
+     422.52000000000004
+    ],
+    "alarm_runs_of_0.5_s_or_more_per_hour": [
+     179.66,
+     142.66
+    ],
+    "baseline_session_frames_correct": [
+     0.9501339999999999,
+     0.913962
+    ],
+    "baseline_session_alarm_runs_per_hour": [
+     110.3,
+     175.2
+    ]
+   },
+   "user41": {
+    "networks": 5,
+    "frames_correct": [
+     0.61593,
+     0.780766
+    ],
+    "second_half_frames_correct": [
+     0.633228,
+     0.842468
+    ],
+    "opposite_announced_after_a_lane_change": [
+     0.8159519038076153,
+     0.34557114228456914
+    ],
+    "timely_share": [
+     0.94432,
+     0.88354
+    ],
+    "alarm_runs_per_hour": [
+     513.9399999999999,
+     1176.12
+    ],
+    "alarm_runs_of_0.5_s_or_more_per_hour": [
+     238.44,
+     212.68
+    ],
+    "baseline_session_frames_correct": [
+     0.931796,
+     0.980846
+    ],
+    "baseline_session_alarm_runs_per_hour": [
+     138.46,
+     90.5
+    ]
+   },
+   "user42": {
+    "networks": 5,
+    "frames_correct": [
+     0.726168,
+     0.8536739999999999
+    ],
+    "second_half_frames_correct": [
+     0.707314,
+     0.866298
+    ],
+    "opposite_announced_after_a_lane_change": [
+     0.7507568113017155,
+     0.29404641775983853
+    ],
+    "timely_share": [
+     0.94904,
+     0.97648
+    ],
+    "alarm_runs_per_hour": [
+     443.7,
+     634.0
+    ],
+    "alarm_runs_of_0.5_s_or_more_per_hour": [
+     227.12,
+     157.72
+    ],
+    "baseline_session_frames_correct": [
+     0.97136,
+     0.933628
+    ],
+    "baseline_session_alarm_runs_per_hour": [
+     82.54,
+     135.70000000000002
+    ]
+   },
+   "user21": {
+    "networks": 5,
+    "frames_correct": [
+     0.697774,
+     0.790678
+    ],
+    "second_half_frames_correct": [
+     0.685318,
+     0.76888
+    ],
+    "opposite_announced_after_a_lane_change": [
+     0.6307061503416856,
+     0.36328018223234626
+    ],
+    "timely_share": [
+     0.7075,
+     0.595
+    ],
+    "alarm_runs_per_hour": [
+     448.18,
+     601.6
+    ],
+    "alarm_runs_of_0.5_s_or_more_per_hour": [
+     244.02,
+     246.44
+    ],
+    "baseline_session_frames_correct": [
+     0.957574,
+     0.978032
+    ],
+    "baseline_session_alarm_runs_per_hour": [
+     118.8,
+     79.2
+    ]
+   },
+   "user35": {
+    "networks": 5,
+    "frames_correct": [
+     0.6466540000000001,
+     0.789506
+    ],
+    "second_half_frames_correct": [
+     0.6513760000000001,
+     0.786296
+    ],
+    "opposite_announced_after_a_lane_change": [
+     0.8351497299950909,
+     0.38438880706921946
+    ],
+    "timely_share": [
+     0.984,
+     0.924
+    ],
+    "alarm_runs_per_hour": [
+     555.84,
+     765.64
+    ],
+    "alarm_runs_of_0.5_s_or_more_per_hour": [
+     261.18,
+     247.76
+    ],
+    "baseline_session_frames_correct": [
+     0.95963,
+     0.932152
+    ],
+    "baseline_session_alarm_runs_per_hour": [
+     99.03999999999999,
+     177.74
+    ]
+   },
+   "user40": {
+    "networks": 5,
+    "frames_correct": [
+     0.587246,
+     0.795478
+    ],
+    "second_half_frames_correct": [
+     0.563214,
+     0.7706080000000001
+    ],
+    "opposite_announced_after_a_lane_change": [
+     0.7580321285140562,
+     0.325
+    ],
+    "timely_share": [
+     0.83636,
+     0.74998
+    ],
+    "alarm_runs_per_hour": [
+     521.24,
+     842.0
+    ],
+    "alarm_runs_of_0.5_s_or_more_per_hour": [
+     314.58,
+     263.7
+    ],
+    "baseline_session_frames_correct": [
+     0.928986,
+     0.9840840000000001
+    ],
+    "baseline_session_alarm_runs_per_hour": [
+     188.16,
+     76.4
+    ]
+   },
+   "user43": {
+    "networks": 5,
+    "frames_correct": [
+     0.817574,
+     0.835938
+    ],
+    "second_half_frames_correct": [
+     0.833872,
+     0.863654
+    ],
+    "opposite_announced_after_a_lane_change": [
+     0.5927325581395348,
+     0.35421511627906976
+    ],
+    "timely_share": [
+     0.64764,
+     0.67622
+    ],
+    "alarm_runs_per_hour": [
+     306.34,
+     483.15999999999997
+    ],
+    "alarm_runs_of_0.5_s_or_more_per_hour": [
+     156.68,
+     187.3
+    ],
+    "baseline_session_frames_correct": [
+     0.959794,
+     0.854988
+    ],
+    "baseline_session_alarm_runs_per_hour": [
+     89.02,
+     262.02
+    ]
+   },
+   "user49": {
+    "networks": 5,
+    "frames_correct": [
+     0.605932,
+     0.744634
+    ],
+    "second_half_frames_correct": [
+     0.5963780000000001,
+     0.740802
+    ],
+    "opposite_announced_after_a_lane_change": [
+     0.8171974522292993,
+     0.33912647861692446
+    ],
+    "timely_share": [
+     0.9811,
+     0.8946
+    ],
+    "alarm_runs_per_hour": [
+     489.76,
+     995.28
+    ],
+    "alarm_runs_of_0.5_s_or_more_per_hour": [
+     270.88,
+     300.8
+    ],
+    "baseline_session_frames_correct": null,
+    "baseline_session_alarm_runs_per_hour": null
+   }
+  }
+ },
+ "criterion": {
+  "rule": "selected setting, arm D, the 34 drives not looked at: (a) mean gain in frames correct at least 2.0 points, (b) a gain on at least 24 drives, (c) timely share at most 5 points below the fixed layer's, (d) alarm runs of 0.5 s or more per hour not above the fixed layer's",
+  "drives": 34,
+  "networks_per_drive": [
+   5
+  ],
+  "a_gain": 0.0039,
+  "a_met": false,
+  "b_drives_with_a_gain": 21,
+  "b_met": false,
+  "c_timely": [
+   0.8786,
+   0.8712
+  ],
+  "c_met": true,
+  "d_runs": [
+   96.4882,
+   103.9594
+  ],
+  "d_met": false,
+  "complete": true,
+  "met": false
+ },
+ "float_fixed_minus_cv_int8_frames_correct": {
+  "D": {
+   "mean": -0.0023,
+   "largest": 0.0139
+  },
+  "L": {
+   "mean": -0.0025,
+   "largest": 0.0076
+  }
+ }
+}
