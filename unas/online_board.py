@@ -13,6 +13,7 @@ the TFLite file, float32, the same xorshift32 draws) is the reference the board 
            .venv\\Scripts\\python unas/online_board.py replay --loc 5         # one location through the board
            .venv\\Scripts\\python unas/online_board.py measures --loc 5       # its test recordings: board, host, fixed
            .venv\\Scripts\\python unas/online_board.py measures-all           # all test recordings, once all replayed
+           .venv\\Scripts\\python unas/online_board.py curve                  # windows correct against time deployed
            .venv\\Scripts\\python unas/online_board.py --report
 Streams and references stay in firmware/build/online/<tag>/ (exiD features: not versioned). Records:
 datasets/exid/results/hil/online_board.jsonl and online_board_reference.json.
@@ -349,6 +350,64 @@ def measures_all(seed: int) -> None:
     print(json.dumps(rec, indent=1))
 
 
+def curve(seed: int, block_min: float = 5.0) -> None:
+    """How fast the board adapts after deployment (analysis added after the results): per location, device time runs
+    through its recordings in stream order (each recording's 25 Hz frames, recordings back to back); windows correct
+    among label-known windows per block of device time, for the board and the int8 fixed network, and the time of the
+    first update (every class with MIN_CLASS labels released, a label 26 frames after its window)."""
+    tag = tag_of(seed)
+    edges_min = (0, 2, 10, 30, 60, 120, float("inf"))
+    per_loc, pooled = {}, {k: np.zeros((len(edges_min) - 1, 3)) for k in ("all",)}
+    for f in sorted((OUTDIR / tag).glob("loc[0-9]*_board.npz")):
+        loc = int(f.stem[3:].split("_")[0])
+        z = np.load(OUTDIR / tag / f"loc{loc}.npz")
+        w, fixed, board = z["w"], z["fixed"], np.load(f)["board"]
+        rec, t_abs, known, label = w[:, 6], w[:, 5], w[:, 4].astype(bool), w[:, 3]
+        order = list(dict.fromkeys(rec.tolist()))                        # recordings in stream order
+        offset, t0 = {}, 0
+        for r in order:
+            offset[r] = t0
+            t0 += int(t_abs[rec == r].max()) + 1
+        t_dev = np.array([offset[r] for r in rec]) + t_abs               # 25 Hz frames since deployment
+        rel = t_dev[known] + OFFSET
+        cls = label[known][np.argsort(rel, kind="stable")]
+        cnt = np.zeros((len(cls), 3), np.int64)
+        cnt[np.arange(len(cls)), cls] = 1
+        warm = np.flatnonzero((np.cumsum(cnt, axis=0) >= MIN_CLASS).all(axis=1))
+        t_warm = float(np.sort(rel)[warm[0]]) / 25 / 60 if len(warm) else None
+        blk = (t_dev[known] / 25 / 60 // block_min).astype(int)
+        nb = int(blk.max()) + 1
+        n = np.bincount(blk, minlength=nb)
+        okf = np.bincount(blk, weights=(fixed[known] == label[known]), minlength=nb)
+        okb = np.bincount(blk, weights=(board[known] == label[known]), minlength=nb)
+        mins = t_dev[known] / 25 / 60
+        iv = {}
+        for a, b in zip(edges_min[:-1], edges_min[1:]):
+            s = (mins >= a) & (mins < b)
+            key = f"{a:g}-{b:g}_min"
+            iv[key] = {"windows": int(s.sum()),
+                       "fixed": round(float((fixed[known][s] == label[known][s]).mean()), 4) if s.any() else None,
+                       "board": round(float((board[known][s] == label[known][s]).mean()), 4) if s.any() else None}
+        per_loc[str(loc)] = {"device_hours": round(t0 / 25 / 3600, 3), "minutes_to_first_update": round(t_warm, 2),
+                             "intervals": iv,
+                             "blocks": {"windows": n.tolist(), "fixed": np.round(okf / np.maximum(n, 1), 4).tolist(),
+                                        "board": np.round(okb / np.maximum(n, 1), 4).tolist()}}
+        for j, (a, b) in enumerate(zip(edges_min[:-1], edges_min[1:])):
+            s = (mins >= a) & (mins < b)
+            pooled["all"][j] += [s.sum(), (fixed[known][s] == label[known][s]).sum(), (board[known][s] == label[known][s]).sum()]
+    pi = {f"{a:g}-{b:g}_min": {"windows": int(p[0]), "fixed": round(float(p[1] / p[0]), 4), "board": round(float(p[2] / p[0]), 4)}
+          for (a, b), p in zip(zip(edges_min[:-1], edges_min[1:]), pooled["all"]) if p[0] > 0}
+    rec_out = {"kind": "adaptation_curve", "tag": tag, "block_min": block_min, "measure": "windows correct, label known, "
+               "all splits as the device streams them", "per_location": per_loc, "pooled_intervals": pi,
+               "utc": datetime.now(timezone.utc).isoformat(timespec="seconds")}
+    with open(RECORDS, "a") as fh:
+        fh.write(json.dumps(rec_out) + "\n")
+    print(json.dumps({k: rec_out[k] for k in ("pooled_intervals",)}, indent=1))
+    for loc, d in per_loc.items():
+        print(loc, d["device_hours"], "h; first update after", d["minutes_to_first_update"], "min;",
+              {k: (v["fixed"], v["board"]) for k, v in d["intervals"].items()})
+
+
 def report() -> None:
     rows = [json.loads(line) for line in RECORDS.read_text().splitlines()] if RECORDS.exists() else []
     for r in rows:
@@ -360,7 +419,7 @@ def report() -> None:
 
 if __name__ == "__main__":
     ap = argparse.ArgumentParser()
-    ap.add_argument("cmd", nargs="?", choices=("prepare", "build", "replay", "measures", "measures-all"))
+    ap.add_argument("cmd", nargs="?", choices=("prepare", "build", "replay", "measures", "measures-all", "curve"))
     ap.add_argument("--seed", type=int, default=100)
     ap.add_argument("--loc", type=int, default=5)
     ap.add_argument("--report", action="store_true")
@@ -377,5 +436,7 @@ if __name__ == "__main__":
         measures(a.seed, a.loc)
     elif a.cmd == "measures-all":
         measures_all(a.seed)
+    elif a.cmd == "curve":
+        curve(a.seed)
     else:
-        ap.error("prepare | build | replay | measures | measures-all | --report")
+        ap.error("prepare | build | replay | measures | measures-all | curve | --report")
