@@ -1,0 +1,222 @@
+{
+ "utc": "2026-11-19T18:00:12+00:00",
+ "rule": "local notes 2026-11-19 18:11",
+ "selection": {
+  "entropy": {
+   "cfg": {
+    "step": 0.001
+   },
+   "qualified": false,
+   "validation": [
+    {
+     "cfg": {
+      "step": 0.0001
+     },
+     "gain": 0.1799,
+     "qualifies": false,
+     "windows_correct": 0.5949,
+     "correct_2_s_before": 0.6393,
+     "runs_0.6_s_per_vehicle_hour": 1197.14,
+     "opposite_without_a_return": 0.2253,
+     "lane_keeping_from_6_s_called": 0.3629
+    },
+    {
+     "cfg": {
+      "step": 0.001
+     },
+     "gain": 0.3646,
+     "qualifies": false,
+     "windows_correct": 0.7796,
+     "correct_2_s_before": 0.1936,
+     "runs_0.6_s_per_vehicle_hour": 170.46,
+     "opposite_without_a_return": 0.0644,
+     "lane_keeping_from_6_s_called": 0.0889
+    },
+    {
+     "cfg": {
+      "step": 0.01
+     },
+     "gain": 0.3244,
+     "qualifies": false,
+     "windows_correct": 0.7394,
+     "correct_2_s_before": 0.0919,
+     "runs_0.6_s_per_vehicle_hour": 51.06,
+     "opposite_without_a_return": 0.0621,
+     "lane_keeping_from_6_s_called": 0.1146
+    }
+   ]
+  },
+  "self_training": {
+   "cfg": {
+    "eta": 0.003
+   },
+   "qualified": false,
+   "validation": [
+    {
+     "cfg": {
+      "eta": 0.003
+     },
+     "gain": -0.0472,
+     "qualifies": false,
+     "windows_correct": 0.3678,
+     "correct_2_s_before": 0.5962,
+     "runs_0.6_s_per_vehicle_hour": 767.68,
+     "opposite_without_a_return": 0.2651,
+     "lane_keeping_from_6_s_called": 0.6606
+    },
+    {
+     "cfg": {
+      "eta": 0.01
+     },
+     "gain": -0.0485,
+     "qualifies": false,
+     "windows_correct": 0.3665,
+     "correct_2_s_before": 0.5788,
+     "runs_0.6_s_per_vehicle_hour": 730.28,
+     "opposite_without_a_return": 0.249,
+     "lane_keeping_from_6_s_called": 0.6601
+    }
+   ]
+  },
+  "naive": {
+   "cfg": {
+    "eta": 0.003
+   },
+   "qualified": true,
+   "validation": [
+    {
+     "cfg": {
+      "eta": 0.003
+     },
+     "gain": 0.487,
+     "qualifies": true,
+     "windows_correct": 0.902,
+     "correct_2_s_before": 0.8794,
+     "runs_0.6_s_per_vehicle_hour": 122.08,
+     "opposite_without_a_return": 0.0151,
+     "lane_keeping_from_6_s_called": 0.0459
+    },
+    {
+     "cfg": {
+      "eta": 0.01
+     },
+     "gain": 0.4721,
+     "qualifies": true,
+     "windows_correct": 0.8871,
+     "correct_2_s_before": 0.8516,
+     "runs_0.6_s_per_vehicle_hour": 159.36,
+     "opposite_without_a_return": 0.0195,
+     "lane_keeping_from_6_s_called": 0.0608
+    }
+   ]
+  },
+  "rls": {
+   "cfg": {
+    "mu": 0.999
+   },
+   "qualified": false,
+   "validation": [
+    {
+     "cfg": {
+      "mu": 0.99
+     },
+     "gain": 0.086,
+     "qualifies": false,
+     "windows_correct": 0.501,
+     "correct_2_s_before": 0.632,
+     "runs_0.6_s_per_vehicle_hour": 1304.6,
+     "opposite_without_a_return": 0.2867,
+     "lane_keeping_from_6_s_called": 0.4905
+    },
+    {
+     "cfg": {
+      "mu": 0.999
+     },
+     "gain": 0.0866,
+     "qualifies": false,
+     "windows_correct": 0.5016,
+     "correct_2_s_before": 0.6284,
+     "runs_0.6_s_per_vehicle_hour": 1382.82,
+     "opposite_without_a_return": 0.2876,
+     "lane_keeping_from_6_s_called": 0.4898
+    }
+   ]
+  }
+ },
+ "test": {
+  "fixed": {
+   "windows_correct": 0.4312,
+   "correct_2_s_before": 0.7631,
+   "runs_0.6_s_per_vehicle_hour": 1762.92,
+   "opposite_without_a_return": 0.3691,
+   "lane_keeping_from_6_s_called": 0.5888
+  },
+  "ours": {
+   "windows_correct": 0.8451,
+   "correct_2_s_before": 0.9673,
+   "runs_0.6_s_per_vehicle_hour": 304.88,
+   "opposite_without_a_return": 0.0408,
+   "lane_keeping_from_6_s_called": 0.1266
+  },
+  "entropy": {
+   "windows_correct": 0.7805,
+   "correct_2_s_before": 0.2076,
+   "runs_0.6_s_per_vehicle_hour": 182.76,
+   "opposite_without_a_return": 0.0359,
+   "lane_keeping_from_6_s_called": 0.0914
+  },
+  "self_training": {
+   "windows_correct": 0.3574,
+   "correct_2_s_before": 0.5692,
+   "runs_0.6_s_per_vehicle_hour": 721.92,
+   "opposite_without_a_return": 0.2739,
+   "lane_keeping_from_6_s_called": 0.6651
+  },
+  "naive": {
+   "windows_correct": 0.8957,
+   "correct_2_s_before": 0.8645,
+   "runs_0.6_s_per_vehicle_hour": 123.66,
+   "opposite_without_a_return": 0.0162,
+   "lane_keeping_from_6_s_called": 0.0468
+  },
+  "rls": {
+   "windows_correct": 0.5075,
+   "correct_2_s_before": 0.6109,
+   "runs_0.6_s_per_vehicle_hour": 1345.16,
+   "opposite_without_a_return": 0.2804,
+   "lane_keeping_from_6_s_called": 0.4787
+  },
+  "site_scaling": {
+   "windows_correct": 0.548,
+   "correct_2_s_before": 0.7443,
+   "runs_0.6_s_per_vehicle_hour": 1373.0,
+   "opposite_without_a_return": 0.184,
+   "lane_keeping_from_6_s_called": 0.4603
+  },
+  "instant": {
+   "windows_correct": 0.8771,
+   "correct_2_s_before": 0.9815,
+   "runs_0.6_s_per_vehicle_hour": 281.16,
+   "opposite_without_a_return": 0.0388,
+   "lane_keeping_from_6_s_called": 0.0824
+  },
+  "offline_refit": {
+   "windows_correct": 0.8018,
+   "correct_2_s_before": 0.9921,
+   "runs_0.6_s_per_vehicle_hour": 485.84,
+   "opposite_without_a_return": 0.0436,
+   "lane_keeping_from_6_s_called": 0.1929
+  }
+ },
+ "claims": {
+  "C1_ours_minus_best_label_free": 0.0646,
+  "C1_met": false,
+  "C2_ours_minus_naive": -0.0506,
+  "C2_naive_qualified_on_validation": true,
+  "C2_met": false,
+  "C3_instant_minus_ours": 0.032,
+  "C3_met": false,
+  "C4_ours_minus_rls": 0.3376,
+  "C4_met": true
+ }
+}
