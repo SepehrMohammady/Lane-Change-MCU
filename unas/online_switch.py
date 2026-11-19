@@ -119,6 +119,7 @@ def run(phase: str, study: str) -> None:
         if not todo:
             continue
         by_loc = {loc: w[w[:, 0] < n_splits] for loc, w in by_loc_all.items()}
+        by_loc = {loc: w for loc, w in by_loc.items() if len(w)}   # highD location 6 has no training or validation recordings
         rank = site.SPLITS.index(scored)
         tracks_file = ts.tracks_file if highd else tsx.tracks_file
         n_scored = int((np.load(tracks_file(scored))["lens"] - ts.IN_LEN + 1).sum())
