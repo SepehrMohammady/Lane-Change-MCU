@@ -106,8 +106,9 @@ def train_phase() -> None:
     KEEP.mkdir(parents=True, exist_ok=True)
     TRAIN_OUT.parent.mkdir(parents=True, exist_ok=True)
     done = set()
-    for path in TRAIN_OUT.parent.glob(f"online_lolo_train{SUFFIX}*.jsonl"):
-        done |= {(r["location"], r["seed"]) for r in map(json.loads, path.read_text().splitlines())}
+    for path in TRAIN_OUT.parent.glob("online_lolo_train*.jsonl"):
+        if ("smoke" in path.name) == SMOKE:                  # the smoke record must not count as trained
+            done |= {(r["location"], r["seed"]) for r in map(json.loads, path.read_text().splitlines())}
     for loc in (LOCS[:1] if SMOKE else LOCS):
         seeds = [s for s in (SEEDS[:1] if SMOKE else SEEDS) if (loc, s) not in done]
         if not seeds:
