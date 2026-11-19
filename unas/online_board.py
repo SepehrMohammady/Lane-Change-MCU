@@ -11,6 +11,8 @@ the TFLite file, float32, the same xorshift32 draws) is the reference the board 
   WSL:     ~/dmir_nas/bin/python unas/online_board.py prepare [--seed 100]   # feature file, header, streams, reference
   Windows: .venv\\Scripts\\python unas/online_board.py build                  # generate, build, flash, timed runs
            .venv\\Scripts\\python unas/online_board.py replay --loc 5         # one location through the board
+           .venv\\Scripts\\python unas/online_board.py measures --loc 5       # its test recordings: board, host, fixed
+           .venv\\Scripts\\python unas/online_board.py measures-all           # all test recordings, once all replayed
            .venv\\Scripts\\python unas/online_board.py --report
 Streams and references stay in firmware/build/online/<tag>/ (exiD features: not versioned). Records:
 datasets/exid/results/hil/online_board.jsonl and online_board_reference.json.
@@ -310,6 +312,43 @@ def measures(seed: int, loc: int) -> None:
     print(json.dumps(rec, indent=1))
 
 
+def measures_all(seed: int) -> None:
+    """The site measures over the test recordings of every replayed location at once (exiD test track order), for
+    the board's classes, the host copy and the int8 fixed network; written only when all locations are replayed."""
+    import online_site_pilot as site
+    ts, tsx = site.ts, site.tsx
+    tag = tag_of(seed)
+    tt = np.load(tsx.tracks_file("test"))
+    lens, cross = tt["lens"].astype(np.int64), json.loads(str(tt["cross"]))
+    w_start = np.concatenate([[0], np.cumsum(lens - ts.IN_LEN + 1)[:-1]])
+    n_win = int(w_start[-1] + lens[-1] - ts.IN_LEN + 1)
+    full = {k: np.full(n_win, -1, np.int8) for k in ("fixed_int8", "host_copy", "board")}
+    locs, tracks = [], []
+    for f in sorted((OUTDIR / tag).glob("loc[0-9]*_board.npz")):
+        loc = int(f.stem[3:].split("_")[0])
+        z = np.load(OUTDIR / tag / f"loc{loc}.npz")
+        w, board = z["w"], np.load(f)["board"]
+        test = w[:, 0] == site.SPLITS.index("test")
+        for key, cls in (("fixed_int8", z["fixed"]), ("host_copy", z["adapted"]), ("board", board)):
+            full[key][w[test, 1]] = cls[test]
+        locs.append(loc)
+        tracks += [int(t) for t in np.unique(w[test, 2])]
+    tracks = np.array(sorted(set(tracks)))
+    if len(tracks) != len(lens):
+        raise RuntimeError(f"{len(tracks)} of {len(lens)} test tracks replayed (locations {locs})")
+    rec = {"kind": "replay_measures_all", "tag": tag, "locations": locs,
+           "recordings": sorted({int(r) for r in tt["rec"][tracks]}), "tracks": int(len(tracks))}
+    for key in ("fixed_int8", "host_copy", "board"):
+        p = np.concatenate([full[key][w_start[t]:w_start[t] + lens[t] - ts.IN_LEN + 1] for t in tracks])
+        assert (p >= 0).all()
+        rec[key] = site.compact(ts.measures_of(p, lens[tracks], [cross[t] for t in tracks]))
+    rec["test_windows_equal_board_host"] = round(float((full["board"] == full["host_copy"]).mean()), 6)
+    rec["utc"] = datetime.now(timezone.utc).isoformat(timespec="seconds")
+    with open(RECORDS, "a") as fh:
+        fh.write(json.dumps(rec) + "\n")
+    print(json.dumps(rec, indent=1))
+
+
 def report() -> None:
     rows = [json.loads(line) for line in RECORDS.read_text().splitlines()] if RECORDS.exists() else []
     for r in rows:
@@ -321,7 +360,7 @@ def report() -> None:
 
 if __name__ == "__main__":
     ap = argparse.ArgumentParser()
-    ap.add_argument("cmd", nargs="?", choices=("prepare", "build", "replay", "measures"))
+    ap.add_argument("cmd", nargs="?", choices=("prepare", "build", "replay", "measures", "measures-all"))
     ap.add_argument("--seed", type=int, default=100)
     ap.add_argument("--loc", type=int, default=5)
     ap.add_argument("--report", action="store_true")
@@ -336,5 +375,7 @@ if __name__ == "__main__":
         replay(a.seed, a.loc)
     elif a.cmd == "measures":
         measures(a.seed, a.loc)
+    elif a.cmd == "measures-all":
+        measures_all(a.seed)
     else:
-        ap.error("prepare | build | replay | --report")
+        ap.error("prepare | build | replay | measures | measures-all | --report")
