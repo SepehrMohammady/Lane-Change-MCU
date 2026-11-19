@@ -1,0 +1,225 @@
+{
+ "tag": "highd_K_seed100_features_int8_io",
+ "seed": 100,
+ "setting": "G_eta0.003_lam0.0",
+ "note": "host copy of the board's algorithm: int8 features of the TFLite feature file, float32 last layer and update, xorshift32 draws; exiD test recordings, prequential",
+ "utc": "2026-11-19T17:09:12+00:00",
+ "fixed": {
+  "all": {
+   "windows_correct": 0.4313,
+   "correct_2_s_before": 0.7573,
+   "runs_0.6_s_per_vehicle_hour": 1754.1,
+   "opposite_without_a_return": 0.355,
+   "lane_keeping_from_6_s_called": 0.587
+  },
+  "per_recording": {
+   "15": {
+    "windows_correct": 0.3055,
+    "correct_2_s_before": 0.6587,
+    "runs_0.6_s_per_vehicle_hour": 1972.0,
+    "opposite_without_a_return": 0.4383,
+    "lane_keeping_from_6_s_called": 0.7503
+   },
+   "16": {
+    "windows_correct": 0.3112,
+    "correct_2_s_before": 0.6508,
+    "runs_0.6_s_per_vehicle_hour": 1955.8,
+    "opposite_without_a_return": 0.3659,
+    "lane_keeping_from_6_s_called": 0.7629
+   },
+   "17": {
+    "windows_correct": 0.3355,
+    "correct_2_s_before": 0.8529,
+    "runs_0.6_s_per_vehicle_hour": 1853.0,
+    "opposite_without_a_return": 0.3971,
+    "lane_keeping_from_6_s_called": 0.6576
+   },
+   "18": {
+    "windows_correct": 0.3124,
+    "correct_2_s_before": 0.6111,
+    "runs_0.6_s_per_vehicle_hour": 1841.1,
+    "opposite_without_a_return": 0.4277,
+    "lane_keeping_from_6_s_called": 0.7231
+   },
+   "37": {
+    "windows_correct": 0.5306,
+    "correct_2_s_before": 0.7541,
+    "runs_0.6_s_per_vehicle_hour": 1547.1,
+    "opposite_without_a_return": 0.2569,
+    "lane_keeping_from_6_s_called": 0.5299
+   },
+   "38": {
+    "windows_correct": 0.5431,
+    "correct_2_s_before": 0.737,
+    "runs_0.6_s_per_vehicle_hour": 1517.5,
+    "opposite_without_a_return": 0.2448,
+    "lane_keeping_from_6_s_called": 0.5119
+   },
+   "51": {
+    "windows_correct": 0.3494,
+    "correct_2_s_before": 0.7591,
+    "runs_0.6_s_per_vehicle_hour": 1904.3,
+    "opposite_without_a_return": 0.406,
+    "lane_keeping_from_6_s_called": 0.6798
+   },
+   "52": {
+    "windows_correct": 0.3336,
+    "correct_2_s_before": 0.6923,
+    "runs_0.6_s_per_vehicle_hour": 1909.3,
+    "opposite_without_a_return": 0.3789,
+    "lane_keeping_from_6_s_called": 0.6666
+   },
+   "60": {
+    "windows_correct": 0.3746,
+    "correct_2_s_before": 0.6429,
+    "runs_0.6_s_per_vehicle_hour": 2019.6,
+    "opposite_without_a_return": 0.4071,
+    "lane_keeping_from_6_s_called": 0.6798
+   },
+   "70": {
+    "windows_correct": 0.4329,
+    "correct_2_s_before": 0.8955,
+    "runs_0.6_s_per_vehicle_hour": 1853.0,
+    "opposite_without_a_return": 0.4118,
+    "lane_keeping_from_6_s_called": 0.5481
+   },
+   "71": {
+    "windows_correct": 0.5116,
+    "correct_2_s_before": 0.8554,
+    "runs_0.6_s_per_vehicle_hour": 1615.0,
+    "opposite_without_a_return": 0.4156,
+    "lane_keeping_from_6_s_called": 0.4503
+   },
+   "72": {
+    "windows_correct": 0.5707,
+    "correct_2_s_before": 0.875,
+    "runs_0.6_s_per_vehicle_hour": 1395.6,
+    "opposite_without_a_return": 0.3643,
+    "lane_keeping_from_6_s_called": 0.3672
+   },
+   "77": {
+    "windows_correct": 0.394,
+    "correct_2_s_before": 0.8425,
+    "runs_0.6_s_per_vehicle_hour": 2009.1,
+    "opposite_without_a_return": 0.3345,
+    "lane_keeping_from_6_s_called": 0.7076
+   },
+   "92": {
+    "windows_correct": 0.4206,
+    "correct_2_s_before": 0.7965,
+    "runs_0.6_s_per_vehicle_hour": 1752.5,
+    "opposite_without_a_return": 0.4041,
+    "lane_keeping_from_6_s_called": 0.5219
+   }
+  }
+ },
+ "adapted": {
+  "all": {
+   "windows_correct": 0.8418,
+   "correct_2_s_before": 0.9648,
+   "runs_0.6_s_per_vehicle_hour": 314.3,
+   "opposite_without_a_return": 0.0448,
+   "lane_keeping_from_6_s_called": 0.1317
+  },
+  "per_recording": {
+   "15": {
+    "windows_correct": 0.85,
+    "correct_2_s_before": 0.9206,
+    "runs_0.6_s_per_vehicle_hour": 320.0,
+    "opposite_without_a_return": 0.082,
+    "lane_keeping_from_6_s_called": 0.1347
+   },
+   "16": {
+    "windows_correct": 0.8464,
+    "correct_2_s_before": 0.9524,
+    "runs_0.6_s_per_vehicle_hour": 390.3,
+    "opposite_without_a_return": 0.0177,
+    "lane_keeping_from_6_s_called": 0.1731
+   },
+   "17": {
+    "windows_correct": 0.8793,
+    "correct_2_s_before": 1.0,
+    "runs_0.6_s_per_vehicle_hour": 283.3,
+    "opposite_without_a_return": 0.1434,
+    "lane_keeping_from_6_s_called": 0.0753
+   },
+   "18": {
+    "windows_correct": 0.8171,
+    "correct_2_s_before": 1.0,
+    "runs_0.6_s_per_vehicle_hour": 322.9,
+    "opposite_without_a_return": 0.0663,
+    "lane_keeping_from_6_s_called": 0.1607
+   },
+   "37": {
+    "windows_correct": 0.8306,
+    "correct_2_s_before": 0.959,
+    "runs_0.6_s_per_vehicle_hour": 290.8,
+    "opposite_without_a_return": 0.0487,
+    "lane_keeping_from_6_s_called": 0.1341
+   },
+   "38": {
+    "windows_correct": 0.8478,
+    "correct_2_s_before": 0.966,
+    "runs_0.6_s_per_vehicle_hour": 255.3,
+    "opposite_without_a_return": 0.0404,
+    "lane_keeping_from_6_s_called": 0.1266
+   },
+   "51": {
+    "windows_correct": 0.8276,
+    "correct_2_s_before": 0.9526,
+    "runs_0.6_s_per_vehicle_hour": 343.6,
+    "opposite_without_a_return": 0.0428,
+    "lane_keeping_from_6_s_called": 0.1136
+   },
+   "52": {
+    "windows_correct": 0.862,
+    "correct_2_s_before": 0.9538,
+    "runs_0.6_s_per_vehicle_hour": 280.0,
+    "opposite_without_a_return": 0.0588,
+    "lane_keeping_from_6_s_called": 0.0606
+   },
+   "60": {
+    "windows_correct": 0.8284,
+    "correct_2_s_before": 0.9898,
+    "runs_0.6_s_per_vehicle_hour": 376.5,
+    "opposite_without_a_return": 0.0167,
+    "lane_keeping_from_6_s_called": 0.0899
+   },
+   "70": {
+    "windows_correct": 0.8185,
+    "correct_2_s_before": 1.0,
+    "runs_0.6_s_per_vehicle_hour": 342.8,
+    "opposite_without_a_return": 0.0425,
+    "lane_keeping_from_6_s_called": 0.2072
+   },
+   "71": {
+    "windows_correct": 0.8362,
+    "correct_2_s_before": 0.9639,
+    "runs_0.6_s_per_vehicle_hour": 313.4,
+    "opposite_without_a_return": 0.0378,
+    "lane_keeping_from_6_s_called": 0.172
+   },
+   "72": {
+    "windows_correct": 0.8316,
+    "correct_2_s_before": 1.0,
+    "runs_0.6_s_per_vehicle_hour": 282.3,
+    "opposite_without_a_return": 0.0271,
+    "lane_keeping_from_6_s_called": 0.1434
+   },
+   "77": {
+    "windows_correct": 0.8773,
+    "correct_2_s_before": 0.9764,
+    "runs_0.6_s_per_vehicle_hour": 169.1,
+    "opposite_without_a_return": 0.0294,
+    "lane_keeping_from_6_s_called": 0.1219
+   },
+   "92": {
+    "windows_correct": 0.8364,
+    "correct_2_s_before": 0.969,
+    "runs_0.6_s_per_vehicle_hour": 379.0,
+    "opposite_without_a_return": 0.043,
+    "lane_keeping_from_6_s_called": 0.1667
+   }
+  }
+ }
+}

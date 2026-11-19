@@ -1,0 +1,746 @@
+{
+ "utc": "2026-11-19T17:08:52+00:00",
+ "records": 45,
+ "rule": "local notes 2026-11-19 17:36",
+ "selection": {
+  "selected": "G_eta0.003_lam0.0",
+  "complete": true,
+  "qualified": [
+   "G_eta0.003_lam0.0",
+   "G_eta0.003_lam0.01",
+   "G_eta0.01_lam0.0",
+   "G_eta0.01_lam0.01",
+   "G_eta0.03_lam0.0",
+   "G_eta0.03_lam0.01"
+  ]
+ },
+ "tune": {
+  "highD_K G_eta0.003_lam0.0": {
+   "networks": 5,
+   "seeds": [
+    100,
+    101,
+    102,
+    103,
+    104
+   ],
+   "windows_correct": {
+    "fixed": 0.415,
+    "adapted": 0.8569
+   },
+   "correct_2_s_before": {
+    "fixed": 0.7761,
+    "adapted": 0.9739
+   },
+   "runs_0.6_s_per_vehicle_hour": {
+    "fixed": 1848.4,
+    "adapted": 308.2
+   },
+   "opposite_without_a_return": {
+    "fixed": 0.3676,
+    "adapted": 0.036
+   },
+   "lane_keeping_from_6_s_called": {
+    "fixed": 0.616,
+    "adapted": 0.1166
+   },
+   "per_recording_windows_correct": {
+    "14": [
+     0.3081,
+     0.8739
+    ],
+    "35": [
+     0.5473,
+     0.8755
+    ],
+    "36": [
+     0.535,
+     0.8471
+    ],
+    "49": [
+     0.3333,
+     0.8499
+    ],
+    "50": [
+     0.3464,
+     0.8645
+    ],
+    "59": [
+     0.3758,
+     0.8515
+    ],
+    "69": [
+     0.4526,
+     0.8414
+    ],
+    "76": [
+     0.3853,
+     0.8899
+    ],
+    "90": [
+     0.4203,
+     0.8497
+    ],
+    "91": [
+     0.426,
+     0.8064
+    ]
+   }
+  },
+  "highD_K G_eta0.003_lam0.01": {
+   "networks": 5,
+   "seeds": [
+    100,
+    101,
+    102,
+    103,
+    104
+   ],
+   "windows_correct": {
+    "fixed": 0.415,
+    "adapted": 0.8331
+   },
+   "correct_2_s_before": {
+    "fixed": 0.7761,
+    "adapted": 0.9726
+   },
+   "runs_0.6_s_per_vehicle_hour": {
+    "fixed": 1848.4,
+    "adapted": 389.5
+   },
+   "opposite_without_a_return": {
+    "fixed": 0.3676,
+    "adapted": 0.0382
+   },
+   "lane_keeping_from_6_s_called": {
+    "fixed": 0.616,
+    "adapted": 0.1343
+   },
+   "per_recording_windows_correct": {
+    "14": [
+     0.3081,
+     0.8433
+    ],
+    "35": [
+     0.5473,
+     0.8541
+    ],
+    "36": [
+     0.535,
+     0.822
+    ],
+    "49": [
+     0.3333,
+     0.8224
+    ],
+    "50": [
+     0.3464,
+     0.8343
+    ],
+    "59": [
+     0.3758,
+     0.823
+    ],
+    "69": [
+     0.4526,
+     0.8242
+    ],
+    "76": [
+     0.3853,
+     0.8624
+    ],
+    "90": [
+     0.4203,
+     0.8399
+    ],
+    "91": [
+     0.426,
+     0.7972
+    ]
+   }
+  },
+  "highD_K G_eta0.01_lam0.0": {
+   "networks": 5,
+   "seeds": [
+    100,
+    101,
+    102,
+    103,
+    104
+   ],
+   "windows_correct": {
+    "fixed": 0.415,
+    "adapted": 0.8501
+   },
+   "correct_2_s_before": {
+    "fixed": 0.7761,
+    "adapted": 0.9615
+   },
+   "runs_0.6_s_per_vehicle_hour": {
+    "fixed": 1848.4,
+    "adapted": 307.22
+   },
+   "opposite_without_a_return": {
+    "fixed": 0.3676,
+    "adapted": 0.0377
+   },
+   "lane_keeping_from_6_s_called": {
+    "fixed": 0.616,
+    "adapted": 0.1213
+   },
+   "per_recording_windows_correct": {
+    "14": [
+     0.3081,
+     0.8719
+    ],
+    "35": [
+     0.5473,
+     0.8689
+    ],
+    "36": [
+     0.535,
+     0.842
+    ],
+    "49": [
+     0.3333,
+     0.8404
+    ],
+    "50": [
+     0.3464,
+     0.8595
+    ],
+    "59": [
+     0.3758,
+     0.8422
+    ],
+    "69": [
+     0.4526,
+     0.8389
+    ],
+    "76": [
+     0.3853,
+     0.8815
+    ],
+    "90": [
+     0.4203,
+     0.838
+    ],
+    "91": [
+     0.426,
+     0.7942
+    ]
+   }
+  },
+  "highD_K G_eta0.01_lam0.01": {
+   "networks": 5,
+   "seeds": [
+    100,
+    101,
+    102,
+    103,
+    104
+   ],
+   "windows_correct": {
+    "fixed": 0.415,
+    "adapted": 0.8175
+   },
+   "correct_2_s_before": {
+    "fixed": 0.7761,
+    "adapted": 0.961
+   },
+   "runs_0.6_s_per_vehicle_hour": {
+    "fixed": 1848.4,
+    "adapted": 406.74
+   },
+   "opposite_without_a_return": {
+    "fixed": 0.3676,
+    "adapted": 0.0416
+   },
+   "lane_keeping_from_6_s_called": {
+    "fixed": 0.616,
+    "adapted": 0.146
+   },
+   "per_recording_windows_correct": {
+    "14": [
+     0.3081,
+     0.831
+    ],
+    "35": [
+     0.5473,
+     0.84
+    ],
+    "36": [
+     0.535,
+     0.8073
+    ],
+    "49": [
+     0.3333,
+     0.8012
+    ],
+    "50": [
+     0.3464,
+     0.8171
+    ],
+    "59": [
+     0.3758,
+     0.8001
+    ],
+    "69": [
+     0.4526,
+     0.8176
+    ],
+    "76": [
+     0.3853,
+     0.8431
+    ],
+    "90": [
+     0.4203,
+     0.8217
+    ],
+    "91": [
+     0.426,
+     0.7854
+    ]
+   }
+  },
+  "highD_K G_eta0.03_lam0.0": {
+   "networks": 5,
+   "seeds": [
+    100,
+    101,
+    102,
+    103,
+    104
+   ],
+   "windows_correct": {
+    "fixed": 0.415,
+    "adapted": 0.8437
+   },
+   "correct_2_s_before": {
+    "fixed": 0.7761,
+    "adapted": 0.9507
+   },
+   "runs_0.6_s_per_vehicle_hour": {
+    "fixed": 1848.4,
+    "adapted": 311.74
+   },
+   "opposite_without_a_return": {
+    "fixed": 0.3676,
+    "adapted": 0.0403
+   },
+   "lane_keeping_from_6_s_called": {
+    "fixed": 0.616,
+    "adapted": 0.1272
+   },
+   "per_recording_windows_correct": {
+    "14": [
+     0.3081,
+     0.8682
+    ],
+    "35": [
+     0.5473,
+     0.86
+    ],
+    "36": [
+     0.535,
+     0.8371
+    ],
+    "49": [
+     0.3333,
+     0.8327
+    ],
+    "50": [
+     0.3464,
+     0.8533
+    ],
+    "59": [
+     0.3758,
+     0.8337
+    ],
+    "69": [
+     0.4526,
+     0.8357
+    ],
+    "76": [
+     0.3853,
+     0.8734
+    ],
+    "90": [
+     0.4203,
+     0.8299
+    ],
+    "91": [
+     0.426,
+     0.7877
+    ]
+   }
+  },
+  "highD_K G_eta0.03_lam0.01": {
+   "networks": 5,
+   "seeds": [
+    100,
+    101,
+    102,
+    103,
+    104
+   ],
+   "windows_correct": {
+    "fixed": 0.415,
+    "adapted": 0.7962
+   },
+   "correct_2_s_before": {
+    "fixed": 0.7761,
+    "adapted": 0.9491
+   },
+   "runs_0.6_s_per_vehicle_hour": {
+    "fixed": 1848.4,
+    "adapted": 441.52
+   },
+   "opposite_without_a_return": {
+    "fixed": 0.3676,
+    "adapted": 0.0469
+   },
+   "lane_keeping_from_6_s_called": {
+    "fixed": 0.616,
+    "adapted": 0.1658
+   },
+   "per_recording_windows_correct": {
+    "14": [
+     0.3081,
+     0.8089
+    ],
+    "35": [
+     0.5473,
+     0.8202
+    ],
+    "36": [
+     0.535,
+     0.7899
+    ],
+    "49": [
+     0.3333,
+     0.7758
+    ],
+    "50": [
+     0.3464,
+     0.8036
+    ],
+    "59": [
+     0.3758,
+     0.7718
+    ],
+    "69": [
+     0.4526,
+     0.8058
+    ],
+    "76": [
+     0.3853,
+     0.8147
+    ],
+    "90": [
+     0.4203,
+     0.7957
+    ],
+    "91": [
+     0.426,
+     0.7708
+    ]
+   }
+  }
+ },
+ "final": {
+  "highD_K G_eta0.003_lam0.0": {
+   "networks": 5,
+   "seeds": [
+    100,
+    101,
+    102,
+    103,
+    104
+   ],
+   "windows_correct": {
+    "fixed": 0.4312,
+    "adapted": 0.8451
+   },
+   "correct_2_s_before": {
+    "fixed": 0.7631,
+    "adapted": 0.9673
+   },
+   "runs_0.6_s_per_vehicle_hour": {
+    "fixed": 1762.92,
+    "adapted": 304.88
+   },
+   "opposite_without_a_return": {
+    "fixed": 0.3691,
+    "adapted": 0.0408
+   },
+   "lane_keeping_from_6_s_called": {
+    "fixed": 0.5888,
+    "adapted": 0.1266
+   },
+   "per_recording_windows_correct": {
+    "15": [
+     0.3052,
+     0.8489
+    ],
+    "16": [
+     0.3087,
+     0.8563
+    ],
+    "17": [
+     0.3392,
+     0.8771
+    ],
+    "18": [
+     0.3139,
+     0.8324
+    ],
+    "37": [
+     0.5285,
+     0.8365
+    ],
+    "38": [
+     0.5435,
+     0.8516
+    ],
+    "51": [
+     0.346,
+     0.8328
+    ],
+    "52": [
+     0.3309,
+     0.8617
+    ],
+    "60": [
+     0.3754,
+     0.8351
+    ],
+    "70": [
+     0.4312,
+     0.829
+    ],
+    "71": [
+     0.5096,
+     0.8369
+    ],
+    "72": [
+     0.5662,
+     0.8417
+    ],
+    "77": [
+     0.4178,
+     0.8782
+    ],
+    "92": [
+     0.4167,
+     0.8344
+    ]
+   }
+  },
+  "highD_P G_eta0.003_lam0.0": {
+   "networks": 5,
+   "seeds": [
+    100,
+    101,
+    102,
+    103,
+    104
+   ],
+   "windows_correct": {
+    "fixed": 0.4444,
+    "adapted": 0.8415
+   },
+   "correct_2_s_before": {
+    "fixed": 0.83,
+    "adapted": 0.9613
+   },
+   "runs_0.6_s_per_vehicle_hour": {
+    "fixed": 1583.16,
+    "adapted": 304.52
+   },
+   "opposite_without_a_return": {
+    "fixed": 0.765,
+    "adapted": 0.0479
+   },
+   "lane_keeping_from_6_s_called": {
+    "fixed": 0.5646,
+    "adapted": 0.1282
+   },
+   "per_recording_windows_correct": {
+    "15": [
+     0.3118,
+     0.844
+    ],
+    "16": [
+     0.3173,
+     0.8652
+    ],
+    "17": [
+     0.3165,
+     0.8703
+    ],
+    "18": [
+     0.3336,
+     0.8344
+    ],
+    "37": [
+     0.5413,
+     0.8358
+    ],
+    "38": [
+     0.5488,
+     0.8528
+    ],
+    "51": [
+     0.3602,
+     0.8259
+    ],
+    "52": [
+     0.3585,
+     0.8615
+    ],
+    "60": [
+     0.4053,
+     0.8375
+    ],
+    "70": [
+     0.4401,
+     0.821
+    ],
+    "71": [
+     0.5156,
+     0.8254
+    ],
+    "72": [
+     0.5692,
+     0.8425
+    ],
+    "77": [
+     0.4441,
+     0.8769
+    ],
+    "92": [
+     0.4444,
+     0.822
+    ]
+   }
+  },
+  "exiD_K G_eta0.003_lam0.0": {
+   "networks": 5,
+   "seeds": [
+    100,
+    101,
+    102,
+    103,
+    104
+   ],
+   "windows_correct": {
+    "fixed": 0.87,
+    "adapted": 0.8713
+   },
+   "correct_2_s_before": {
+    "fixed": 0.9981,
+    "adapted": 0.9798
+   },
+   "runs_0.6_s_per_vehicle_hour": {
+    "fixed": 325.8,
+    "adapted": 240.62
+   },
+   "opposite_without_a_return": {
+    "fixed": 0.0476,
+    "adapted": 0.0283
+   },
+   "lane_keeping_from_6_s_called": {
+    "fixed": 0.1207,
+    "adapted": 0.1041
+   },
+   "per_recording_windows_correct": {
+    "15": [
+     0.86,
+     0.8723
+    ],
+    "16": [
+     0.8884,
+     0.8918
+    ],
+    "17": [
+     0.8905,
+     0.8999
+    ],
+    "18": [
+     0.8639,
+     0.8717
+    ],
+    "37": [
+     0.859,
+     0.8673
+    ],
+    "38": [
+     0.8596,
+     0.8747
+    ],
+    "51": [
+     0.8713,
+     0.8654
+    ],
+    "52": [
+     0.8897,
+     0.897
+    ],
+    "60": [
+     0.8835,
+     0.8824
+    ],
+    "70": [
+     0.8903,
+     0.8554
+    ],
+    "71": [
+     0.8729,
+     0.8564
+    ],
+    "72": [
+     0.9211,
+     0.8723
+    ],
+    "77": [
+     0.8717,
+     0.8995
+    ],
+    "92": [
+     0.8497,
+     0.8489
+    ]
+   }
+  }
+ },
+ "criterion": {
+  "rule": "selected setting, highD arm K, the 14 test recordings: (a) gain in windows correct at least half the gap to exiD's own arm K and at least 3 points; (b) a gain on at least 11 recordings; (c) correct 2 s before at most 5 points below the fixed layer's; (d) runs of 0.6 s or more per vehicle hour not above the fixed layer's",
+  "networks": [
+   5,
+   5
+  ],
+  "fixed_highD": 0.4312,
+  "adapted_highD": 0.8451,
+  "exiD_own": 0.87,
+  "gap": 0.4388,
+  "gain": 0.4139,
+  "share_of_gap": 0.9433,
+  "a_met": true,
+  "b_recordings_with_a_gain": 14,
+  "b_of": 14,
+  "b_met": true,
+  "c_correct_2_s_before": [
+   0.7631,
+   0.9673
+  ],
+  "c_met": true,
+  "d_runs": [
+   1762.92,
+   304.88
+  ],
+  "d_met": true,
+  "complete": true,
+  "met": true
+ }
+}
