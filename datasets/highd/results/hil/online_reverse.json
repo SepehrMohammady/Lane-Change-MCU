@@ -1,0 +1,139 @@
+{
+ "utc": "2026-11-19T18:28:41+00:00",
+ "rule": "local notes 2026-11-19 18:19",
+ "nets": {
+  "exiD_K": {
+   "networks": 5,
+   "windows_correct": {
+    "fixed": 0.8816,
+    "adapted": 0.8858
+   },
+   "correct_2_s_before": {
+    "fixed": 0.9969,
+    "adapted": 0.9597
+   },
+   "runs_0.6_s_per_vehicle_hour": {
+    "fixed": 297.22,
+    "adapted": 210.82
+   },
+   "opposite_without_a_return": {
+    "fixed": 0.0823,
+    "adapted": 0.095
+   },
+   "lane_keeping_from_6_s_called": {
+    "fixed": 0.0954,
+    "adapted": 0.075
+   },
+   "per_recording_windows_correct": {
+    "56": [
+     0.9349,
+     0.9208
+    ],
+    "57": [
+     0.9293,
+     0.9177
+    ],
+    "58": [
+     0.7662,
+     0.8392
+    ],
+    "59": [
+     0.8777,
+     0.8494
+    ],
+    "60": [
+     0.8113,
+     0.8403
+    ]
+   },
+   "per_location_windows_correct": {
+    "1": [
+     0.9321,
+     0.9193
+    ],
+    "6": [
+     0.8158,
+     0.8422
+    ]
+   }
+  },
+  "highD_K": {
+   "networks": 5,
+   "windows_correct": {
+    "fixed": 0.9042,
+    "adapted": 0.9364
+   },
+   "correct_2_s_before": {
+    "fixed": 1.0,
+    "adapted": 0.9984
+   },
+   "runs_0.6_s_per_vehicle_hour": {
+    "fixed": 287.82,
+    "adapted": 175.88
+   },
+   "opposite_without_a_return": {
+    "fixed": 0.1255,
+    "adapted": 0.0713
+   },
+   "lane_keeping_from_6_s_called": {
+    "fixed": 0.0547,
+    "adapted": 0.0378
+   },
+   "per_recording_windows_correct": {
+    "56": [
+     0.9604,
+     0.9515
+    ],
+    "57": [
+     0.9531,
+     0.954
+    ],
+    "58": [
+     0.7769,
+     0.9099
+    ],
+    "59": [
+     0.8902,
+     0.9173
+    ],
+    "60": [
+     0.8384,
+     0.9163
+    ]
+   },
+   "per_location_windows_correct": {
+    "1": [
+     0.9567,
+     0.9528
+    ],
+    "6": [
+     0.8356,
+     0.915
+    ]
+   }
+  }
+ },
+ "criterion": {
+  "fixed_exiD_net": 0.8816,
+  "adapted_exiD_net": 0.8858,
+  "highD_own": 0.9042,
+  "gap": 0.0226,
+  "gain": 0.0042,
+  "share_of_gap": 0.1858,
+  "a_met": false,
+  "b_recordings_with_a_gain": 2,
+  "b_met": false,
+  "c": [
+   0.9969,
+   0.9597
+  ],
+  "c_met": true,
+  "d": [
+   297.22,
+   210.82
+  ],
+  "d_met": true,
+  "complete": true,
+  "met": false
+ }
+}
