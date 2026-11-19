@@ -282,6 +282,34 @@ def replay(seed: int, loc: int) -> None:
     print(json.dumps(rec, indent=1))
 
 
+def measures(seed: int, loc: int) -> None:
+    """The site measures of the board's classes on the location's test recordings, next to the int8 fixed network
+    and the host copy (track order of exiD's test tracks; only the location's tracks)."""
+    import online_site_pilot as site
+    ts, tsx = site.ts, site.tsx
+    tag = tag_of(seed)
+    z = np.load(OUTDIR / tag / f"loc{loc}.npz")
+    w = z["w"]
+    board = np.load(OUTDIR / tag / f"loc{loc}_board.npz")["board"]
+    tt = np.load(tsx.tracks_file("test"))
+    lens, cross = tt["lens"].astype(np.int64), json.loads(str(tt["cross"]))
+    w_start = np.concatenate([[0], np.cumsum(lens - ts.IN_LEN + 1)[:-1]])
+    test = w[:, 0] == site.SPLITS.index("test")
+    tracks = np.unique(w[test, 2])
+    rec = {"kind": "replay_measures", "tag": tag, "location": loc,
+           "recordings": sorted({int(r) for r in tt["rec"][tracks]}), "tracks": int(len(tracks))}
+    for key, cls in (("fixed_int8", z["fixed"]), ("host_copy", z["adapted"]), ("board", board)):
+        full = np.full(int(w_start[-1] + lens[-1] - ts.IN_LEN + 1), -1, np.int8)
+        full[w[test, 1]] = cls[test]
+        p = np.concatenate([full[w_start[t]:w_start[t] + lens[t] - ts.IN_LEN + 1] for t in tracks])
+        assert (p >= 0).all()
+        rec[key] = site.compact(ts.measures_of(p, lens[tracks], [cross[t] for t in tracks]))
+    rec["utc"] = datetime.now(timezone.utc).isoformat(timespec="seconds")
+    with open(RECORDS, "a") as fh:
+        fh.write(json.dumps(rec) + "\n")
+    print(json.dumps(rec, indent=1))
+
+
 def report() -> None:
     rows = [json.loads(line) for line in RECORDS.read_text().splitlines()] if RECORDS.exists() else []
     for r in rows:
@@ -293,7 +321,7 @@ def report() -> None:
 
 if __name__ == "__main__":
     ap = argparse.ArgumentParser()
-    ap.add_argument("cmd", nargs="?", choices=("prepare", "build", "replay"))
+    ap.add_argument("cmd", nargs="?", choices=("prepare", "build", "replay", "measures"))
     ap.add_argument("--seed", type=int, default=100)
     ap.add_argument("--loc", type=int, default=5)
     ap.add_argument("--report", action="store_true")
@@ -306,5 +334,7 @@ if __name__ == "__main__":
         build(a.seed)
     elif a.cmd == "replay":
         replay(a.seed, a.loc)
+    elif a.cmd == "measures":
+        measures(a.seed, a.loc)
     else:
         ap.error("prepare | build | replay | --report")
