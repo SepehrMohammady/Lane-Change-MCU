@@ -246,7 +246,7 @@ def means(rows: list) -> dict:
     out = {}
     for key in site.KEYS:
         vals = [r["measures"]["all"][key] for r in rows]
-        out[key] = None if any(v is None for v in vals) else round(st.mean(vals), 4)
+        out[key] = None if any(v is None for v in vals) else round(st.mean(vals), 5)
     return out
 
 
