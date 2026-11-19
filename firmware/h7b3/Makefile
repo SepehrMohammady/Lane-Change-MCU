@@ -37,9 +37,15 @@ else ifeq ($(STREAM),1)
 BUILD ?= ../build/h7b3stream/$(notdir $(GEN))
 AXIDEF := -DSTREAM_MODE -I$(CFG)
 else ifeq ($(ONLINE),1)
-# online learning mode (see main.c); online_cfg.h is generated into ../build/online, outside the repository
+# online learning mode (see main.c); online_cfg.h is generated into ../build/online, outside the repository;
+# OLOOP=1 runs the update back to back instead, for power readings
+ifeq ($(OLOOP),1)
+BUILD ?= ../build/h7b3onlineloop/$(notdir $(GEN))
+AXIDEF := -DONLINE_MODE -DONLINE_LOOP -I$(OCFG)
+else
 BUILD ?= ../build/h7b3online/$(notdir $(GEN))
 AXIDEF := -DONLINE_MODE -I$(OCFG)
+endif
 else ifeq ($(AXI),1)
 BUILD ?= ../build/h7b3axi/$(notdir $(GEN))
 AXIDEF := -DACT_AXI

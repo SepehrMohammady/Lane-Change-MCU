@@ -286,6 +286,32 @@ static void onl_step(void) /* one gradient step of softmax cross-entropy on ONL_
     }
 }
 
+#ifdef ONLINE_LOOP
+/* Update loop for power readings (make ONLINE=1 OLOOP=1): the class memories are filled with pseudo-random
+   int8 features and the gradient step runs back to back; g_online holds magic, mean cycles of 1000 timed steps
+   and a step counter. */
+volatile uint32_t g_online[4] __attribute__((used));
+static void online_bench(void)
+{
+    onl_reset();
+    for (int k = 0; k < ONL_C; k++) {
+        for (int j = 0; j < ONL_MEM; j++)
+            for (int i = 0; i < ONL_D; i++)
+                onl_mem[k][j][i] = (int8_t)(rnd() >> 24);
+        onl_cnt[k] = ONL_MEM;
+    }
+    uint32_t t0 = DWT->CYCCNT;
+    for (int n = 0; n < 1000; n++)
+        onl_step();
+    g_online[1] = (DWT->CYCCNT - t0) / 1000u;
+    g_online[0] = RESULT_MAGIC;
+    for (uint32_t k = 0;; k++) {
+        onl_step();
+        g_online[2] = k;
+    }
+}
+#endif
+
 static void online_loop(ai_buffer *in, ai_buffer *out)
 {
     uint8_t tx[12 + 255];
@@ -480,6 +506,9 @@ int main(void)
     stream_loop(in, out);
 #endif
 #ifdef ONLINE_MODE
+#ifdef ONLINE_LOOP
+    online_bench();
+#endif
     g_result[7] = 0; /* messages answered */
     online_loop(in, out);
 #endif
