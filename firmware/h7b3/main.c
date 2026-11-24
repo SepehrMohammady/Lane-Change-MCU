@@ -81,7 +81,8 @@ static int8_t ring[STREAM_IN_LEN][STREAM_N_FEAT];
    one gradient step each (softmax cross-entropy on ONL_PER vectors per class drawn with xorshift32);
    then every window runs the network and the last layer.
    Board -> host, 12 + NW bytes: 0x5B, NW, sequence number echo, DWT cycles of the labels (copies and
-   steps) and of the windows (network and last layer), then the class of each window. */
+   steps) and of the windows (network and last layer), then the class of each window. With ONL_CHECK_N in
+   online_cfg.h the class sent is the one the check chooses (flashed or updated layer, see below). */
 #include <string.h>
 #include <math.h>
 #include "online_cfg.h"
@@ -99,6 +100,15 @@ static float onl_w[ONL_D][ONL_C], onl_b[ONL_C];
 static float onl_xs[ONL_C * ONL_PER][ONL_D];
 static uint16_t onl_cnt[ONL_C], onl_pos[ONL_C];
 static uint32_t onl_xr = ONL_SEED;
+#ifdef ONL_CHECK_N
+/* The check (2026-11-24, unas/online_switch.py): the board keeps the flashed layer next to the updated one,
+   notes for every label whether each layer's class for that window (given at the window's time) was right,
+   and gives the updated layer's class only while it was right more often over the last ONL_CHECK_N labels
+   (ties and the first ONL_CHECK_N labels: the flashed layer). */
+static uint8_t onl_cls[ONL_RING];          /* per pending window: flashed class (bits 0-1), updated (bits 2-3) */
+static uint8_t onl_hist[ONL_CHECK_N];      /* per label: flashed right (bit 0), updated right (bit 1) */
+static uint32_t onl_hn, onl_hp, onl_sf, onl_sa;
+#endif
 #endif
 
 #ifdef ACT_AXI
@@ -223,6 +233,9 @@ static void onl_reset(void)
     memset(onl_cnt, 0, sizeof onl_cnt);
     memset(onl_pos, 0, sizeof onl_pos);
     onl_xr = ONL_SEED;
+#ifdef ONL_CHECK_N
+    onl_hn = onl_hp = onl_sf = onl_sa = 0;
+#endif
 }
 
 static uint8_t onl_class(const int8_t *q) /* the last layer; the first of equal logits wins */
@@ -241,6 +254,25 @@ static uint8_t onl_class(const int8_t *q) /* the last layer; the first of equal 
             k = (uint8_t)c;
     return k;
 }
+
+#ifdef ONL_CHECK_N
+static uint8_t onl_class0(const int8_t *q) /* the flashed last layer, same arithmetic as onl_class */
+{
+    float z[ONL_C];
+    for (int c = 0; c < ONL_C; c++)
+        z[c] = onl_b0[c];
+    for (int i = 0; i < ONL_D; i++) {
+        float f = ((float)q[i] - (float)ONL_FEAT_ZP) * ONL_FEAT_SCALE;
+        for (int c = 0; c < ONL_C; c++)
+            z[c] += f * onl_w0[i][c];
+    }
+    uint8_t k = 0;
+    for (int c = 1; c < ONL_C; c++)
+        if (z[c] > z[k])
+            k = (uint8_t)c;
+    return k;
+}
+#endif
 
 static void onl_step(void) /* one gradient step of softmax cross-entropy on ONL_PER vectors per class */
 {
@@ -332,6 +364,22 @@ static void online_loop(ai_buffer *in, ai_buffer *out)
         for (uint32_t j = 0; j < nl; j++, p += 3) {
             uint32_t slot = (uint32_t)p[0] | ((uint32_t)p[1] << 8);
             uint32_t c = p[2];
+#ifdef ONL_CHECK_N
+            {
+                uint32_t k2 = onl_cls[slot % ONL_RING];
+                uint32_t e = (uint32_t)((k2 & 3u) == c) | ((uint32_t)(((k2 >> 2) & 3u) == c) << 1);
+                if (onl_hn == ONL_CHECK_N) {           /* the oldest label leaves the window */
+                    onl_sf -= onl_hist[onl_hp] & 1u;
+                    onl_sa -= (onl_hist[onl_hp] >> 1) & 1u;
+                } else {
+                    onl_hn++;
+                }
+                onl_hist[onl_hp] = (uint8_t)e;
+                onl_sf += e & 1u;
+                onl_sa += (e >> 1) & 1u;
+                onl_hp = (onl_hp + 1u) % ONL_CHECK_N;
+            }
+#endif
             memcpy(onl_mem[c][onl_pos[c]], onl_ring[slot % ONL_RING], ONL_D);
             onl_pos[c] = (uint16_t)((onl_pos[c] + 1u) % ONL_MEM);
             if (onl_cnt[c] < ONL_MEM)
@@ -349,7 +397,13 @@ static void online_loop(ai_buffer *in, ai_buffer *out)
             memcpy(in[0].data, p + 2, ONL_IN_BYTES);
             ai_network_run(network, in, out);
             memcpy(onl_ring[slot % ONL_RING], out[0].data, ONL_D);
+#ifdef ONL_CHECK_N
+            uint8_t ca = onl_class((const int8_t *)out[0].data), cf = onl_class0((const int8_t *)out[0].data);
+            onl_cls[slot % ONL_RING] = (uint8_t)(cf | (ca << 2));
+            tx[12 + j] = (onl_hn >= ONL_CHECK_N && onl_sa > onl_sf) ? ca : cf;
+#else
             tx[12 + j] = onl_class((const int8_t *)out[0].data);
+#endif
         }
         uint32_t t2 = DWT->CYCCNT, cl = t1 - t0, cw = t2 - t1;
         tx[0] = 0x5Bu;
