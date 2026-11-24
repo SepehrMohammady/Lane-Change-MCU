@@ -717,6 +717,28 @@ which they cannot see; they do not depend on the arm. Only aggregates are versio
 
 The same loops with the board as the predictor (2026-11-17, `unas/acc_loop_board.py`): the stream firmware of one network of each kind (seed 100, fixed beforehand; 30,412 B flash, 11,984 B static RAM) gets the neighbouring vehicle's 18 raw features every 5th frame over the ST-LINK virtual COM port and returns its int8 outputs, which decide the ACC's anticipation. In all 931 episodes of each network every decision equals the PC loop's (38,023 per network, every int8 output identical), so the outcomes in the table above are the board's as well. The network takes 0.1851 ms per decision on the H7B3; the host's round trip is 1.732 ms (99th percentile 2.032 ms). In real time (20 part-C episodes, the ego at 25 Hz, the board at 5 Hz) the steps were late by 0.334 ms on average and 1.309 ms at most against a period of 40 ms, and none of the 20 episodes failed. Results: `datasets/highd/results/hil/acc_loop_board.json(l)`.
 
+## Runners, setup and one-off checks
+
+Shell runners start the WSL jobs and log to `runs/` (not versioned); scripts without a row above are listed here.
+
+| File | What it ran |
+|---|---|
+| `setup_wsl_env.sh`, `setup_fork.sh` | the WSL environment and the fork (see Environment) |
+| `run_smoke.sh` | a short search on real data, to check the whole chain after a change |
+| `run_chunked.sh`, `run_chunked_highd.sh`, `run_all_chunked.sh` | searches in fresh-process chunks resumed from the checkpoint (the long runs survive TensorFlow's memory growth) |
+| `run_rmse.sh` | the RMSE-aware LCIR regression searches of the first round (2026-07) |
+| `run_dmir_v4.sh` | the LCIR final-round searches with the faithful cost graph, their five-seed choices and controls (2026-09-25) |
+| `run_v4_k3.sh` | the final regression searches again after the trainer fix of 2026-11-03 (runs named `_k3`) |
+| `run_noise_aware.sh`, `run_noise_queue.sh` | the search variants of 2026-11-02 to 11-10 (single, random, fixed, adaptive, cost-first), one after the other |
+| `run_costfirst_pilot.sh` | the cost-first search pilot (2026-11-10; its criterion was not met) |
+| `run_twod.sh`, `run_twod_pilot.sh` | the two-road-type pilot (2026-11-04; no go) |
+| `run_mm_searches.sh` | see Seed studies |
+| `run_carla.sh` | the CARLA server without rendering around one client script (`carla_record.py`) |
+| `latency_headroom.py` | whether board-measured latency would choose differently from MACs among the tied candidates of each corrected search (2026-11-04; rule fixed beforehand) |
+| `verify_models.py` | an early independent check of saved search models against trivial baselines (2026-08) |
+| `weight_check.py` | that board latency, flash and RAM do not depend on the weight values (same graph, trained against random weights; 2026-09-23) |
+| `../scripts/register_v2.py` | adds the board runs of the later rounds' chosen models to the measurement registries |
+
 ## Thresholds (first pass, in `dmir_config.py`)
 
 | Bound | Value | Rationale |
@@ -730,10 +752,11 @@ The same loops with the board as the predictor (2026-11-17, `unas/acc_loop_board
 Tighten `peak_mem`/`model_size` after the first front to push toward the
 STM32F401 low-end stretch (96 KB / 512 KB).
 
-## Environment (see docs/research/unas-integration.md)
+## Environment
 
-The fork is **TensorFlow**, not PyTorch. On Windows it pins `tensorflow<2.11`
-+ `numpy==1.23.5` + Python ≤3.10, and that old TF cannot use the RTX 5070
-(Blackwell needs CUDA 12.8), so on Windows the search runs on the CPU only. GPU needs Linux/WSL2
-with `tensorflow[and-cuda]` (2.18), and Blackwell support there is unverified.
-Options and recommendation in the integration note.
+The fork is TensorFlow. On Windows its pinned TensorFlow (below 2.11, Python 3.10 at most) cannot use the RTX 5070
+(Blackwell needs CUDA 12.8 or later), so every search and every Keras run of this folder ran in WSL2:
+`setup_wsl_env.sh` creates the venv `~/dmir_nas` with TensorFlow and its bundled CUDA (verified 2026-07-08: TF 2.21
+with CUDA 12.9 sees the GPU, sm_120), and `setup_fork.sh` clones the ELIOS µNAS fork into `~/uNAS`, copies the
+dataset and config modules of this folder into it and registers the configs (`patch_fork.py` applies the fixes listed
+above). Board work (ST Edge AI, the GCC toolchain, the programmer) runs on Windows; see `firmware/README.md`.

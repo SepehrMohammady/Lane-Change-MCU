@@ -26,7 +26,6 @@ Emits <out_dir>/<stem>_int8_io.tflite + a comparison against the float32-I/O
 build, including the predicted RAM saving to check against the ST report.
 """
 import json
-import os
 import sys
 from pathlib import Path
 

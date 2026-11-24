@@ -22,7 +22,6 @@ import time
 from datetime import datetime, timezone
 from pathlib import Path
 
-import numpy as np
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 import seed_variance as sv                                  # noqa: E402  (sets up TF, keras, adapters)

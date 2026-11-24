@@ -15,7 +15,7 @@ import time
 from datetime import datetime, timezone
 from pathlib import Path
 
-from .config import DATASET_ROOT, PROJECT_ROOT, Config
+from .config import PROJECT_ROOT, Config
 from .env_utils import env_report
 
 LOGBOOK = PROJECT_ROOT / "LOGBOOK.md"
@@ -59,9 +59,3 @@ def append_logbook(title: str, body: str) -> None:
         f.write(entry)
 
 
-def read_experiments() -> list[dict]:
-    path = DATASET_ROOT / "logs" / "experiments.jsonl"
-    if not path.exists():
-        return []
-    with open(path, encoding="utf-8") as f:
-        return [json.loads(line) for line in f if line.strip()]

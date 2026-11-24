@@ -277,16 +277,6 @@ def seed_summary(rows, key_field="key"):
     return out
 
 
-def seed_line(seeds, key, metric, pct):
-    g = seeds.get(key) if seeds else None
-    st = g and g["stats"].get(metric)
-    if not st or st["n"] < 2:
-        return None
-    if pct:
-        return f"retrained {st['n']}×: {st['mean'] * 100:.1f} ± {st['std'] * 100:.1f}%"
-    return f"retrained {st['n']}×: {st['mean']:.3f} ± {st['std']:.3f} s"
-
-
 def baseline_seeds(log_path: Path, prefix: str):
     rows = []
     for r in read_jsonl(log_path):

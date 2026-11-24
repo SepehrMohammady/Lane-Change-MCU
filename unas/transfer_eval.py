@@ -30,7 +30,7 @@ import keras  # noqa: E402
 REPO = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(REPO / "unas"))
 sys.path.insert(0, os.path.expanduser("~/uNAS"))
-from highd_dataset import _windows, IN_LEN, N_SLIDES  # noqa: E402
+from highd_dataset import _windows, N_SLIDES  # noqa: E402
 
 EXID = REPO / "datasets" / "exid" / "data" / "prepared"
 HIGHD = REPO / "datasets" / "highd" / "data" / "prepared"

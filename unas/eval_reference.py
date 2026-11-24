@@ -7,7 +7,6 @@ may not clip). Run in the WSL dmir_nas venv.
 """
 import os
 import pickle
-import sys
 from pathlib import Path
 
 import keras

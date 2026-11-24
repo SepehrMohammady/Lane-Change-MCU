@@ -170,15 +170,6 @@ def _unused_pick_scenario_old():
     raise SystemExit("no suitable scenario found")
 
 
-def raw_track(rec_id, tid, f_start, f_end):
-    """25 Hz rows of one vehicle between two absolute frames (inclusive)."""
-    import pandas as pd
-    import prepare_highd as ph
-    df = pd.read_csv(ph.RAW / f"{rec_id:02d}_tracks.csv")
-    g = df[(df.id == tid) & (df.frame >= f_start) & (df.frame <= f_end)].sort_values("frame")
-    return g
-
-
 def main_select(tid_wanted=None):
     import prepare_highd as ph
     rec, tid, first, c, lab, feats = pick_scenario(tid_wanted)

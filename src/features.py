@@ -62,10 +62,6 @@ CONSTANT_FEATURES = ("egoLaneWidth",)
 SPIKE_FEATURES = ("curvatureDxRightLine", "curvatureDxLeftLine")
 
 
-def feature_names(task: str) -> list[str]:
-    return list(FEATURES_BY_TASK[task])
-
-
 def indices_of(task: str, names) -> list[int]:
     feats = FEATURES_BY_TASK[task]
     return [feats.index(n) for n in names if n in feats]
