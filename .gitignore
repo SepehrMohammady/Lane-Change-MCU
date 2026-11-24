@@ -16,7 +16,6 @@ runs/
 checkpoints/
 *.pth
 *.onnx
-!models/best/*.onnx
 
 # OS / IDE
 .DS_Store
