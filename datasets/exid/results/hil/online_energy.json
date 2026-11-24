@@ -1,0 +1,92 @@
+{
+ "tag": "highd_K_seed100_features_int8_io",
+ "meter": "JT-UM120 USB meter, P-BUS at the board's USB input (laptop -> meter -> board)",
+ "p_sleep_W": 0.926667,
+ "p_busy_W": 1.058667,
+ "p_feature_network_W": 1.045,
+ "p_update_loop_W": 1.043667,
+ "drift_W": -0.000667,
+ "feature_network": {
+  "time_per_run_ms": 0.17524,
+  "energy_mcu_uJ": 20.7362,
+  "energy_board_uJ": 183.1213
+ },
+ "update": {
+  "time_per_run_ms": 0.58413,
+  "energy_mcu_uJ": 68.3435,
+  "energy_board_uJ": 609.6392
+ },
+ "per_location": {
+  "0": {
+   "windows": 618041,
+   "labels": 407110,
+   "device_hours": 1.424,
+   "energy_per_window_uJ": 24.432,
+   "energy_per_label_uJ": 62.079,
+   "inference_mW": 2.946,
+   "learning_mW": 4.93
+  },
+  "1": {
+   "windows": 893815,
+   "labels": 583058,
+   "device_hours": 2.402,
+   "energy_per_window_uJ": 24.435,
+   "energy_per_label_uJ": 62.125,
+   "inference_mW": 2.526,
+   "learning_mW": 4.189
+  },
+  "2": {
+   "windows": 701370,
+   "labels": 437603,
+   "device_hours": 3.986,
+   "energy_per_window_uJ": 24.44,
+   "energy_per_label_uJ": 62.127,
+   "inference_mW": 1.195,
+   "learning_mW": 1.895
+  },
+  "3": {
+   "windows": 450836,
+   "labels": 275778,
+   "device_hours": 2.631,
+   "energy_per_window_uJ": 24.44,
+   "energy_per_label_uJ": 62.143,
+   "inference_mW": 1.163,
+   "learning_mW": 1.809
+  },
+  "4": {
+   "windows": 1009312,
+   "labels": 620533,
+   "device_hours": 1.692,
+   "energy_per_window_uJ": 24.43,
+   "energy_per_label_uJ": 62.083,
+   "inference_mW": 4.048,
+   "learning_mW": 6.325
+  },
+  "5": {
+   "windows": 417500,
+   "labels": 298005,
+   "device_hours": 1.492,
+   "energy_per_window_uJ": 24.439,
+   "energy_per_label_uJ": 61.953,
+   "inference_mW": 1.9,
+   "learning_mW": 3.437
+  },
+  "6": {
+   "windows": 557789,
+   "labels": 331269,
+   "device_hours": 2.481,
+   "energy_per_window_uJ": 24.438,
+   "energy_per_label_uJ": 62.068,
+   "inference_mW": 1.526,
+   "learning_mW": 2.302
+  }
+ },
+ "all_locations": {
+  "device_hours": 16.108,
+  "inference_mW": 1.959,
+  "learning_mW": 3.162,
+  "learning_share_of_the_asleep_board": 0.00341
+ },
+ "note": "above the asleep board (core in WFI, 0.93 W for the whole kit with its display); window and label times are the board's own from the replays, at the powers of the back-to-back steps",
+ "utc": "2026-11-24T12:58:51+00:00"
+}
