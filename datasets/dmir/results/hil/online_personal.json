@@ -1,0 +1,384 @@
+{
+ "utc": "2026-11-24T14:26:13+00:00",
+ "rule": "local notes 2026-11-24 15:18",
+ "selection": {
+  "selected": 1024,
+  "qualified": true,
+  "candidates": [
+   {
+    "N": 256,
+    "qualifies": true,
+    "drives": 14,
+    "networks_per_drive": [
+     5
+    ],
+    "frames_correct": [
+     0.87301,
+     0.88656
+    ],
+    "timely_share": [
+     0.9204,
+     0.91284
+    ],
+    "alarm_runs_of_0.5_s_or_more_per_hour": [
+     80.06571,
+     75.91286
+    ],
+    "mean_gain": 0.01355,
+    "drives_with_a_gain": 11,
+    "worst_drive_gain": -0.00278,
+    "best_drive_gain": 0.04278
+   },
+   {
+    "N": 1024,
+    "qualifies": true,
+    "drives": 14,
+    "networks_per_drive": [
+     5
+    ],
+    "frames_correct": [
+     0.87301,
+     0.88871
+    ],
+    "timely_share": [
+     0.9204,
+     0.9138
+    ],
+    "alarm_runs_of_0.5_s_or_more_per_hour": [
+     80.06571,
+     73.85429
+    ],
+    "mean_gain": 0.01571,
+    "drives_with_a_gain": 11,
+    "worst_drive_gain": -0.00675,
+    "best_drive_gain": 0.04936
+   },
+   {
+    "N": 4096,
+    "qualifies": true,
+    "drives": 14,
+    "networks_per_drive": [
+     5
+    ],
+    "frames_correct": [
+     0.87301,
+     0.87983
+    ],
+    "timely_share": [
+     0.9204,
+     0.91925
+    ],
+    "alarm_runs_of_0.5_s_or_more_per_hour": [
+     80.06571,
+     79.1
+    ],
+    "mean_gain": 0.00682,
+    "drives_with_a_gain": 9,
+    "worst_drive_gain": -0.00569,
+    "best_drive_gain": 0.03152
+   }
+  ],
+  "update_alone": {
+   "drives": 14,
+   "networks_per_drive": [
+    5
+   ],
+   "frames_correct": [
+    0.87301,
+    0.88842
+   ],
+   "timely_share": [
+    0.9204,
+    0.91271
+   ],
+   "alarm_runs_of_0.5_s_or_more_per_hour": [
+    80.06571,
+    72.12714
+   ],
+   "mean_gain": 0.01542,
+   "drives_with_a_gain": 11,
+   "worst_drive_gain": -0.03549,
+   "best_drive_gain": 0.05179
+  },
+  "complete": true
+ },
+ "final_D_check": {
+  "drives": 34,
+  "networks_per_drive": [
+   5
+  ],
+  "frames_correct": [
+   0.85587,
+   0.86507
+  ],
+  "timely_share": [
+   0.8786,
+   0.87027
+  ],
+  "alarm_runs_of_0.5_s_or_more_per_hour": [
+   96.48824,
+   93.70824
+  ],
+  "mean_gain": 0.0092,
+  "drives_with_a_gain": 23,
+  "worst_drive_gain": -0.00868,
+  "best_drive_gain": 0.06683
+ },
+ "final_D_update_alone": {
+  "drives": 34,
+  "networks_per_drive": [
+   5
+  ],
+  "frames_correct": [
+   0.85587,
+   0.85975
+  ],
+  "timely_share": [
+   0.8786,
+   0.8712
+  ],
+  "alarm_runs_of_0.5_s_or_more_per_hour": [
+   96.48824,
+   103.95941
+  ],
+  "mean_gain": 0.00387,
+  "drives_with_a_gain": 21,
+  "worst_drive_gain": -0.08138,
+  "best_drive_gain": 0.07377
+ },
+ "criterion": {
+  "a_mean_gain": 0.0092,
+  "a_met": true,
+  "b_worst_drive_gain": -0.00868,
+  "b_met": true,
+  "c_timely_share": [
+   0.8786,
+   0.87027
+  ],
+  "d_alarm_runs": [
+   96.48824,
+   93.70824
+  ],
+  "c_met": true,
+  "d_met": true,
+  "complete": true,
+  "met": true
+ },
+ "per_drive_frames_correct": {
+  "user1": [
+   0.92673,
+   0.92393
+  ],
+  "user11": [
+   0.90157,
+   0.91958
+  ],
+  "user14": [
+   0.80222,
+   0.81894
+  ],
+  "user15": [
+   0.83955,
+   0.83087
+  ],
+  "user17": [
+   0.82559,
+   0.81975
+  ],
+  "user20": [
+   0.81803,
+   0.84353
+  ],
+  "user21": [
+   0.85926,
+   0.85873
+  ],
+  "user22": [
+   0.78803,
+   0.79876
+  ],
+  "user23": [
+   0.83138,
+   0.84101
+  ],
+  "user26": [
+   0.90909,
+   0.91563
+  ],
+  "user28": [
+   0.85661,
+   0.87956
+  ],
+  "user29": [
+   0.91077,
+   0.90965
+  ],
+  "user3": [
+   0.85166,
+   0.85946
+  ],
+  "user30": [
+   0.88655,
+   0.92513
+  ],
+  "user32": [
+   0.90418,
+   0.92262
+  ],
+  "user33": [
+   0.88794,
+   0.88848
+  ],
+  "user34": [
+   0.79068,
+   0.78431
+  ],
+  "user35": [
+   0.74387,
+   0.8107
+  ],
+  "user37": [
+   0.92089,
+   0.91344
+  ],
+  "user38": [
+   0.80528,
+   0.81895
+  ],
+  "user39": [
+   0.78746,
+   0.79159
+  ],
+  "user4": [
+   0.8379,
+   0.87896
+  ],
+  "user40": [
+   0.81613,
+   0.82495
+  ],
+  "user41": [
+   0.84621,
+   0.86201
+  ],
+  "user42": [
+   0.92357,
+   0.92021
+  ],
+  "user43": [
+   0.90722,
+   0.90434
+  ],
+  "user44": [
+   0.84222,
+   0.85057
+  ],
+  "user45": [
+   0.88337,
+   0.88524
+  ],
+  "user46": [
+   0.89502,
+   0.90534
+  ],
+  "user47": [
+   0.83513,
+   0.84389
+  ],
+  "user48": [
+   0.88087,
+   0.88181
+  ],
+  "user49": [
+   0.80701,
+   0.80772
+  ],
+  "user50": [
+   0.87856,
+   0.87851
+  ],
+  "user6": [
+   0.89912,
+   0.89434
+  ]
+ },
+ "lowest_eight_flashed": {
+  "user35": [
+   0.74387,
+   0.8107
+  ],
+  "user39": [
+   0.78746,
+   0.79159
+  ],
+  "user22": [
+   0.78803,
+   0.79876
+  ],
+  "user34": [
+   0.79068,
+   0.78431
+  ],
+  "user14": [
+   0.80222,
+   0.81894
+  ],
+  "user38": [
+   0.80528,
+   0.81895
+  ],
+  "user49": [
+   0.80701,
+   0.80772
+  ],
+  "user40": [
+   0.81613,
+   0.82495
+  ]
+ },
+ "lowest_eight_mean_gain": 0.0144,
+ "final_L_check": {
+  "drives": 34,
+  "networks_per_drive": [
+   5
+  ],
+  "frames_correct": [
+   0.69453,
+   0.80305
+  ],
+  "timely_share": [
+   0.89092,
+   0.83453
+  ],
+  "alarm_runs_of_0.5_s_or_more_per_hour": [
+   244.67647,
+   194.43941
+  ],
+  "mean_gain": 0.10852,
+  "drives_with_a_gain": 33,
+  "worst_drive_gain": -0.0145,
+  "best_drive_gain": 0.19524
+ },
+ "final_L_update_alone": {
+  "drives": 34,
+  "networks_per_drive": [
+   5
+  ],
+  "frames_correct": [
+   0.69453,
+   0.81078
+  ],
+  "timely_share": [
+   0.89092,
+   0.83014
+  ],
+  "alarm_runs_of_0.5_s_or_more_per_hour": [
+   244.67647,
+   195.12882
+  ],
+  "mean_gain": 0.11625,
+  "drives_with_a_gain": 33,
+  "worst_drive_gain": -0.00842,
+  "best_drive_gain": 0.20823
+ }
+}
