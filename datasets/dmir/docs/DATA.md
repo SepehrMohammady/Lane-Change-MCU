@@ -180,6 +180,23 @@ drivers use the 48 different drives (users 24 and 25 left out).
 The lane changes our frame rule finds agree with the count the lab made at recording time for 47 of the
 50 sessions with lane changes (driver 31: 111 in both).
 
+## The drives ran slower than real time (found 2026-11-25)
+
+`datasets/dmir/recording_pace.py`, run on the lab's copies of the original CARLA recordings of the 50 drivers' sessions.
+The lab's client takes one 0.051 s simulation step per drawn frame and has no clock of its own, so a drive runs as fast
+as the PC draws. Simulated duration (elapsed time of the last recorded frame) over wall duration (start time in the
+recording's header to the file's date), 97 distinct recordings longer than 2 minutes:
+
+| | n | pace, median | quartiles | simulated duration, median |
+|---|---|---|---|---|
+| drives with lane changes (10 cars) | 50 | 0.873 | 0.860-0.898 | 921 s |
+| baseline drives (one car) | 47 | 0.909 | 0.895-0.934 | 547 s |
+
+The range over all 97 is 0.83-0.99. Every time in the dataset (10 Hz frames, 5 s windows, time to lane change) is
+simulated time; the drivers lived each simulated second as about 1.1 s on the clock. New drives recorded on another PC
+are comparable only at the same pace: on a laptop with an RTX 5070 the same client ran at 0.92, and at 1.27 once its two
+mirror cameras were rendered at the size they are shown, so the pace has to be held, not left to the PC.
+
 ## Provenance (resolved 2026-07-07 — details in datasets/dmir/docs/dataset-provenance.md)
 
 The data is the ELIOS "Lane Change Intention Recognition Dataset" (Zenodo DOI
