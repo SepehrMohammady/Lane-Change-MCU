@@ -1,0 +1,128 @@
+{
+ "utc": "2026-11-25T14:46:04+00:00",
+ "rule": "local notes 2026-11-25 15:02",
+ "results": {
+  "clean": {
+   "windows_correct": {
+    "fixed": 0.43122,
+    "adapted": 0.84514,
+    "check": 0.84514
+   },
+   "correct_2_s_before": {
+    "fixed": 0.76306,
+    "adapted": 0.9673,
+    "check": 0.9673
+   },
+   "runs_0.6_s_per_vehicle_hour": {
+    "fixed": 1762.92,
+    "adapted": 304.88,
+    "check": 304.88
+   },
+   "labels_changed_share": 0.0
+  },
+  "flip_0.05": {
+   "windows_correct": {
+    "fixed": 0.43122,
+    "adapted": 0.6472,
+    "check": 0.64686
+   },
+   "correct_2_s_before": {
+    "fixed": 0.76306,
+    "adapted": 0.92522,
+    "check": 0.92488
+   },
+   "runs_0.6_s_per_vehicle_hour": {
+    "fixed": 1762.92,
+    "adapted": 650.12,
+    "check": 655.48
+   },
+   "labels_changed_share": 0.04991
+  },
+  "flip_0.1": {
+   "windows_correct": {
+    "fixed": 0.43122,
+    "adapted": 0.57202,
+    "check": 0.57222
+   },
+   "correct_2_s_before": {
+    "fixed": 0.76306,
+    "adapted": 0.90646,
+    "check": 0.9039
+   },
+   "runs_0.6_s_per_vehicle_hour": {
+    "fixed": 1762.92,
+    "adapted": 730.54,
+    "check": 753.84
+   },
+   "labels_changed_share": 0.09998
+  },
+  "flip_0.2": {
+   "windows_correct": {
+    "fixed": 0.43122,
+    "adapted": 0.49524,
+    "check": 0.49928
+   },
+   "correct_2_s_before": {
+    "fixed": 0.76306,
+    "adapted": 0.86272,
+    "check": 0.8452
+   },
+   "runs_0.6_s_per_vehicle_hour": {
+    "fixed": 1762.92,
+    "adapted": 800.7,
+    "check": 957.74
+   },
+   "labels_changed_share": 0.19997
+  },
+  "missed_0.1": {
+   "windows_correct": {
+    "fixed": 0.43122,
+    "adapted": 0.84278,
+    "check": 0.84278
+   },
+   "correct_2_s_before": {
+    "fixed": 0.76306,
+    "adapted": 0.94584,
+    "check": 0.94584
+   },
+   "runs_0.6_s_per_vehicle_hour": {
+    "fixed": 1762.92,
+    "adapted": 292.9,
+    "check": 292.9
+   },
+   "labels_changed_share": 0.01748
+  },
+  "missed_0.25": {
+   "windows_correct": {
+    "fixed": 0.43122,
+    "adapted": 0.83838,
+    "check": 0.83838
+   },
+   "correct_2_s_before": {
+    "fixed": 0.76306,
+    "adapted": 0.90892,
+    "check": 0.90892
+   },
+   "runs_0.6_s_per_vehicle_hour": {
+    "fixed": 1762.92,
+    "adapted": 282.94,
+    "check": 282.94
+   },
+   "labels_changed_share": 0.04333
+  }
+ },
+ "criterion": {
+  "clean_gain": 0.41392,
+  "R1_flip_0.10_gain": 0.1408,
+  "R1_share": 0.3402,
+  "R1_met": false,
+  "R2_missed_0.25_gain": 0.40716,
+  "R2_share": 0.9837,
+  "R2_correct_2_s_before": [
+   0.76306,
+   0.90892
+  ],
+  "R2_met": true,
+  "met": false
+ }
+}
