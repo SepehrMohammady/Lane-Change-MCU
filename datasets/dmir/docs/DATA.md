@@ -192,10 +192,12 @@ recording's header to the file's date), 97 distinct recordings longer than 2 min
 | drives with lane changes (10 cars) | 50 | 0.873 | 0.860-0.898 | 921 s |
 | baseline drives (one car) | 47 | 0.909 | 0.895-0.934 | 547 s |
 
-The range over all 97 is 0.83-0.99. Every time in the dataset (10 Hz frames, 5 s windows, time to lane change) is
-simulated time; the drivers lived each simulated second as about 1.1 s on the clock. New drives recorded on another PC
-are comparable only at the same pace: on a laptop with an RTX 5070 the same client ran at 0.92, and at 1.27 once its two
-mirror cameras were rendered at the size they are shown, so the pace has to be held, not left to the PC.
+The range over all 97 is 0.83-0.99. With one 0.051 s step per drawn frame, real time would be 19.6 frames per second;
+the drivers saw about 17 (17.1 in drives with lane changes, 17.8 in baseline drives). Every time in the dataset (10 Hz
+frames, 5 s windows, time to lane change) is simulated time; the drivers lived each simulated second as about 1.1 s on
+the clock. New drives recorded on another PC are comparable only at the same pace: on a laptop with an RTX 5070 the same
+client ran at 0.92, and at 1.27 once its two mirror cameras were rendered at the size they are shown, so a client for new
+drives has to hold the pace itself.
 
 ## Provenance (resolved 2026-07-07 — details in datasets/dmir/docs/dataset-provenance.md)
 
