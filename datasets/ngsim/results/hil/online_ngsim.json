@@ -1,0 +1,110 @@
+{
+ "utc": "2026-11-26T19:05:07+00:00",
+ "rule": "local notes (NGSIM rule)",
+ "results": {
+  "val": {
+   "fixed": {
+    "windows_correct": 0.51058,
+    "correct_2_s_before": 0.67328,
+    "runs_0.6_s_per_vehicle_hour": 1333.04
+   },
+   "own": {
+    "windows_correct": 0.80396,
+    "correct_2_s_before": 0.95422,
+    "runs_0.6_s_per_vehicle_hour": 330.96
+   },
+   "update_g1": {
+    "windows_correct": 0.82934,
+    "correct_2_s_before": 0.80904,
+    "runs_0.6_s_per_vehicle_hour": 334.96
+   },
+   "check_g1": {
+    "windows_correct": 0.82934,
+    "correct_2_s_before": 0.80904,
+    "runs_0.6_s_per_vehicle_hour": 334.96
+   },
+   "update_g8": {
+    "windows_correct": 0.8329,
+    "correct_2_s_before": 0.81562,
+    "runs_0.6_s_per_vehicle_hour": 330.92
+   },
+   "check_g8": {
+    "windows_correct": 0.8329,
+    "correct_2_s_before": 0.81562,
+    "runs_0.6_s_per_vehicle_hour": 330.92
+   }
+  },
+  "test": {
+   "fixed": {
+    "windows_correct": 0.5526,
+    "correct_2_s_before": 0.68974,
+    "runs_0.6_s_per_vehicle_hour": 1257.86
+   },
+   "own": {
+    "windows_correct": 0.83986,
+    "correct_2_s_before": 0.9428,
+    "runs_0.6_s_per_vehicle_hour": 272.52
+   },
+   "update_g1": {
+    "windows_correct": 0.83376,
+    "correct_2_s_before": 0.83294,
+    "runs_0.6_s_per_vehicle_hour": 320.12
+   },
+   "check_g1": {
+    "windows_correct": 0.83376,
+    "correct_2_s_before": 0.83294,
+    "runs_0.6_s_per_vehicle_hour": 320.12
+   },
+   "update_g8": {
+    "windows_correct": 0.8301,
+    "correct_2_s_before": 0.83708,
+    "runs_0.6_s_per_vehicle_hour": 325.5
+   },
+   "check_g8": {
+    "windows_correct": 0.8301,
+    "correct_2_s_before": 0.83708,
+    "runs_0.6_s_per_vehicle_hour": 325.5
+   }
+  },
+  "test_per_recording": {
+   "3": {
+    "fixed": 0.581,
+    "own": 0.8302,
+    "update_g1": 0.83678,
+    "check_g1": 0.83678,
+    "update_g8": 0.83308,
+    "check_g8": 0.83308
+   },
+   "6": {
+    "fixed": 0.52144,
+    "own": 0.85042,
+    "update_g1": 0.83052,
+    "check_g1": 0.83052,
+    "update_g8": 0.82688,
+    "check_g8": 0.82688
+   }
+  }
+ },
+ "criterion": {
+  "frozen_guard": 8,
+  "gap": 0.28726,
+  "N1_gap_exists": true,
+  "N2_gain": 0.2775,
+  "N2_share_of_gap": 0.966,
+  "N2_every_location": true,
+  "N3_correct_2_s_before": [
+   0.68974,
+   0.83708
+  ],
+  "N3_runs": [
+   1257.86,
+   325.5
+  ],
+  "N4_check_minus_update": 0.0,
+  "N2_met": true,
+  "N3_met": true,
+  "N4_met": true,
+  "applies": true,
+  "met": true
+ }
+}
